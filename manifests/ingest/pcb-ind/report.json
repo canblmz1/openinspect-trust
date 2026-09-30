@@ -1,0 +1,252 @@
+{
+  "adapter": {
+    "canonical_format": "yolo",
+    "formats_present": [
+      "coco",
+      "voc",
+      "yolo"
+    ],
+    "name": "pcb_ind",
+    "status": "ok_with_warnings",
+    "version": 1
+  },
+  "annotations": 5932,
+  "anomalies": [
+    {
+      "code": "box_out_of_bounds",
+      "count": 1,
+      "examples": [
+        "5799_t_038.jpg"
+      ],
+      "message": "a box is degenerate or leaves the image",
+      "severity": "warning"
+    },
+    {
+      "code": "coco_missing_box",
+      "count": 1,
+      "examples": [
+        "5799_t_038.jpg"
+      ],
+      "message": "YOLO holds boxes that the COCO file lacks (YOLO is complete and matches the paper's total)",
+      "severity": "warning"
+    },
+    {
+      "code": "voc_unreadable",
+      "count": 1,
+      "examples": [
+        "6194_b_017.xml: the file is empty or consists only of NUL bytes"
+      ],
+      "message": "a VOC annotation file cannot be parsed (YOLO and COCO still hold its boxes)",
+      "severity": "warning"
+    }
+  ],
+  "archive": {
+    "bytes": 101336845,
+    "checksum_algo": "md5",
+    "checksum_ok": true,
+    "filename": "PCB-IND_v4.zip",
+    "files_extracted": 23954,
+    "sha256": "29cf919c64cab7e60e90e16bf3f42cce674688f99295d66a8e10d0066836e3c9",
+    "size_ok": true,
+    "zip_crc_ok": true
+  },
+  "classes": [
+    {
+      "count": 844,
+      "label": "mouse_bite",
+      "label_id": 0
+    },
+    {
+      "count": 1715,
+      "label": "missing_copper",
+      "label_id": 1
+    },
+    {
+      "count": 463,
+      "label": "scratch",
+      "label_id": 2
+    },
+    {
+      "count": 660,
+      "label": "spurious_copper",
+      "label_id": 3
+    },
+    {
+      "count": 1174,
+      "label": "copper_burr",
+      "label_id": 4
+    },
+    {
+      "count": 584,
+      "label": "stain",
+      "label_id": 5
+    },
+    {
+      "count": 360,
+      "label": "short",
+      "label_id": 6
+    },
+    {
+      "count": 132,
+      "label": "open",
+      "label_id": 7
+    }
+  ],
+  "dataset_name": "PCB-IND: Industrial Printed Circuit Board Surface Defect Dataset for Object Detection",
+  "decode": {
+    "decodable": 4789,
+    "failed": 0,
+    "failures": [],
+    "images": 4789
+  },
+  "digests": {
+    "annotations_jsonl": "c28a667b432c1a8dee38604765c2ed840b914fdd06376b36d73ee1f4a5fb78ff",
+    "files_list": "68cbbdf6b1d68c4eaf8d83316915952ba7124352f0021d1e4925766120a76dde",
+    "images_jsonl": "6ab623dd7aff4f3e6dabce554ba246d2012c98a3b5d0bb04f74a278718c0e1ce"
+  },
+  "exact_duplicates": {
+    "cross_split_groups": 0,
+    "groups": 0,
+    "redundant_files": 0
+  },
+  "grouping": {
+    "evidence": [
+      "685 batches, 1,069 (batch, side) groups; side letters: b 3,272, t 1,517",
+      "images per batch: min 1, median 4, max 267",
+      "batches that occur in more than one split: 125 of 685",
+      "(batch, side) groups that occur in more than one split: 0"
+    ],
+    "key": "batch = first 4 characters of the file name; file names are <batch>_<b|t>_<n>",
+    "n_groups": 685,
+    "quality": "explicit",
+    "summary": "the file name encodes the production batch and the board side; the official split never separates a (batch, side) group but does split 125 batches across two splits, so it is group-aware at (batch, side) level only"
+  },
+  "images": 4789,
+  "licence": {
+    "archive_says": [
+      "README.md section 'License' says: Please use the license specified in the Zenodo record for this release."
+    ],
+    "attribution_in_manifest": true,
+    "evidence_files": 3,
+    "licence_url": "https://creativecommons.org/licenses/by/4.0/",
+    "manifest": "manifests/sources/pcb-ind.yaml",
+    "spdx": "CC-BY-4.0"
+  },
+  "notes": [
+    "README: the release may contain hard negatives, images without annotations that look like defects."
+  ],
+  "reconciliation": [
+    {
+      "field": "content.image_count",
+      "manifest": "4789",
+      "observed": "4789",
+      "status": "match"
+    },
+    {
+      "field": "content.annotation_count",
+      "manifest": "5932",
+      "observed": "5932",
+      "status": "match"
+    },
+    {
+      "field": "content.original_classes[mouse_bite].count",
+      "manifest": "844",
+      "observed": "844",
+      "status": "match"
+    },
+    {
+      "field": "content.original_classes[missing_copper].count",
+      "manifest": "1715",
+      "observed": "1715",
+      "status": "match"
+    },
+    {
+      "field": "content.original_classes[scratch].count",
+      "manifest": "463",
+      "observed": "463",
+      "status": "match"
+    },
+    {
+      "field": "content.original_classes[spurious_copper].count",
+      "manifest": "660",
+      "observed": "660",
+      "status": "match"
+    },
+    {
+      "field": "content.original_classes[copper_burr].count",
+      "manifest": "1174",
+      "observed": "1174",
+      "status": "match"
+    },
+    {
+      "field": "content.original_classes[stain].count",
+      "manifest": "584",
+      "observed": "584",
+      "status": "match"
+    },
+    {
+      "field": "content.original_classes[short].count",
+      "manifest": "360",
+      "observed": "360",
+      "status": "match"
+    },
+    {
+      "field": "content.original_classes[open].count",
+      "manifest": "132",
+      "observed": "132",
+      "status": "match"
+    },
+    {
+      "field": "content.official_splits.counts.train",
+      "manifest": "3833",
+      "observed": "3833",
+      "status": "match"
+    },
+    {
+      "field": "content.official_splits.counts.val",
+      "manifest": "478",
+      "observed": "478",
+      "status": "match"
+    },
+    {
+      "field": "content.official_splits.counts.test",
+      "manifest": "478",
+      "observed": "478",
+      "status": "match"
+    },
+    {
+      "field": "content.image_size_px.min",
+      "manifest": "[300, 300]",
+      "observed": "[300, 300]",
+      "status": "match"
+    },
+    {
+      "field": "content.image_size_px.max",
+      "manifest": "[300, 300]",
+      "observed": "[300, 300]",
+      "status": "match"
+    }
+  ],
+  "schema_version": 1,
+  "slug": "pcb-ind",
+  "splits": [
+    {
+      "annotations": 4746,
+      "images": 3833,
+      "images_without_annotations": 115,
+      "split": "train"
+    },
+    {
+      "annotations": 639,
+      "images": 478,
+      "images_without_annotations": 3,
+      "split": "val"
+    },
+    {
+      "annotations": 547,
+      "images": 478,
+      "images_without_annotations": 9,
+      "split": "test"
+    }
+  ]
+}

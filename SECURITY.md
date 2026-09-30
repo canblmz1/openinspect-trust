@@ -15,6 +15,10 @@ Do not open a public issue with details of a vulnerability. Use GitHub's "Report
 - Secrets are read from the environment only; the EVREN client (planned) never logs or stores a token and never writes it to a run record.
 - Evidence snapshots under `manifests/evidence/` are public registry metadata. Do not add files there that came from an authenticated session.
 
+## Untrusted archives
+
+Dataset archives are third-party input. `openinspect ingest` verifies size and checksum before it keeps a download, refuses unsafe zip members (path traversal, absolute paths, reserved names, symlinks), enforces size limits, parses XML with `defusedxml`, and never executes a file shipped inside an archive. It also refuses a data directory inside the repository or OneDrive ([docs/DECISIONS.md](docs/DECISIONS.md), T11).
+
 ## Supply chain
 
 - GitHub Actions are pinned to full commit SHAs; dependencies are pinned by `uv.lock`.

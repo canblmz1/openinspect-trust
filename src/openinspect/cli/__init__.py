@@ -8,6 +8,7 @@ from typing import Annotated
 import typer
 
 from openinspect import __version__
+from openinspect.cli.ingest import ingest_app
 from openinspect.cli.source import source_app
 
 app = typer.Typer(
@@ -17,6 +18,7 @@ app = typer.Typer(
     add_completion=False,
 )
 app.add_typer(source_app, name="source")
+app.add_typer(ingest_app, name="ingest")
 
 
 def _version_callback(value: bool) -> None:

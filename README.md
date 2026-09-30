@@ -2,7 +2,7 @@
 
 Provenance-aware cross-dataset benchmark tooling for industrial defect detection.
 
-**Status: early development.** Milestone 1 (the source registry) is implemented. There are no experimental results yet.
+**Status: early development.** Milestones 1 (source registry) and 2 (ingest) are implemented and have been run on the three accepted sources. There are no experimental results yet.
 
 ## Problem
 
@@ -26,7 +26,7 @@ Whether this matters quantitatively is what the project measures.
 ## Method
 
 1. Register sources with a verified licence, a pinned version and archived, hashed evidence (implemented).
-2. Ingest with SHA-256 manifests and per-image provenance; audit exact and near duplicates across sources.
+2. Ingest with SHA-256 manifests and per-image provenance (implemented: no exact duplicate inside or across the three sources); audit near duplicates across sources.
 3. Map source labels to a common taxonomy; audit label quality with human review (models never change labels).
 4. Build three splits: random on the raw pool (A0), group-aware random on the cleaned pool (A1), and source-held-out / leave-one-source-out (B).
 5. Train YOLO11n (and later RT-DETR) on [EVREN](docs/EVREN.md); evaluate every model with one local evaluator; report the generalization gap with confidence intervals.
@@ -35,15 +35,25 @@ Details, data contracts, invariants and risks: [docs/SPEC.md](docs/SPEC.md). Dec
 
 ## Dataset sources
 
-All three accepted sources are CC BY 4.0, read from the repository record and confirmed by the DOI registry; the records are archived and hashed in [manifests/evidence/](manifests/evidence/). Nothing has been downloaded yet.
+All three accepted sources are CC BY 4.0, read from the repository record and confirmed by the DOI registry; the records are archived and hashed in [manifests/evidence/](manifests/evidence/). Milestone 2 downloaded the archives on 2026-09-30 (size and checksum match the records) and ingested them; the raw data stays outside the repository.
 
-| slug | dataset | images / boxes | acquisition |
-|---|---|---|---|
-| `dspcbsd-plus` | [DsPCBSD+](https://doi.org/10.6084/m9.figshare.24970329.v1) | 10,259 / 20,276 | factory AOI crops |
-| `pcb-ind` | [PCB-IND v4](https://doi.org/10.5281/zenodo.19723114) | 4,789 / 5,932 | factory AOI ROI patches |
-| `pcb-defect` | [PCB-Defect](https://doi.org/10.17632/vdj74sngvn.1) | 230 / 1,704 | lab boards, flatbed scan |
+| slug | dataset | images / boxes | original split | board or batch key in the archive | acquisition |
+|---|---|---|---|---|---|
+| `dspcbsd-plus` | [DsPCBSD+](https://doi.org/10.6084/m9.figshare.24970329.v1) | 10,259 / 20,276 | train / val, random 8:2 | none | factory AOI crops |
+| `pcb-ind` | [PCB-IND v4](https://doi.org/10.5281/zenodo.19723114) | 4,789 / 5,932 | train / val / test | production batch and board side, from the file names | factory AOI ROI patches |
+| `pcb-defect` | [PCB-Defect](https://doi.org/10.17632/vdj74sngvn.1) | 230 / 1,704 | none | board-design family, derived from the original scan names | lab boards, flatbed scan |
 
 DeepPCB is rejected (its README and its LICENSE file disagree). Every decision and the licences of other candidates are in [LICENSE_MATRIX.md](LICENSE_MATRIX.md).
+
+## What ingest found (Milestone 2)
+
+The full per-source report is [reports/m2-ingest-report.md](reports/m2-ingest-report.md); the machine-readable reports are in [manifests/ingest/](manifests/ingest/).
+
+- All three archives match the size and checksum published by their repositories, every member passes its zip CRC-32, all 15,278 images decode, and no SHA-256 occurs twice inside a source or across sources.
+- PCB-IND is the only source with an explicit grouping key (production batch and board side, from the file name). Its official split never separates a (batch, side) group, yet 125 of its 685 batches occur in two splits.
+- DsPCBSD+ has no board or scene identifier, so a board-level split there needs similarity clustering (Milestone 3).
+- PCB-Defect's original scan names fall into 22 board-design families over 230 images, although the paper describes one image per board.
+- Smaller issues: one PCB-IND box has zero height (it is missing from the COCO file), one PCB-IND VOC file is empty, 111 DsPCBSD+ images are 108×108 instead of 226×226, and 127 PCB-IND images carry no annotation (hard negatives).
 
 ## Results
 
@@ -61,6 +71,15 @@ uv run openinspect source validate --strict
 uv run pytest
 ```
 
+The tests use small synthetic archives and need neither the network nor the datasets. To reproduce the ingest, set `OPENINSPECT_DATA_DIR` (below), then:
+
+```bash
+uv run openinspect ingest download --all
+uv run openinspect ingest run --all
+```
+
+`download` keeps a file only if its size and checksum equal the manifest's. `run` extracts the archives, reads them with one adapter per source, writes the image and annotation records under the data directory, and regenerates [manifests/ingest/](manifests/ingest/) and [reports/m2-ingest-report.md](reports/m2-ingest-report.md). `uv run pytest` checks the committed reports against the committed manifests without the data.
+
 `validate` re-hashes every archived evidence file and checks it against [manifests/evidence/SHA256SUMS.txt](manifests/evidence/SHA256SUMS.txt). `validate --release public` additionally fails when an accepted source cannot be redistributed.
 
 If this folder lives inside OneDrive, keep the virtual environment outside it, for example in PowerShell:
@@ -69,7 +88,7 @@ If this folder lives inside OneDrive, keep the virtual environment outside it, f
 $env:UV_PROJECT_ENVIRONMENT = "C:\venvs\openinspect-trust"
 ```
 
-Raw data belongs outside the repository and outside OneDrive, under `OPENINSPECT_DATA_DIR` (see `.env.example`).
+Raw data belongs outside the repository and outside OneDrive, under `OPENINSPECT_DATA_DIR` (see `.env.example`); `ingest` refuses a data directory inside either. About 0.9 GB is used by the three sources.
 
 ## Licence
 

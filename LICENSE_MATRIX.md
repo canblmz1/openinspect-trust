@@ -13,7 +13,7 @@ This file summarises the manifests; the manifests are the source of truth.
 
 ## A. Accepted
 
-Each licence was read from the repository record, confirmed by the DOI registry (DataCite), and the paper's own licence was read from Crossref. The records are archived and hashed. **Nothing has been downloaded yet.**
+Each licence was read from the repository record, confirmed by the DOI registry (DataCite), and the paper's own licence was read from Crossref. The records are archived and hashed. The archives were downloaded and verified in Milestone 2 (2026-09-30): size and checksum equal the records, and no licence statement inside an archive contradicts them.
 
 | slug | licence | record (pinned) | archive listed by the record | repository record says | DataCite says | paper (Crossref) says |
 |---|---|---|---|---|---|---|
@@ -42,7 +42,7 @@ For all three: redistribution, adaptation and commercial use are allowed by CC B
 3. **Permissive tags on re-uploads**: a Hub, Kaggle or Roboflow tag says nothing about the uploader's rights.
 4. **A "CC BY" label does not prove ownership** of the images (Mixed PCB). Check that the uploader is the creator and that the paper describes original acquisition.
 5. **Documentation drift**: the PCB-IND GitHub README and the Zenodo v4 description list different classes. Pin the record version and read labels from the files.
-6. **Registry generic caveats**: Mendeley's licence text warns that third-party content inside a dataset may need further permission. Re-check images for third-party marks at ingest.
+6. **Registry generic caveats**: Mendeley's licence text warns that third-party content inside a dataset may need further permission. Re-check images for third-party marks at ingest (M2: a seeded sample of 12 images per source showed none; the check is not exhaustive).
 
 ## D. Obligations when releasing "OpenInspect-Trust v0.1" (CC BY 4.0 inputs)
 

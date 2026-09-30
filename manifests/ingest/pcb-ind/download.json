@@ -1,0 +1,23 @@
+{
+  "files": [
+    {
+      "bytes": 101336845,
+      "checksum_algo": "md5",
+      "checksum_expected": "1325f8dffeb73bef4db34fbd22b31ec5",
+      "checksum_ok": true,
+      "downloaded_at": "2026-09-30T17:27:19+00:00",
+      "etag": null,
+      "filename": "PCB-IND_v4.zip",
+      "http_status": 200,
+      "last_modified": null,
+      "md5": "1325f8dffeb73bef4db34fbd22b31ec5",
+      "resumed": false,
+      "sha256": "29cf919c64cab7e60e90e16bf3f42cce674688f99295d66a8e10d0066836e3c9",
+      "size_expected": 101336845,
+      "size_ok": true,
+      "skipped": false,
+      "url": "https://zenodo.org/api/records/19723114/files/PCB-IND_v4.zip/content"
+    }
+  ],
+  "slug": "pcb-ind"
+}

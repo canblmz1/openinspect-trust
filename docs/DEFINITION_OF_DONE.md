@@ -37,9 +37,24 @@ A milestone is done only when every item on its list is true and the milestone r
 - [x] GitHub Actions runs ruff, mypy, pytest and manifest validation without downloading any dataset (run 36748100561 on commit 65d37f8: all six jobs green, tests and manifest validation on Ubuntu and Windows).
 - [x] README states problem, question, method, sources, results and reproduction, without marketing language.
 
+## M2: ingest
+
+- [x] `openinspect ingest download` fetches each accepted archive from the manifest URL, resumes and retries, keeps a file only if its size and the repository's checksum match, computes the SHA-256 and records it in the manifest. Three archives, 388 MB: all matched.
+- [x] Archive integrity: the zip CRC-32 of every member passes; extraction refuses unsafe members (T11); the SHA-256 of every extracted file is listed.
+- [x] Real counts replace claimed counts: images, boxes, classes and original splits are recomputed from the files and reconciled with each manifest, and the manifests were corrected where they differed (DsPCBSD+ smallest image size, PCB-Defect class strings and size range, PCB-IND per-class counts). No mismatch remains.
+- [x] Every image is decoded: 15,278 of 15,278. A corrupt or unopenable file would be listed in the report.
+- [x] Annotation formats are identified from the files (COCO, YOLO, VOC as shipped), read in one canonical format and cross-checked against the others (T10); orphan images, orphan annotations and degenerate boxes are reported.
+- [x] Exact duplicates (SHA-256): 0 inside each source and 0 across the three.
+- [x] The original train/val/test structure is recorded per source; the grouping key is reported as explicit, derived or none with its evidence (T13).
+- [x] Licence and attribution stay traceable: each report links to its manifest, states whether the attribution text is present, and quotes what the archive itself says about its licence.
+- [x] Adapters were written after inspecting the real archives. Unit tests use small synthetic archives with the same layouts, so no test needs the network or a real dataset; integration tests check the committed reports against the committed manifests.
+- [x] No raw data, archive, extracted file or record is committed; everything lives under `OPENINSPECT_DATA_DIR`, outside the repository and OneDrive.
+- [ ] GitHub Actions green on the M2 commit.
+
 ## v0.1 release
 
-- [ ] 3 sources `accepted` with archived evidence, ingest gates G7 and G8 passed; `ATTRIBUTION.md` complete.
+- [x] 3 sources `accepted` with archived evidence; ingest gates G7 and G8 passed (M2, 2026-09-30).
+- [ ] `ATTRIBUTION.md` complete.
 - [ ] Release has 2,000–5,000 images and 3–5 normalized classes derived from real labels; the mapping is approved and tagged.
 - [ ] 100% of image and annotation rows pass the provenance validator (SPEC §6.2, I7, I8).
 - [ ] 0 repeated SHA-256 in `v0.1-clean`; near-duplicate report published with the calibration evidence (thresholds not arbitrary).

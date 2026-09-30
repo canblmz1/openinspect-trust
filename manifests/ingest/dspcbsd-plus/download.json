@@ -1,0 +1,23 @@
+{
+  "files": [
+    {
+      "bytes": 128541608,
+      "checksum_algo": "md5",
+      "checksum_expected": "508334b65bdaea7336f4c1b5d5a80a81",
+      "checksum_ok": true,
+      "downloaded_at": "2026-09-30T17:22:11+00:00",
+      "etag": "\"508334b65bdaea7336f4c1b5d5a80a81\"",
+      "filename": "DsPCBSD+.zip",
+      "http_status": 200,
+      "last_modified": "Tue, 16 Jan 2024 15:44:39 GMT",
+      "md5": "508334b65bdaea7336f4c1b5d5a80a81",
+      "resumed": false,
+      "sha256": "b256846a1f2cf17e6e88be49c551ebf2c7551601e08691f50c70dc367a218817",
+      "size_expected": 128541608,
+      "size_ok": true,
+      "skipped": false,
+      "url": "https://ndownloader.figshare.com/files/44069552"
+    }
+  ],
+  "slug": "dspcbsd-plus"
+}

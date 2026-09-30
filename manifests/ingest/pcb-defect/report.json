@@ -1,0 +1,171 @@
+{
+  "adapter": {
+    "canonical_format": "coco",
+    "formats_present": [
+      "coco"
+    ],
+    "name": "pcb_defect",
+    "status": "ok",
+    "version": 1
+  },
+  "annotations": 1704,
+  "anomalies": [
+    {
+      "code": "unused_category",
+      "count": 1,
+      "examples": [
+        "detecting-pcb-defects"
+      ],
+      "message": "a COCO category without any annotation (Roboflow's project placeholder); not a class",
+      "severity": "info"
+    }
+  ],
+  "archive": {
+    "bytes": 158048862,
+    "checksum_algo": "sha256",
+    "checksum_ok": true,
+    "filename": "PCB_Defect.zip",
+    "files_extracted": 231,
+    "sha256": "a5fb17e7009f96ffdb833cd9309b36da775545c8cc36a6dca3a8e9b4fbcb5f2a",
+    "size_ok": true,
+    "zip_crc_ok": true
+  },
+  "classes": [
+    {
+      "count": 276,
+      "label": "missing_pad",
+      "label_id": 1
+    },
+    {
+      "count": 356,
+      "label": "mouse_bite",
+      "label_id": 2
+    },
+    {
+      "count": 276,
+      "label": "open_circuit",
+      "label_id": 3
+    },
+    {
+      "count": 254,
+      "label": "short",
+      "label_id": 4
+    },
+    {
+      "count": 296,
+      "label": "spur",
+      "label_id": 5
+    },
+    {
+      "count": 246,
+      "label": "spurious_copper",
+      "label_id": 6
+    }
+  ],
+  "dataset_name": "PCB-Defect: An Annotated Dataset for Surface Defect Detection in Printed Circuit Boards",
+  "decode": {
+    "decodable": 230,
+    "failed": 0,
+    "failures": [],
+    "images": 230
+  },
+  "digests": {
+    "annotations_jsonl": "4832155f09fb9b25f78544c7e344a6a0d2247f59b1afbcb78c189d9b069709da",
+    "files_list": "2f76d726a63da03342a0fac11847f1c64cce6b973d8f2ad5a13b65c9a2ceae9a",
+    "images_jsonl": "1abd46e2a6dbe422b63d348f7b2772e3a8d5bf3a8b5cbccd7f0e0ab3866ae48e"
+  },
+  "exact_duplicates": {
+    "cross_split_groups": 0,
+    "groups": 0,
+    "redundant_files": 0
+  },
+  "grouping": {
+    "evidence": [
+      "22 values of A and 40 values of (A, B) over 230 images; images per A: min 2, median 10.5, max 16",
+      "nearest neighbour by 32x32 grayscale correlation shares A for 159/230 images (69%; chance 5%) and shares (A, B) for 150/230 (65%; chance 2%)"
+    ],
+    "key": "A of the original scan name <A>-<B>-<C>.png (extra.name in the COCO file); (A, B) is finer",
+    "n_groups": 22,
+    "quality": "derived",
+    "summary": "the COCO file keeps the original scan name of each image; its first field behaves like a board design family (appearance predicts it far better than chance), but no document defines the fields"
+  },
+  "images": 230,
+  "licence": {
+    "archive_says": [
+      "COCO file states licence 'CC BY 4.0' (https://creativecommons.org/licenses/by/4.0/)"
+    ],
+    "attribution_in_manifest": true,
+    "evidence_files": 4,
+    "licence_url": "https://creativecommons.org/licenses/by/4.0/",
+    "manifest": "manifests/sources/pcb-defect.yaml",
+    "spdx": "CC-BY-4.0"
+  },
+  "notes": [
+    "The paper reports one image per physical board; the original names show only 22 design families across 230 images, so images of one family share their board layout."
+  ],
+  "reconciliation": [
+    {
+      "field": "content.image_count",
+      "manifest": "230",
+      "observed": "230",
+      "status": "match"
+    },
+    {
+      "field": "content.annotation_count",
+      "manifest": "1704",
+      "observed": "1704",
+      "status": "match"
+    },
+    {
+      "field": "content.original_classes[mouse_bite].count",
+      "manifest": "356",
+      "observed": "356",
+      "status": "match"
+    },
+    {
+      "field": "content.original_classes[spur].count",
+      "manifest": "296",
+      "observed": "296",
+      "status": "match"
+    },
+    {
+      "field": "content.original_classes[open_circuit].count",
+      "manifest": "276",
+      "observed": "276",
+      "status": "match"
+    },
+    {
+      "field": "content.original_classes[missing_pad].count",
+      "manifest": "276",
+      "observed": "276",
+      "status": "match"
+    },
+    {
+      "field": "content.original_classes[short].count",
+      "manifest": "254",
+      "observed": "254",
+      "status": "match"
+    },
+    {
+      "field": "content.original_classes[spurious_copper].count",
+      "manifest": "246",
+      "observed": "246",
+      "status": "match"
+    },
+    {
+      "field": "content.image_size_px.min",
+      "manifest": "[1540, 1285]",
+      "observed": "[1540, 1285]",
+      "status": "match"
+    },
+    {
+      "field": "content.image_size_px.max",
+      "manifest": "[5971, 5236]",
+      "observed": "[5971, 5236]",
+      "status": "match"
+    }
+  ],
+  "schema_version": 1,
+  "slug": "pcb-defect",
+  "splits": []
+}

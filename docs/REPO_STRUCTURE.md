@@ -1,14 +1,15 @@
 # Repository structure
 
-Target layout (brief §34) with additions marked **+**. The last column says which milestone creates the item. M0 and M1 files exist today; the rest appears with its milestone.
+Target layout (brief §34) with additions marked **+**. The last column says which milestone creates the item. M0, M1 and M2 files exist today; the rest appears with its milestone.
 
 ```
 openinspect-trust/
 ├── src/openinspect/
 │   ├── __init__.py, __main__.py, cli/       + `python -m openinspect`, the `openinspect` script      M1
+│   ├── settings.py                          + data directory from flag, env or .env; safety checks      M2
 │   ├── provenance/                          schemas (SourceManifest, ImageRecord, …), registry,          M1–M2
 │   │                                        manifest generator, validators
-│   ├── ingest/                              downloaders, integrity checks, metadata, normalisation      M2
+│   ├── ingest/                              download, extract, adapters/, records, report               M2
 │   ├── dedup/                               exact, pHash, grouping, review files                        M3
 │   ├── embeddings/                          DINOv2 / OpenCLIP extraction, nearest-neighbour search      M3
 │   ├── taxonomy/                            mapping load, validate, apply                               M4
@@ -20,13 +21,13 @@ openinspect-trust/
 ├── manifests/
 │   ├── sources/                             one YAML per source + _template.yaml                        M0
 │   ├── evidence/<slug>/                     + archived records, hashed in SHA256SUMS.txt                M0
-│   ├── sha256/                              + per-source file hash lists                                M2
-│   ├── images/                              + provenance JSONL per release                              M2
+│   ├── ingest/<slug>/                       + download.json, report.json; cross_source.json             M2
+│   ├── images/                              + provenance JSONL per release (release assembly)           M5
 │   └── splits/                              + split files and meta                                      M5
 ├── taxonomy/                                mapping.csv                                                 M4
 ├── experiments/                             frozen experiment configs, DEVIATIONS.md, EVREN run notes   M7
 ├── benchmarks/                              run records, metrics, dedup_calibration/                    M3, M7
-├── reports/                                 dedup, audit and gap reports (generated)                    M3+
+├── reports/                                 ingest (M2), dedup, audit and gap reports (generated)       M2+
 ├── scripts/                                 thin helpers only; logic lives in the package               as needed
 ├── tests/
 │   ├── unit/, integration/
@@ -51,7 +52,8 @@ Heavy data lives outside git and outside OneDrive, under `OPENINSPECT_DATA_DIR`:
 ```
 <OPENINSPECT_DATA_DIR>/
 ├── raw/<slug>/            downloaded archives (never edited)
-├── extracted/<slug>/      unpacked files
+├── extracted/<slug>/      unpacked files (never edited)
+├── records/<slug>/        image and annotation JSONL, files.sha256 (regenerable; their digests are in the ingest report)
 ├── release/<version>/     normalised images of a release
 ├── embeddings/            .npy files
 └── exports/               YOLO/COCO ZIPs (the brief's `build/…zip`)
@@ -61,12 +63,12 @@ Heavy data lives outside git and outside OneDrive, under `OPENINSPECT_DATA_DIR`:
 
 | tracked | ignored |
 |---|---|
-| manifests (YAML), evidence (small JSON/PDF), provenance JSONL, dedup groups, taxonomy CSV, split files, run records, reports, docs, code, synthetic fixtures | images, archives, embeddings, weights, `.env`, caches, virtual environments |
+| manifests (YAML), evidence (small JSON/PDF), ingest reports, release provenance JSONL, dedup groups, taxonomy CSV, split files, run records, reports, docs, code, synthetic fixtures | images, archives, embeddings, weights, `.env`, caches, virtual environments |
 
 ## Conventions
 
 - `src/` layout; package `openinspect`; Python 3.12.
 - Slugs: lowercase letters, digits, hyphens; immutable once used in an image record.
-- IDs: `OI_%06d` for images, `DUP-%03d` for duplicate groups.
+- IDs: `OI_%06d` for images (assigned at release assembly, T8; ingest records are keyed by source and item path), `DUP-%03d` for duplicate groups.
 - Text files use LF line endings (`.gitattributes`) so hashes of manifests do not depend on the operating system.
 - Paths inside manifests are POSIX-style and relative.

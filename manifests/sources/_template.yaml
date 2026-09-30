@@ -56,9 +56,9 @@ licence:
 acquisition:
   download_method: null          # http / api / git  (must be scriptable and repeatable)
   download_files: []             # [{url, filename, bytes, record_checksum: {algo, value}}]
-  download_date: null            # YYYY-MM-DD of the first successful download
-  archive_sha256: null           # {filename: sha256} of each downloaded archive, computed by us
-  sha256_manifest: null          # path to the per-file SHA-256 list written by `ingest`
+  download_date: null            # YYYY-MM-DD of the first successful download (written by `ingest download`)
+  archive_sha256: null           # {filename: sha256} of each downloaded archive, computed by us (written by `ingest download`)
+  sha256_manifest: null          # path of the ingest report (archive SHA-256, digests of the record files), written by `ingest run`
 
 content:
   domain: null

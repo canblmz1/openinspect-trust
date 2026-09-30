@@ -64,9 +64,9 @@ acquisition:
       filename: "PCB-IND_v4.zip"
       bytes: 101336845
       record_checksum: {algo: md5, value: "1325f8dffeb73bef4db34fbd22b31ec5"}
-  download_date: null
-  archive_sha256: null
-  sha256_manifest: null
+  download_date: 2026-09-30
+  archive_sha256: {"PCB-IND_v4.zip": "29cf919c64cab7e60e90e16bf3f42cce674688f99295d66a8e10d0066836e3c9"}
+  sha256_manifest: "manifests/ingest/pcb-ind/report.json"
 
 content:
   domain: pcb-surface-defects
@@ -79,33 +79,37 @@ content:
   pixel_pitch_um: null
   colour: rgb
   original_classes:
-    - {label: "mouse_bite", meaning: "Mouse bite", count: null}
-    - {label: "missing_copper", meaning: "Missing copper", count: null}
-    - {label: "scratch", meaning: "Scratch", count: null}
-    - {label: "spurious_copper", meaning: "Spurious copper", count: null}
-    - {label: "copper_burr", meaning: "Copper burr (edge protrusion)", count: null}
-    - {label: "stain", meaning: "Stain", count: null}
-    - {label: "short", meaning: "Short", count: null}
-    - {label: "open", meaning: "Open", count: null}
+    - {label: "mouse_bite", meaning: "Mouse bite", count: 844}
+    - {label: "missing_copper", meaning: "Missing copper", count: 1715}
+    - {label: "scratch", meaning: "Scratch", count: 463}
+    - {label: "spurious_copper", meaning: "Spurious copper", count: 660}
+    - {label: "copper_burr", meaning: "Copper burr (edge protrusion)", count: 1174}
+    - {label: "stain", meaning: "Stain", count: 584}
+    - {label: "short", meaning: "Short", count: 360}
+    - {label: "open", meaning: "Open", count: 132}
   official_splits:
     scheme: "8:1:1 train/val/test (tools/data_split.py in the code repository)"
     counts: {train: 3833, val: 478, test: 478}
-    how_made: "Near-duplicates (pHash) resolved with train > val > test retention priority. Whether the split is random or batch-aware is not stated in the text we read."
-  source_group_key: "production batch = first four characters of the filename (paper); verify against real filenames at ingest"
+    how_made: "Near-duplicates (pHash) resolved with train > val > test retention priority. Verified at ingest (M2): the split never separates a (batch, side) group, but 125 of 685 batches occur in two splits, so it is group-aware at (batch, side) level only."
+  source_group_key: "production batch = first four characters of the file name; names are <batch>_<b|t>_<n> (verified at ingest on all 4,789 files: 685 batches, 1,069 (batch, side) groups)"
 
 provenance_risks:
   acquisition_environment: "Mass-production line of Fujian Fuqiang Delicate Circuit Plate Co., Ltd., outer-layer etching inspection; colour CCD AOI (raw scale about 6-12 um/px, scan 160 mm/s so motion blur is present); 300x300 ROI patches cropped around AOI-reported anomalies with a small random offset; AOI online + VRS confirmation (paper)."
   independence_notes: "Fujian Polytechnic Normal University, Fujian Fuqiang Delicate Circuit Plate, CAS Quanzhou. No shared authors or institutions with dspcbsd-plus or pcb-defect. Same modality as dspcbsd-plus (factory AOI etch-stage crops), so leave-one-source-out between those two mostly measures factory/device shift."
-  known_duplicates: "Authors removed 57 near-duplicates with a 64-bit pHash, Hamming distance <= 3, compared only WITHIN a production batch; cross-batch duplicates were not checked. AOI systems capture overlapping images of the same defect (paper)."
+  known_duplicates: "0 exact duplicates (SHA-256) among the 4,789 images (M2). The authors removed 57 near-duplicates with a 64-bit pHash, Hamming distance <= 3, compared only WITHIN a production batch; cross-batch duplicates were not checked. AOI systems capture overlapping images of the same defect (paper)."
   known_weaknesses:
     - "ROI patches around AOI-reported anomalies: selection bias toward AOI-detectable regions. Includes multi-defect images and zero-annotation images (AOI false calls)."
     - "Annotation = AOI pre-screening + verified annotation: anomalies the AOI missed are not labelled."
     - "Authors' own failure analysis: low-contrast 'stain' missed, tiny 'open' missed, 'short' vs 'copper_burr' confused."
-    - "Class-list conflict: the GitHub README lists 8 classes including 'Missing Hole', 'Spur' and 'Pin Hole', the Zenodo v4 description lists 'missing_copper', 'copper_burr' and 'stain'. classes.json inside the archive is authoritative; pin the record version."
+    - "Class-list conflict: the GitHub README lists 8 classes including 'Missing Hole', 'Spur' and 'Pin Hole', the Zenodo v4 description lists 'missing_copper', 'copper_burr' and 'stain'. Verified at ingest: classes.json and YOLO/data.yaml inside the archive agree with the Zenodo description, so the GitHub README is stale; pin the record version."
+    - "Measured at ingest (M2): the YOLO labels hold all 5,932 boxes; the COCO file lacks one (val image 5799_t_038, a zero-height box at the top edge that converters drop), and the VOC file 6194_b_017.xml (train) is 249 NUL bytes. YOLO is therefore the canonical annotation set."
+    - "Measured at ingest (M2): 127 images have no annotation (115 train, 3 val, 9 test), the hard negatives the README mentions. One box (5799_t_038) is degenerate (zero height)."
+    - "Measured at ingest (M2): the archive README defers the licence to the Zenodo record; the archive itself carries no licence text."
+    - "Pixel pitch is not in the files. Measured at ingest (M2): no image carries EXIF or a DPI value (the JFIF density is an aspect ratio only), so pixel_pitch_um stays null."
   synthetic_or_engineered_defects: false
 
 citation:
   citation_text: "Yan, H., Yu, X., Ma, B., Zhang, H., Liu, Y., Huang, G., Xie, S., Li, J., Li, Q. Industrial Printed Circuit Board Surface Defect Dataset for Object Detection. Sci Data 13, 1356 (2026). https://doi.org/10.1038/s41597-026-07684-4. Dataset: https://doi.org/10.5281/zenodo.19723114"
   bibtex: null
 
-notes: "Zenodo concept DOI (all versions): 10.5281/zenodo.17988285. We pin v4 = 10.5281/zenodo.19723114. The Zenodo record lists 'Yan, Hao' as the only creator; the paper lists nine authors. The direct file URL is the `links.self` value of the archived Zenodo record. Per-class counts are in the paper; re-compute from the archive at ingest. Paper published 27 June 2026 (Scientific Data, vol. 13, article 1356)."
+notes: "Zenodo concept DOI (all versions): 10.5281/zenodo.17988285. We pin v4 = 10.5281/zenodo.19723114. The Zenodo record lists 'Yan, Hao' as the only creator; the paper lists nine authors. The direct file URL is the `links.self` value of the archived Zenodo record. Ingested in Milestone 2 (2026-09-30): size, MD5 and zip CRC-32 match the record; image, box and split counts reconcile with the paper and the per-class counts above were computed from the YOLO labels. See manifests/ingest/pcb-ind/report.json. Paper published 27 June 2026 (Scientific Data, vol. 13, article 1356)."

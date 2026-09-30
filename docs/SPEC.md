@@ -57,13 +57,15 @@ Out of scope for v0.1: more than three sources, FastAPI backend, pgvector, autom
 
 | slug | what | images / boxes | acquisition | licence |
 |---|---|---|---|---|
-| `dspcbsd-plus` | DsPCBSD+ (Sci Data 2024), 9 classes | 10,259 / 20,276 | factory AOI, etch stage, 226×226 JPG crops, pre-processed | CC BY 4.0 |
+| `dspcbsd-plus` | DsPCBSD+ (Sci Data 2024), 9 classes | 10,259 / 20,276 | factory AOI, etch stage, 226×226 JPG crops (111 of them 108×108), pre-processed | CC BY 4.0 |
 | `pcb-ind` | PCB-IND v4 (Sci Data 2026), 8 classes | 4,789 / 5,932 | factory AOI, outer-layer etch stage, 300×300 ROI patches around AOI-reported anomalies | CC BY 4.0 |
-| `pcb-defect` | PCB-Defect (Data in Brief, vol. 64), 6 classes | 230 / 1,704 | lab: etched single-layer FR4 boards, flatbed scan at 1600 dpi, 800×600 to 6000×4000 px, engineered defects | CC BY 4.0 |
+| `pcb-defect` | PCB-Defect (Data in Brief, vol. 64), 6 classes | 230 / 1,704 | lab: etched single-layer FR4 boards, flatbed scan at 1600 dpi, 1540×1285 to 5971×5236 px measured at ingest (the record says 800×600 to 6000×4000), engineered defects | CC BY 4.0 |
 
-All three: licence read from the repository record and confirmed by the DOI registry (DataCite) on 2026-09-30; status `accepted`, evidence archived and hashed. Nothing is downloaded before Milestone 2, and the ingest gates G7 and G8 still have to pass. `deeppcb` is rejected (DO NOT USE).
+All three: licence read from the repository record and confirmed by the DOI registry (DataCite) on 2026-09-30; status `accepted`, evidence archived and hashed. Milestone 2 (2026-09-30) downloaded the archives, found size and checksum equal to the records, ingested them and passed the ingest gates G7 and G8 ([reports/m2-ingest-report.md](../reports/m2-ingest-report.md)). `deeppcb` is rejected (DO NOT USE).
 
 **Source-shift spectrum.** `dspcbsd-plus` and `pcb-ind` come from different producers (no shared authors or institutions) but the same modality, so holding out one of them mostly measures factory/device shift. Holding out `pcb-defect` measures lab-to-factory shift. Results are reported per source and never averaged without the per-source rows.
+
+**Grouping keys found at ingest (M2).** `pcb-ind`: production batch and board side are in the file name (explicit); the official split keeps every (batch, side) group in one split, but 125 of its 685 batches occur in two splits. `pcb-defect`: the COCO file keeps the original scan name `<A>-<B>-<C>`; `A` behaves like a board-design family (22 values over 230 images; the most similar other image shares it for 69% of the images, chance 5%) (derived). `dspcbsd-plus`: no board or scene identifier (none); a group-aware split there needs similarity clusters from M3. Consequence: the group-aware split A1 uses an explicit key where one exists and a derived key or cluster ids otherwise, and every report says which (T13).
 
 **Candidate class core (a hypothesis, not a decision; brief §18).** By name and meaning, the labels shared by all three sources are open, short, mouse-bite and spurious copper; `spur` is shared by two and would extend to a third if `copper_burr` (PCB-IND) is judged equivalent by visual review. The normalized taxonomy is built from the real files in M4; this paragraph only shows that "3–5 classes" is realistic.
 
@@ -73,7 +75,7 @@ All three: licence read from the repository record and confirmed by the DOI regi
 open datasets ─► source add / validate ............. manifests/sources/*.yaml          [M1]
       │
       ▼
-ingest: download → verify → SHA-256 → integrity → metadata → normalise → provenance     [M2]
+ingest: download → verify → extract → adapters → decode → records → report              [M2]
       │
       ▼
 image records + annotation records (JSONL) = single source of truth
@@ -92,6 +94,8 @@ image records + annotation records (JSONL) = single source of truth
       benchmark runner ─► InferenceProvider {EvrenProvider, LocalProvider}
                           ─► predictions ─► local evaluator ─► metrics ─► reports/       [M7–M9]
 ```
+
+Release assembly (global `OI_` ids, format normalisation, crops per D7) sits between M4 and the splits and is part of M5 (T8).
 
 **EVREN boundary**
 
@@ -119,6 +123,8 @@ Deviations from the brief are marked **[dev]** and listed in D5.
 
 ### 6.2 Image record (one JSONL line per image)
 
+**At ingest (M2, T8)** a record is keyed by (`source_dataset`, `source_item_id`) and has no `id` yet. Ingest adds `decode_ok`, `decode_error`, `mode`, `dhash` (a 64-bit difference hash: a cheap fingerprint, not the calibrated near-duplicate hash of M3), `original_split`, `source_subgroup_id`, `name_family`, `original_name`, `n_annotations`, `annotation_source`, `alternate_paths` (other copies with the same bytes) and `flags`. `normalized_labels`, `phash`, `split`, `parent_id`, `crop_xyxy`, `dup_group_id`, `selected` and `exclusion_reason` come at later milestones. The type is `src/openinspect/provenance/records.py`.
+
 | field | notes |
 |---|---|
 | `id` | `OI_%06d`, assigned once; order = sort by (`source_dataset`, `source_item_id`) so it is reproducible |
@@ -143,6 +149,8 @@ Deviations from the brief are marked **[dev]** and listed in D5.
 ### 6.3 Annotation record (one line per box) **[dev]**
 `ann_id`, `image_id`, `source_ann_id`, `original_label`, `normalized_label` (null until mapped), `bbox_xyxy` (release-image pixels), `bbox_source` (original coordinates and format), `mapping_status`, `review_status`, `review_note`.
 
+At ingest an annotation is keyed by (`source_dataset`, `source_item_id`, `ann_index`) and carries `original_label`, `label_id`, `bbox_xyxy` in pixels of the shipped image, `in_bounds` and `flags`; the other fields are added at release assembly and in M4.
+
 ### 6.4 Duplicate group (brief §16)
 `group_id` (`DUP-019`), `items` (image ids), `similarity`, `type` (`exact` / `near_duplicate` / `group_overlap`), `method` (`sha256` / `phash` / `embedding`), `cross_source` (bool), `decision` (`review` / `keep_one` / `keep_all_same_split` / `not_duplicate`), `keep_id`, `decided_by`, `decided_on`. Only exact duplicates may be auto-decided; everything else is `review` until a human decides.
 
@@ -162,7 +170,9 @@ Download → source validation → SHA-256 manifest → image integrity check �
 
 - Integrity: the image decodes fully, size > 0, dimensions plausible; **EXIF orientation is recorded and must be 1** (otherwise box coordinates may not match the pixels other tools show).
 - Normalisation changes no pixels except cropping/tiling, which is recorded through `parent_id` and `crop_xyxy`. Images used as-is keep their bytes. Crops taken from JPEG parents are saved losslessly to avoid a second compression.
-- **Scale and crop policy (D7).** Native sizes differ by orders of magnitude (226², 300², up to 6000×4000), while the nominal pixel pitch is similar (about 6–16 µm/px). Recommended policy: keep native resolution; cut large images (`pcb-defect`) into ROI crops of about 300×300 around annotations, mimicking how the AOI sets were made. The policy is part of the benchmark definition, fixed in M2, with a sensitivity check at a second crop size if budget allows.
+- **Scale and crop policy (D7).** Native sizes differ by orders of magnitude (226², 300², up to 5971×5236, measured in M2), while the nominal pixel pitch is similar (about 6–16 µm/px). Recommended policy: keep native resolution; cut large images (`pcb-defect`) into ROI crops of about 300×300 around annotations, mimicking how the AOI sets were made. The policy is part of the benchmark definition, fixed at the start of M5 (release assembly), with a sensitivity check at a second crop size if budget allows.
+
+**As implemented in M2** (`openinspect ingest`, decisions T8–T13): `download` (size and repository checksum must match the manifest; our SHA-256 is recorded) → `extract` (zip CRC-32 of every member, safe extraction, SHA-256 of every file) → one adapter per source, written from the real file layout (canonical annotation format, cross-check against the other shipped formats, orphan images and annotations, degenerate boxes) → every image decoded and fingerprinted → records, exact-duplicate check inside and across sources, grouping analysis → reconciliation of the manifest (gate G7) → `manifests/ingest/<slug>/report.json` and `reports/m2-ingest-report.md`. Raw data, extracted files and records stay under `OPENINSPECT_DATA_DIR`; git holds the reports and the manifests. **Format normalisation and the crop policy are not part of M2**: they need the final pool and move to release assembly at the start of M5 (T8).
 
 ### 7.2 Exact duplicates (brief §13)
 SHA-256 of file bytes, and optionally of decoded pixels, computed **before** anything is uploaded to EVREN and **across** sources. Within a source the first item by sorted `source_item_id` is kept; the rest get `excluded: exact_duplicate`. A duplicate pair with conflicting labels is logged as a label-noise candidate. A cross-source exact duplicate means one source contains the other's images: it is a provenance finding (independence and licence), not just a cleaning step.
@@ -239,7 +249,7 @@ Observed on 2026-09-30: Windows 11 Home, Python 3.12.10, git 2.53, Docker 29.3.1
 - Ingestion, dedup and embeddings run on CPU (about 5k small images with DINOv2-small).
 - The local GPU is for smoke tests only (YOLO11n, tiny subset, few epochs, small batch) and needs a CUDA build of PyTorch. All real training happens on EVREN.
 - **OneDrive:** synced folders risk sync conflicts, locked files and quota use. Decision D6: the repository stays where it is (risk recorded); raw data goes outside OneDrive and outside the repository under `OPENINSPECT_DATA_DIR` (suggested `C:\data\openinspect`), and so does the virtual environment (`UV_PROJECT_ENVIRONMENT`). Moving the repository to `C:\dev\openinspect-trust` removes the risk.
-- Disk budget: keep total data under about 10 GB.
+- Disk budget: keep total data under about 10 GB. After M2 the data directory holds about 0.9 GB (370 MB archives, 495 MB extracted, 23 MB records).
 
 ## 10. Reproducibility, security, quality gates
 
@@ -254,7 +264,7 @@ Observed on 2026-09-30: Windows 11 Home, Python 3.12.10, git 2.53, Docker 29.3.1
 |---|---|---|
 | R1 | licence laundering or mirror provenance | gates G1–G9; cross-source duplicate audit as provenance test |
 | R2 | independence overstated: two of three sources are factory-AOI etch-stage crops | per-source reporting; interpret LOSO by modality |
-| R3 | crop/scale policy changes defect pixel size and results | policy frozen in M2; sensitivity check |
+| R3 | crop/scale policy changes defect pixel size and results | policy frozen at the start of M5; sensitivity check |
 | R4 | tiny held-out set (`pcb-defect`: 230 images) gives wide CIs | cluster bootstrap; always report n |
 | R5 | EVREN API may limit how low the confidence threshold can go, truncating the PR curve | the confidence and IoU thresholds are documented parameters; check the lowest allowed value; otherwise headline mAP comes from `LocalProvider` on exported weights and the API gives operating-point metrics and a parity check |
 | R6 | EVREN may withdraw a model family | resolved for now: YOLO11 and RT-DETR are offered (EVREN guide, per the maintainer); recheck before M7 |
@@ -279,7 +289,7 @@ Logged with evidence, reason, risk and revisit condition in [DECISIONS](DECISION
 | D4 | dataset release licence: CC BY 4.0, provisional; no public release before the release checklist | decided |
 | D5 | schema deviations from brief §11 | decided (accepted) |
 | D6 | locations: repository stays; data and virtual environment outside OneDrive | decided |
-| D7 | scale and crop policy: native resolution, about 300×300 ROI crops for `pcb-defect` | decided in principle, frozen in M2 |
+| D7 | scale and crop policy: native resolution, about 300×300 ROI crops for `pcb-defect` | decided in principle, frozen at the start of M5 |
 | D8 | EVREN facts | recorded in [EVREN](EVREN.md); two items UNKNOWN |
 | D9 | human review budget: about 300 label items and 300 calibration pairs | default, confirmed at M3 |
 | D10 | analysis defaults: δ = 0.02 mAP50, 1,000 resamples, 3 seeds | default, revisited after the pilot |
@@ -290,10 +300,10 @@ Logged with evidence, reason, risk and revisit condition in [DECISIONS](DECISION
 |---|---|---|
 | M0 | this specification, gates, intake format, definition of done | S |
 | M1 | source registry and provenance manifest generator: `openinspect source add/list/validate` | M |
-| M2 | ingest: reproducible downloader, SHA-256 manifests, integrity, metadata, normalisation, image and annotation records | L |
+| M2 | ingest: reproducible downloader, SHA-256 manifests, integrity, metadata, image and annotation records, per-source report (done 2026-09-30) | L |
 | M3 | exact and near-duplicate audit, embeddings, calibration, review files | L |
 | M4 | taxonomy mapping and label-quality audit with review queue | M |
-| M5 | splits A0/A1/B, leakage tests in CI | M |
+| M5 | release assembly (global ids, normalisation and crop policy D7), splits A0/A1/B, leakage tests in CI | M |
 | M6 | YOLO/COCO export; maintainer uploads `v0.1-raw` and `v0.1-clean` in the EVREN UI and freezes them | S |
 | M7 | local smoke test, then EVREN runs E1–E3 | L |
 | M8 | `InferenceProvider`, `EvrenProvider`, `LocalProvider`, evaluator, benchmark runner | M |
@@ -302,7 +312,7 @@ Logged with evidence, reason, risk and revisit condition in [DECISIONS](DECISION
 | M11 | research poster and SAYZEK project brief | M |
 | optional | FastAPI backend (brief §33), after M9 | M |
 
-Status on 2026-09-30: M0 and M1 are done; M2 is next. Its first step downloads the three accepted archives (about 388 MB in total) to `OPENINSPECT_DATA_DIR`, so that the adapters are written against the real file layouts.
+Status on 2026-09-30: M0, M1 and M2 are done; M3 (exact and near-duplicate audit, embeddings) is next.
 
 ## 14. Related work and positioning
 

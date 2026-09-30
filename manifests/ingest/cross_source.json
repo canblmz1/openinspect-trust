@@ -1,0 +1,15 @@
+{
+  "groups": [],
+  "images_per_source": {
+    "dspcbsd-plus": 10259,
+    "pcb-defect": 230,
+    "pcb-ind": 4789
+  },
+  "schema_version": 1,
+  "shared_sha256": 0,
+  "sources": [
+    "dspcbsd-plus",
+    "pcb-defect",
+    "pcb-ind"
+  ]
+}

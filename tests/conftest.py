@@ -39,12 +39,14 @@ class Repo:
 
 @pytest.fixture
 def repo(tmp_path: Path) -> Repo:
-    (tmp_path / "configs").mkdir()
-    (tmp_path / "configs" / "licences.yaml").write_text(LICENCES_YAML, encoding="utf-8")
-    (tmp_path / "manifests" / "sources").mkdir(parents=True)
-    evidence = tmp_path / EVIDENCE_REL
+    """A throw-away repository in ``<tmp>/repo``; ``<tmp>/data`` stays free for a data directory."""
+    root = tmp_path / "repo"
+    (root / "configs").mkdir(parents=True)
+    (root / "configs" / "licences.yaml").write_text(LICENCES_YAML, encoding="utf-8")
+    (root / "manifests" / "sources").mkdir(parents=True)
+    evidence = root / EVIDENCE_REL
     evidence.parent.mkdir(parents=True)
     evidence.write_bytes(EVIDENCE_BYTES)
-    index = tmp_path / "manifests" / "evidence" / "SHA256SUMS.txt"
+    index = root / "manifests" / "evidence" / "SHA256SUMS.txt"
     index.write_text(f"{EVIDENCE_SHA}  demo-source/record.json\n", encoding="ascii")
-    return Repo(tmp_path)
+    return Repo(root)

@@ -1,0 +1,23 @@
+{
+  "files": [
+    {
+      "bytes": 158048862,
+      "checksum_algo": "sha256",
+      "checksum_expected": "a5fb17e7009f96ffdb833cd9309b36da775545c8cc36a6dca3a8e9b4fbcb5f2a",
+      "checksum_ok": true,
+      "downloaded_at": "2026-09-30T17:25:28+00:00",
+      "etag": "\"667573d0c0e5c221eaeb86d1f4e03a4a-8\"",
+      "filename": "PCB_Defect.zip",
+      "http_status": 200,
+      "last_modified": "Fri, 08 Aug 2025 09:36:50 GMT",
+      "md5": "0ff62e65d2f0d5fad1449916056140b6",
+      "resumed": false,
+      "sha256": "a5fb17e7009f96ffdb833cd9309b36da775545c8cc36a6dca3a8e9b4fbcb5f2a",
+      "size_expected": 158048862,
+      "size_ok": true,
+      "skipped": false,
+      "url": "https://data.mendeley.com/public-files/datasets/vdj74sngvn/files/9a62af5d-f3ea-4b3d-a99b-e48115d51c2f/file_downloaded"
+    }
+  ],
+  "slug": "pcb-defect"
+}

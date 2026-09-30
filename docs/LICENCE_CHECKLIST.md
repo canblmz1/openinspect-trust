@@ -1,6 +1,6 @@
 # Licence acceptance checklist
 
-One completed checklist per source. **Admission gates (G1–G6, G9)** decide whether a source may be `accepted`. **Ingest gates (G7, G8)** are verified in Milestone 2, when the data is downloaded; a failure there returns the source to `pending` or `rejected`. Any failed gate ends in `status: rejected` (DO NOT USE) with the reason recorded in the manifest.
+One completed checklist per source. **Admission gates (G1–G6, G9)** decide whether a source may be `accepted`. **Ingest gates (G7, G8)** are verified in Milestone 2, when the data is downloaded; a failure there returns the source to `pending` or `rejected`. All three accepted sources passed both on 2026-09-30. Any failed gate ends in `status: rejected` (DO NOT USE) with the reason recorded in the manifest.
 
 ## Hard rules
 
@@ -49,10 +49,27 @@ From M3 the cross-source near-duplicate audit doubles as a provenance test: a so
 | G4 | ✅ | ✅ | ✅ | — |
 | G5 | ✅ | ✅ | ✅ | — |
 | G6 | ⚠️ same modality as `pcb-ind` | ✅ lab vs factory | ⚠️ same modality as `dspcbsd-plus` | — |
-| G7 | ☐ recorded, reconcile at M2 | ☐ recorded, reconcile at M2 | ☐ recorded, reconcile at M2 | — |
-| G8 | ☐ M2 | ☐ M2 | ☐ M2 | — |
+| G7 | ✅ reconciled (M2) | ✅ reconciled (M2) | ✅ reconciled (M2) | — |
+| G8 | ✅ size, MD5, SHA-256, 0 undecodable | ✅ size, SHA-256, 0 undecodable | ✅ size, MD5, SHA-256, 0 undecodable | — |
 | G9 | ✅ evidence hashed | ✅ evidence hashed | ✅ evidence hashed | ✅ rejection evidenced |
 | **status** | **accepted** | **accepted** | **accepted** | **rejected** |
+
+## Ingest results (M2, 2026-09-30)
+
+What gates G7 and G8 found when the archives were downloaded and read ([reports/m2-ingest-report.md](../reports/m2-ingest-report.md), [manifests/ingest/](../manifests/ingest/)):
+
+| check | `dspcbsd-plus` | `pcb-defect` | `pcb-ind` |
+|---|---|---|---|
+| archive size equals the record | yes (128,541,608 B) | yes (158,048,862 B) | yes (101,336,845 B) |
+| record checksum | MD5 equal | SHA-256 equal | MD5 equal |
+| zip CRC-32 of every member | pass | pass | pass |
+| images decoded | 10,259 of 10,259 | 230 of 230 | 4,789 of 4,789 |
+| exact duplicates (SHA-256) inside the source | 0 | 0 | 0 |
+| images / boxes equal the manifest | 10,259 / 20,276 | 230 / 1,704 | 4,789 / 5,932 |
+| the archive's own licence statement | COCO `licenses` entry is empty: no statement, the record stands | COCO file says CC BY 4.0: consistent | README defers to the Zenodo record: consistent |
+| third-party marks (12 seeded-random images per source looked at) | none seen | none seen | none seen |
+
+Across the three sources no SHA-256 occurs twice. The manifests were corrected where an archive differed from its record or paper: DsPCBSD+ has 111 images of 108×108 (not all 226×226) and ships no VOC files; PCB-Defect images measure 1540×1285 to 5971×5236 (the record says 800×600 to 6000×4000) and its class strings are lower-case with underscores; PCB-IND per-class counts were measured, and its `classes.json` agrees with the Zenodo description, so the GitHub README class list is stale. Pixel pitch cannot be derived: no image carries EXIF or a DPI value. The look at third-party marks is a sample, not an exhaustive check; the label audit (M4) looks at many more images.
 
 ## Decision record (the `decision` block of a manifest)
 

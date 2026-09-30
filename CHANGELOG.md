@@ -8,6 +8,21 @@ All notable changes are recorded here. Format: [Keep a Changelog](https://keepac
 
 - `LICENSE`: Apache-2.0 for the code (decision D3, chosen by the maintainer); `pyproject.toml` declares it.
 
+### Added — M2: ingest
+
+- `openinspect ingest download | extract | inspect | run | report`.
+  - `download` fetches each accepted archive from its manifest URL, resumes interrupted transfers, retries with backoff, and keeps a file only if its size and the repository's checksum (MD5 or SHA-256) match; it computes the SHA-256 and writes `download_date` (first download only) and `archive_sha256` into the manifest.
+  - `extract` checks the CRC-32 of every zip member and extracts safely: no path traversal, absolute paths, reserved Windows names, case-insensitive collisions or symlinks; member-count and size limits; a `.partial` directory that is renamed on success; SHA-256 of every file.
+  - `inspect` prints the extracted file tree; `run` does all of the above, reads the annotations, decodes every image and writes records and reports; `report` rebuilds the Markdown report.
+- One adapter per source, written after looking at the real archives: `dspcbsd-plus` (COCO canonical, YOLO cross-check), `pcb-ind` (YOLO canonical, COCO and VOC cross-check), `pcb-defect` (COCO). Orphan images, orphan annotations, degenerate boxes and disagreements between formats are reported as anomalies, not repaired silently.
+- Image and annotation records (SHA-256, size, format, EXIF orientation, 64-bit dHash, original split, group key, labels) as JSONL under the data directory. In git: `manifests/ingest/<slug>/report.json` and `download.json`, `manifests/ingest/cross_source.json`, and `reports/m2-ingest-report.md` (images, annotations, classes, original splits, grouping key, anomalies and adapter status per source).
+- Reconciliation of each manifest with its archive (ingest gate G7): counts, class counts, sizes and splits are recomputed and compared. The three manifests now carry the measured values (class counts, image sizes, group keys, weaknesses).
+- Exact-duplicate check (SHA-256) inside each source and across sources: none found.
+- `openinspect.settings`: the data directory comes from `--data-dir`, `OPENINSPECT_DATA_DIR` or `.env`; a directory inside the repository or OneDrive is refused; free-space check.
+- Dependencies: `httpx`, `pillow`, `defusedxml`; dev: `types-defusedxml`.
+- 367 tests (unit tests on synthetic archives with the real layouts, plus integration tests that check the committed reports against the manifests), 99% coverage.
+- Decisions T8–T14 in [docs/DECISIONS.md](docs/DECISIONS.md).
+
 ### Added — M1: source registry
 
 - `openinspect source add | list | show | validate` (Typer CLI, also `python -m openinspect`).

@@ -1,0 +1,260 @@
+{
+  "adapter": {
+    "canonical_format": "coco",
+    "formats_present": [
+      "coco",
+      "yolo"
+    ],
+    "name": "dspcbsd_plus",
+    "status": "ok",
+    "version": 1
+  },
+  "annotations": 20276,
+  "anomalies": [
+    {
+      "code": "non_data_file_in_archive",
+      "count": 1,
+      "examples": [
+        "Hash.py"
+      ],
+      "message": "a file that is not data ships in the archive (read as text, never executed)",
+      "severity": "info"
+    },
+    {
+      "code": "voc_not_shipped",
+      "count": 1,
+      "examples": [],
+      "message": "the paper and record mention VOC annotations, the archive contains only COCO and YOLO",
+      "severity": "info"
+    },
+    {
+      "code": "windows_copy_suffix_in_name",
+      "count": 3,
+      "examples": [],
+      "message": "file names of the form 'name (n).jpg' (Windows copy suffix): possible manual copies",
+      "severity": "info"
+    }
+  ],
+  "archive": {
+    "bytes": 128541608,
+    "checksum_algo": "md5",
+    "checksum_ok": true,
+    "filename": "DsPCBSD+.zip",
+    "files_extracted": 30780,
+    "sha256": "b256846a1f2cf17e6e88be49c551ebf2c7551601e08691f50c70dc367a218817",
+    "size_ok": true,
+    "zip_crc_ok": true
+  },
+  "classes": [
+    {
+      "count": 915,
+      "label": "SH",
+      "label_id": 1
+    },
+    {
+      "count": 4584,
+      "label": "SP",
+      "label_id": 2
+    },
+    {
+      "count": 1593,
+      "label": "SC",
+      "label_id": 3
+    },
+    {
+      "count": 1770,
+      "label": "OP",
+      "label_id": 4
+    },
+    {
+      "count": 2529,
+      "label": "MB",
+      "label_id": 5
+    },
+    {
+      "count": 2883,
+      "label": "HB",
+      "label_id": 6
+    },
+    {
+      "count": 2490,
+      "label": "CS",
+      "label_id": 7
+    },
+    {
+      "count": 1832,
+      "label": "CFO",
+      "label_id": 8
+    },
+    {
+      "count": 1680,
+      "label": "BMFO",
+      "label_id": 9
+    }
+  ],
+  "dataset_name": "DsPCBSD+ (Dataset of PCB Surface Defects)",
+  "decode": {
+    "decodable": 10259,
+    "failed": 0,
+    "failures": [],
+    "images": 10259
+  },
+  "digests": {
+    "annotations_jsonl": "82c7a9e3131358ac5abf0570437b4839787eb6f68c936b42f92c6b5956ae61ab",
+    "files_list": "621892dc82bfe547382abf20bf9977128bcb2381bd07f17fd73814532018aa23",
+    "images_jsonl": "ea456188902b7d31167b359f22d01369850434b1fb493955df10fc2808798e62"
+  },
+  "exact_duplicates": {
+    "cross_split_groups": 0,
+    "groups": 0,
+    "redundant_files": 0
+  },
+  "grouping": {
+    "evidence": [
+      "file-name families: E 397, S 6,652, Y 1,923, copy_suffix 3, data 111, num5 24, num7 1,149",
+      "family E (397 images): median dHash distance between consecutive numbers 31 vs 31 for random pairs; pairs within 8 bits: 1% vs 0%",
+      "family S (6,652 images): median dHash distance between consecutive numbers 30 vs 31 for random pairs; pairs within 8 bits: 1% vs 0%",
+      "family Y (1,923 images): median dHash distance between consecutive numbers 30 vs 31 for random pairs; pairs within 8 bits: 3% vs 0%",
+      "family data (111 images): median dHash distance between consecutive numbers 31.5 vs 32 for random pairs; pairs within 8 bits: 1% vs 0%",
+      "family num7 (1,149 images): median dHash distance between consecutive numbers 30 vs 31 for random pairs; pairs within 8 bits: 1% vs 0%"
+    ],
+    "key": null,
+    "n_groups": null,
+    "quality": "none",
+    "summary": "no board or scene identifier in the archive. File names carry a family code (S, Y, E, digits, data) and a number, but consecutive numbers are hardly more alike than random pairs, so they do not identify boards; groups must come from similarity clustering (M3)"
+  },
+  "images": 10259,
+  "licence": {
+    "archive_says": [
+      "the COCO files carry a licenses entry with no name and no URL"
+    ],
+    "attribution_in_manifest": true,
+    "evidence_files": 3,
+    "licence_url": "https://creativecommons.org/licenses/by/4.0/",
+    "manifest": "manifests/sources/dspcbsd-plus.yaml",
+    "spdx": "CC-BY-4.0"
+  },
+  "notes": [
+    "Hash.py in the archive is the authors' near-duplicate script (16x16 dHash, Hamming distance < 4, applied per folder); whether and where it was applied to the released images is not documented."
+  ],
+  "reconciliation": [
+    {
+      "field": "content.image_count",
+      "manifest": "10259",
+      "observed": "10259",
+      "status": "match"
+    },
+    {
+      "field": "content.annotation_count",
+      "manifest": "20276",
+      "observed": "20276",
+      "status": "match"
+    },
+    {
+      "field": "content.original_classes[SH].count",
+      "manifest": "915",
+      "observed": "915",
+      "status": "match"
+    },
+    {
+      "field": "content.original_classes[SP].count",
+      "manifest": "4584",
+      "observed": "4584",
+      "status": "match"
+    },
+    {
+      "field": "content.original_classes[SC].count",
+      "manifest": "1593",
+      "observed": "1593",
+      "status": "match"
+    },
+    {
+      "field": "content.original_classes[OP].count",
+      "manifest": "1770",
+      "observed": "1770",
+      "status": "match"
+    },
+    {
+      "field": "content.original_classes[MB].count",
+      "manifest": "2529",
+      "observed": "2529",
+      "status": "match"
+    },
+    {
+      "field": "content.original_classes[HB].count",
+      "manifest": "2883",
+      "observed": "2883",
+      "status": "match"
+    },
+    {
+      "field": "content.original_classes[CS].count",
+      "manifest": "2490",
+      "observed": "2490",
+      "status": "match"
+    },
+    {
+      "field": "content.original_classes[CFO].count",
+      "manifest": "1832",
+      "observed": "1832",
+      "status": "match"
+    },
+    {
+      "field": "content.original_classes[BMFO].count",
+      "manifest": "1680",
+      "observed": "1680",
+      "status": "match"
+    },
+    {
+      "field": "content.official_splits.counts.train_images",
+      "manifest": "8208",
+      "observed": "8208",
+      "status": "match"
+    },
+    {
+      "field": "content.official_splits.counts.val_images",
+      "manifest": "2051",
+      "observed": "2051",
+      "status": "match"
+    },
+    {
+      "field": "content.official_splits.counts.train_boxes",
+      "manifest": "16184",
+      "observed": "16184",
+      "status": "match"
+    },
+    {
+      "field": "content.official_splits.counts.val_boxes",
+      "manifest": "4092",
+      "observed": "4092",
+      "status": "match"
+    },
+    {
+      "field": "content.image_size_px.min",
+      "manifest": "[108, 108]",
+      "observed": "[108, 108]",
+      "status": "match"
+    },
+    {
+      "field": "content.image_size_px.max",
+      "manifest": "[226, 226]",
+      "observed": "[226, 226]",
+      "status": "match"
+    }
+  ],
+  "schema_version": 1,
+  "slug": "dspcbsd-plus",
+  "splits": [
+    {
+      "annotations": 16184,
+      "images": 8208,
+      "images_without_annotations": 0,
+      "split": "train"
+    },
+    {
+      "annotations": 4092,
+      "images": 2051,
+      "images_without_annotations": 0,
+      "split": "val"
+    }
+  ]
+}

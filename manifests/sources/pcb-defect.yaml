@@ -62,9 +62,9 @@ acquisition:
       filename: "PCB_Defect.zip"
       bytes: 158048862
       record_checksum: {algo: sha256, value: "a5fb17e7009f96ffdb833cd9309b36da775545c8cc36a6dca3a8e9b4fbcb5f2a"}
-  download_date: null
-  archive_sha256: null
-  sha256_manifest: null
+  download_date: 2026-09-30
+  archive_sha256: {"PCB_Defect.zip": "a5fb17e7009f96ffdb833cd9309b36da775545c8cc36a6dca3a8e9b4fbcb5f2a"}
+  sha256_manifest: "manifests/ingest/pcb-defect/report.json"
 
 content:
   domain: pcb-surface-defects
@@ -73,34 +73,36 @@ content:
   annotation_tool: "Roboflow (manual bounding boxes)"
   image_count: 230
   annotation_count: 1704
-  image_size_px: {min: [800, 600], max: [6000, 4000]}
+  image_size_px: {min: [1540, 1285], max: [5971, 5236]}
   pixel_pitch_um: null
   colour: rgb
   original_classes:
-    - {label: "Mouse-Bite", meaning: "Mouse bite", count: 356}
-    - {label: "Spur", meaning: "Spur", count: 296}
-    - {label: "Open-Circuit", meaning: "Open circuit", count: 276}
-    - {label: "Missing-Pad", meaning: "Missing pad", count: 276}
-    - {label: "Short-Circuit", meaning: "Short circuit", count: 254}
-    - {label: "Spurious-Copper", meaning: "Spurious copper", count: 246}
+    - {label: "mouse_bite", meaning: "Mouse bite", count: 356}
+    - {label: "spur", meaning: "Spur", count: 296}
+    - {label: "open_circuit", meaning: "Open circuit", count: 276}
+    - {label: "missing_pad", meaning: "Missing pad", count: 276}
+    - {label: "short", meaning: "Short circuit", count: 254}
+    - {label: "spurious_copper", meaning: "Spurious copper", count: 246}
   official_splits: null
-  source_group_key: "one image per board (230 distinct boards); files named like pcb_defect_001.jpg, single COCO JSON"
+  source_group_key: "images[].extra.name in the COCO file keeps the original scan name <A>-<B>-<C>.png: 22 values of A, 40 of (A, B); A behaves like a board design family (verified at ingest: the most similar other image shares A for 69% of images, chance 5%)"
 
 provenance_risks:
   acquisition_environment: "Lab: single-layer FR4 boards made by chemical etching with defects designed in ECAD, scanned on an HP ScanJet Pro 3600 f1 flatbed at 1600 dpi, 24-bit colour JPEG, no auto-enhancement (paper)."
   independence_notes: "Islamic University of Technology (Bangladesh). No shared authors or institutions with dspcbsd-plus or pcb-ind. Lab-made boards + flatbed scanner: the largest domain gap of the three sources."
-  known_duplicates: "None stated. Each image is a distinct board (one image per board)."
+  known_duplicates: "0 exact duplicates (SHA-256) among the 230 images (M2). The paper says one image per physical board, but the original names show only 22 design families across 230 images, so images of one family share their board layout."
   known_weaknesses:
     - "Defects were engineered on purpose (physically real, but placed by design) and classes are near-balanced (246-356 boxes each): not a natural long-tail distribution."
     - "Single-layer boards, no solder mask, lab lighting, flatbed scanner (paper)."
     - "Small: 230 images. As a held-out source its confidence intervals will be wide."
-    - "Whether images were cropped or resized after scanning is not stated; released sizes (2.6-31 MP) are below a full 5x8 in scan at 1600 dpi, so the physical pixel pitch of released images is unknown."
+    - "Whether images were cropped or resized after scanning is not stated; the observed sizes (1540x1285 to 5971x5236, measured at ingest; the record says 800x600 to 6000x4000) are below a full 5x8 in scan at 1600 dpi, so the physical pixel pitch of released images is unknown."
     - "Author-name spellings differ between the dataset record ('Mamun Mian') and the paper ('Md. Mamun Mian'): use the dataset record's 'Cite as' for the dataset and the paper's for the paper."
     - "Mendeley's licence text carries a generic caveat about third-party content. None is identified in the record and the paper describes original fabrication; re-check at ingest for logos or third-party marks."
+    - "Measured at ingest (M2): the COCO file carries Roboflow's placeholder category 0 'detecting-pcb-defects' (no annotations, not a class) and states the licence CC BY 4.0, consistent with the record."
+    - "Pixel pitch is not in the files. Measured at ingest (M2): no image carries EXIF or a DPI value (the JFIF density is an aspect ratio only), so pixel_pitch_um stays null."
   synthetic_or_engineered_defects: true
 
 citation:
   citation_text: "Rashid, A. J., Ullah, M. A., Isfara, A., Ahmed, N., Mian, Md. M., Shalehin, Md. M. PCB-defect: An annotated dataset for surface defect detection in printed circuit boards. Data in Brief 64, 112296 (2026). https://doi.org/10.1016/j.dib.2025.112296"
   bibtex: null
 
-notes: "The Mendeley public API supplies the archive's own SHA-256 (record_checksum), so ingest can verify it directly. Nominal pixel pitch would be 15.875 um at 1600 dpi if images were not resized (derived, unverified). Category strings in the COCO JSON are unverified (the paper uses hyphenated names)."
+notes: "The Mendeley public API supplies the archive's own SHA-256 (record_checksum), so ingest can verify it directly. Nominal pixel pitch would be 15.875 um at 1600 dpi if images were not resized (derived, unverified). Ingested in Milestone 2 (2026-09-30): size and SHA-256 match the record; the category strings in the COCO file are missing_pad, mouse_bite, open_circuit, short, spur and spurious_copper, and image and box counts reconcile with the record. See manifests/ingest/pcb-defect/report.json."
