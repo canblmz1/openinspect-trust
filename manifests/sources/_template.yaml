@@ -1,0 +1,88 @@
+# OpenInspect-Trust — source manifest TEMPLATE (schema_version 1)
+#
+# Copy to manifests/sources/<slug>.yaml and fill in. Rules:
+#   1. Every value comes from a PRIMARY source (the repository record, the DOI registry, the paper,
+#      the licence text) — never from a mirror, a blog post, or memory.
+#   2. A value you could not verify is `null`. Never guess. `null` is a valid, honest answer.
+#   3. `status` stays `pending` until the admission gates of docs/LICENCE_CHECKLIST.md (G1-G6, G9) pass.
+#      `accepted` = admitted for download and internal use. It requires: licence identified and on the
+#      allowlist (configs/licences.yaml), the four rights questions answered, evidence archived with
+#      SHA-256, and a complete `decision` block.
+#      PUBLIC RELEASE needs more: redistribution and derivative_work must both be `allowed`. An unclear
+#      answer blocks public release (`openinspect source validate --release public`).
+#   4. A source that fails a gate becomes `rejected` (= DO NOT USE) with a reason. The file is kept so
+#      the rejection stays auditable.
+#
+# Field semantics: docs/DATASET_INTAKE.md. Machine validation: `openinspect source validate`.
+
+schema_version: 1
+slug: example-dataset            # [a-z0-9-]+ ; unique ; equals the file name ; becomes `source_dataset` in every image record
+dataset_name: "Example Dataset"
+status: pending                  # pending / accepted / rejected
+decision:
+  status: null                   # mirrors the top-level status once decided (accepted / rejected)
+  decided_by: null               # who decided, e.g. project-maintainer
+  decided_on: null               # YYYY-MM-DD
+  evidence: []                   # archived evidence paths the decision relies on (subset of licence.evidence)
+  reason: null                   # mandatory when status is accepted or rejected
+
+identity:
+  official_url: null             # landing page of the repository RECORD (not a mirror)
+  doi: null                      # bare DOI of the dataset record (pin the version DOI), e.g. 10.5281/zenodo.123
+  paper_doi: null
+  paper_url: null
+  code_repository: null
+  creators: []                   # list of "Family, Given (affiliation)"
+  publisher_repository: null     # figshare / zenodo / mendeley-data / github / other
+  is_original_upload: null       # true = uploaded by the creators ; false = mirror or re-upload
+  version: null                  # record version being used
+  published_on: null             # YYYY-MM-DD
+
+licence:
+  spdx: null                     # e.g. CC-BY-4.0 ; use LicenseRef-* for anything that is not an SPDX id
+  licence_url: null
+  stated_in: []                  # [{where: repository_record / doi_registry / readme / paper / licence_file, value: "..."}]
+  conflicts: []                  # every disagreement between the places above and how it was resolved
+  redistribution: null           # allowed / not_allowed / unclear
+  derivative_work: null          # allowed / not_allowed / unclear  (format conversion, crop/tile, relabel)
+  commercial_use: null           # allowed / not_allowed / unclear
+  attribution_required: null     # true / false
+  attribution_text: null         # credit line to reproduce in the release
+  changes_must_be_indicated: null
+  verified_on: null              # YYYY-MM-DD the record was read
+  evidence: []                   # [{kind, url, retrieved_on, archived_path, sha256}] ; archived_path is relative to the repository root
+                                 # kind: repository_record_api / repository_files_api / doi_registry_metadata / paper_registry_metadata / paper_page
+
+acquisition:
+  download_method: null          # http / api / git  (must be scriptable and repeatable)
+  download_files: []             # [{url, filename, bytes, record_checksum: {algo, value}}]
+  download_date: null            # YYYY-MM-DD of the first successful download
+  archive_sha256: null           # {filename: sha256} of each downloaded archive, computed by us
+  sha256_manifest: null          # path to the per-file SHA-256 list written by `ingest`
+
+content:
+  domain: null
+  task: null                     # detection / segmentation / classification
+  annotation_format: []          # coco / yolo / voc / ...
+  annotation_tool: null
+  image_count: null
+  annotation_count: null
+  image_size_px: null            # {min: [w, h], max: [w, h]}
+  pixel_pitch_um: null           # physical scale per pixel, if known
+  colour: null                   # rgb / grayscale
+  original_classes: []           # [{label, meaning, count}] -- label EXACTLY as in the files
+  official_splits: null          # {scheme, counts, how_made}
+  source_group_key: null         # how to derive the board / batch / parent id from a file
+
+provenance_risks:
+  acquisition_environment: null  # factory AOI line / lab scanner / web scrape / ...
+  independence_notes: null       # producer, device, shared origin with other sources
+  known_duplicates: null
+  known_weaknesses: []
+  synthetic_or_engineered_defects: null   # true / false / partial
+
+citation:
+  citation_text: null
+  bibtex: null
+
+notes: null

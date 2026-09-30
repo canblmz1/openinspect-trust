@@ -1,0 +1,111 @@
+# Source manifest. Facts verified against primary sources on 2026-09-30.
+# Evidence is archived under manifests/evidence/dspcbsd-plus/ and hashed in manifests/evidence/SHA256SUMS.txt.
+schema_version: 1
+slug: dspcbsd-plus
+dataset_name: "DsPCBSD+ (Dataset of PCB Surface Defects)"
+status: accepted
+decision:
+  status: accepted
+  decided_by: project-maintainer
+  decided_on: 2026-09-30
+  evidence:
+    - manifests/evidence/dspcbsd-plus/figshare_article_24970329.json
+    - manifests/evidence/dspcbsd-plus/datacite_10.6084_m9.figshare.24970329.v1.json
+    - manifests/evidence/dspcbsd-plus/crossref_10.1038_s41597-024-03656-8.json
+  reason: "Admission gates G1-G6 and G9 pass: CC BY 4.0 read from the figshare record and confirmed by the DataCite DOI record and the paper's Crossref record; the four rights questions are answered; producers are independent of the other sources; evidence is archived with SHA-256. Ingest gates G7/G8 are verified at Milestone 2. Decision executed by the assistant under the maintainer's autonomous-execution directive of 2026-09-30."
+
+identity:
+  official_url: "https://figshare.com/articles/dataset/DsPCBSD_/24970329"
+  doi: "10.6084/m9.figshare.24970329.v1"
+  paper_doi: "10.1038/s41597-024-03656-8"
+  paper_url: "https://www.nature.com/articles/s41597-024-03656-8"
+  code_repository: null
+  creators:
+    - "Lv, Shengping (South China Agricultural University)"
+    - "Ouyang, Bin (South China Agricultural University)"
+    - "Deng, Zhihua (Guangzhou FastPrint Technology Co., Ltd)"
+    - "Liang, Tairan (South China Agricultural University)"
+    - "Jiang, Shixin (CEPREI, Guangzhou)"
+    - "Zhang, Kaibin (South China Agricultural University)"
+    - "Chen, Jianyu (South China Agricultural University)"
+    - "Li, Zhuohui (South China Agricultural University)"
+  publisher_repository: figshare
+  is_original_upload: true
+  version: "v1"
+  published_on: 2024-06-08
+
+licence:
+  spdx: "CC-BY-4.0"
+  licence_url: "https://creativecommons.org/licenses/by/4.0/"
+  stated_in:
+    - {where: repository_record, value: "figshare API record: licence CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/)"}
+    - {where: doi_registry, value: "DataCite record of the dataset DOI: rightsList = Creative Commons Attribution 4.0 International (cc-by-4.0)"}
+    - {where: paper, value: "Crossref record of Sci Data 11, 811 (2024): article licence CC BY 4.0 (version of record)"}
+  conflicts: []
+  redistribution: allowed
+  derivative_work: allowed
+  commercial_use: allowed
+  attribution_required: true
+  attribution_text: "Lv, S. et al. (2024). DsPCBSD+ [dataset]. figshare. https://doi.org/10.6084/m9.figshare.24970329.v1. Licensed CC BY 4.0. Described in Lv et al., Sci Data 11, 811 (2024), https://doi.org/10.1038/s41597-024-03656-8"
+  changes_must_be_indicated: true
+  verified_on: 2026-09-30
+  evidence:
+    - {kind: repository_record_api, url: "https://api.figshare.com/v2/articles/24970329", retrieved_on: 2026-09-30, archived_path: "manifests/evidence/dspcbsd-plus/figshare_article_24970329.json", sha256: "d53da2d3b8d1c496d2e571bd411f73db511630bdd74a06e403a0c1acc69450dd"}
+    - {kind: doi_registry_metadata, url: "https://api.datacite.org/dois/10.6084/m9.figshare.24970329.v1", retrieved_on: 2026-09-30, archived_path: "manifests/evidence/dspcbsd-plus/datacite_10.6084_m9.figshare.24970329.v1.json", sha256: "097bd1ce53c891ad9839caafc7c624d4f027f3c447b3cc9934e66d5314f07ff1"}
+    - {kind: paper_registry_metadata, url: "https://api.crossref.org/works/10.1038/s41597-024-03656-8", retrieved_on: 2026-09-30, archived_path: "manifests/evidence/dspcbsd-plus/crossref_10.1038_s41597-024-03656-8.json", sha256: "6721f4140d4b833074cd450499afcf5fc0f428c05d5bce520e0142dd186d12fe"}
+    - {kind: paper_page, url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC11263390/", retrieved_on: 2026-09-30, archived_path: null, sha256: null}
+
+acquisition:
+  download_method: http
+  download_files:
+    - url: "https://ndownloader.figshare.com/files/44069552"
+      filename: "DsPCBSD+.zip"
+      bytes: 128541608
+      record_checksum: {algo: md5, value: "508334b65bdaea7336f4c1b5d5a80a81"}
+  download_date: null
+  archive_sha256: null
+  sha256_manifest: null
+
+content:
+  domain: pcb-surface-defects
+  task: detection
+  annotation_format: [voc, yolo, coco]
+  annotation_tool: "LabelImg (manual bounding boxes)"
+  image_count: 10259
+  annotation_count: 20276
+  image_size_px: {min: [226, 226], max: [226, 226]}
+  pixel_pitch_um: null
+  colour: null
+  original_classes:
+    - {label: "SH", meaning: "Short", count: 915}
+    - {label: "SP", meaning: "Spur", count: 4584}
+    - {label: "SC", meaning: "Spurious copper", count: 1593}
+    - {label: "OP", meaning: "Open", count: 1770}
+    - {label: "MB", meaning: "Mouse bite", count: 2529}
+    - {label: "HB", meaning: "Hole breakout", count: 2883}
+    - {label: "CS", meaning: "Conductor scratch", count: 2490}
+    - {label: "CFO", meaning: "Conductor foreign object", count: 1832}
+    - {label: "BMFO", meaning: "Base material foreign object", count: 1680}
+  official_splits:
+    scheme: "random image-level split, train/val only (8:2)"
+    counts: {train_images: 8208, val_images: 2051, train_boxes: 16184, val_boxes: 4092}
+    how_made: "Paper: images randomly divided 8:2. No test set. Board-level grouping is not stated."
+  source_group_key: null
+
+provenance_risks:
+  acquisition_environment: "Factory AOI line (AGLE'OL AOI-100 V8, controllable LED lighting, 16K line-scan, eight cameras), inner/outer-layer inspection after etching. Images were pre-processed by the authors (noise removal, contrast enhancement, brightness adjustment)."
+  independence_notes: "Producers per paper affiliations: South China Agricultural University, Guangzhou FastPrint Technology Co., Ltd, CEPREI. No shared authors or institutions with pcb-defect or pcb-ind. Same modality as pcb-ind (factory AOI etch-stage crops)."
+  known_duplicates: "Not reported. Images are crops of larger boards and the number of crops per board is not stated, so adjacent or overlapping crops of one board may exist."
+  known_weaknesses:
+    - "Official split is a random image-level 8:2 train/val split with no board-level grouping stated: the leakage pattern this project measures."
+    - "Local crops around defects (selection bias toward AOI-detectable regions); defects may look incomplete in a crop (paper)."
+    - "Pixel data were pre-processed by the authors; not raw AOI output."
+    - "2D information only; pre-solder-mask stages only (paper)."
+    - "An unofficial Kaggle mirror exists (enisteper1/dataset-of-pcb-surface-defects-dspcbsd). Do NOT use it; the figshare record is the source of truth."
+  synthetic_or_engineered_defects: false
+
+citation:
+  citation_text: "Lv, S., Ouyang, B., Deng, Z., Liang, T., Jiang, S., Zhang, K., Chen, J., Li, Z. A dataset for deep learning based detection of printed circuit board surface defect. Sci Data 11, 811 (2024). https://doi.org/10.1038/s41597-024-03656-8"
+  bibtex: null
+
+notes: "The figshare landing page answers HTTP 403 to automated fetchers; the API record (archived) is the machine-readable evidence. The figshare record lists the lead author only (Shengping Lv, ORCID 0000-0001-6480-4110); the paper lists eight authors: use the paper's list in ATTRIBUTION. Class counts, image size and split counts come from the paper and MUST be re-computed from the downloaded archive at ingest (Milestone 2). Label strings in the files are unverified (the paper uses the abbreviations above)."

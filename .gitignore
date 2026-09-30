@@ -1,0 +1,44 @@
+# --- Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+build/
+dist/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# --- Secrets (never commit)
+.env
+.env.*
+!.env.example
+
+# --- Data and heavy artefacts live OUTSIDE the repo (OPENINSPECT_DATA_DIR); these are safety nets
+data/
+raw/
+extracted/
+exports/
+runs/
+*.zip
+!tests/fixtures/**/*.zip
+*.pt
+*.pth
+*.onnx
+*.safetensors
+*.npy
+*.npz
+*.faiss
+*.duckdb
+
+# --- Tooling and OS
+.idea/
+.vscode/
+*.log
+Thumbs.db
+desktop.ini
+.DS_Store
+~$*

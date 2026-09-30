@@ -1,0 +1,111 @@
+# Source manifest. Facts verified against primary sources on 2026-09-30.
+# Evidence is archived under manifests/evidence/pcb-ind/ and hashed in manifests/evidence/SHA256SUMS.txt.
+schema_version: 1
+slug: pcb-ind
+dataset_name: "PCB-IND: Industrial Printed Circuit Board Surface Defect Dataset for Object Detection"
+status: accepted
+decision:
+  status: accepted
+  decided_by: project-maintainer
+  decided_on: 2026-09-30
+  evidence:
+    - manifests/evidence/pcb-ind/zenodo_record_19723114.json
+    - manifests/evidence/pcb-ind/datacite_10.5281_zenodo.19723114.json
+    - manifests/evidence/pcb-ind/crossref_10.1038_s41597-026-07684-4.json
+  reason: "Admission gates G1-G6 and G9 pass: CC BY 4.0 read from the Zenodo record and confirmed by the DataCite DOI record; the paper's own CC BY-NC-ND licence applies to the article text and figures, not to the dataset, and is documented as a scoped conflict; the four rights questions are answered; producers are independent of the other sources; evidence is archived with SHA-256. Ingest gates G7/G8 are verified at Milestone 2. Decision executed by the assistant under the maintainer's autonomous-execution directive of 2026-09-30."
+
+identity:
+  official_url: "https://zenodo.org/records/19723114"
+  doi: "10.5281/zenodo.19723114"
+  paper_doi: "10.1038/s41597-026-07684-4"
+  paper_url: "https://www.nature.com/articles/s41597-026-07684-4"
+  code_repository: "https://github.com/gnmtdt/PCB-IND"
+  creators:
+    - "Yan, Hao (Fujian Polytechnic Normal University; City University of Macau)"
+    - "Yu, Xiaoguang (Fujian Polytechnic Normal University)"
+    - "Ma, Bifang (Fujian Polytechnic Normal University)"
+    - "Zhang, Hong (Fujian Polytechnic Normal University)"
+    - "Liu, Yiqiong (Fujian Fuqiang Delicate Circuit Plate Co., Ltd.)"
+    - "Huang, Guanlian (Fujian Fuqiang Delicate Circuit Plate Co., Ltd.)"
+    - "Xie, Siwen (Fujian Fuqiang Delicate Circuit Plate Co., Ltd.)"
+    - "Li, Jun (Quanzhou Institute of Equipment Manufacturing, Chinese Academy of Sciences)"
+    - "Li, Qiming (Quanzhou Institute of Equipment Manufacturing, Chinese Academy of Sciences)"
+  publisher_repository: zenodo
+  is_original_upload: true
+  version: "v4 (PCB-IND_v4.zip)"
+  published_on: 2026-04-24
+
+licence:
+  spdx: "CC-BY-4.0"
+  licence_url: "https://creativecommons.org/licenses/by/4.0/"
+  stated_in:
+    - {where: repository_record, value: "Zenodo API record: license.id cc-by-4.0, access_right open"}
+    - {where: doi_registry, value: "DataCite record of the dataset DOI: rightsList = Creative Commons Attribution 4.0 International (cc-by-4.0)"}
+    - {where: paper, value: "Data availability statement: dataset released under CC BY 4.0 in COCO, VOC and YOLO formats"}
+  conflicts:
+    - "The ARTICLE (text and figures) is licensed CC BY-NC-ND 4.0 (Crossref record, archived; article page), while the DATASET is CC BY 4.0 (Zenodo record and DataCite). Resolution: the dataset licence is taken from the Zenodo record and DataCite. Article text and figures must not be copied into this repository."
+  redistribution: allowed
+  derivative_work: allowed
+  commercial_use: allowed
+  attribution_required: true
+  attribution_text: "Yan, H. et al. (2026). PCB-IND: Industrial Printed Circuit Board Surface Defect Dataset for Object Detection, v4 [dataset]. Zenodo. https://doi.org/10.5281/zenodo.19723114. Licensed CC BY 4.0. Described in Sci Data 13, 1356 (2026), https://doi.org/10.1038/s41597-026-07684-4"
+  changes_must_be_indicated: true
+  verified_on: 2026-09-30
+  evidence:
+    - {kind: repository_record_api, url: "https://zenodo.org/api/records/19723114", retrieved_on: 2026-09-30, archived_path: "manifests/evidence/pcb-ind/zenodo_record_19723114.json", sha256: "8b191137dbd134fa79ab26421862f65c33d94eb84d29235e4fcda45f8729f278"}
+    - {kind: doi_registry_metadata, url: "https://api.datacite.org/dois/10.5281/zenodo.19723114", retrieved_on: 2026-09-30, archived_path: "manifests/evidence/pcb-ind/datacite_10.5281_zenodo.19723114.json", sha256: "28faae77709f7aaef903d64370c603c18664fd29cf02acf2b851c492cbae18c4"}
+    - {kind: paper_registry_metadata, url: "https://api.crossref.org/works/10.1038/s41597-026-07684-4", retrieved_on: 2026-09-30, archived_path: "manifests/evidence/pcb-ind/crossref_10.1038_s41597-026-07684-4.json", sha256: "873d11e02afa087ccb30ef7100f7660115a392d7453b2da5fe9b94d959c90332"}
+    - {kind: paper_page, url: "https://www.nature.com/articles/s41597-026-07684-4", retrieved_on: 2026-09-30, archived_path: null, sha256: null}
+
+acquisition:
+  download_method: http
+  download_files:
+    - url: "https://zenodo.org/api/records/19723114/files/PCB-IND_v4.zip/content"
+      filename: "PCB-IND_v4.zip"
+      bytes: 101336845
+      record_checksum: {algo: md5, value: "1325f8dffeb73bef4db34fbd22b31ec5"}
+  download_date: null
+  archive_sha256: null
+  sha256_manifest: null
+
+content:
+  domain: pcb-surface-defects
+  task: detection
+  annotation_format: [yolo, voc, coco]
+  annotation_tool: "X-AnyLabeling-assisted refinement, expert confirmation (paper)"
+  image_count: 4789
+  annotation_count: 5932
+  image_size_px: {min: [300, 300], max: [300, 300]}
+  pixel_pitch_um: null
+  colour: rgb
+  original_classes:
+    - {label: "mouse_bite", meaning: "Mouse bite", count: null}
+    - {label: "missing_copper", meaning: "Missing copper", count: null}
+    - {label: "scratch", meaning: "Scratch", count: null}
+    - {label: "spurious_copper", meaning: "Spurious copper", count: null}
+    - {label: "copper_burr", meaning: "Copper burr (edge protrusion)", count: null}
+    - {label: "stain", meaning: "Stain", count: null}
+    - {label: "short", meaning: "Short", count: null}
+    - {label: "open", meaning: "Open", count: null}
+  official_splits:
+    scheme: "8:1:1 train/val/test (tools/data_split.py in the code repository)"
+    counts: {train: 3833, val: 478, test: 478}
+    how_made: "Near-duplicates (pHash) resolved with train > val > test retention priority. Whether the split is random or batch-aware is not stated in the text we read."
+  source_group_key: "production batch = first four characters of the filename (paper); verify against real filenames at ingest"
+
+provenance_risks:
+  acquisition_environment: "Mass-production line of Fujian Fuqiang Delicate Circuit Plate Co., Ltd., outer-layer etching inspection; colour CCD AOI (raw scale about 6-12 um/px, scan 160 mm/s so motion blur is present); 300x300 ROI patches cropped around AOI-reported anomalies with a small random offset; AOI online + VRS confirmation (paper)."
+  independence_notes: "Fujian Polytechnic Normal University, Fujian Fuqiang Delicate Circuit Plate, CAS Quanzhou. No shared authors or institutions with dspcbsd-plus or pcb-defect. Same modality as dspcbsd-plus (factory AOI etch-stage crops), so leave-one-source-out between those two mostly measures factory/device shift."
+  known_duplicates: "Authors removed 57 near-duplicates with a 64-bit pHash, Hamming distance <= 3, compared only WITHIN a production batch; cross-batch duplicates were not checked. AOI systems capture overlapping images of the same defect (paper)."
+  known_weaknesses:
+    - "ROI patches around AOI-reported anomalies: selection bias toward AOI-detectable regions. Includes multi-defect images and zero-annotation images (AOI false calls)."
+    - "Annotation = AOI pre-screening + verified annotation: anomalies the AOI missed are not labelled."
+    - "Authors' own failure analysis: low-contrast 'stain' missed, tiny 'open' missed, 'short' vs 'copper_burr' confused."
+    - "Class-list conflict: the GitHub README lists 8 classes including 'Missing Hole', 'Spur' and 'Pin Hole', the Zenodo v4 description lists 'missing_copper', 'copper_burr' and 'stain'. classes.json inside the archive is authoritative; pin the record version."
+  synthetic_or_engineered_defects: false
+
+citation:
+  citation_text: "Yan, H., Yu, X., Ma, B., Zhang, H., Liu, Y., Huang, G., Xie, S., Li, J., Li, Q. Industrial Printed Circuit Board Surface Defect Dataset for Object Detection. Sci Data 13, 1356 (2026). https://doi.org/10.1038/s41597-026-07684-4. Dataset: https://doi.org/10.5281/zenodo.19723114"
+  bibtex: null
+
+notes: "Zenodo concept DOI (all versions): 10.5281/zenodo.17988285. We pin v4 = 10.5281/zenodo.19723114. The Zenodo record lists 'Yan, Hao' as the only creator; the paper lists nine authors. The direct file URL is the `links.self` value of the archived Zenodo record. Per-class counts are in the paper; re-compute from the archive at ingest. Paper published 27 June 2026 (Scientific Data, vol. 13, article 1356)."

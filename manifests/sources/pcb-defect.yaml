@@ -1,0 +1,106 @@
+# Source manifest. Facts verified against primary sources on 2026-09-30.
+# Evidence is archived under manifests/evidence/pcb-defect/ and hashed in manifests/evidence/SHA256SUMS.txt.
+schema_version: 1
+slug: pcb-defect
+dataset_name: "PCB-Defect: An Annotated Dataset for Surface Defect Detection in Printed Circuit Boards"
+status: accepted
+decision:
+  status: accepted
+  decided_by: project-maintainer
+  decided_on: 2026-09-30
+  evidence:
+    - manifests/evidence/pcb-defect/mendeley_dataset_vdj74sngvn.json
+    - manifests/evidence/pcb-defect/mendeley_files_vdj74sngvn_v1.json
+    - manifests/evidence/pcb-defect/datacite_10.17632_vdj74sngvn.1.json
+    - manifests/evidence/pcb-defect/crossref_10.1016_j.dib.2025.112296.json
+  reason: "Admission gates G1-G6 and G9 pass: CC BY 4.0 read from the Mendeley Data public API record and confirmed by the DataCite DOI record and the paper's Crossref record; the four rights questions are answered; producers are independent of the other sources; evidence is archived with SHA-256. Ingest gates G7/G8 are verified at Milestone 2. Decision executed by the assistant under the maintainer's autonomous-execution directive of 2026-09-30."
+
+identity:
+  official_url: "https://data.mendeley.com/datasets/vdj74sngvn/1"
+  doi: "10.17632/vdj74sngvn.1"
+  paper_doi: "10.1016/j.dib.2025.112296"
+  paper_url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC12756537/"
+  code_repository: null
+  creators:
+    - "Rashid, Ahmed Jawad (Islamic University of Technology, Bangladesh)"
+    - "Ullah, Mohammad Aman (Islamic University of Technology, Bangladesh)"
+    - "Isfara, Adiba (Islamic University of Technology, Bangladesh)"
+    - "Ahmed, Nadim (Islamic University of Technology, Bangladesh)"
+    - "Mian, Mamun (Islamic University of Technology, Bangladesh)"
+    - "Shalehin, Md. Mashur (Islamic University of Technology, Bangladesh)"
+  publisher_repository: mendeley-data
+  is_original_upload: true
+  version: "v1"
+  published_on: 2025-08-08
+
+licence:
+  spdx: "CC-BY-4.0"
+  licence_url: "https://creativecommons.org/licenses/by/4.0/"
+  stated_in:
+    - {where: repository_record, value: "Mendeley Data public API record: data_licence CC BY 4.0 (Creative Commons Attribution 4.0 International); the record carries Mendeley's generic caveat that further permission may be needed for third-party content identified in a dataset"}
+    - {where: doi_registry, value: "DataCite record of the dataset DOI: rightsList = Creative Commons Attribution 4.0 International (cc-by-4.0) and info:eu-repo/semantics/openAccess"}
+    - {where: paper, value: "Crossref record of Data in Brief 64, 112296: article licence CC BY 4.0 (version of record)"}
+  conflicts: []
+  redistribution: allowed
+  derivative_work: allowed
+  commercial_use: allowed
+  attribution_required: true
+  attribution_text: "Rashid, A. J., Ullah, M. A., Isfara, A., Ahmed, N., Mian, M., Shalehin, Md. M. (2025). PCB-Defect: An Annotated Dataset for Surface Defect Detection in Printed Circuit Boards [dataset], Version 1. Mendeley Data. https://doi.org/10.17632/vdj74sngvn.1. Licensed CC BY 4.0."
+  changes_must_be_indicated: true
+  verified_on: 2026-09-30
+  evidence:
+    - {kind: repository_record_api, url: "https://data.mendeley.com/public-api/datasets/vdj74sngvn", retrieved_on: 2026-09-30, archived_path: "manifests/evidence/pcb-defect/mendeley_dataset_vdj74sngvn.json", sha256: "21bb54ffc01c92d18170af62bd812538e15de44aa3e8fb9c6aa4229b5b709d72"}
+    - {kind: repository_files_api, url: "https://data.mendeley.com/public-api/datasets/vdj74sngvn/files?folder_id=root&version=1", retrieved_on: 2026-09-30, archived_path: "manifests/evidence/pcb-defect/mendeley_files_vdj74sngvn_v1.json", sha256: "e027d67a5ec751d0f20865ade2084f0004d45c550828ca1b256fa7f50603b31c"}
+    - {kind: doi_registry_metadata, url: "https://api.datacite.org/dois/10.17632/vdj74sngvn.1", retrieved_on: 2026-09-30, archived_path: "manifests/evidence/pcb-defect/datacite_10.17632_vdj74sngvn.1.json", sha256: "3027f1b8d85e8e3ea3e1b7814bfc7858534861f84b87eb6e6f50f3acf22a1a40"}
+    - {kind: paper_registry_metadata, url: "https://api.crossref.org/works/10.1016/j.dib.2025.112296", retrieved_on: 2026-09-30, archived_path: "manifests/evidence/pcb-defect/crossref_10.1016_j.dib.2025.112296.json", sha256: "132e1fd7dfbdde715f3acf75c91f26bfe9b37cd5acc6cf1b5489322b42c92d81"}
+    - {kind: paper_page, url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC12756537/", retrieved_on: 2026-09-30, archived_path: null, sha256: null}
+
+acquisition:
+  download_method: http
+  download_files:
+    - url: "https://data.mendeley.com/public-files/datasets/vdj74sngvn/files/9a62af5d-f3ea-4b3d-a99b-e48115d51c2f/file_downloaded"
+      filename: "PCB_Defect.zip"
+      bytes: 158048862
+      record_checksum: {algo: sha256, value: "a5fb17e7009f96ffdb833cd9309b36da775545c8cc36a6dca3a8e9b4fbcb5f2a"}
+  download_date: null
+  archive_sha256: null
+  sha256_manifest: null
+
+content:
+  domain: pcb-surface-defects
+  task: detection
+  annotation_format: [coco]
+  annotation_tool: "Roboflow (manual bounding boxes)"
+  image_count: 230
+  annotation_count: 1704
+  image_size_px: {min: [800, 600], max: [6000, 4000]}
+  pixel_pitch_um: null
+  colour: rgb
+  original_classes:
+    - {label: "Mouse-Bite", meaning: "Mouse bite", count: 356}
+    - {label: "Spur", meaning: "Spur", count: 296}
+    - {label: "Open-Circuit", meaning: "Open circuit", count: 276}
+    - {label: "Missing-Pad", meaning: "Missing pad", count: 276}
+    - {label: "Short-Circuit", meaning: "Short circuit", count: 254}
+    - {label: "Spurious-Copper", meaning: "Spurious copper", count: 246}
+  official_splits: null
+  source_group_key: "one image per board (230 distinct boards); files named like pcb_defect_001.jpg, single COCO JSON"
+
+provenance_risks:
+  acquisition_environment: "Lab: single-layer FR4 boards made by chemical etching with defects designed in ECAD, scanned on an HP ScanJet Pro 3600 f1 flatbed at 1600 dpi, 24-bit colour JPEG, no auto-enhancement (paper)."
+  independence_notes: "Islamic University of Technology (Bangladesh). No shared authors or institutions with dspcbsd-plus or pcb-ind. Lab-made boards + flatbed scanner: the largest domain gap of the three sources."
+  known_duplicates: "None stated. Each image is a distinct board (one image per board)."
+  known_weaknesses:
+    - "Defects were engineered on purpose (physically real, but placed by design) and classes are near-balanced (246-356 boxes each): not a natural long-tail distribution."
+    - "Single-layer boards, no solder mask, lab lighting, flatbed scanner (paper)."
+    - "Small: 230 images. As a held-out source its confidence intervals will be wide."
+    - "Whether images were cropped or resized after scanning is not stated; released sizes (2.6-31 MP) are below a full 5x8 in scan at 1600 dpi, so the physical pixel pitch of released images is unknown."
+    - "Author-name spellings differ between the dataset record ('Mamun Mian') and the paper ('Md. Mamun Mian'): use the dataset record's 'Cite as' for the dataset and the paper's for the paper."
+    - "Mendeley's licence text carries a generic caveat about third-party content. None is identified in the record and the paper describes original fabrication; re-check at ingest for logos or third-party marks."
+  synthetic_or_engineered_defects: true
+
+citation:
+  citation_text: "Rashid, A. J., Ullah, M. A., Isfara, A., Ahmed, N., Mian, Md. M., Shalehin, Md. M. PCB-defect: An annotated dataset for surface defect detection in printed circuit boards. Data in Brief 64, 112296 (2026). https://doi.org/10.1016/j.dib.2025.112296"
+  bibtex: null
+
+notes: "The Mendeley public API supplies the archive's own SHA-256 (record_checksum), so ingest can verify it directly. Nominal pixel pitch would be 15.875 um at 1600 dpi if images were not resized (derived, unverified). Category strings in the COCO JSON are unverified (the paper uses hyphenated names)."

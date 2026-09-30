@@ -1,0 +1,12 @@
+# LF everywhere for text so hashes of manifests and CSVs do not depend on the OS.
+* text=auto eol=lf
+
+# Evidence snapshots are hashed byte-for-byte (manifests/evidence/SHA256SUMS.txt): never let git rewrite them.
+manifests/evidence/** -text
+
+*.jpg binary
+*.jpeg binary
+*.png binary
+*.zip binary
+*.pt binary
+*.npy binary
