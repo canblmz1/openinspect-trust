@@ -34,7 +34,7 @@ A milestone is done only when every item on its list is true and the milestone r
 - [x] Tests: valid accepted manifest; missing licence rejected; missing source URL rejected; invalid DOI is a validation error; unknown redistribution blocks public release; duplicate source ID rejected; accepted source appears in list and show; plus allowlist, evidence and CLI behaviour.
 - [x] The committed manifests and evidence pass `openinspect source validate`.
 - [x] `configs/licences.yaml` holds the allowlist.
-- [ ] GitHub Actions runs ruff, mypy, pytest and manifest validation without downloading any dataset.
+- [x] GitHub Actions runs ruff, mypy, pytest and manifest validation without downloading any dataset (run 36748100561 on commit 65d37f8: all six jobs green, tests and manifest validation on Ubuntu and Windows).
 - [x] README states problem, question, method, sources, results and reproduction, without marketing language.
 
 ## v0.1 release

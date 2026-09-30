@@ -302,6 +302,8 @@ Logged with evidence, reason, risk and revisit condition in [DECISIONS](DECISION
 | M11 | research poster and SAYZEK project brief | M |
 | optional | FastAPI backend (brief §33), after M9 | M |
 
+Status on 2026-09-30: M0 and M1 are done; M2 is next. Its first step downloads the three accepted archives (about 388 MB in total) to `OPENINSPECT_DATA_DIR`, so that the adapters are written against the real file layouts.
+
 ## 14. Related work and positioning
 
 To our knowledge, from a limited search on 2026-09-30 (a full literature review belongs to M10):
