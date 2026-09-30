@@ -27,15 +27,15 @@ A milestone is done only when every item on its list is true and the milestone r
 
 ## M1: source registry
 
-- [ ] `openinspect source add` creates a valid manifest (from flags, or from a complete file with `--from-file`), refuses a duplicate slug, never overwrites without `--force`, and cannot create an `accepted` source from flags.
-- [ ] `openinspect source list` shows slug, status, licence, version, public-release flag; `--json` is machine-readable.
-- [ ] `openinspect source show SLUG` shows the manifest and its computed flags; `--json` too.
-- [ ] `openinspect source validate` enforces the schema, the allowlist, evidence hashes and `SHA256SUMS.txt`, slug/file consistency and duplicate slugs; `--release public` blocks any accepted source whose redistribution or derivative-work answer is not `allowed`; exit code 1 on errors.
-- [ ] Tests: valid accepted manifest; missing licence rejected; missing source URL rejected; invalid DOI is a validation error; unknown redistribution blocks public release; duplicate source ID rejected; accepted source appears in list and show; plus allowlist, evidence and CLI behaviour.
-- [ ] The committed manifests and evidence pass `openinspect source validate`.
-- [ ] `configs/licences.yaml` holds the allowlist.
+- [x] `openinspect source add` creates a valid manifest (from flags, or from a complete file with `--from-file`), refuses a duplicate slug, never overwrites without `--force`, and cannot create an `accepted` source from flags.
+- [x] `openinspect source list` shows slug, status, licence, version, public-release flag; `--json` is machine-readable.
+- [x] `openinspect source show SLUG` shows the manifest and its computed flags; `--json` too.
+- [x] `openinspect source validate` enforces the schema, the allowlist, evidence hashes and `SHA256SUMS.txt`, slug/file consistency and duplicate slugs; `--release public` blocks any accepted source whose redistribution or derivative-work answer is not `allowed`; exit code 1 on errors.
+- [x] Tests: valid accepted manifest; missing licence rejected; missing source URL rejected; invalid DOI is a validation error; unknown redistribution blocks public release; duplicate source ID rejected; accepted source appears in list and show; plus allowlist, evidence and CLI behaviour.
+- [x] The committed manifests and evidence pass `openinspect source validate`.
+- [x] `configs/licences.yaml` holds the allowlist.
 - [ ] GitHub Actions runs ruff, mypy, pytest and manifest validation without downloading any dataset.
-- [ ] README states problem, question, method, sources, results and reproduction, without marketing language.
+- [x] README states problem, question, method, sources, results and reproduction, without marketing language.
 
 ## v0.1 release
 

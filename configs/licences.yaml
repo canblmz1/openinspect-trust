@@ -1,0 +1,18 @@
+# Licence allowlist for dataset sources (schema_version 1).
+# Read by `openinspect source validate`. Policy: docs/LICENCE_CHECKLIST.md (hard rules 4 and 5).
+# Changing this file changes what may be `accepted`: do it only with a written decision in docs/DECISIONS.md.
+schema_version: 1
+
+allowlist:
+  - spdx: CC0-1.0
+    name: "Creative Commons Zero v1.0 Universal"
+    url: "https://creativecommons.org/publicdomain/zero/1.0/"
+  - spdx: CC-BY-4.0
+    name: "Creative Commons Attribution 4.0 International"
+    url: "https://creativecommons.org/licenses/by/4.0/"
+
+# An SPDX id that contains one of these tokens is refused with a specific explanation.
+blocked_terms:
+  - {token: NC, meaning: "non-commercial terms"}
+  - {token: ND, meaning: "no-derivatives terms"}
+  - {token: SA, meaning: "share-alike terms (need an explicit project-wide decision)"}

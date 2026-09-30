@@ -1,11 +1,11 @@
 # Repository structure
 
-Target layout (brief §34) with additions marked **+**. The last column says which milestone creates the item. Only M0 files exist today.
+Target layout (brief §34) with additions marked **+**. The last column says which milestone creates the item. M0 and M1 files exist today; the rest appears with its milestone.
 
 ```
 openinspect-trust/
 ├── src/openinspect/
-│   ├── __init__.py, __main__.py, cli.py     + `python -m openinspect` and the `openinspect` script     M1
+│   ├── __init__.py, __main__.py, cli/       + `python -m openinspect`, the `openinspect` script      M1
 │   ├── provenance/                          schemas (SourceManifest, ImageRecord, …), registry,          M1–M2
 │   │                                        manifest generator, validators
 │   ├── ingest/                              downloaders, integrity checks, metadata, normalisation      M2
