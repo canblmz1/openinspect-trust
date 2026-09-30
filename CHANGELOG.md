@@ -4,6 +4,10 @@ All notable changes are recorded here. Format: [Keep a Changelog](https://keepac
 
 ## [Unreleased]
 
+### Added — licence
+
+- `LICENSE`: Apache-2.0 for the code (decision D3, chosen by the maintainer); `pyproject.toml` declares it.
+
 ### Added — M1: source registry
 
 - `openinspect source add | list | show | validate` (Typer CLI, also `python -m openinspect`).

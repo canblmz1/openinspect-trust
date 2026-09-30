@@ -73,4 +73,4 @@ Raw data belongs outside the repository and outside OneDrive, under `OPENINSPECT
 
 ## Licence
 
-The code has no licence file yet, so it is all-rights-reserved until the maintainer chooses one ([docs/DECISIONS.md](docs/DECISIONS.md), D3). Data licences are in [LICENSE_MATRIX.md](LICENSE_MATRIX.md). The optional local-training extra will depend on Ultralytics, which is AGPL-3.0 ([docs/DEPENDENCIES.md](docs/DEPENDENCIES.md)).
+The code is licensed under [Apache-2.0](LICENSE) ([docs/DECISIONS.md](docs/DECISIONS.md), D3). The datasets keep their own licences (CC BY 4.0 for the three accepted sources) and are not part of this repository: see [LICENSE_MATRIX.md](LICENSE_MATRIX.md). The optional local-training extra will depend on Ultralytics, which is AGPL-3.0 ([docs/DEPENDENCIES.md](docs/DEPENDENCIES.md)).

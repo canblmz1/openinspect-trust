@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| Status | **Accepted** on 2026-09-30 under the maintainer's autonomous-execution directive (decisions: [DECISIONS](DECISIONS.md)); open: D3, the code licence |
+| Status | **Accepted** on 2026-09-30 under the maintainer's autonomous-execution directive (decisions: [DECISIONS](DECISIONS.md)); no decision is open |
 | Date | 2026-09-30 |
 | Spec version | 0.1.0 |
 | Requirements source | the *Master Build Prompt*, cited below as "brief §N" |
@@ -275,7 +275,7 @@ Logged with evidence, reason, risk and revisit condition in [DECISIONS](DECISION
 |---|---|---|
 | D1 | domain: PCB surface defects | decided |
 | D2 | sources: `dspcbsd-plus`, `pcb-ind`, `pcb-defect` accepted; `deeppcb` rejected | decided |
-| D3 | code licence | **open**: a legal choice for the maintainer (recommendation: Apache-2.0) |
+| D3 | code licence: Apache-2.0 | decided by the maintainer (2026-09-30) |
 | D4 | dataset release licence: CC BY 4.0, provisional; no public release before the release checklist | decided |
 | D5 | schema deviations from brief §11 | decided (accepted) |
 | D6 | locations: repository stays; data and virtual environment outside OneDrive | decided |
@@ -317,4 +317,4 @@ OpenInspect-Trust differs by making provenance, duplicate audit and source-held-
 
 ## Sign-off
 
-Accepted 2026-09-30 by project-maintainer through the autonomous-execution directive; decisions are logged in [DECISIONS](DECISIONS.md). Open: D3 (code licence).
+Accepted 2026-09-30 by project-maintainer through the autonomous-execution directive; decisions are logged in [DECISIONS](DECISIONS.md).

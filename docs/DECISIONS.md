@@ -1,6 +1,6 @@
 # Decision log
 
-Decisions D1–D10 come from [SPEC §12](SPEC.md); T1–T7 are technical choices made while building M1. Each has the same five fields. All were taken on 2026-09-30 under the maintainer's autonomous-execution directive. **D3 is the exception: it is a legal choice and stays with the maintainer.**
+Decisions D1–D10 come from [SPEC §12](SPEC.md); T1–T7 are technical choices made while building M1. Each has the same five fields. All were taken on 2026-09-30 under the maintainer's autonomous-execution directive. **D3, the code licence, is the exception: the maintainer chose it (Apache-2.0).**
 
 ## D1 — Domain
 - **Decision:** PCB surface-defect detection with bounding boxes.
@@ -16,12 +16,12 @@ Decisions D1–D10 come from [SPEC §12](SPEC.md); T1–T7 are technical choices
 - **Risk:** independence of the two factory-AOI sets rests on affiliations only; ingest gates G7 and G8 are still open.
 - **Revisit when:** the cross-source duplicate audit (M3) finds shared images, a record's licence changes, or the archive reconcile at M2 fails.
 
-## D3 — Code licence  ·  **OPEN, needs the maintainer**
-- **Decision:** none yet. Interim: no `LICENSE` file, so the code is all-rights-reserved by default. The recommendation is Apache-2.0.
-- **Evidence:** dependency licences are compatible with Apache-2.0 and MIT ([DEPENDENCIES](DEPENDENCIES.md)); the AGPL isolation of Ultralytics holds under either.
-- **Reason:** how one's own code is licensed is a legal choice. Adding a licence file cannot be undone once others copy the code.
-- **Risk:** until a licence is chosen nobody may legally reuse the code.
-- **Revisit when:** before any announcement or M10. Reply "Apache-2.0" or "MIT" and it is added in one commit.
+## D3 — Code licence
+- **Decision:** Apache-2.0 for the code, chosen by the maintainer on 2026-09-30. `LICENSE` holds the unmodified licence text; `pyproject.toml` declares `license = "Apache-2.0"`.
+- **Evidence:** the maintainer's instruction; the `LICENSE` text is word-for-word identical to the copy served by the GitHub licences API and to the text published at apache.org; dependency licences are compatible ([DEPENDENCIES](DEPENDENCIES.md)); the AGPL isolation of Ultralytics holds under this choice.
+- **Reason:** a permissive licence with an explicit patent grant suits an open research tool.
+- **Risk:** the datasets are not covered by this licence; they keep their own (CC BY 4.0 for the accepted sources, see D4). Ultralytics stays an optional, never-bundled extra.
+- **Revisit when:** an institution or contributor requires another licence; relicensing needs the consent of all copyright holders.
 
 ## D4 — Dataset release licence
 - **Decision:** provisional CC BY 4.0 for the compiled dataset. No public dataset release before the release checklist (R1–R6 in [LICENCE_CHECKLIST](LICENCE_CHECKLIST.md)) passes.

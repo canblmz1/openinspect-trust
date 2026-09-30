@@ -21,7 +21,7 @@ A milestone is done only when every item on its list is true and the milestone r
 - [x] Licence acceptance checklist and matrix: [LICENCE_CHECKLIST](LICENCE_CHECKLIST.md), [LICENSE_MATRIX](../LICENSE_MATRIX.md)
 - [x] Licence evidence archived and hashed: `manifests/evidence/`
 - [x] Definition of Done: this file
-- [x] Decisions D1–D10 recorded: [DECISIONS](DECISIONS.md) (D3, the code licence, is a legal choice left to the maintainer)
+- [x] Decisions D1–D10 recorded: [DECISIONS](DECISIONS.md) (D3, the code licence, was chosen by the maintainer: Apache-2.0)
 - [x] EVREN facts and unknowns recorded: [EVREN](EVREN.md)
 - [x] Manifests are structurally identical to the template; class-count and split sums are consistent; every evidence hash matches (checked 2026-09-30)
 
