@@ -71,7 +71,18 @@ The full per-source report is [reports/m2-ingest-report.md](reports/m2-ingest-re
 
 ## What the assurance audit found (Milestone 3)
 
-The reports are in [reports/m3/](reports/m3/); every number in them is in [artifacts/m3/audit.json](artifacts/m3/audit.json).
+The reports are in [reports/m3/](reports/m3/) and every number in them is in [artifacts/m3/audit.json](artifacts/m3/audit.json); the short version is the [dataset assurance report](reports/m3/dataset-assurance.md). The rules were committed before any number was computed ([docs/M3_PROTOCOL.md](docs/M3_PROTOCOL.md)); corrections, the points of an independent red-team review and their effect are in [docs/M3_PROTOCOL_AMENDMENT.md](docs/M3_PROTOCOL_AMENDMENT.md). Similarity is the cosine of DINOv2-small embeddings of the whole image. A *visual similarity component* links images through pairs at or above a threshold: it is evidence of potential leakage, not proof that two images show the same physical board, and no image was removed.
+
+- **Thresholds, from the frozen rule:** near-duplicate 0.934, same family or scene 0.918 (the review level coincides with it), pHash candidate 4 bits. Neither labelled pool reached precision 0.90 against its own proxy key (PCB-IND batch and side, PCB-Defect design family), so the rule's F1 fallback fixed the family level; at the near threshold every source keeps its target 95% of synthetic near-duplicates (achieved: DsPCBSD+ 95.7%, PCB-Defect 99.5%, PCB-IND 95.0%). Until the 300-pair review queue is labelled by a person, the thresholds rest on proxy labels.
+- **DsPCBSD+ (official random 80/20 split):** at the family level, 216 components cross the train/validation boundary; they hold 1,983 of the 10,259 images (19.3%), and 482 of the 2,051 validation images (23.5%) have a training image at cosine 0.918 or more. At the stricter near-duplicate level: 196 components, 1,191 images (11.6%), 325 validation images (15.8%). Random 80/20 splits of the same images give about as many crossing components (227.7 ± 10.7), so the official split behaves as if it ignored visual similarity.
+- **PCB-IND (official train/val/test):** 57 components cross a split (33 train/val, 38 train/test, 18 val/test), holding 842 of 4,789 images (17.6%); 16.5% of the validation and 17.8% of the test images have a training image at 0.918 or more. That is about half of what random splits give (109.1 ± 6.6), because the split keeps each (batch, side) group together; but every one of the 832 cross-split similar pairs joins two *different* batches, which a batch-key check cannot see. With pHash at 3 bits there are 0 pairs inside a batch (the authors removed those) and 435 pairs across batches, 123 of them across a split. Separately, 125 of the 685 batches have images in two splits.
+- **PCB-Defect (no official split):** the most similar other image shares the design family for 72.2% of the images (4.9% by chance). The components chain (one near-level component holds 111 of the 230 images, with a chaining gap of 0.22), so its groups are chains, not duplicate sets.
+- **Across sources:** no identical file; 115 pairs between DsPCBSD+ and PCB-IND reach the family level and 30 the near-duplicate level; none involve PCB-Defect.
+- **A group-aware split** with the official sizes has no crossing component (measured) and lowers the 95th percentile of each DsPCBSD+ validation image's highest cosine to training from 0.964 to 0.912.
+- **Robustness:** DINOv2-base, calibrated by the same rule, keeps the direction of every finding (the DsPCBSD+ split crosses about as many components as random splits, the PCB-IND split fewer), but at its own, stricter threshold (0.958) it finds far fewer crossing components (DsPCBSD+ 83 instead of 216, PCB-IND 7 instead of 57) and misses more of the synthetic near-duplicates (its near threshold keeps 81.6% of the DsPCBSD+ and 84.1% of the PCB-IND copies, against a 95% target). The direction is robust to the representation; the size is not, and only the human review can say which scale is closer.
+- **Assessment (dimensional, no score):** DsPCBSD+ and PCB-IND are *potentially optimistic* as split; PCB-Defect cannot be assessed (no split); independent source validation is missing, and source diversity is low (two acquisition kinds for three sources).
+
+Whether this leakage changes model scores is measured by the experiments (Milestone 7), not here.
 
 ## Results
 
@@ -111,7 +122,7 @@ If this folder lives inside OneDrive, keep the virtual environment outside it, f
 $env:UV_PROJECT_ENVIRONMENT = "C:\venvs\openinspect-trust"
 ```
 
-Raw data belongs outside the repository and outside OneDrive, under `OPENINSPECT_DATA_DIR` (see `.env.example`); `ingest` refuses a data directory inside either. About 0.9 GB is used by the three sources, plus about 110 MB of embedding caches and model weights.
+Raw data belongs outside the repository and outside OneDrive, under `OPENINSPECT_DATA_DIR` (see `.env.example`); `ingest` refuses a data directory inside either. About 0.9 GB is used by the three sources, plus about 0.6 GB of model weights and embedding caches.
 
 ## Licence
 

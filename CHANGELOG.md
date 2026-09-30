@@ -4,6 +4,23 @@ All notable changes are recorded here. Format: [Keep a Changelog](https://keepac
 
 ## [Unreleased]
 
+### Added — M3: similarity and leakage audit, dataset assurance report
+
+- `openinspect dedup features | synthetic | analyze | review | report | run`.
+  - `features` decodes every image once, checks its SHA-256 against the ingest record, and caches a 64-bit pHash and a DINOv2 embedding (L2-normalised CLS token, preprocessing `v1`, backend `cpu-fp32`); the cache key is image SHA-256, model and pinned revision, preprocessing version and backend, so an interrupted run resumes and nothing is embedded twice.
+  - `synthetic` embeds seeded, mildly transformed copies of 100 images per source (11 transforms, protocol section 5).
+  - `analyze` needs no model: calibration against the sources' own keys (proxy metadata), the frozen threshold rule, exact cosine search, per-source similarity graphs with a percolation sweep, split leakage per level, a random-split baseline (1,000 permutations), a group-aware split whose crossings are measured, key overlap, cohesion, chaining and stability, a hash audit (SHA-256, pHash, dHash), candidate pairs with machine categories, the synthetic recall achieved at the final threshold, a both-sides bootstrap check, and with `--robustness-model` a second representation compared by conclusions and partition agreement.
+  - `review` writes a local HTML contact sheet of a seeded review queue of about 300 pairs (stratified by source, band, split relation and metadata relation) plus a seeded sample of components; `report` re-renders the reports from `artifacts/m3/audit.json`; `run` does everything, reusing the caches.
+- `openinspect.assurance`: a dimensional dataset assurance report (provenance, licence evidence, archive integrity, exact duplicates, visual similarity leakage, group split integrity, independent source validation, source diversity, cross-source overlap) with explicit rules and evidence, and no scalar score.
+- The protocol ([docs/M3_PROTOCOL.md](docs/M3_PROTOCOL.md)) was committed before any number was computed and is unchanged (a test checks its SHA-256); corrections, the eight points of an independent red-team review, and implementation notes are in [docs/M3_PROTOCOL_AMENDMENT.md](docs/M3_PROTOCOL_AMENDMENT.md), each with the previous rule, the issue, the correction and the effect on interpretation.
+- Reports in `reports/m3/`: similarity summary, threshold calibration, split leakage, source comparison, representation robustness, dataset assurance, limitations, performance, with SVG figures. Artifacts in `artifacts/m3/`: `audit.json`, `thresholds.json`, `synthetic-recall.json`, `duplicate-pairs.parquet`, `leakage-groups.parquet`, `review-candidates.csv` (tracked) and `nearest-neighbors.parquet` (regenerable, listed by SHA-256).
+- The core uses generic keys only (`group_id`, `subgroup_id`, `acquisition_id`); `configs/dedup.yaml` maps each source onto them, declares its calibration pools, and pins DINOv2-small and DINOv2-base by revision and weights SHA-256.
+- Position: a reproducible dataset and benchmark assurance preflight; prior art (FiftyOne Brain, Cleanlab, imagededup) acknowledged in the README; A0 − B is not a leakage measure (SPEC 7.6).
+- Dependencies: `numpy` and `pyarrow` in the core; `torch` (CPU-only index) and `transformers` in the optional extra `embeddings`.
+- Decisions T15–T28 in [docs/DECISIONS.md](docs/DECISIONS.md).
+- Integration tests check the committed reports against `audit.json`, the tracked artifacts against their digests, the thresholds against the rule, and the frozen protocol against its hash.
+
+
 ### Added — licence
 
 - `LICENSE`: Apache-2.0 for the code (decision D3, chosen by the maintainer); `pyproject.toml` declares it.

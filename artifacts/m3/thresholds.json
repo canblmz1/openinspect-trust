@@ -1,0 +1,72 @@
+{
+  "family": 0.918,
+  "from_pools": [
+    {
+      "f1_optimal": 0.918,
+      "fallback": "precision 0.90 is never reached: the F1-optimal cosine is used",
+      "family": 0.918,
+      "pool": "family A",
+      "precision_050": 0.9375,
+      "precision_090": null,
+      "review": 0.9375,
+      "source": "pcb-defect",
+      "used_in_rule": true
+    },
+    {
+      "f1_optimal": 0.9295,
+      "fallback": "precision 0.90 is never reached: the F1-optimal cosine is used",
+      "family": 0.9295,
+      "pool": "(A, B)",
+      "precision_050": 0.938,
+      "precision_090": null,
+      "review": 0.938,
+      "source": "pcb-defect",
+      "used_in_rule": false
+    },
+    {
+      "f1_optimal": 0.7575,
+      "fallback": "precision 0.90 is never reached: the F1-optimal cosine is used; precision 0.50 is never reached: the F1-optimal cosine is used",
+      "family": 0.7575,
+      "pool": "(batch, side)",
+      "precision_050": null,
+      "precision_090": null,
+      "review": 0.7575,
+      "source": "pcb-ind",
+      "used_in_rule": true
+    }
+  ],
+  "from_synthetic": [
+    {
+      "n_near": 1000,
+      "n_photometric": 800,
+      "near": 0.936433,
+      "phash": 4,
+      "source": "dspcbsd-plus"
+    },
+    {
+      "n_near": 1000,
+      "n_photometric": 800,
+      "near": 0.959635,
+      "phash": 2,
+      "source": "pcb-defect"
+    },
+    {
+      "n_near": 1000,
+      "n_photometric": 800,
+      "near": 0.933905,
+      "phash": 2,
+      "source": "pcb-ind"
+    }
+  ],
+  "model": "dinov2-small",
+  "near": 0.933905,
+  "notes": [],
+  "phash_authors": 3,
+  "phash_candidate": 4,
+  "precision_family": 0.9,
+  "precision_review": 0.5,
+  "review": 0.918,
+  "rule": "v1",
+  "schema_version": 1,
+  "synthetic_recall": 0.95
+}

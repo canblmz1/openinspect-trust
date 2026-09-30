@@ -1,0 +1,29 @@
+[
+  {
+    "achieved_recall": 0.957,
+    "final_near_threshold": 0.933905,
+    "meets_target": true,
+    "n_pairs": 1000,
+    "source": "dspcbsd-plus",
+    "source_threshold": 0.936433,
+    "target_recall": 0.95
+  },
+  {
+    "achieved_recall": 0.995,
+    "final_near_threshold": 0.933905,
+    "meets_target": true,
+    "n_pairs": 1000,
+    "source": "pcb-defect",
+    "source_threshold": 0.959635,
+    "target_recall": 0.95
+  },
+  {
+    "achieved_recall": 0.95,
+    "final_near_threshold": 0.933905,
+    "meets_target": true,
+    "n_pairs": 1000,
+    "source": "pcb-ind",
+    "source_threshold": 0.933905,
+    "target_recall": 0.95
+  }
+]

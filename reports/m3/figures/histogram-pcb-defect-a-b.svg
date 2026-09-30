@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 400" width="640" height="400" font-family="sans-serif" font-size="11">
+<rect width="640" height="400" fill="white"/>
+<text x="64" y="20" font-size="13" font-weight="bold">pcb-defect: cosine of positive and negative pairs ((A, B))</text>
+<rect x="64" y="34" width="408" height="314" fill="none" stroke="#999"/>
+<line x1="64.0" y1="34" x2="64.0" y2="348" stroke="#eee"/><text x="64.0" y="363" text-anchor="middle">0.4</text>
+<line x1="145.6" y1="34" x2="145.6" y2="348" stroke="#eee"/><text x="145.6" y="363" text-anchor="middle">0.52</text>
+<line x1="227.2" y1="34" x2="227.2" y2="348" stroke="#eee"/><text x="227.2" y="363" text-anchor="middle">0.64</text>
+<line x1="308.8" y1="34" x2="308.8" y2="348" stroke="#eee"/><text x="308.8" y="363" text-anchor="middle">0.76</text>
+<line x1="390.4" y1="34" x2="390.4" y2="348" stroke="#eee"/><text x="390.4" y="363" text-anchor="middle">0.88</text>
+<line x1="472.0" y1="34" x2="472.0" y2="348" stroke="#eee"/><text x="472.0" y="363" text-anchor="middle">1</text>
+<line x1="64" y1="348.0" x2="472" y2="348.0" stroke="#eee"/><text x="58" y="352.0" text-anchor="end">0</text>
+<line x1="64" y1="285.2" x2="472" y2="285.2" stroke="#eee"/><text x="58" y="289.2" text-anchor="end">0.0202</text>
+<line x1="64" y1="222.4" x2="472" y2="222.4" stroke="#eee"/><text x="58" y="226.4" text-anchor="end">0.0404</text>
+<line x1="64" y1="159.6" x2="472" y2="159.6" stroke="#eee"/><text x="58" y="163.6" text-anchor="end">0.0607</text>
+<line x1="64" y1="96.8" x2="472" y2="96.8" stroke="#eee"/><text x="58" y="100.8" text-anchor="end">0.0809</text>
+<line x1="64" y1="34.0" x2="472" y2="34.0" stroke="#eee"/><text x="58" y="38.0" text-anchor="end">0.1011</text>
+<text x="268" y="390" text-anchor="middle">cosine similarity (0.01 bins)</text><text transform="translate(16 191) rotate(-90)" text-anchor="middle">share of the class&#x27;s pairs</text>
+<line x1="416.2" y1="34" x2="416.2" y2="348" stroke="#555" stroke-dasharray="4 3"/><text x="419.2" y="46" fill="#555">review = family</text>
+<line x1="427.1" y1="34" x2="427.1" y2="348" stroke="#555" stroke-dasharray="4 3"/><text x="430.1" y="46" fill="#555">near</text>
+<polyline fill="none" stroke="#1f77b4" stroke-width="1.6" points="179.6,348.0 193.2,348.0 200.0,348.0 206.8,348.0 213.6,348.0 220.4,348.0 227.2,348.0 234.0,348.0 240.8,348.0 247.6,348.0 254.4,348.0 261.2,348.0 268.0,348.0 274.8,348.0 281.6,343.2 288.4,343.2 295.2,343.2 302.0,343.2 308.8,338.3 315.6,338.3 322.4,343.2 329.2,338.3 336.0,319.0 342.8,280.3 349.6,251.2 356.4,246.4 363.2,256.1 370.0,188.3 376.8,144.8 383.6,173.8 390.4,193.2 397.2,96.4 404.0,106.1 410.8,86.7 417.6,62.5 424.4,106.1 431.2,125.4 438.0,149.6 444.8,164.1 451.6,270.6 458.4,338.3"/>
+<line x1="484" y1="44" x2="502" y2="44" stroke="#1f77b4" stroke-width="2"/><text x="507" y="48">positive (same group)</text>
+<polyline fill="none" stroke="#d62728" stroke-width="1.6" points="179.6,347.9 193.2,347.9 200.0,347.8 206.8,347.8 213.6,347.6 220.4,347.0 227.2,346.8 234.0,345.6 240.8,345.0 247.6,345.1 254.4,343.5 261.2,342.3 268.0,338.3 274.8,335.8 281.6,330.5 288.4,325.1 295.2,320.1 302.0,307.8 308.8,294.1 315.6,275.8 322.4,255.8 329.2,232.8 336.0,206.0 342.8,190.3 349.6,154.1 356.4,128.5 363.2,111.2 370.0,88.4 376.8,72.4 383.6,66.1 390.4,103.9 397.2,133.3 404.0,174.7 410.8,235.5 417.6,281.4 424.4,320.0 431.2,338.1 438.0,345.4 444.8,346.5 451.6,347.8 458.4,348.0"/>
+<line x1="484" y1="60" x2="502" y2="60" stroke="#d62728" stroke-width="2"/><text x="507" y="64">negative (other group)</text>
+</svg>

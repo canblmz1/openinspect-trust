@@ -15,7 +15,7 @@ Each amendment states the **previous rule**, the **issue** found, the **correcti
 | after 23:12 | A4 and reporting additions (A4 below) |
 | 23:38 and 23:42 | full runs with `openinspect dedup run --all` on `740662b` and on `7aa1b1b` (the second on a clean tree); same thresholds and counts |
 | about 23:43 | an independent red-team review of the direction received; R1–R8 below implemented in response on 2026-10-01, all after the numbers above were known |
-| final run | the committed numbers, on a clean tree, at the commit named in every report; its shared numbers are compared with the `7aa1b1b` run |
+| 2026-10-01 01:14 | **final run** (finished), `openinspect dedup run --all --robustness-model dinov2-base` on a clean tree at `a030e7b` (the commit named in every report): all 7,315 values of the `7aa1b1b` audit are unchanged; the red-team additions are new fields only |
 
 ## Corrections found in the code
 

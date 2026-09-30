@@ -51,6 +51,25 @@ A milestone is done only when every item on its list is true and the milestone r
 - [x] No raw data, archive, extracted file or record is committed; everything lives under `OPENINSPECT_DATA_DIR`, outside the repository and OneDrive.
 - [x] GitHub Actions ran ruff, mypy, pytest and manifest validation without downloading any dataset (run 36760457834 on commit 29da0e3: all six jobs green, tests and manifest validation on Ubuntu and Windows).
 
+## M3: similarity and leakage audit
+
+- [x] The rules were written before any number was computed ([M3_PROTOCOL](M3_PROTOCOL.md), `8572b7e`) and are unchanged (SHA-256 checked by a test); every later correction, and the eight points of the red-team review, is in [M3_PROTOCOL_AMENDMENT](M3_PROTOCOL_AMENDMENT.md) with the previous rule, the issue, the correction and the effect on interpretation.
+- [x] Hash audit inside and across the sources: SHA-256 (0 identical pairs, as in M2), 64-bit pHash and dHash at a published reference distance (3 bits) and at the calibrated one (4 bits).
+- [x] Embeddings of all 15,278 images, pinned by revision and weights SHA-256, cached by image SHA-256, model, preprocessing and backend, 0 failures: DINOv2-small (primary, 10.2 images/s in the model) and DINOv2-base (robustness check).
+- [x] Exact cosine search; the global top-10 of every image is in `nearest-neighbors.parquet`.
+- [x] Thresholds from the frozen rule: group-label pools over all pairs, bootstrap intervals, 3,300 synthetic near-duplicates; the rule's fallbacks and the synthetic recall achieved at the final threshold are reported per source.
+- [x] Visual similarity components at two levels with a percolation sweep, cohesion, chaining gap and stability; the chaining rule applied.
+- [x] Split leakage per source: crossing components by split pair, affected images and annotations, evaluation images with a training neighbour, the random-split baseline, a group-aware split whose crossings are measured (0), and the sources' own keys across splits.
+- [x] Comparison with the sources' own keys (proxy metadata); latent grouping of the source without a key judged by cohesion, stability, pHash agreement, transfer and the second representation.
+- [x] Uncertainty: the protocol's bootstrap plus one both-sides check, with a materiality criterion fixed before it ran.
+- [x] One representation-robustness check (DINOv2-base), compared by conclusions and partition agreement.
+- [x] A dimensional dataset assurance report with explicit rules and evidence, and no scalar score.
+- [x] A seeded, stratified review queue of 300 pairs (`review-candidates.csv`, human columns empty) and a local HTML pack with a seeded sample of components; nothing is decided or deleted (T15).
+- [x] The core is domain- and platform-agnostic (generic keys; source mapping in `configs/dedup.yaml`).
+- [x] Reports in `reports/m3/` rendered from `artifacts/m3/audit.json`; integration tests check reports, digests, thresholds and the frozen protocol without the data.
+- [x] Performance recorded: time per stage, images per second, cache size, peak RAM, processor.
+- [ ] The human review of the queue (maintainer, D9); until then the thresholds rest on proxy labels.
+
 ## v0.1 release
 
 - [x] 3 sources `accepted` with archived evidence; ingest gates G7 and G8 passed (M2, 2026-09-30).
