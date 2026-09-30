@@ -49,6 +49,7 @@ from openinspect.dedup.graph import GraphError
 from openinspect.dedup.hashing import PHASH_VERSION
 from openinspect.dedup.inventory import ImageItem, InventoryError, Unreadable, load_items
 from openinspect.dedup.perf import (
+    RunRecord,
     StageTiming,
     append_run,
     build_performance,
@@ -374,6 +375,22 @@ def analyse_model(
     return features, result
 
 
+def _other_runs(
+    ctx: Context, model: str | None
+) -> list[tuple[str, list[RunRecord], list[RunRecord]]]:
+    """The recorded embedding runs of the robustness model, for the performance report."""
+    if model is None:
+        return []
+    key = spec_from_config(ctx.config, model).model_key
+    return [
+        (
+            model,
+            [r for r in read_runs(ctx.data, "features") if r.get("model_key") == key],
+            [r for r in read_runs(ctx.data, "synthetic") if r.get("model_key") == key],
+        )
+    ]
+
+
 def run_analyze(
     ctx: Context,
     *,
@@ -436,6 +453,7 @@ def run_analyze(
         cache_files=cache_files,
         cache_bytes=cache_bytes,
         dim=ctx.spec.dim,
+        others=_other_runs(ctx, robustness_model),
     )
     audit = result.audit.model_copy(
         update={

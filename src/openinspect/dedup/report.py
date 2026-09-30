@@ -18,6 +18,8 @@ from openinspect.dedup.audit_models import (
     Audit,
     Interval,
     LevelResult,
+    Robustness,
+    SyntheticRecall,
     Top1Stats,
 )
 from openinspect.dedup.leakage import KeyOverlap, PermutationBaseline, SourceLeakage
@@ -345,7 +347,7 @@ def similarity_summary(audit: Audit) -> str:
         f"{audit.hash_audit.sha256_equal_groups:,} groups over all {run.images:,} images, "
         f"{audit.cross_source.sha256_equal_pairs:,} of them across sources.",
         "",
-        "## Candidate pairs by suggested category",
+        "## Candidate pairs by machine category",
         "",
         "Counts of image pairs; in brackets the pairs whose two images sit in different official "
         "splits of the same source.",
@@ -1427,6 +1429,26 @@ def representation_robustness(audit: Audit) -> str:
             ],
         ],
     )
+    if r.other_synthetic_recall:
+        mine = {row.source: row for row in audit.synthetic_recall}
+        lines += [
+            "",
+            "Synthetic recall at each representation's final near threshold (target "
+            f"{_share(b.synthetic_recall)}):",
+            "",
+        ]
+        lines += _table(
+            ["source", "primary", "second", "second's own threshold"],
+            [
+                [
+                    f"`{row.source}`",
+                    _recall(mine.get(row.source)),
+                    _recall(row),
+                    _f(row.source_threshold, 4),
+                ]
+                for row in r.other_synthetic_recall
+            ],
+        )
     lines += ["", "## Leakage per source and level (primary / second)", ""]
     lines += _table(
         [
@@ -1491,8 +1513,28 @@ def representation_robustness(audit: Audit) -> str:
             + "."
         ),
         "",
+        "The size of the leakage is another matter: " + _magnitudes(r) + ".",
+        "",
     ]
     return "\n".join(lines) + "\n"
+
+
+def _recall(row: SyntheticRecall | None) -> str:
+    if row is None:
+        return DASH
+    return f"{_share(row.achieved_recall)}" + ("" if row.meets_target else " (below target)")
+
+
+def _magnitudes(r: Robustness) -> str:
+    parts = [
+        f"at the family level the second representation finds {_int(row.crossing_other)} crossing "
+        f"components in `{row.source}` against {_int(row.crossing_primary)}, and "
+        f"{_share(row.exposed_other)} of its evaluation images with a training neighbour against "
+        f"{_share(row.exposed_primary)}"
+        for row in r.rows
+        if row.level == "family" and row.crossing_primary is not None
+    ]
+    return "; ".join(parts) if parts else "no source has a split"
 
 
 # ---------------------------------------------------------------------- assurance
@@ -1625,24 +1667,29 @@ def limitations(audit: Audit) -> str:
         if s.median_long_side and s.max_long_side and s.median_long_side > 448
     ]
     robust = audit.robustness
-    agreement = ""
-    if robust is not None:
+    parts = ["5. **Representation.** Every image is squeezed whole to 224x224."]
+    if squeezed:
+        parts.append("Large scans lose most of their pixels: " + "; ".join(squeezed) + ".")
+    if robust is None:
+        parts.append("No second representation was run.")
+    else:
         compared = [row for row in robust.rows if row.reading_primary is not None]
         same = sum(1 for row in compared if row.reading_primary == row.reading_other)
-        agreement = (
-            f" The second representation (`{robust.other_model}`) gives the same random-split "
-            f"reading for {same} of {len(compared)} source and level pairs "
-            "([representation-robustness.md](representation-robustness.md))."
+        short = [row.source for row in robust.other_synthetic_recall if not row.meets_target]
+        parts.append(
+            f"The second representation (`{robust.other_model}`) gives the same random-split "
+            f"reading for {same} of {len(compared)} source and level pairs, so the direction of "
+            f"the findings holds; the size does not ({_magnitudes(robust)}), because each "
+            "representation reaches its own thresholds by the rule"
+            + (
+                f" and the second's near threshold keeps less than the target share of the "
+                f"synthetic copies of {', '.join(f'`{s}`' for s in short)}"
+                if short
+                else ""
+            )
+            + " ([representation-robustness.md](representation-robustness.md))."
         )
-    lines.append(
-        "5. **Representation.** Every image is squeezed whole to 224x224. "
-        + (
-            "Large scans lose most of their pixels: " + "; ".join(squeezed) + ". "
-            if squeezed
-            else ""
-        )
-        + (agreement or "No second representation was run.")
-    )
+    lines.append(" ".join(parts))
     lines.append(
         "6. **Leakage is not a score.** M3 measures the structure of the data; no model was "
         "trained. Later, A0 - A1 (random against group-aware split of the same sources) "

@@ -164,6 +164,7 @@ def build_performance(
     cache_files: int,
     cache_bytes: int,
     dim: int,
+    others: Sequence[tuple[str, Sequence[RunRecord], Sequence[RunRecord]]] = (),
 ) -> Performance:
     """Stage times of this analysis next to the recorded runs that did the embedding work.
 
@@ -193,6 +194,21 @@ def build_performance(
                 note=str(copies["note"]) if copies.get("note") else None,
             )
         )
+    for name, other_features, other_synthetic in others:
+        for label, runs in (
+            (f"embeddings (cache build, {name})", other_features),
+            (f"synthetic copies ({name})", other_synthetic),
+        ):
+            best = max(runs, key=lambda r: _number(r, "embedded") or 0.0, default=None)
+            if best is not None and (_number(best, "embedded") or 0) > 0:
+                stages.append(
+                    StageTimingInfo(
+                        stage=label,
+                        seconds=_number(best, "wall_seconds") or 0.0,
+                        peak_ram_bytes=_integer(best, "peak_ram_bytes"),
+                        images=_integer(best, "embedded"),
+                    )
+                )
     stages.extend(
         StageTimingInfo(stage=t.stage, seconds=round(t.seconds, 3), peak_ram_bytes=t.peak_ram_bytes)
         for t in timings

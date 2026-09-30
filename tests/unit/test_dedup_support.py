@@ -352,3 +352,28 @@ def test_weights_are_refused_unless_their_hash_matches(tmp_path: Path) -> None:
     verify_weights(weights, hashlib.sha256(b"weights").hexdigest())
     with pytest.raises(EmbedderError, match="refusing to load unverified weights"):
         verify_weights(weights, "0" * 64)
+
+
+def test_the_robustness_model_runs_are_listed_next_to_the_primary() -> None:
+    perf = build_performance(
+        [],
+        features_runs=[{"embedded": 10, "wall_seconds": 5.0}],
+        synthetic_runs=[],
+        cache_files=10,
+        cache_bytes=100,
+        dim=8,
+        others=[
+            (
+                "second",
+                [{"embedded": 0}, {"embedded": 10, "wall_seconds": 9.0}],
+                [{"embedded": 3, "wall_seconds": 2.0}],
+            ),
+            ("third", [], []),
+        ],
+    )
+    assert [s.stage for s in perf.stages] == [
+        "embeddings (cache build)",
+        "embeddings (cache build, second)",
+        "synthetic copies (second)",
+    ]
+    assert perf.total_seconds == 16.0

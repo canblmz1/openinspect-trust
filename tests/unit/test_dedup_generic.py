@@ -86,6 +86,7 @@ def test_a_changed_representation_is_measured(
     )
     check = robustness(primary, other, other_model="other/model@000000000000")
     assert check.other_thresholds == other.audit.thresholds
+    assert check.other_synthetic_recall == other.audit.synthetic_recall
     assert all(row.adjusted_rand is not None for row in check.rows)
     assert all(0.0 <= value <= 1.0 for value in check.top1_agreement.values())
     ind = next(r for r in check.rows if r.source == "pcb-ind" and r.level == "family")
@@ -97,6 +98,12 @@ def test_a_changed_representation_is_measured(
     assert "## Agreement of the two groupings" in files["representation-robustness.md"]
     assert "source and level pairs" in files["representation-robustness.md"]
     assert "other/model@000000000000" in files["limitations.md"]
+    assert "The size of the leakage is another matter" in files["representation-robustness.md"]
+    assert (
+        "Synthetic recall at each representation's final near threshold"
+        in files["representation-robustness.md"]
+    )
+    assert "so the direction of the findings holds" in files["limitations.md"]
 
 
 def test_audits_of_different_images_are_not_compared(

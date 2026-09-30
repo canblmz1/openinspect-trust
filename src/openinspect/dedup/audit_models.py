@@ -368,6 +368,7 @@ class Robustness(StrictModel):
     other_thresholds: Thresholds
     rows: list[RobustnessRow]
     top1_agreement: dict[str, float] = Field(default_factory=dict)  # same most similar image
+    other_synthetic_recall: list[SyntheticRecall] = Field(default_factory=list)
     note: str
 
 

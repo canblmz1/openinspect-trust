@@ -1470,6 +1470,7 @@ def robustness(primary: AnalysisResult, other: AnalysisResult, *, other_model: s
         other_thresholds=other.audit.thresholds,
         rows=rows,
         top1_agreement=top1,
+        other_synthetic_recall=other.audit.synthetic_recall,
         note=(
             "Each representation is calibrated by the same frozen rule (its own pools and "
             "synthetic copies); partitions are compared image by image inside each source."
