@@ -50,7 +50,7 @@ from openinspect.dedup.perf import (
     timed,
 )
 from openinspect.dedup.report import write_reports
-from openinspect.dedup.review import ReviewError, write_review_pack
+from openinspect.dedup.review import ReviewError, sample_groups, write_review_pack
 from openinspect.dedup.synthetic import (
     SyntheticError,
     SyntheticPair,
@@ -61,8 +61,10 @@ from openinspect.dedup.synthetic import (
 )
 from openinspect.dedup.tables import (
     AUDIT,
+    GROUPS,
     REVIEW,
     read_audit,
+    read_groups,
     read_review,
     write_artifacts,
     write_audit,
@@ -382,14 +384,22 @@ def run_analyze(ctx: Context, *, seed: int, per_source: int, out: Path, reports:
     typer.echo(f"reports: {len(written)} files in {reports.as_posix()}")
 
 
-def run_review(ctx: Context, *, artifacts: Path, target: Path) -> Path:
+GROUPS_PER_SOURCE = 10  # seeded sample of family-level groups for the qualitative look (section 9f)
+
+
+def run_review(ctx: Context, *, artifacts: Path, target: Path, seed: int = 0) -> Path:
     try:
         rows = read_review(artifacts / REVIEW)
         audit = read_audit(artifacts / AUDIT)
-        path = write_review_pack(rows, ctx.items, target, audit=audit)
+        groups = sample_groups(
+            read_groups(artifacts / GROUPS), per_source=GROUPS_PER_SOURCE, seed=seed
+        )
+        path = write_review_pack(rows, ctx.items, target, audit=audit, groups=groups)
     except (OSError, ValueError, ReviewError) as exc:
         fail(str(exc))
-    typer.echo(f"review pack: {len(rows):,} pairs in {path.as_posix()}")
+    typer.echo(
+        f"review pack: {len(rows):,} pairs and {len(groups):,} sampled groups in {path.as_posix()}"
+    )
     return path
 
 

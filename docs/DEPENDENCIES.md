@@ -14,12 +14,14 @@ Free and open-source only; no paid cloud service is required (brief §3). Add a 
 | core | `httpx` | resumable, checksum-verified downloads (later the EVREN client) | BSD-3 (verified, installed metadata) | M2 |
 | core | `defusedxml` | parse the VOC XML files of untrusted archives | PSF-2.0 (verified, installed metadata) | M2 |
 | core | `pillow` (≥ 10.3) | image decode, integrity checks, metadata, dHash (crops later) | MIT-CMU, formerly HPND (verified, installed metadata) | M2 |
-| data | `numpy`, `pandas`, `pyarrow` | tables, statistics, optional Parquet | BSD-3, BSD-3, Apache-2.0 | when first needed (M2 did not need them) |
-| dedup | `imagehash` | 64-bit pHash | BSD-2 | M3 |
-| ml | `torch` (installed 2.11.0, CPU build) | embeddings, local inference; CUDA build only for GPU smoke tests | BSD-3 | M3 |
-| ml | `transformers` | DINOv2 (`facebook/dinov2-small`) | Apache-2.0; model card licence **apache-2.0 (verified)** | M3 |
-| ml | `open_clip_torch` | alternative embeddings | MIT; **weights: check the licence of the chosen pretrained tag** | M3 |
-| ml | `faiss-cpu` (or plain NumPy at 5k vectors) | nearest-neighbour search | MIT | M3 |
+| core | `numpy` (2.5.3 is installed) | vectors, similarity, hashes, statistics (M3) | BSD-3 | M3 |
+| core | `pyarrow` (25.0.1 is installed) | the M3 Parquet tables | Apache-2.0 | M3 |
+| data | `pandas` | not used: the tables are written with `pyarrow` directly | BSD-3 | not needed |
+| dedup | `imagehash` | not used: the 64-bit pHash is computed in house with NumPy and Pillow (T16) | BSD-2 | not needed |
+| ml | `torch` (2.14.1+cpu, from the official CPU-only index) | DINOv2 embeddings, in the optional extra `embeddings` (T17); CUDA build only for GPU smoke tests | BSD-3 | M3 |
+| ml | `transformers` (5.18.0), with `huggingface-hub` and `safetensors` | DINOv2 (`facebook/dinov2-small`, revision and weights SHA-256 pinned in `configs/dedup.yaml`), extra `embeddings` | Apache-2.0; model card licence **apache-2.0 (verified)** | M3 |
+| ml | `open_clip_torch` | alternative embeddings; not used in M3 (the protocol's optional second model is DINOv2-base) | MIT; **weights: check the licence of the chosen pretrained tag** | later, if needed |
+| ml | `faiss-cpu` | not used: exact search in NumPy is fast enough at 15,278 vectors (T18) | MIT | not needed |
 | ml | `scikit-learn`, `scipy` | out-of-fold classifiers, outlier scores, clustering | BSD-3 | M4 |
 | eval | `pycocotools` or `torchmetrics` (decide in M8; test against a reference) | COCO-style mAP | BSD-2, Apache-2.0 | M8 |
 | evren | `httpx` (already core) | API client; retry with backoff and the `.env` reader are in-house (`ingest/download.py`, `settings.py`), so `tenacity` and `python-dotenv` are not needed | BSD-3 | M8 |
@@ -39,6 +41,7 @@ Free and open-source only; no paid cloud service is required (brief §3). Add a 
 
 ## Local environment notes (2026-09-30)
 
-- PyTorch is a **CPU build** (`2.11.0+cpu`); `torch.cuda.is_available()` is `False`. GPU smoke tests need a CUDA build from the selector on pytorch.org.
+- PyTorch is a **CPU build** (`2.14.1+cpu` in the project environment, `uv sync --extra embeddings`); `torch.cuda.is_available()` is `False`. GPU smoke tests need a CUDA build from the selector on pytorch.org.
+- CI installs the core and dev dependencies only; the M3 tests use a stub embedder, so neither torch nor the model weights are needed there.
 - `ultralytics` is not installed; it is installed only for M7.
 - The GPU has 4 GB VRAM: fine for YOLO11n smoke tests with a small batch, not for real training.

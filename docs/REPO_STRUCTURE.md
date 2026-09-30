@@ -1,6 +1,6 @@
 # Repository structure
 
-Target layout (brief §34) with additions marked **+**. The last column says which milestone creates the item. M0, M1 and M2 files exist today; the rest appears with its milestone.
+Target layout (brief §34) with additions marked **+**. The last column says which milestone creates the item. M0 to M3 files exist today; the rest appears with its milestone.
 
 ```
 openinspect-trust/
@@ -10,14 +10,17 @@ openinspect-trust/
 │   ├── provenance/                          schemas (SourceManifest, ImageRecord, …), registry,          M1–M2
 │   │                                        manifest generator, validators
 │   ├── ingest/                              download, extract, adapters/, records, report               M2
-│   ├── dedup/                               exact, pHash, grouping, review files                        M3
-│   ├── embeddings/                          DINOv2 / OpenCLIP extraction, nearest-neighbour search      M3
+│   ├── dedup/                               SHA-256, pHash, DINOv2 embeddings and their cache, exact     M3
+│   │                                        cosine search, calibration, groups, split leakage, tables,
+│   │                                        reports, review pack (embeddings/ was merged in here, T19)
 │   ├── taxonomy/                            mapping load, validate, apply                               M4
 │   ├── audit/                               label-quality signals, review queue                         M4
 │   ├── split/                               A0, A1, B (LOSO), invariants                                M5
 │   ├── benchmark/                           InferenceProvider, evaluator, metrics, runner, reports      M7–M9
 │   └── evren/                               client.py (HTTP), export.py (YOLO/COCO ZIP), EvrenProvider  M6–M8
-├── configs/                                 licences.yaml (allowlist), calibrated thresholds            M1, M3
+├── configs/                                 licences.yaml (allowlist), dedup.yaml (pinned models)       M1, M3
+├── artifacts/m3/                          + audit.json (every M3 number), leakage groups, candidate    M3
+│                                            pairs, review queue; the neighbour table is ignored (T20)
 ├── manifests/
 │   ├── sources/                             one YAML per source + _template.yaml                        M0
 │   ├── evidence/<slug>/                     + archived records, hashed in SHA256SUMS.txt                M0
@@ -27,7 +30,8 @@ openinspect-trust/
 ├── taxonomy/                                mapping.csv                                                 M4
 ├── experiments/                             frozen experiment configs, DEVIATIONS.md, EVREN run notes   M7
 ├── benchmarks/                              run records, metrics, dedup_calibration/                    M3, M7
-├── reports/                                 ingest (M2), dedup, audit and gap reports (generated)       M2+
+├── reports/                                 ingest (M2), m3/ similarity and leakage reports with SVG     M2+
+│                                            figures, later audit and gap reports (all generated)
 ├── scripts/                                 thin helpers only; logic lives in the package               as needed
 ├── tests/
 │   ├── unit/, integration/
@@ -55,7 +59,9 @@ Heavy data lives outside git and outside OneDrive, under `OPENINSPECT_DATA_DIR`:
 ├── extracted/<slug>/      unpacked files (never edited)
 ├── records/<slug>/        image and annotation JSONL, files.sha256 (regenerable; their digests are in the ingest report)
 ├── release/<version>/     normalised images of a release
-├── embeddings/            .npy files
+├── embeddings/            one .npy per image: <model>@<revision>/<preprocessing>/<backend>/ (T19)
+├── models/                pinned model weights (Hugging Face cache layout, SHA-256 checked)
+├── m3/                    pHash store, synthetic copies, run records, logs, the HTML review pack
 └── exports/               YOLO/COCO ZIPs (the brief's `build/…zip`)
 ```
 
@@ -63,7 +69,7 @@ Heavy data lives outside git and outside OneDrive, under `OPENINSPECT_DATA_DIR`:
 
 | tracked | ignored |
 |---|---|
-| manifests (YAML), evidence (small JSON/PDF), ingest reports, release provenance JSONL, dedup groups, taxonomy CSV, split files, run records, reports, docs, code, synthetic fixtures | images, archives, embeddings, weights, `.env`, caches, virtual environments |
+| manifests (YAML), evidence (small JSON/PDF), ingest reports, the M3 audit JSON and small tables, release provenance JSONL, taxonomy CSV, split files, run records, reports, docs, code, synthetic fixtures | images, archives, embeddings, weights, the M3 neighbour table and review pack, `.env`, caches, virtual environments |
 
 ## Conventions
 

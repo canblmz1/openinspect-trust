@@ -169,6 +169,8 @@ def test_the_audit_runs_stage_by_stage(setup: Setup) -> None:
     assert review.exit_code == 0, review.output
     html = (pack / "review-pack.html").read_text(encoding="utf-8")
     assert "data:image/jpeg;base64," in html
+    assert "Seeded sample of similarity groups" in html
+    assert "sampled groups" in review.output
 
 
 def test_run_does_every_stage_and_reuses_the_caches(setup: Setup) -> None:

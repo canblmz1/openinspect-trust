@@ -260,6 +260,12 @@ def read_review(path: Path) -> list[dict[str, str]]:
     return rows
 
 
+def read_groups(path: Path) -> list[dict[str, object]]:
+    """The rows of ``leakage-groups.parquet`` as dictionaries."""
+    rows: list[dict[str, object]] = pq.read_table(path).to_pylist()
+    return rows
+
+
 def write_audit(path: Path, audit: Audit) -> None:
     _replace(path, (audit.model_dump_json(indent=2) + "\n").encode("utf-8"))
 
