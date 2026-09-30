@@ -49,7 +49,7 @@ A milestone is done only when every item on its list is true and the milestone r
 - [x] Licence and attribution stay traceable: each report links to its manifest, states whether the attribution text is present, and quotes what the archive itself says about its licence.
 - [x] Adapters were written after inspecting the real archives. Unit tests use small synthetic archives with the same layouts, so no test needs the network or a real dataset; integration tests check the committed reports against the committed manifests.
 - [x] No raw data, archive, extracted file or record is committed; everything lives under `OPENINSPECT_DATA_DIR`, outside the repository and OneDrive.
-- [ ] GitHub Actions green on the M2 commit.
+- [x] GitHub Actions ran ruff, mypy, pytest and manifest validation without downloading any dataset (run 36760457834 on commit 29da0e3: all six jobs green, tests and manifest validation on Ubuntu and Windows).
 
 ## v0.1 release
 
