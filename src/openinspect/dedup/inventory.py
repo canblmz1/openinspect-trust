@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from collections.abc import Mapping
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -15,17 +16,26 @@ class InventoryError(Exception):
 
 @dataclass(frozen=True)
 class ImageItem:
-    source: str
-    item_id: str  # source_item_id: POSIX path inside the extracted archive
+    """One image in the generic form the audit works on; nothing here is specific to a domain.
+
+    A source adapter decides what the keys mean for its source (``configs/dedup.yaml`` names
+    them): ``group_id`` is the coarser unit images may share (a production batch, a design
+    family, a patient), ``subgroup_id`` a finer one inside it, ``acquisition_id`` the kind of
+    acquisition the source comes from. Any of them may be unknown.
+    """
+
+    source: str  # source id (the registry slug)
+    item_id: str  # POSIX path inside the extracted archive
     path: Path
     sha256: str
     split: str | None
-    group: str | None  # source_group_id: batch (pcb-ind) or design family (pcb-defect), if known
-    subgroup: str | None  # source_subgroup_id: (batch, side) or (A, B), if known
+    group_id: str | None
+    subgroup_id: str | None
     n_annotations: int
     dhash: int | None  # 64-bit difference hash from ingest
     width: int | None
     height: int | None
+    acquisition_id: str | None = None
 
     @property
     def key(self) -> tuple[str, str]:
@@ -41,8 +51,14 @@ class Unreadable:
     error: str
 
 
-def load_items(data_dir: Path, slugs: list[str]) -> tuple[list[ImageItem], list[Unreadable]]:
-    """Images of ``slugs`` in a fixed order (source, item id); images ingest could not decode are listed apart."""
+def load_items(
+    data_dir: Path, slugs: list[str], *, acquisition: Mapping[str, str | None] | None = None
+) -> tuple[list[ImageItem], list[Unreadable]]:
+    """Images of ``slugs`` in a fixed order (source, item id); images ingest could not decode are listed apart.
+
+    ``acquisition`` gives the acquisition id of each source (``configs/dedup.yaml``), if known.
+    """
+    acquisition = acquisition or {}
     items: list[ImageItem] = []
     skipped: list[Unreadable] = []
     for slug in sorted(slugs):
@@ -70,12 +86,13 @@ def load_items(data_dir: Path, slugs: list[str]) -> tuple[list[ImageItem], list[
                     path=dirs.extracted / record.source_item_id,
                     sha256=record.sha256,
                     split=record.original_split,
-                    group=record.source_group_id,
-                    subgroup=record.source_subgroup_id,
+                    group_id=record.source_group_id,
+                    subgroup_id=record.source_subgroup_id,
                     n_annotations=record.n_annotations,
                     dhash=int(record.dhash, 16) if record.dhash else None,
                     width=record.width,
                     height=record.height,
+                    acquisition_id=acquisition.get(slug),
                 )
             )
     items.sort(key=lambda item: item.key)

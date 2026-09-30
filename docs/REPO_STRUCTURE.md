@@ -12,13 +12,16 @@ openinspect-trust/
 │   ├── ingest/                              download, extract, adapters/, records, report               M2
 │   ├── dedup/                               SHA-256, pHash, DINOv2 embeddings and their cache, exact     M3
 │   │                                        cosine search, calibration, groups, split leakage, tables,
-│   │                                        reports, review pack (embeddings/ was merged in here, T19)
+│   │                                        reports, review pack (embeddings/ was merged in here, T19);
+│   │                                        generic keys only: group_id, subgroup_id, acquisition_id (T24)
+│   ├── assurance.py                       + dimensional dataset assurance report, no scalar score (T26)    M3
 │   ├── taxonomy/                            mapping load, validate, apply                               M4
 │   ├── audit/                               label-quality signals, review queue                         M4
 │   ├── split/                               A0, A1, B (LOSO), invariants                                M5
 │   ├── benchmark/                           InferenceProvider, evaluator, metrics, runner, reports      M7–M9
 │   └── evren/                               client.py (HTTP), export.py (YOLO/COCO ZIP), EvrenProvider  M6–M8
-├── configs/                                 licences.yaml (allowlist), dedup.yaml (pinned models)       M1, M3
+├── configs/                                 licences.yaml (allowlist), dedup.yaml (pinned models, and   M1, M3
+│                                            what each source's keys mean: the adapter mapping, T24)
 ├── artifacts/m3/                          + audit.json (every M3 number), leakage groups, candidate    M3
 │                                            pairs, review queue; the neighbour table is ignored (T20)
 ├── manifests/

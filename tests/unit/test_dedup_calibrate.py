@@ -7,12 +7,14 @@ from numpy.typing import NDArray
 from openinspect.dedup.calibrate import (
     COARSE,
     NBINS,
+    BootstrapResult,
     Histograms,
     Interval,
     Pool,
     auc,
     average_precision,
     bin_of,
+    bootstrap_both_sides,
     bootstrap_positive_groups,
     codes,
     curve_from_histograms,
@@ -21,6 +23,7 @@ from openinspect.dedup.calibrate import (
     label_block,
     metrics_at,
     pool_histograms,
+    pool_pairs,
     quantile_threshold,
     threshold_at_precision,
     threshold_of,
@@ -261,3 +264,34 @@ def test_bootstrap_intervals_refer_to_the_exact_threshold() -> None:
     result = bootstrap_positive_groups(histograms, threshold, resamples=200)
     assert result.precision == Interval(1.0, 1.0)
     assert result.recall == Interval(1.0, 1.0)
+
+
+def test_pool_pairs_hold_exactly_the_pairs_of_the_histograms() -> None:
+    vectors, label = clusters([6, 5, 4], noise=0.3, seed=2)
+    unit = np.array(label, dtype=np.int64)
+    pool = Pool("c", unit, unit)
+    hist = pool_histograms(vectors, pool, chunk=4)
+    sample = pool_pairs(vectors, pool, chunk=4)
+    assert sample.units == 3
+    assert np.bincount(sample.pos_bins, minlength=NBINS).tolist() == hist.positive.tolist()
+    assert np.bincount(sample.neg_bins, minlength=NBINS).tolist() == hist.negative.tolist()
+    assert (sample.pos_a == sample.pos_b).all()  # a positive pair lies inside one unit
+    assert (sample.neg_a != sample.neg_b).all()
+
+
+def test_the_both_sides_bootstrap_is_seeded_and_brackets_the_estimate() -> None:
+    vectors, label = clusters([10] * 8, noise=0.7, dim=10, seed=4)
+    unit = np.array(label, dtype=np.int64)
+    pool = Pool("c", unit, unit)
+    sample = pool_pairs(vectors, pool)
+    hist = pool_histograms(vectors, pool)
+    point = auc(curve_from_histograms(hist.positive, hist.negative)) or 0.0
+    first = bootstrap_both_sides(sample, 0.8, resamples=200, seed=3)
+    assert first == bootstrap_both_sides(sample, 0.8, resamples=200, seed=3)
+    assert first.auc is not None
+    assert first.auc.low <= point <= first.auc.high
+    assert first.precision is not None
+    single = pool_pairs(vectors[:10], Pool("one", unit[:10], unit[:10]))
+    assert bootstrap_both_sides(single, 0.8, resamples=50) == BootstrapResult(
+        None, None, None, None
+    )

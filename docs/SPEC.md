@@ -13,6 +13,10 @@ Companion documents: [REPO_STRUCTURE](REPO_STRUCTURE.md) · [DEPENDENCIES](DEPEN
 
 OpenInspect-Trust measures whether an industrial vision benchmark actually generalizes beyond the sources it was built from. It assembles a small, licence-clean, provenance-complete, duplicate-audited benchmark from open datasets and compares conventional random splits with source-held-out evaluation.
 
+**Position (T27, after the M3 red-team review).** The tool is a reproducible pre-training dataset and benchmark assurance preflight: it checks provenance, licence evidence, group dependence, visual similarity leakage and source dependence before expensive training, and reports each check with its evidence. It is not a novel duplicate detector: near-duplicate search is established tooling (FiftyOne Brain, Cleanlab, imagededup), and the hypothesis under test is that the combination with provenance, metadata group integrity and source-aware evaluation detects optimistic benchmarks. The PCB sources are the research demonstrator; the core is domain- and platform-agnostic (T24), and EVREN is an integration target.
+
+Research question of the assurance process: *can a provenance-aware, group-aware and source-aware assurance process detect when an industrial-vision benchmark gives an overly optimistic estimate of deployment performance?* It is tested through the A0/A1/B decomposition (§7.6).
+
 Principle: **more trustworthy data, not more data.**
 
 Non-goals for v0.1:
@@ -180,6 +184,8 @@ SHA-256 of file bytes, and optionally of decoded pixels, computed **before** any
 ### 7.3 Near-duplicates (brief §14)
 Stage A: 64-bit pHash, Hamming distance. Stage B: L2-normalised DINOv2-small embeddings (`facebook/dinov2-small`, Apache-2.0, 22M parameters, feasible on CPU), with OpenCLIP as a comparison; exact nearest-neighbour search. A pair is a candidate if the pHash distance ≤ h **or** cosine similarity ≥ τ. Candidate pairs form groups by connected components.
 
+**As implemented in M3** ([M3_PROTOCOL](M3_PROTOCOL.md), frozen before any result; [amendment](M3_PROTOCOL_AMENDMENT.md); T15–T28): pHash in house (T16); DINOv2-small as the primary representation and DINOv2-base as the one robustness check (T25; OpenCLIP not used); exact cosine search (T18). Because human-labelled pairs did not exist yet, the thresholds come from the sources' own keys (proxy metadata: group-label agreement, not duplicate accuracy) and synthetic near-duplicates, by the frozen rule. Neither labelled pool reached precision 0.90, so the rule's F1 fallback fixed family = review = 0.918; near = 0.934; pHash candidate 4 bits; the synthetic recall achieved at the final near threshold is measured per source. The 300-pair review queue (`artifacts/m3/review-candidates.csv`) is the planned set of human-labelled pairs; once labelled, h and τ can be re-derived as planned below and compared. Results: [reports/m3/](../reports/m3/).
+
 **Calibration (no arbitrary threshold).** Build a calibration set from (i) synthetic positives made by controlled transforms of random images (JPEG re-encode, ±10–25% resize, ≤10% shift/crop, brightness/contrast jitter), (ii) about 300 real candidate pairs sampled evenly across similarity bins and labelled by the maintainer as same-scene or different, (iii) hard negatives: nearest neighbours from different boards (PCB traces are repetitive, so structural similarity is high). Pick h and τ that maximise F2 at precision ≥ 0.9 on the human-labelled pairs, report the PR curves, and commit the labelled pairs to `benchmarks/dedup_calibration/`. The PCB-IND authors used pHash ≤ 3 as duplicate and 4–5 as distinct within a batch: a prior to compare with, not a rule.
 
 ### 7.4 Taxonomy (brief §17–18)
@@ -198,7 +204,7 @@ Signals: S1 nearest-neighbour label disagreement on box-crop embeddings; S2 out-
 | **A1** group-aware random | same ratios on the *clean* pool; duplicate groups and `source_group_id` never straddle splits | removes leakage but keeps sources mixed |
 | **B** source-held-out | train on K−1 sources, test on the held-out source; validation is 10–15% of the training sources, group-aware; run for every source (leave-one-source-out) | the real generalization test |
 
-Gap decomposition: total = A0 − B, leakage effect = A0 − A1, residual source shift = A1 − B.
+Gap decomposition: total = A0 − B, leakage effect = A0 − A1, residual source shift = A1 − B. **A0 − B is not a leakage measure:** between sources the acquisition hardware, the factory, the lighting, the resolution, the annotation style, the taxonomy and the label distribution change, and each moves the score; A1 − B carries all of them, so it is called a residual source or domain shift, not a single cause.
 Confounds to report: training-set sizes differ (A0 is larger than a B fold; the clean pool is smaller than raw). Optional ablation: subsample A0 training to the B fold size.
 **Paired comparison for H1:** evaluate the A0 model on the part of the A0 test set that belongs to source s, and evaluate the B fold that held out s on *the same images*.
 No hyper-parameter tuning or checkpoint selection on a held-out source; checkpoints are chosen on the validation split of the training sources.
@@ -276,6 +282,7 @@ Observed on 2026-09-30: Windows 11 Home, Python 3.12.10, git 2.53, Docker 29.3.1
 | R12 | Ultralytics is AGPL-3.0 | optional extra only, never vendored or bundled ([DEPENDENCIES](DEPENDENCIES.md)) |
 | R13 | credits or time run short | minimal variant (≈ 18 runs); RT-DETR last |
 | R14 | one reviewer, limited hours | review budget (D9); prioritised queue; report audit recall from the unflagged sample |
+| R15 | the similarity thresholds rest on proxy metadata (both group-key pools fell back to the F1-optimal cosine in M3) | human review of the 300-pair queue; percolation sweep and stability reported; one representation-robustness check (T25) |
 
 ## 12. Decisions
 
@@ -291,7 +298,7 @@ Logged with evidence, reason, risk and revisit condition in [DECISIONS](DECISION
 | D6 | locations: repository stays; data and virtual environment outside OneDrive | decided |
 | D7 | scale and crop policy: native resolution, about 300×300 ROI crops for `pcb-defect` | decided in principle, frozen at the start of M5 |
 | D8 | EVREN facts | recorded in [EVREN](EVREN.md); two items UNKNOWN |
-| D9 | human review budget: about 300 label items and 300 calibration pairs | default, confirmed at M3 |
+| D9 | human review budget: about 300 label items and 300 calibration pairs | confirmed at M3: a seeded queue of 300 pairs exists; the review is pending |
 | D10 | analysis defaults: δ = 0.02 mAP50, 1,000 resamples, 3 seeds | default, revisited after the pilot |
 
 ## 13. Roadmap (proposed after M0; effort S/M/L)
@@ -301,7 +308,7 @@ Logged with evidence, reason, risk and revisit condition in [DECISIONS](DECISION
 | M0 | this specification, gates, intake format, definition of done | S |
 | M1 | source registry and provenance manifest generator: `openinspect source add/list/validate` | M |
 | M2 | ingest: reproducible downloader, SHA-256 manifests, integrity, metadata, image and annotation records, per-source report (done 2026-09-30) | L |
-| M3 | exact and near-duplicate audit, embeddings, calibration, review files | L |
+| M3 | exact and near-duplicate audit, embeddings, calibration, split leakage, assurance report, review files (done 2026-10-01) | L |
 | M4 | taxonomy mapping and label-quality audit with review queue | M |
 | M5 | release assembly (global ids, normalisation and crop policy D7), splits A0/A1/B, leakage tests in CI | M |
 | M6 | YOLO/COCO export; maintainer uploads `v0.1-raw` and `v0.1-clean` in the EVREN UI and freezes them | S |
@@ -312,7 +319,7 @@ Logged with evidence, reason, risk and revisit condition in [DECISIONS](DECISION
 | M11 | research poster and SAYZEK project brief | M |
 | optional | FastAPI backend (brief §33), after M9 | M |
 
-Status on 2026-09-30: M0, M1 and M2 are done; M3 (exact and near-duplicate audit, embeddings) is next.
+Status on 2026-10-01: M0 to M3 are done; the human review of the M3 queue and M4 (taxonomy and label audit) are next.
 
 ## 14. Related work and positioning
 

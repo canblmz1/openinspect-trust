@@ -1,6 +1,6 @@
 # Decision log
 
-Decisions D1–D10 come from [SPEC §12](SPEC.md); T1–T7 are technical choices made while building M1, T8–T14 while building M2, T15–T23 while building M3. Each has the same five fields. All were taken on 2026-09-30 under the maintainer's autonomous-execution directive. **D3, the code licence, is the exception: the maintainer chose it (Apache-2.0).**
+Decisions D1–D10 come from [SPEC §12](SPEC.md); T1–T7 are technical choices made while building M1, T8–T14 while building M2, T15–T28 while building M3 (T24–T28 after an independent red-team review). Each has the same five fields. All were taken on 2026-09-30 under the maintainer's autonomous-execution directive. **D3, the code licence, is the exception: the maintainer chose it (Apache-2.0).**
 
 ## D1 — Domain
 - **Decision:** PCB surface-defect detection with bounding boxes.
@@ -206,7 +206,7 @@ Decisions D1–D10 come from [SPEC §12](SPEC.md); T1–T7 are technical choices
 - **Revisit when:** the read time matters, or a second model is added (DINOv2-base has its own directory).
 
 ## T20 — What M3 puts in git
-- **Decision:** tracked: `artifacts/m3/audit.json` (every number of the reports), `leakage-groups.parquet`, `duplicate-pairs.parquet`, `review-candidates.csv`, the reports in `reports/m3/` and their SVG figures. Not tracked: `nearest-neighbors.parquet` (about 1.4 MB, regenerable, listed with its SHA-256 in `audit.json`), the embedding and synthetic caches, the run records and logs, and the HTML review pack, which embeds thumbnails of dataset images (all under `<data>/m3/`).
+- **Decision:** tracked: `artifacts/m3/audit.json` (every number of the reports), `thresholds.json`, `synthetic-recall.json`, `leakage-groups.parquet`, `duplicate-pairs.parquet`, `review-candidates.csv`, the reports in `reports/m3/` and their SVG figures. Not tracked: `nearest-neighbors.parquet` (about 1.4 MB, regenerable, listed with its SHA-256 in `audit.json`), the embedding and synthetic caches, the run records and logs, and the HTML review pack, which embeds thumbnails of dataset images (all under `<data>/m3/`).
 - **Evidence:** the tracked tables are each under 0.3 MB and hold file names, similarities and group memberships, no pixels.
 - **Reason:** a reader can check every reported number against a tracked table; nothing of the datasets' pixels enters the repository (licence and size).
 - **Risk:** a different pyarrow version writes different Parquet bytes; the digests in `audit.json` then change on a rerun although the content does not.
@@ -232,3 +232,38 @@ Decisions D1–D10 come from [SPEC §12](SPEC.md); T1–T7 are technical choices
 - **Reason:** the report shows what embedding actually costs on this machine.
 - **Risk:** the two runs made before the record existed were transcribed from their console logs (amendment N5); their values are rounded as printed.
 - **Revisit when:** the cache is rebuilt, which writes a complete record.
+
+## T24 — A generic assurance schema; sources map onto it
+- **Decision:** the audit's image record uses generic fields (`source`, `split`, `group_id`, `subgroup_id`, `acquisition_id`); what they mean for a source, and which of its pairs calibrate the thresholds, is declared in `configs/dedup.yaml` (`sources:`). No core algorithm names a dataset or a domain concept (a test scans the core's strings).
+- **Evidence:** before, the calibration pools and key names were constants keyed by source name in `analysis.py`; the red-team review asked for platform- and domain-agnostic core interfaces.
+- **Reason:** the same audit must run on another domain (a production lot, a patient, a camera) by writing an adapter and a configuration entry, not by changing the algorithms.
+- **Risk:** a wrong mapping gives the audit wrong proxy keys without any error; the mapping is in one reviewed file.
+- **Revisit when:** a source needs more than two nested keys, or a key that is not nested.
+
+## T25 — One representation-robustness check: DINOv2-base on the whole image
+- **Decision:** the second representation is DINOv2-base (pinned revision and weights SHA-256, same preprocessing `v1` and backend), calibrated by the same frozen rule; conclusions and partitions are compared with the primary's, not accuracies.
+- **Evidence:** protocol section 4 already names DINOv2-base as the robustness check; it ran at 4.4 images/s in the model on the same CPU. A tiled high-resolution representation would cost about four times the primary's embedding time for every image, needs a preprocessing version the protocol does not define, and would change little for the two sources whose images are already 226 and 300 pixels wide.
+- **Reason:** the question is whether the leakage conclusions survive a reasonable change of representation, with the least new machinery.
+- **Risk:** both models share the 224x224 whole-image view, so the check does not test the loss of detail in the large PCB-Defect scans.
+- **Revisit when:** a conclusion depends on fine detail (for example the review contradicts components of the large scans).
+
+## T26 — A dimensional assurance report, no score
+- **Decision:** `reports/m3/dataset-assurance.md` gives a status per dimension (PASS, WARNING, FAIL, MISSING, LOW, OK, N/A) by rules written in `openinspect/assurance.py` and printed in the report, each with the measurements it rests on, and an assessment per source (for example POTENTIALLY OPTIMISTIC). There is no scalar trust score.
+- **Evidence:** no calibration exists that would give a number such as 83/100 a meaning.
+- **Reason:** a reader can check every status against a number in the audit.
+- **Risk:** the rules are policy choices; visual similarity can raise a warning but never a failure, because it is not proof of shared content.
+- **Revisit when:** human review or model results give evidence to calibrate a rule.
+
+## T27 — Position: a dataset and benchmark assurance preflight
+- **Decision:** OpenInspect-Trust is positioned as a reproducible pre-training check of provenance, licence evidence, group dependence, visual similarity leakage and source dependence, not as a duplicate detector. The PCB sources are the research demonstrator. EVREN is an integration target; the core stays platform-agnostic.
+- **Evidence:** near-duplicate detection with embeddings is established tooling (FiftyOne Brain, Cleanlab, imagededup); the red-team review concluded that novelty lies in combining provenance, licence evidence, visual leakage audit, metadata group integrity and source-aware evaluation in one reproducible evidence chain.
+- **Reason:** the research question becomes whether such an assurance process detects when a benchmark gives an optimistic estimate; that is testable later through the A0, A1 and B experiments.
+- **Risk:** the combination still has to be shown useful; A0 − B mixes leakage with source and domain shift (acquisition hardware, factory, lighting, resolution, annotation style, taxonomy), so only A0 − A1 approximates the leakage effect.
+- **Revisit when:** the M7 experiments report.
+
+## T28 — Uncertainty: the protocol's bootstrap plus one sensitivity check
+- **Decision:** the protocol's intervals (positive groups resampled, negatives fixed) stay primary; one check resamples the units of the negative key on both sides. A width ratio of at least 1.5 (or at most 1/1.5), fixed before the check ran on the real data, is reported as a limitation.
+- **Evidence:** negative pairs between two batches are as dependent as positive pairs inside one.
+- **Reason:** to learn whether the primary intervals understate the uncertainty, without building more statistical machinery than the result needs.
+- **Risk:** the check resamples one key; nested or crossed dependence beyond it is not modelled.
+- **Revisit when:** the check shows a material difference that matters for a conclusion.

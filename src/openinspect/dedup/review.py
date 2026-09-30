@@ -1,8 +1,9 @@
 """A local HTML contact sheet of the review queue, with both images of a pair side by side (M3I).
 
 The page embeds small JPEG thumbnails of dataset images, so it is written to the data directory and
-never committed. A reviewer records decisions in ``review-candidates.csv`` (``reviewer_decision``,
-``reviewer_note``); the page only shows what the machine measured and suggests.
+never committed. A reviewer records decisions in ``review-candidates.csv`` (``human_decision``,
+``human_notes``); the page only shows what the machine measured and suggests. The metadata keys it
+shows are the sources' own proxy keys, not ground truth.
 """
 
 from __future__ import annotations
@@ -73,10 +74,10 @@ def _side(row: Mapping[str, str], side: str) -> str:
         f"source {row[f'source_{side}']}",
         f"split {row[f'split_{side}'] or '-'}",
     ]
-    if row[f"group_{side}"]:
-        keys.append(f"group {row[f'group_{side}']}")
-    if row[f"subgroup_{side}"]:
-        keys.append(f"subgroup {row[f'subgroup_{side}']}")
+    if row[f"metadata_group_{side}"]:
+        keys.append(f"metadata group {row[f'metadata_group_{side}']}")
+    if row[f"metadata_subgroup_{side}"]:
+        keys.append(f"metadata subgroup {row[f'metadata_subgroup_{side}']}")
     return "<br>".join(escape(k) for k in [row[f"image_{side}"], *keys])
 
 
@@ -85,7 +86,7 @@ def _header(audit: Audit | None, rows: int) -> list[str]:
         "<h1>OpenInspect-Trust M3 review pack</h1>",
         f"<p>{rows} pairs. The machine's category is a suggestion, not a verdict. Visual "
         "similarity is not proof of the same physical board. Record a decision per pair in "
-        "<code>review-candidates.csv</code>: "
+        "<code>review-candidates.csv</code> (<code>human_decision</code>, <code>human_notes</code>): "
         + ", ".join(f"<code>{d}</code>" for d in DECISIONS)
         + ".</p>",
     ]
@@ -111,16 +112,16 @@ def _pairs_table(
         a = by_key.get((row["source_a"], row["image_a"]))
         b = by_key.get((row["source_b"], row["image_b"]))
         measures = [
-            f"suggested {row['suggested_category']}",
+            f"machine category {row['machine_category']}",
             f"stratum {row['stratum']}",
             f"cosine {row['cosine']}",
             f"pHash {row['phash_distance']} bits",
             f"dHash {row['dhash_distance']} bits",
         ]
-        if row["group_near"]:
-            measures.append(f"near group {row['group_near']}")
-        if row["group_family"]:
-            measures.append(f"family group {row['group_family']}")
+        if row["component_near"]:
+            measures.append(f"near component {row['component_near']}")
+        if row["component_family"]:
+            measures.append(f"family component {row['component_family']}")
         parts.append(
             f"<tr><td class='meta'>{escape(row['pair_id'])}</td>"
             f"<td>{_img(thumbs.of(a), row['image_a'])}</td>"
@@ -167,7 +168,8 @@ def _groups_section(
             source, _, item_id = member.partition(":")
             strip.append(_img(thumbs.of(by_key.get((source, item_id))), member))
         splits = group.get("splits")
-        weakest = group.get("min_similarity")
+        weakest = group.get("all_pairs_min_similarity")
+        gap = group.get("chaining_gap")
         info = [
             str(group.get("group_id")),
             f"{len(names)} images",
@@ -175,6 +177,7 @@ def _groups_section(
             + (", ".join(str(s) for s in splits) if isinstance(splits, list) and splits else "-"),
             "min pairwise cosine "
             + (f"{weakest:.3f}" if isinstance(weakest, int | float) else "-"),
+            "chaining gap " + (f"{gap:.3f}" if isinstance(gap, int | float) else "-"),
         ]
         parts.append(
             f"<tr><td class='meta'>{'<br>'.join(escape(i) for i in info)}</td>"

@@ -36,6 +36,9 @@ class SourceCounts(StrictModel):
     failed: int
     splits: dict[str, int]
     group_key: str | None  # what the source's own key is, if any
+    acquisition_id: str | None = None
+    median_long_side: int | None = None  # pixels, before the model's resize
+    max_long_side: int | None = None
 
 
 class RunInfo(StrictModel):
@@ -148,6 +151,15 @@ class Interval(StrictModel):
     high: float
 
 
+class UncertaintyCheck(StrictModel):
+    """One 95% interval by the protocol's bootstrap and by the both-sides sensitivity check."""
+
+    metric: str
+    primary: Interval | None  # positive groups resampled, negative pairs fixed (protocol section 5)
+    both_sides: Interval | None  # units of the negative key resampled, weighting both sides
+    width_ratio: float | None  # both_sides width / primary width
+
+
 class PoolResult(StrictModel):
     source: str
     pool: str
@@ -167,6 +179,9 @@ class PoolResult(StrictModel):
     pr: list[tuple[float, float]]  # (recall, precision)
     histogram: list[tuple[float, float, float]]  # (cosine, positive density, negative density)
     baselines: list[BaselineCurve]
+    positive_groups: int | None = None  # resampling units of the protocol's bootstrap
+    negative_units: int | None = None  # resampling units of the both-sides check
+    uncertainty: list[UncertaintyCheck] = Field(default_factory=list)
 
 
 class TransformSummary(StrictModel):
@@ -184,6 +199,48 @@ class SyntheticSummary(StrictModel):
     seed: int
     by_transform: list[TransformSummary]
     by_source: list[TransformSummary]  # the near-duplicate set, per source (kind column = source)
+
+
+class SyntheticRecall(StrictModel):
+    """How many of a source's synthetic near-duplicates the final near threshold keeps.
+
+    ``near`` is the larger of ``family`` and the lowest per-source value, so the final threshold
+    can be stricter than a source's own: its recall is measured here, never assumed.
+    """
+
+    source: str
+    target_recall: float
+    source_threshold: float  # the cosine that keeps the target share of this source's copies
+    final_near_threshold: float
+    achieved_recall: float  # share of this source's copies at or above the final threshold
+    n_pairs: int
+    meets_target: bool
+
+
+class MetadataIntegrity(StrictModel):
+    """Whether a source's own proxy key stays inside one split (only sources with a split and a key)."""
+
+    source: str
+    key: str  # group_id | subgroup_id
+    key_name: str  # what the key means for this source
+    values: int  # distinct values among images that have a split
+    crossing: int  # values found in two or more splits
+    images_in_crossing: int
+
+
+class SourceProvenance(StrictModel):
+    """What the registry and the ingest report say about a source (inputs of the assurance report)."""
+
+    source: str
+    licence: str | None
+    evidence_files: int
+    evidence_ok: bool  # the registry validates the source without an error
+    archive_ok: (
+        bool | None
+    )  # size, repository checksum and zip CRC matched at ingest; None: no report
+    images_expected: int | None  # the manifest's image count
+    images_recorded: int | None  # images decoded and recorded at ingest
+    acquisition_id: str | None
 
 
 class TransferRow(StrictModel):
@@ -217,8 +274,21 @@ class PercolationRow(StrictModel):
     affected_images: int | None
 
 
+class ComponentSummary(StrictModel):
+    """One visual similarity component; ``chaining_gap`` = weakest edge - weakest member pair."""
+
+    size: int
+    share_of_source: float
+    edge_min_similarity: float
+    edge_mean_similarity: float
+    all_pairs_min_similarity: float
+    all_pairs_mean_similarity: float
+    chaining_gap: float
+    splits: list[str]
+
+
 class Cohesion(StrictModel):
-    """How tight the groups of one source are (chaining shows as a low minimum pairwise cosine)."""
+    """How tight the components of one source are (chaining shows as a low weakest member pair)."""
 
     source: str
     level: str
@@ -226,9 +296,9 @@ class Cohesion(StrictModel):
     min_pairwise: Quantiles | None
     mean_pairwise: Quantiles | None
     sizes: Quantiles | None
-    share_below_review: (
-        float | None
-    )  # groups whose weakest member pair is under the review threshold
+    share_below_review: float | None  # components whose weakest member pair is under review
+    chaining_gap: Quantiles | None = None
+    largest: list[ComponentSummary] = Field(default_factory=list)  # the five largest, by size
 
 
 class Stability(StrictModel):
@@ -270,19 +340,34 @@ class CrossSourceSummary(StrictModel):
 
 
 class RobustnessRow(StrictModel):
+    """One source and level under the primary and the second representation, each at its own rule."""
+
     source: str
     level: str
+    threshold_primary: float
+    threshold_other: float
     groups_primary: int
     groups_other: int
     crossing_primary: int | None
     crossing_other: int | None
-    adjusted_rand: float | None
+    affected_primary: int | None
+    affected_other: int | None
+    exposed_primary: float | None  # share of evaluation images with a training image at the level
+    exposed_other: float | None
+    reading_primary: str | None  # the random-split baseline in words
+    reading_other: str | None
+    adjusted_rand: float | None  # agreement of the two partitions of the source's images
+    pair_precision: float | None  # of the pairs the second groups together, share the primary does
+    pair_recall: float | None  # of the pairs the primary groups together, share the second does
 
 
 class Robustness(StrictModel):
+    """Do the leakage conclusions survive a reasonable change of representation? (protocol 9e)"""
+
     other_model: str
     other_thresholds: Thresholds
     rows: list[RobustnessRow]
+    top1_agreement: dict[str, float] = Field(default_factory=dict)  # same most similar image
     note: str
 
 
@@ -302,6 +387,9 @@ class Audit(StrictModel):
     cross_source: CrossSourceSummary
     stability: list[Stability]
     transfer: list[TransferRow]
+    synthetic_recall: list[SyntheticRecall] = Field(default_factory=list)
+    metadata_integrity: list[MetadataIntegrity] = Field(default_factory=list)
+    provenance: list[SourceProvenance] = Field(default_factory=list)
     performance: Performance | None = None
     robustness: Robustness | None = None
     artifacts: dict[str, str] = Field(default_factory=dict)  # file name -> SHA-256

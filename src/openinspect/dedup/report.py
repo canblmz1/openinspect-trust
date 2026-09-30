@@ -1,4 +1,4 @@
-"""The M3 reports: five Markdown files and their SVG figures, rendered from the audit alone (M3J).
+"""The M3 reports: Markdown files and their SVG figures, rendered from the audit alone (M3J).
 
 Everything here is a pure function of :class:`~openinspect.dedup.audit_models.Audit`, so the
 committed reports can be checked against the committed ``artifacts/m3/audit.json`` without any
@@ -13,6 +13,7 @@ import re
 from collections.abc import Callable, Sequence
 from pathlib import Path
 
+from openinspect.assurance import ASSESSMENT_RULE, RULES, assess
 from openinspect.dedup.audit_models import (
     Audit,
     Interval,
@@ -32,15 +33,19 @@ SOURCE_LINE = (
     "(re-render with `openinspect dedup report`)."
 )
 VOCABULARY = (
-    "A *visual similarity group* is a connected component of image pairs whose embedding cosine "
-    "reaches a threshold: evidence of a potential leakage group, not proof that two images show the "
-    "same physical board. No image was deleted, excluded or re-labelled."
+    "A *visual similarity component* (a potential leakage group) is a connected component of image "
+    "pairs whose embedding cosine reaches a threshold: evidence of potential leakage, not proof that "
+    "two images show the same physical object. No image was deleted, excluded or re-labelled."
 )
+MATERIAL_WIDTH_RATIO = 1.5  # declared before the real run (amendment R5)
 REPORTS = (
     "similarity-summary.md",
     "threshold-calibration.md",
     "split-leakage.md",
     "source-comparison.md",
+    "representation-robustness.md",
+    "dataset-assurance.md",
+    "limitations.md",
     "performance.md",
 )
 
@@ -289,6 +294,7 @@ def similarity_summary(audit: Audit) -> str:
             "failed",
             "original splits",
             "group key",
+            "acquisition kind",
         ],
         [
             [
@@ -299,6 +305,7 @@ def similarity_summary(audit: Audit) -> str:
                 _int(s.failed),
                 " / ".join(f"{k} {v:,}" for k, v in s.splits.items()),
                 s.group_key or "none",
+                s.acquisition_id or DASH,
             ]
             for s in run.sources
         ],
@@ -409,8 +416,10 @@ def _hash_section(audit: Audit) -> list[str]:
     lines = [
         "## Hash audit",
         "",
-        f"Pairs within a Hamming distance, at the PCB-IND authors' distance ({h.authors_distance} "
-        f"bits) and at the calibrated candidate distance ({h.candidate_distance} bits).",
+        f"Pairs within a Hamming distance, at a published reference distance ({h.authors_distance} "
+        "bits, used by one source's authors to deduplicate inside a production batch) and at the "
+        f"calibrated candidate distance ({h.candidate_distance} bits). Same group and subgroup "
+        "refer to the source's own proxy keys.",
         "",
     ]
     lines += _table(
@@ -611,6 +620,8 @@ def threshold_calibration(audit: Audit) -> str:
             + f"; capped at 12; value **{t.phash_candidate} bits**.",
         ]
     lines += [f"- {note}" for note in t.notes]
+    lines += _recall_section(audit)
+    lines += _uncertainty_section(audit)
     lines += ["", "## Hash distances as a baseline score", ""]
     lines += _table(
         ["pool", "hash", "ROC AUC", "average precision", "best F1", "at distance (bits)"],
@@ -645,6 +656,82 @@ def threshold_calibration(audit: Audit) -> str:
             ]
     lines += _synthetic_section(audit)
     return "\n".join(lines) + "\n"
+
+
+def _recall_section(audit: Audit) -> list[str]:
+    rows = audit.synthetic_recall
+    if not rows:
+        return []
+    lines = [
+        "",
+        "## Synthetic recall at the final near threshold",
+        "",
+        "`near` is the larger of `family` and the lowest per-source value, so it can be stricter "
+        "than a source's own: the recall each source actually gets is measured, not assumed.",
+        "",
+    ]
+    lines += _table(
+        [
+            "source",
+            "target recall",
+            "source threshold",
+            "final near",
+            "achieved recall",
+            "copies",
+            "target met",
+        ],
+        [
+            [
+                f"`{r.source}`",
+                _share(r.target_recall),
+                _f(r.source_threshold, 4),
+                _f(r.final_near_threshold, 4),
+                _share(r.achieved_recall),
+                _int(r.n_pairs),
+                "yes" if r.meets_target else "**no**",
+            ]
+            for r in rows
+        ],
+    )
+    return lines
+
+
+def _uncertainty_section(audit: Audit) -> list[str]:
+    pools = [p for p in audit.pools if p.uncertainty]
+    if not pools:
+        return []
+    lines = [
+        "",
+        "## Uncertainty: the protocol's bootstrap and a both-sides check",
+        "",
+        "The protocol resamples the positive groups and keeps the negative pairs fixed. The check "
+        "resamples the units of the negative key instead (a pair between two units weighs the "
+        "product of their draws), so the negatives vary too. A width ratio of "
+        f"{MATERIAL_WIDTH_RATIO} or more (or {1 / MATERIAL_WIDTH_RATIO:.2f} or less), fixed before "
+        "the real run, counts as a material difference.",
+        "",
+    ]
+    rows = []
+    for p in pools:
+        for u in p.uncertainty:
+            material = u.width_ratio is not None and (
+                u.width_ratio >= MATERIAL_WIDTH_RATIO or u.width_ratio <= 1 / MATERIAL_WIDTH_RATIO
+            )
+            rows.append(
+                [
+                    f"`{p.source}` {p.pool}",
+                    u.metric,
+                    f"{_ci(u.primary)} ({_int(p.positive_groups)} groups)",
+                    f"{_ci(u.both_sides)} ({_int(p.negative_units)} units)",
+                    _f(u.width_ratio, 2),
+                    "**yes**" if material else "no",
+                ]
+            )
+    lines += _table(
+        ["pool", "metric", "protocol interval", "both-sides interval", "width ratio", "material"],
+        rows,
+    )
+    return lines
 
 
 def _synthetic_section(audit: Audit) -> list[str]:
@@ -745,6 +832,40 @@ def _reading(baseline: PermutationBaseline) -> str:
     return "consistent with random splits"
 
 
+def _without_split(audit: Audit) -> str:
+    names = [f"`{s.source}`" for s in audit.run.sources if set(s.splits) <= {"none"}]
+    if not names:
+        return "Every source has an official split."
+    return f"{', '.join(names)} {'has' if len(names) == 1 else 'have'} no official split."
+
+
+def _metadata_section(audit: Audit) -> list[str]:
+    if not audit.metadata_integrity:
+        return []
+    lines = [
+        "## The sources' own keys across the splits",
+        "",
+        "Proxy metadata, not ground truth: a key value found in two or more splits means images "
+        "that share a production batch, a design family and the like are on both sides.",
+        "",
+    ]
+    lines += _table(
+        ["source", "key", "meaning", "values", "in two or more splits", "images in those values"],
+        [
+            [
+                f"`{r.source}`",
+                f"`{r.key}`",
+                r.key_name,
+                _int(r.values),
+                f"{r.crossing:,} ({_pct(r.crossing, r.values)})",
+                _int(r.images_in_crossing),
+            ]
+            for r in audit.metadata_integrity
+        ],
+    )
+    return [*lines, ""]
+
+
 def split_leakage(audit: Audit) -> str:
     lines = _header("M3 split leakage", audit)
     lines += [
@@ -753,8 +874,7 @@ def split_leakage(audit: Audit) -> str:
         "",
         "Groups come from the graph *within* each source (images are nodes, pairs at or above the "
         "level's cosine are edges). A group crosses a split when its members sit in two or more "
-        "official splits; its images and annotations are then *affected*. `pcb-defect` has no "
-        "official split.",
+        "official splits; its images and annotations are then *affected*. " + _without_split(audit),
         "",
         "## Official splits",
         "",
@@ -923,6 +1043,7 @@ def split_leakage(audit: Audit) -> str:
         rows,
     )
     lines += ["", _figure("percolation.svg", "Largest group against threshold"), ""]
+    lines += _metadata_section(audit)
     return "\n".join(lines) + "\n"
 
 
@@ -1035,37 +1156,54 @@ def _overlap_section(audit: Audit, source: str, title: str) -> list[str]:
 
 def source_comparison(audit: Audit) -> str:
     lines = _header("M3 source comparison", audit)
-    lines += _overlap_section(
-        audit, "pcb-ind", "`pcb-ind`: production-batch key against DINOv2 groups"
-    )
-    lines += _overlap_section(
-        audit, "pcb-defect", "`pcb-defect`: design family against DINOv2 groups"
-    )
     lines += [
-        "## `dspcbsd-plus`: is there a latent grouping? (protocol section 9)",
+        "A source's own keys are proxy metadata (what its files say about a production batch, a "
+        "design family and the like), mapped by its adapter onto the generic `group_id` and "
+        "`subgroup_id`. Agreement with them is group-label agreement, not duplicate accuracy.",
         "",
-        "The source has no group key, so nothing below is ground truth.",
+    ]
+    keyed: list[str] = []
+    for counts in audit.run.sources:
+        overlaps = [o for lv in audit.levels for o in lv.key_overlap if o.source == counts.source]
+        if overlaps:
+            keyed.append(counts.source)
+            names = f"{overlaps[0].key_group_name}; {overlaps[0].key_subgroup_name}"
+            lines += _overlap_section(
+                audit,
+                counts.source,
+                f"`{counts.source}`: its own keys ({names}) against DINOv2 components",
+            )
+    second = (
+        f"`{audit.robustness.other_model}`, see "
+        "[representation-robustness.md](representation-robustness.md)"
+        if audit.robustness
+        else "not run"
+    )
+    for counts in audit.run.sources:
+        if counts.source in keyed:
+            continue
+        lines += [
+            f"## `{counts.source}`: is there a latent grouping? (protocol section 9)",
+            "",
+            "The source has no group key, so nothing below is ground truth.",
+            "",
+            "- (a) cohesion and (b) stability: tables below;",
+            "- (c) agreement with pHash near-duplicates: "
+            + _share(audit.hash_audit.phash_in_family_group.get(counts.source))
+            + " of its pHash-candidate pairs fall inside one family-level component "
+            "([similarity-summary.md](similarity-summary.md));",
+            "- (d) transfer of the calibrated thresholds: table below;",
+            f"- (e) a second representation: {second};",
+            "- (f) a qualitative look: the seeded sample of components in the local review pack "
+            "(`openinspect dedup review`); it is not a verdict either.",
+            "",
+        ]
+    lines += [
+        "## Cohesion of the components",
         "",
-        "- (a) cohesion and (b) stability: tables below;",
-        "- (c) agreement with pHash near-duplicates: "
-        + _share(audit.hash_audit.phash_in_family_group.get("dspcbsd-plus"))
-        + " of its pHash-candidate pairs fall inside one family-level group "
-        "([similarity-summary.md](similarity-summary.md));",
-        "- (d) transfer of the calibrated thresholds: table below;",
-        "- (e) a second model: "
-        + (
-            f"`{audit.robustness.other_model}`"
-            if audit.robustness
-            else "not run in M3 (optional in the protocol)"
-        )
-        + ";",
-        "- (f) a qualitative look: the seeded sample of groups in the local review pack "
-        "(`openinspect dedup review`); it is not a verdict either.",
-        "",
-        "## Cohesion of the groups",
-        "",
-        "Connected components chain: a group can hold pairs far below its threshold. The weakest "
-        "member pair of each group shows how much.",
+        "Connected components chain: a component can hold pairs far below its threshold. The "
+        "weakest member pair of each component shows how far, and the chaining gap (weakest edge "
+        "minus weakest member pair) how much of that is chaining.",
         "",
     ]
     lines += _table(
@@ -1077,7 +1215,8 @@ def source_comparison(audit: Audit) -> str:
             "max size",
             "weakest member pair: median (p05 to p95)",
             "mean member pair: median",
-            "groups whose weakest pair is under review",
+            "chaining gap: median (p05 to p95)",
+            "components whose weakest pair is under review",
         ],
         [
             [
@@ -1088,10 +1227,49 @@ def source_comparison(audit: Audit) -> str:
                 _f(c.sizes.maximum if c.sizes else None, 0),
                 _q(c.min_pairwise),
                 _f(c.mean_pairwise.median if c.mean_pairwise else None),
+                _q(c.chaining_gap),
                 _share(c.share_below_review),
             ]
             for level in audit.levels
             for c in level.cohesion
+        ],
+    )
+    lines += [
+        "",
+        "## Largest visual similarity components",
+        "",
+        "Because components chain (A ~ B and B ~ C while A and C differ), a large component is a "
+        "*potential leakage group*, not a group of near-duplicates. The five largest per source "
+        "and level:",
+        "",
+    ]
+    lines += _table(
+        [
+            "source",
+            "level",
+            "size (share of the source)",
+            "weakest edge",
+            "mean edge",
+            "weakest member pair",
+            "mean member pair",
+            "chaining gap",
+            "splits",
+        ],
+        [
+            [
+                f"`{c.source}`",
+                c.level,
+                f"{comp.size:,} ({_share(comp.share_of_source)})",
+                _f(comp.edge_min_similarity),
+                _f(comp.edge_mean_similarity),
+                _f(comp.all_pairs_min_similarity),
+                _f(comp.all_pairs_mean_similarity),
+                _f(comp.chaining_gap),
+                ", ".join(comp.splits),
+            ]
+            for level in audit.levels
+            for c in level.cohesion
+            for comp in c.largest
         ],
     )
     lines += ["", "## Stability (family threshold ± 0.02)", ""]
@@ -1206,6 +1384,295 @@ def performance(audit: Audit) -> str:
     return "\n".join(lines) + "\n"
 
 
+# ------------------------------------------------------------------- robustness
+
+
+def representation_robustness(audit: Audit) -> str:
+    lines = _header("M3 representation robustness", audit)
+    lines += [
+        "> Are the major leakage conclusions stable to a reasonable change of representation? "
+        "The question is not which embedding is best.",
+        "",
+    ]
+    r = audit.robustness
+    if r is None:
+        lines += ["Not run: the second representation's features were not available."]
+        return "\n".join(lines) + "\n"
+    run, a, b = audit.run, audit.thresholds, r.other_thresholds
+    lines += [
+        f"Primary: `{run.model_id}` at `{run.revision[:12]}`, whole image at 224x224, "
+        f"`{run.backend}`. Second: `{r.other_model}`, the check protocol section 4 names, with the "
+        "same preprocessing and backend. Each is calibrated by the same frozen rule (its own "
+        f"pools and synthetic copies). {r.note}",
+        "",
+        "## Thresholds",
+        "",
+    ]
+    lines += _table(
+        ["representation", "review", "family", "near", "pHash candidate"],
+        [
+            [
+                f"primary (`{run.model_name}`)",
+                _f(a.review, 4),
+                _f(a.family, 4),
+                _f(a.near, 4),
+                f"{a.phash_candidate} bits",
+            ],
+            [
+                f"second (`{b.model}`)",
+                _f(b.review, 4),
+                _f(b.family, 4),
+                _f(b.near, 4),
+                f"{b.phash_candidate} bits",
+            ],
+        ],
+    )
+    lines += ["", "## Leakage per source and level (primary / second)", ""]
+    lines += _table(
+        [
+            "source",
+            "level",
+            "cosine",
+            "components",
+            "crossing components",
+            "affected images",
+            "evaluation images with a training neighbour",
+            "against random splits",
+        ],
+        [
+            [
+                f"`{row.source}`",
+                row.level,
+                f"{_f(row.threshold_primary, 4)} / {_f(row.threshold_other, 4)}",
+                f"{row.groups_primary:,} / {row.groups_other:,}",
+                f"{_int(row.crossing_primary)} / {_int(row.crossing_other)}",
+                f"{_int(row.affected_primary)} / {_int(row.affected_other)}",
+                f"{_share(row.exposed_primary)} / {_share(row.exposed_other)}",
+                f"{row.reading_primary or DASH} / {row.reading_other or DASH}",
+            ]
+            for row in r.rows
+        ],
+    )
+    lines += ["", "## Agreement of the two groupings", ""]
+    lines += _table(
+        ["source", "level", "adjusted Rand", "pair precision", "pair recall"],
+        [
+            [
+                f"`{row.source}`",
+                row.level,
+                _f(row.adjusted_rand),
+                _f(row.pair_precision),
+                _f(row.pair_recall),
+            ]
+            for row in r.rows
+        ],
+    )
+    lines += [
+        "",
+        "Pair precision: of the image pairs the second representation groups together, the share "
+        "the primary groups together too; pair recall the other way round. Same most similar "
+        "image inside the source: "
+        + "; ".join(f"`{s}` {_share(v)}" for s, v in sorted(r.top1_agreement.items()))
+        + ".",
+        "",
+        "## Reading",
+        "",
+    ]
+    compared = [row for row in r.rows if row.reading_primary is not None]
+    same = [row for row in compared if row.reading_primary == row.reading_other]
+    lines += [
+        f"The random-split reading is the same under both representations for {len(same)} of "
+        f"{len(compared)} source and level pairs"
+        + (
+            "."
+            if len(same) == len(compared)
+            else "; it differs for "
+            + ", ".join(f"`{row.source}` {row.level}" for row in compared if row not in same)
+            + "."
+        ),
+        "",
+    ]
+    return "\n".join(lines) + "\n"
+
+
+# ---------------------------------------------------------------------- assurance
+
+
+def dataset_assurance(audit: Audit) -> str:
+    report = assess(audit)
+    lines = _header("Dataset assurance report", audit)
+    lines += [
+        "No scalar score is given: nothing calibrates a number such as 83/100. Each dimension has "
+        "a status by the rule listed at the end, and every status comes with the measurements it "
+        "rests on. The sources' own keys are proxy metadata; visual similarity is not proof of "
+        "shared content.",
+        "",
+        f"**Assessment of the pool: {report.assessment}.** Independent source validation is "
+        "missing, so nothing here says how a model trained on these sources would do elsewhere.",
+        "",
+        "## Summary",
+        "",
+    ]
+    names = [d.name for d in report.sources[0].dimensions] if report.sources else []
+    lines += _table(
+        ["source", *names, "assessment"],
+        [
+            [f"`{s.source}`", *(d.status for d in s.dimensions), s.assessment]
+            for s in report.sources
+        ],
+    )
+    lines += ["", "## The pool of sources", ""]
+    lines += _table(
+        ["dimension", "status", "evidence"],
+        [[d.name, d.status, "; ".join(d.evidence)] for d in report.pool],
+    )
+    for s in report.sources:
+        lines += ["", f"## `{s.source}`: {s.assessment}", ""]
+        if s.reasons:
+            lines += ["Because of: " + ", ".join(s.reasons) + ".", ""]
+        lines += _table(
+            ["dimension", "status", "evidence"],
+            [[d.name, d.status, "; ".join(d.evidence)] for d in s.dimensions],
+        )
+    lines += ["", "## Rules", ""]
+    lines += [f"- **{name}.** {rule}" for name, rule in RULES.items()]
+    lines += [f"- **Assessment.** {ASSESSMENT_RULE}", ""]
+    return "\n".join(lines) + "\n"
+
+
+# --------------------------------------------------------------------- limitations
+
+
+def limitations(audit: Audit) -> str:
+    lines = _header("M3 limitations", audit)
+    t = audit.thresholds
+    fallbacks = [f"`{p.source}` {p.pool}" for p in t.from_pools if p.fallback]
+    lines += [
+        "What the M3 numbers cannot say, with the measurement behind each point.",
+        "",
+        "1. **Proxy labels, not ground truth.** The thresholds come from the sources' own keys "
+        "(production batch, design family: proxy metadata) and from synthetic copies. The pool "
+        "results are group-label agreement, not duplicate accuracy"
+        + (
+            f"; precision 0.90 was never reached in {', '.join(fallbacks)}, so the rule fell back to "
+            "the F1-optimal cosine"
+            if fallbacks
+            else ""
+        )
+        + ". The human review queue (`artifacts/m3/review-candidates.csv`) has no decision yet.",
+    ]
+    family = _level(audit, "family")
+    near = _level(audit, "near")
+    chained = family.chained_sources if family else []
+    still = []
+    if near is not None:
+        sizes = {s.source: s.images for s in audit.run.sources}
+        still = [
+            f"`{leak.source}` {_pct(leak.largest_group, sizes.get(leak.source))}"
+            for leak in near.leakage
+            if sizes.get(leak.source) and leak.largest_group > 0.25 * sizes[leak.source]
+        ]
+    lines.append(
+        "2. **Chaining.** Components are transitive: A ~ B and B ~ C put A and C in one component "
+        "however unlike they are. "
+        + (
+            f"Flagged at the family level: {', '.join(f'`{s}`' for s in chained)}. "
+            if chained
+            else "No source is flagged at the family level. "
+        )
+        + (
+            f"At the near level the largest component still holds {', '.join(still)} of its source, "
+            "so that source's groups are chains rather than groups of duplicates."
+            if still
+            else "At the near level no component holds more than 25% of its source."
+        )
+    )
+    recall = [r for r in audit.synthetic_recall if not r.meets_target]
+    lines.append(
+        "3. **Synthetic recall.** The synthetic copies are mild transforms of a seeded sample; they "
+        "measure sensitivity to re-encoding, resampling and small crops, not to re-photographing. "
+        + (
+            "At the final near threshold the target is missed for "
+            + ", ".join(f"`{r.source}` ({_share(r.achieved_recall)})" for r in recall)
+            + "."
+            if recall
+            else "At the final near threshold every source keeps at least the target share of its copies ("
+            + ", ".join(f"`{r.source}` {_share(r.achieved_recall)}" for r in audit.synthetic_recall)
+            + ")."
+        )
+    )
+    material = [
+        f"`{p.source}` {p.pool} {u.metric} ({_f(u.width_ratio, 2)})"
+        for p in audit.pools
+        for u in p.uncertainty
+        if u.width_ratio is not None
+        and (u.width_ratio >= MATERIAL_WIDTH_RATIO or u.width_ratio <= 1 / MATERIAL_WIDTH_RATIO)
+    ]
+    lines.append(
+        "4. **Uncertainty.** The protocol's intervals resample the positive groups and keep the "
+        "negative pairs fixed. "
+        + (
+            "The both-sides check gives a materially different width for "
+            + "; ".join(material)
+            + ", so those intervals understate the uncertainty."
+            if material
+            else "The both-sides check changes no interval width materially."
+        )
+    )
+    squeezed = [
+        f"`{s.source}` (median longer side {s.median_long_side:,} px, up to {s.max_long_side:,})"
+        for s in audit.run.sources
+        if s.median_long_side and s.max_long_side and s.median_long_side > 448
+    ]
+    robust = audit.robustness
+    agreement = ""
+    if robust is not None:
+        compared = [row for row in robust.rows if row.reading_primary is not None]
+        same = sum(1 for row in compared if row.reading_primary == row.reading_other)
+        agreement = (
+            f" The second representation (`{robust.other_model}`) gives the same random-split "
+            f"reading for {same} of {len(compared)} source and level pairs "
+            "([representation-robustness.md](representation-robustness.md))."
+        )
+    lines.append(
+        "5. **Representation.** Every image is squeezed whole to 224x224. "
+        + (
+            "Large scans lose most of their pixels: " + "; ".join(squeezed) + ". "
+            if squeezed
+            else ""
+        )
+        + (agreement or "No second representation was run.")
+    )
+    lines.append(
+        "6. **Leakage is not a score.** M3 measures the structure of the data; no model was "
+        "trained. Later, A0 - A1 (random against group-aware split of the same sources) "
+        "approximates the effect of split leakage, and A1 - B (group-aware against source-held-out) "
+        "a residual source or domain shift. A0 - B is not leakage: acquisition hardware, factory, "
+        "lighting, resolution, annotation style, taxonomy and label distribution all differ "
+        "between sources."
+    )
+    pairs = [e for e in audit.cross_source.edges if e.level == "family" and e.pairs]
+    lines.append(
+        "7. **Independence of the sources.** "
+        + (
+            "; ".join(f"{e.pairs:,} pairs between `{e.source_a}` and `{e.source_b}`" for e in pairs)
+            + " reach the family threshold, so a source-held-out split does not hold out every look-alike."
+            if pairs
+            else "No cross-source pair reaches the family threshold."
+        )
+    )
+    lines.append(
+        "8. **Sampling of the review queue.** The queue is stratified, not random: its counts do "
+        "not estimate how common each category is in the data."
+    )
+    lines.append(
+        "9. **Recorded performance.** The two runs that did the embedding work predate the per-run "
+        "record; their times are transcribed from the console logs (amendment N5)."
+    )
+    lines.append("")
+    return "\n".join(lines) + "\n"
+
+
 # ------------------------------------------------------------------------------ write
 
 RENDERERS: dict[str, Callable[[Audit], str]] = {
@@ -1213,6 +1680,9 @@ RENDERERS: dict[str, Callable[[Audit], str]] = {
     "threshold-calibration.md": threshold_calibration,
     "split-leakage.md": split_leakage,
     "source-comparison.md": source_comparison,
+    "representation-robustness.md": representation_robustness,
+    "dataset-assurance.md": dataset_assurance,
+    "limitations.md": limitations,
     "performance.md": performance,
 }
 

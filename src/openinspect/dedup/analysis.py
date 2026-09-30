@@ -12,7 +12,7 @@ import hashlib
 import math
 from collections import Counter
 from collections.abc import Iterator, Mapping, Sequence
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 
 import numpy as np
 from numpy.typing import NDArray
@@ -22,6 +22,7 @@ from openinspect.dedup.audit_models import (
     BaselineCurve,
     CategoryCount,
     Cohesion,
+    ComponentSummary,
     CrossSourceEdges,
     CrossSourceSummary,
     FailureInfo,
@@ -30,15 +31,20 @@ from openinspect.dedup.audit_models import (
     HashScope,
     Interval,
     LevelResult,
+    MetadataIntegrity,
     PercolationRow,
     PoolResult,
+    Robustness,
+    RobustnessRow,
     RunInfo,
     SourceCounts,
     Stability,
+    SyntheticRecall,
     SyntheticSummary,
     Top1Stats,
     TransferRow,
     TransformSummary,
+    UncertaintyCheck,
 )
 from openinspect.dedup.calibrate import (
     MIN_PAIRS,
@@ -48,20 +54,24 @@ from openinspect.dedup.calibrate import (
     Pool,
     auc,
     average_precision,
+    bootstrap_both_sides,
     bootstrap_positive_groups,
     codes,
     curve_from_histograms,
     hash_pool_histograms,
     metrics_at,
     pool_histograms,
+    pool_pairs,
 )
 from openinspect.dedup.compute import FeatureSet
+from openinspect.dedup.config import DedupConfig
 from openinspect.dedup.embedder import EmbedderSpec
 from openinspect.dedup.graph import (
     Edges,
     GraphError,
     UnionFind,
     collect_edges,
+    edge_stats_by_label,
     member_pair_stats,
     multi_member_groups,
 )
@@ -102,35 +112,24 @@ class AnalysisError(Exception):
 
 @dataclass(frozen=True)
 class PoolSpec:
-    """One calibration pool of a source (docs/M3_PROTOCOL.md section 5)."""
+    """One calibration pool of a source (docs/M3_PROTOCOL.md section 5), in generic keys."""
 
     name: str
-    positive: (
-        str  # item attribute ("group" or "subgroup") that two images must share to be a positive
-    )
-    negative: str  # item attribute that must differ for a negative
+    positive: str  # "group_id" or "subgroup_id": two images sharing it form a positive pair
+    negative: str  # "group_id" or "subgroup_id": two images differing in it form a negative pair
     used_in_rule: bool
 
 
-# The pools of the protocol, section 5. dspcbsd-plus has no group key and takes no part.
-PROTOCOL_POOLS: dict[str, tuple[PoolSpec, ...]] = {
-    "pcb-ind": (PoolSpec("(batch, side)", "subgroup", "group", True),),
-    "pcb-defect": (
-        PoolSpec("family A", "group", "group", True),
-        PoolSpec("(A, B)", "subgroup", "group", False),
-    ),
-}
-KEY_NAMES: dict[str, tuple[str, str]] = {
-    "pcb-ind": ("batch", "(batch, side)"),
-    "pcb-defect": ("design family A", "(A, B)"),
-}
 LEVELS = ("near", "family")
 DECISION = "review"  # M3 decides nothing: every pair waits for a human (SPEC 6.4)
 CONTROL = "BELOW_REVIEW"  # review-queue stratum: nearest neighbours the rule does not flag
+GENERIC_KEYS = ("group_id", "subgroup_id")
 
 
 @dataclass(frozen=True)
 class Settings:
+    """Parameters of one audit. Source-specific meaning comes in through ``pools`` and ``key_names``."""
+
     seed: int = 0
     resamples: int = 1000
     permutations: int = 1000
@@ -139,8 +138,25 @@ class Settings:
     stability_delta: float = 0.02
     chaining_share: float = 0.25
     max_edges: int = 30_000_000
-    pools: Mapping[str, Sequence[PoolSpec]] = field(default_factory=lambda: PROTOCOL_POOLS)
-    key_names: Mapping[str, tuple[str, str]] = field(default_factory=lambda: KEY_NAMES)
+    pools: Mapping[str, Sequence[PoolSpec]] = field(default_factory=dict)
+    key_names: Mapping[str, tuple[str, str]] = field(default_factory=dict)  # source -> names
+    acquisition: Mapping[str, str | None] = field(default_factory=dict)  # source -> acquisition id
+
+
+def settings_from_config(config: DedupConfig, base: Settings | None = None) -> Settings:
+    """``base`` with the pools, key names and acquisition ids that ``configs/dedup.yaml`` declares."""
+    pools = {
+        source: tuple(PoolSpec(p.name, p.positive, p.negative, p.used_in_rule) for p in entry.pools)
+        for source, entry in config.sources.items()
+        if entry.pools
+    }
+    names = {
+        source: (entry.group_id or GENERIC_KEYS[0], entry.subgroup_id or GENERIC_KEYS[1])
+        for source, entry in config.sources.items()
+        if entry.group_id or entry.subgroup_id
+    }
+    acquisition = {source: entry.acquisition_id for source, entry in config.sources.items()}
+    return replace(base or Settings(), pools=pools, key_names=names, acquisition=acquisition)
 
 
 # ------------------------------------------------------------------------------- views
@@ -194,6 +210,7 @@ def _r(value: float) -> float:
 class PoolData:
     view: View
     spec: PoolSpec
+    pool: Pool
     histograms: Histograms
     curve: Curve
     phash: tuple[NDArray[np.int64], NDArray[np.int64]]
@@ -213,6 +230,7 @@ def calibration_pools(views: Sequence[View], settings: Settings) -> list[PoolDat
                 PoolData(
                     view=view,
                     spec=spec,
+                    pool=pool,
                     histograms=histograms,
                     curve=curve_from_histograms(histograms.positive, histograms.negative),
                     phash=hash_pool_histograms(view.phash, pool),
@@ -266,6 +284,19 @@ def pool_result(data: PoolData, thresholds: Thresholds, settings: Settings) -> P
     boot = bootstrap_positive_groups(
         data.histograms, thresholds.family, resamples=settings.resamples, seed=settings.seed
     )
+    sample = pool_pairs(data.view.vectors, data.pool)
+    both = bootstrap_both_sides(
+        sample, thresholds.family, resamples=settings.resamples, seed=settings.seed
+    )
+    uncertainty = [
+        _uncertainty(name, getattr(boot, attr), getattr(both, attr))
+        for name, attr in (
+            ("ROC AUC", "auc"),
+            ("average precision", "average_precision"),
+            ("precision at family", "precision"),
+            ("recall at family", "recall"),
+        )
+    ]
     levels = {"review": thresholds.review, "family": thresholds.family, "near": thresholds.near}
     at = {name: grid_point(curve, value) for name, value in levels.items()}
     grid = [grid_point(curve, k / 100) for k in range(0, 101)]
@@ -308,7 +339,18 @@ def pool_result(data: PoolData, thresholds: Thresholds, settings: Settings) -> P
         pr=pr,
         histogram=histogram,
         baselines=[hash_baseline("phash", *data.phash), hash_baseline("dhash", *data.dhash)],
+        positive_groups=len(data.histograms.group_positive),
+        negative_units=sample.units,
+        uncertainty=uncertainty,
     )
+
+
+def _uncertainty(metric: str, primary: object, both_sides: object) -> UncertaintyCheck:
+    first, second = _interval(primary), _interval(both_sides)
+    ratio = None
+    if first is not None and second is not None and first.high > first.low:
+        ratio = _r((second.high - second.low) / (first.high - first.low))
+    return UncertaintyCheck(metric=metric, primary=first, both_sides=second, width_ratio=ratio)
 
 
 # --------------------------------------------------------------------------- synthetic
@@ -361,6 +403,62 @@ def synthetic_summary(
         by_transform=by_transform,
         by_source=by_source,
     )
+
+
+def synthetic_recall(
+    synthetic: Sequence[SyntheticPair], thresholds: Thresholds
+) -> list[SyntheticRecall]:
+    """Achieved recall of each source's near-duplicate copies at the final near threshold."""
+    rows: list[SyntheticRecall] = []
+    for entry in thresholds.from_synthetic:
+        cosines = np.array(
+            [p.cosine for p in synthetic if p.source == entry.source and p.near_duplicate],
+            dtype=np.float64,
+        )
+        if len(cosines) == 0:
+            continue
+        achieved = float((cosines >= thresholds.near).mean())
+        rows.append(
+            SyntheticRecall(
+                source=entry.source,
+                target_recall=thresholds.synthetic_recall,
+                source_threshold=entry.near,
+                final_near_threshold=thresholds.near,
+                achieved_recall=_r(achieved),
+                n_pairs=len(cosines),
+                meets_target=achieved >= thresholds.synthetic_recall,
+            )
+        )
+    return rows
+
+
+def metadata_integrity(views: Sequence[View], settings: Settings) -> list[MetadataIntegrity]:
+    """For each source with a split, how many values of its own keys occur in two or more splits."""
+    rows: list[MetadataIntegrity] = []
+    for view in views:
+        names = settings.key_names.get(view.source, GENERIC_KEYS)
+        for key, name in zip(GENERIC_KEYS, names, strict=True):
+            splits_of: dict[str, set[str]] = {}
+            images_of: Counter[str] = Counter()
+            for item in view.items:
+                value = getattr(item, key)
+                if value is not None and item.split is not None:
+                    splits_of.setdefault(value, set()).add(item.split)
+                    images_of[value] += 1
+            if not splits_of:
+                continue
+            crossing = [value for value, splits in splits_of.items() if len(splits) > 1]
+            rows.append(
+                MetadataIntegrity(
+                    source=view.source,
+                    key=key,
+                    key_name=name,
+                    values=len(splits_of),
+                    crossing=len(crossing),
+                    images_in_crossing=sum(images_of[value] for value in crossing),
+                )
+            )
+    return rows
 
 
 # ------------------------------------------------------------------------ neighbours
@@ -430,8 +528,8 @@ def top1_stats(
             other = source_of[first] != view.source
             other_family = other & (near.cosine[view.index, 0] >= thresholds.family)
         local = near.within_index[view.source]
-        same_group, chance_group = key_agreement([item.group for item in view.items], local)
-        same_sub, chance_sub = key_agreement([item.subgroup for item in view.items], local)
+        same_group, chance_group = key_agreement([item.group_id for item in view.items], local)
+        same_sub, chance_sub = key_agreement([item.subgroup_id for item in view.items], local)
         rows.append(
             Top1Stats(
                 source=view.source,
@@ -557,23 +655,46 @@ def source_graphs(
     return SourceGraphs(view, floor, edges, labels, admitted, note)
 
 
-def cohesion(graphs: SourceGraphs, level: str, threshold: float, review: float) -> Cohesion:
-    groups = multi_member_groups(graphs.labels[threshold])
-    minima, means, sizes = [], [], []
+def cohesion(
+    graphs: SourceGraphs, level: str, threshold: float, review: float, *, largest: int = 5
+) -> Cohesion:
+    """Member-pair statistics of every component, the chaining gap, and the largest components."""
+    labels = graphs.labels[threshold]
+    groups = multi_member_groups(labels)
+    edge_info = edge_stats_by_label(labels, filter_edges(graphs.edges, threshold))
+    split_names = [item.split or "none" for item in graphs.view.items]
+    minima, means, gaps = [], [], []
+    summaries: list[ComponentSummary] = []
     for group in groups:
         stats = member_pair_stats(graphs.view.vectors, group.members)
+        _, edge_min, edge_mean = edge_info[group.label]
         minima.append(stats.minimum)
         means.append(stats.mean)
-        sizes.append(len(group.members))
+        gaps.append(edge_min - stats.minimum)
+        summaries.append(
+            ComponentSummary(
+                size=len(group.members),
+                share_of_source=_r(len(group.members) / len(graphs.view.items)),
+                edge_min_similarity=_r(edge_min),
+                edge_mean_similarity=_r(edge_mean),
+                all_pairs_min_similarity=_r(stats.minimum),
+                all_pairs_mean_similarity=_r(stats.mean),
+                chaining_gap=_r(edge_min - stats.minimum),
+                splits=sorted({split_names[m] for m in group.members.tolist()}),
+            )
+        )
     low = np.array(minima, dtype=np.float64)
+    summaries.sort(key=lambda s: -s.size)  # stable: equal sizes keep the order of their members
     return Cohesion(
         source=graphs.view.source,
         level=level,
         groups=len(groups),
         min_pairwise=quantiles(low),
         mean_pairwise=quantiles(np.array(means, dtype=np.float64)),
-        sizes=quantiles(np.array(sizes, dtype=np.float64)),
+        sizes=quantiles(np.array([len(g.members) for g in groups], dtype=np.float64)),
         share_below_review=_r(float((low < review).mean())) if len(low) else None,
+        chaining_gap=quantiles(np.array(gaps, dtype=np.float64)),
+        largest=summaries[:largest],
     )
 
 
@@ -600,7 +721,7 @@ def level_result(
         leakage.append(leak)
         if leak.largest_group > settings.chaining_share * max(leak.n_images, 1):
             chained.append(view.source)
-        group_name, subgroup_name = settings.key_names.get(view.source, ("group", "subgroup"))
+        group_name, subgroup_name = settings.key_names.get(view.source, GENERIC_KEYS)
         overlap = key_overlap(
             view.source,
             view.items,
@@ -746,10 +867,10 @@ def sha_pairs(features: FeatureSet) -> tuple[NDArray[np.int64], NDArray[np.int64
 
 
 def _key_mix(view: View, i: NDArray[np.int64], j: NDArray[np.int64]) -> tuple[int, int, int] | None:
-    if not any(item.group for item in view.items):
+    if not any(item.group_id for item in view.items):
         return None
-    group = codes([item.group for item in view.items])
-    sub = codes([item.subgroup for item in view.items])
+    group = codes([item.group_id for item in view.items])
+    sub = codes([item.subgroup_id for item in view.items])
     known = (group[i] >= 0) & (group[j] >= 0)
     same_sub = known & (sub[i] >= 0) & (sub[i] == sub[j])
     same_group = known & (group[i] == group[j]) & ~same_sub
@@ -986,7 +1107,7 @@ class ReviewRow:
     cosine: float
     phash_distance: int
     dhash_distance: int
-    suggested_category: str
+    machine_category: str  # the rule's suggestion, or BELOW_REVIEW for the control
 
 
 def control_pairs(
@@ -1046,6 +1167,25 @@ def allocate(counts: Mapping[str, int], budget: int) -> dict[str, int]:
     return quota
 
 
+SPLIT_RELATIONS = ("cross-split", "same-split", "no-split")
+KEY_RELATIONS = ("same-group", "other-group", "no-key")
+
+
+def pair_relations(
+    features: FeatureSet, i: NDArray[np.int64], j: NDArray[np.int64]
+) -> tuple[NDArray[np.int64], NDArray[np.int64]]:
+    """Per pair: index into SPLIT_RELATIONS and into KEY_RELATIONS (group_id of the two images)."""
+    splits = split_codes(features.items)
+    groups = codes(
+        [f"{item.source}:{item.group_id}" if item.group_id else None for item in features.items]
+    )
+    known = (splits[i] >= 0) & (splits[j] >= 0)
+    split_rel = np.where(known & (splits[i] != splits[j]), 0, np.where(known, 1, 2))
+    keyed = (groups[i] >= 0) & (groups[j] >= 0)
+    key_rel = np.where(keyed & (groups[i] == groups[j]), 0, np.where(keyed, 1, 2))
+    return split_rel.astype(np.int64), key_rel.astype(np.int64)
+
+
 def review_queue(
     features: FeatureSet,
     pairs: PairTable,
@@ -1055,20 +1195,34 @@ def review_queue(
     budget: int,
     seed: int,
 ) -> list[ReviewRow]:
-    """A seeded queue stratified by scope and suggested category, plus a below-threshold control."""
+    """A seeded queue for a human reviewer, stratified four ways.
+
+    Strata: scope (inside each source, or across sources) x the rule's band (the four categories,
+    plus a ``BELOW_REVIEW`` control of nearest neighbours the rule does not flag) x the split
+    relation (cross-split, same split, no split) x the metadata relation (same group, other group,
+    no key). The budget is shared equally over the strata that hold pairs.
+    """
     control = control_pairs(features, pairs, near, thresholds.review)
     tables = {"candidate": pairs, "control": control}
     members: dict[str, tuple[str, NDArray[np.int64]]] = {}
     for kind, table in tables.items():
         scopes = pair_scopes(features, table.i, table.j)
-        for code in [*range(len(scopes.names)), -1]:
-            in_scope = scopes.code == code
-            categories = range(len(CATEGORIES)) if kind == "candidate" else [-1]
-            for index in categories:
-                rows = np.flatnonzero(in_scope & (table.category == index))
-                if len(rows):
-                    label = CATEGORIES[index] if index >= 0 else CONTROL
-                    members[f"{scopes.label(code)}|{label}"] = (kind, rows)
+        split_rel, key_rel = pair_relations(features, table.i, table.j)
+        band = table.category.astype(np.int64)  # -1 for the control
+        code = (((scopes.code + 1) * 5 + (band + 1)) * 3 + split_rel) * 3 + key_rel
+        for value in np.unique(code).tolist():
+            rows = np.flatnonzero(code == value)
+            first = int(rows[0])
+            label = CATEGORIES[int(band[first])] if band[first] >= 0 else CONTROL
+            name = "|".join(
+                [
+                    scopes.label(int(scopes.code[first])),
+                    label,
+                    SPLIT_RELATIONS[int(split_rel[first])],
+                    KEY_RELATIONS[int(key_rel[first])],
+                ]
+            )
+            members[name] = (kind, rows)
     quota = allocate({name: len(rows) for name, (_, rows) in members.items()}, budget)
     chosen: list[tuple[str, str, int]] = []
     for name in sorted(members):
@@ -1089,13 +1243,21 @@ def review_queue(
                 cosine=_r(table.cosine[row]),
                 phash_distance=int(table.phash[row]),
                 dhash_distance=int(table.dhash[row]),
-                suggested_category=name.split("|", 1)[1],
+                machine_category=name.split("|")[1],
             )
         )
     return out
 
 
 # --------------------------------------------------------------------------- run info
+
+
+def _long_sides(items: Sequence[ImageItem]) -> NDArray[np.int64]:
+    """The longer side of every image whose size ingest recorded, in pixels."""
+    return np.array(
+        [max(item.width, item.height) for item in items if item.width and item.height],
+        dtype=np.int64,
+    )
 
 
 def run_info(
@@ -1126,9 +1288,12 @@ def run_info(
                 embedded=len(own),
                 failed=failed,
                 splits={name: splits[name] for name in [*SPLITS, "none"] if splits[name]},
-                group_key=settings.key_names.get(source, ("group", "subgroup"))[0]
-                if any(item.group for item in own)
+                group_key=settings.key_names.get(source, GENERIC_KEYS)[0]
+                if any(item.group_id for item in own)
                 else None,
+                acquisition_id=settings.acquisition.get(source),
+                median_long_side=int(np.median(sides)) if len(sides := _long_sides(own)) else None,
+                max_long_side=int(sides.max()) if len(sides) else None,
             )
         )
     return RunInfo(
@@ -1159,6 +1324,8 @@ class AnalysisResult:
     group_ids: dict[str, list[str | None]]
     review: list[ReviewRow]
     notes: list[str]
+    source_labels: dict[tuple[str, str], NDArray[np.int64]] = field(default_factory=dict)
+    item_keys: list[tuple[str, str]] = field(default_factory=list)
 
 
 def run_analysis(
@@ -1230,8 +1397,84 @@ def run_analysis(
         cross_source=cross,
         stability=stability,
         transfer=transfer_rows(views, near, thresholds, settings),
+        synthetic_recall=synthetic_recall(synthetic, thresholds),
+        metadata_integrity=metadata_integrity(views, settings),
     )
-    return AnalysisResult(audit, pairs, near, graph.rows, ids, review, notes)
+    labels = {
+        (g.view.source, level): g.labels[getattr(thresholds, level)]
+        for g in graphs
+        for level in LEVELS
+    }
+    keys = [item.key for item in features.items]
+    return AnalysisResult(audit, pairs, near, graph.rows, ids, review, notes, labels, keys)
+
+
+def permutation_reading(baseline: PermutationBaseline | None) -> str | None:
+    """The random-split baseline in words (p <= 0.05 on either side, as in the report)."""
+    if baseline is None:
+        return None
+    if baseline.p_upper <= 0.05:
+        return "more than random"
+    if baseline.p_lower <= 0.05:
+        return "fewer than random"
+    return "consistent with random"
+
+
+def _exposed(leak: SourceLeakage) -> float | None:
+    images = sum(n.images for n in leak.eval_neighbour)
+    return _r(sum(n.with_train_neighbour for n in leak.eval_neighbour) / images) if images else None
+
+
+def robustness(primary: AnalysisResult, other: AnalysisResult, *, other_model: str) -> Robustness:
+    """Compare two audits of the same images made with two representations, each at its own rule."""
+    if primary.item_keys != other.item_keys:
+        raise AnalysisError("the two audits do not cover the same images in the same order")
+    rows: list[RobustnessRow] = []
+    for level in LEVELS:
+        first = next(x for x in primary.audit.levels if x.level == level)
+        second = next(x for x in other.audit.levels if x.level == level)
+        for leak in first.leakage:
+            twin = next(x for x in second.leakage if x.source == leak.source)
+            agreement = partition_agreement(
+                [int(x) for x in other.source_labels[(leak.source, level)]],
+                [int(x) for x in primary.source_labels[(leak.source, level)]],
+            )
+            rows.append(
+                RobustnessRow(
+                    source=leak.source,
+                    level=level,
+                    threshold_primary=first.threshold,
+                    threshold_other=second.threshold,
+                    groups_primary=leak.groups,
+                    groups_other=twin.groups,
+                    crossing_primary=leak.groups_crossing_any if leak.has_splits else None,
+                    crossing_other=twin.groups_crossing_any if twin.has_splits else None,
+                    affected_primary=leak.affected_images if leak.has_splits else None,
+                    affected_other=twin.affected_images if twin.has_splits else None,
+                    exposed_primary=_exposed(leak),
+                    exposed_other=_exposed(twin),
+                    reading_primary=permutation_reading(first.permutation.get(leak.source)),
+                    reading_other=permutation_reading(second.permutation.get(leak.source)),
+                    adjusted_rand=_round(agreement.adjusted_rand),
+                    pair_precision=_round(agreement.pair_precision),
+                    pair_recall=_round(agreement.pair_recall),
+                )
+            )
+    top1: dict[str, float] = {}
+    for source, index in primary.neighbours.within_index.items():
+        twin_index = other.neighbours.within_index[source]
+        if len(index):
+            top1[source] = _r(float((index == twin_index).mean()))
+    return Robustness(
+        other_model=other_model,
+        other_thresholds=other.audit.thresholds,
+        rows=rows,
+        top1_agreement=top1,
+        note=(
+            "Each representation is calibrated by the same frozen rule (its own pools and "
+            "synthetic copies); partitions are compared image by image inside each source."
+        ),
+    )
 
 
 def _cross_sha(features: FeatureSet) -> int:

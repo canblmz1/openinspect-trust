@@ -10,6 +10,7 @@ from __future__ import annotations
 import csv
 import hashlib
 import io
+import json
 import os
 from collections.abc import Sequence
 from pathlib import Path
@@ -30,28 +31,32 @@ NEIGHBOURS = "nearest-neighbors.parquet"
 GROUPS = "leakage-groups.parquet"
 REVIEW = "review-candidates.csv"
 AUDIT = "audit.json"
+THRESHOLDS = "thresholds.json"
+SYNTHETIC_RECALL = "synthetic-recall.json"
 REVIEW_COLUMNS = (
     "pair_id",
     "stratum",
-    "suggested_category",
-    "cosine",
-    "phash_distance",
-    "dhash_distance",
+    "source",
     "source_a",
     "image_a",
     "split_a",
-    "group_a",
-    "subgroup_a",
+    "metadata_group_a",
+    "metadata_subgroup_a",
     "source_b",
     "image_b",
     "split_b",
-    "group_b",
-    "subgroup_b",
-    "group_near",
-    "group_family",
-    "reviewer_decision",
-    "reviewer_note",
+    "metadata_group_b",
+    "metadata_subgroup_b",
+    "cosine",
+    "phash_distance",
+    "dhash_distance",
+    "machine_category",
+    "component_near",
+    "component_family",
+    "human_decision",
+    "human_notes",
 )
+HUMAN_COLUMNS = ("human_decision", "human_notes")
 
 
 def sha256_of(path: Path) -> str:
@@ -199,13 +204,23 @@ def groups_table(rows: Sequence[GroupRow]) -> pa.Table:
             "sources": pa.array([r.sources for r in rows], type=strings),
             "splits": pa.array([r.splits for r in rows], type=strings),
             "n_annotations": pa.array([r.n_annotations for r in rows], type=pa.int32()),
-            "max_similarity": pa.array([r.max_similarity for r in rows], type=pa.float64()),
-            "min_similarity": pa.array([r.min_similarity for r in rows], type=pa.float64()),
-            "mean_similarity": pa.array([r.mean_similarity for r in rows], type=pa.float64()),
             "n_edges": pa.array([r.n_edges for r in rows], type=pa.int64()),
-            "min_edge_similarity": pa.array(
-                [r.min_edge_similarity for r in rows], type=pa.float64()
+            "edge_min_similarity": pa.array(
+                [r.edge_min_similarity for r in rows], type=pa.float64()
             ),
+            "edge_mean_similarity": pa.array(
+                [r.edge_mean_similarity for r in rows], type=pa.float64()
+            ),
+            "all_pairs_min_similarity": pa.array(
+                [r.all_pairs_min_similarity for r in rows], type=pa.float64()
+            ),
+            "all_pairs_mean_similarity": pa.array(
+                [r.all_pairs_mean_similarity for r in rows], type=pa.float64()
+            ),
+            "all_pairs_max_similarity": pa.array(
+                [r.all_pairs_max_similarity for r in rows], type=pa.float64()
+            ),
+            "chaining_gap": pa.array([r.chaining_gap for r in rows], type=pa.float64()),
             "cross_split": pa.array([r.cross_split for r in rows], type=pa.bool_()),
             "crosses": pa.array([r.crosses for r in rows], type=strings),
             "cross_source": pa.array([r.cross_source for r in rows], type=pa.bool_()),
@@ -217,7 +232,12 @@ def groups_table(rows: Sequence[GroupRow]) -> pa.Table:
 def review_csv(
     features: FeatureSet, rows: Sequence[ReviewRow], ids: dict[str, list[str | None]]
 ) -> bytes:
-    """The review queue; the two reviewer columns stay empty until a human fills them."""
+    """The review queue; the human columns stay empty until a person fills them.
+
+    ``metadata_group`` and ``metadata_subgroup`` are the source's own proxy keys (``group_id``,
+    ``subgroup_id``), not ground truth; ``component_*`` is the visual similarity component both
+    images share at that level, if any.
+    """
     buffer = io.StringIO()
     writer = csv.writer(buffer, lineterminator="\n")
     writer.writerow(REVIEW_COLUMNS)
@@ -229,20 +249,21 @@ def review_csv(
             [
                 row.pair_id,
                 row.stratum,
-                row.suggested_category,
-                f"{row.cosine:.6f}",
-                row.phash_distance,
-                row.dhash_distance,
+                a.source if a.source == b.source else f"{a.source}|{b.source}",
                 a.source,
                 a.item_id,
                 a.split or "",
-                a.group or "",
-                a.subgroup or "",
+                a.group_id or "",
+                a.subgroup_id or "",
                 b.source,
                 b.item_id,
                 b.split or "",
-                b.group or "",
-                b.subgroup or "",
+                b.group_id or "",
+                b.subgroup_id or "",
+                f"{row.cosine:.6f}",
+                row.phash_distance,
+                row.dhash_distance,
+                row.machine_category,
                 near_a if near_a is not None and near_a == near_b else "",
                 fam_a if fam_a is not None and fam_a == fam_b else "",
                 "",
@@ -274,10 +295,23 @@ def read_audit(path: Path) -> Audit:
     return Audit.model_validate_json(path.read_text(encoding="utf-8"))
 
 
+def _json(value: object) -> bytes:
+    return (json.dumps(value, indent=2, sort_keys=True) + "\n").encode("utf-8")
+
+
 def write_artifacts(out: Path, features: FeatureSet, result: AnalysisResult) -> dict[str, str]:
-    """Write the three tables and the review queue; returns file name -> SHA-256."""
+    """Write the tables, the review queue, the thresholds and the synthetic recall.
+
+    Returns file name -> SHA-256 of every file written.
+    """
     _write_parquet(out / PAIRS, pairs_table(features, result.pairs, result.group_ids))
     _write_parquet(out / NEIGHBOURS, neighbours_table(features, result))
     _write_parquet(out / GROUPS, groups_table(result.group_rows))
     _replace(out / REVIEW, review_csv(features, result.review, result.group_ids))
-    return {name: sha256_of(out / name) for name in (PAIRS, NEIGHBOURS, GROUPS, REVIEW)}
+    _replace(out / THRESHOLDS, _json(result.audit.thresholds.model_dump(mode="json")))
+    _replace(
+        out / SYNTHETIC_RECALL,
+        _json([row.model_dump(mode="json") for row in result.audit.synthetic_recall]),
+    )
+    names = (PAIRS, NEIGHBOURS, GROUPS, REVIEW, THRESHOLDS, SYNTHETIC_RECALL)
+    return {name: sha256_of(out / name) for name in names}

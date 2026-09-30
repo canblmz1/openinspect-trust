@@ -328,3 +328,101 @@ def quantile_threshold(values: NDArray[np.float64], recall: float) -> float:
     if len(values) == 0:
         raise ValueError("no values to take a quantile of")
     return float(np.quantile(values, 1.0 - recall, method="lower"))
+
+
+# ----------------------------------------------------------- sensitivity: both sides
+
+
+@dataclass(frozen=True)
+class PairSample:
+    """Every labelled pair of a pool: its bin and the resampling unit of both images.
+
+    The unit is the image's code in the pool's *negative* key (for example the production batch):
+    the coarser key, so the positive pairs of a unit and the negative pairs between two units move
+    together when units are resampled. ``-1`` means no unit; such an image keeps weight 1.
+    """
+
+    pos_bins: NDArray[np.int16]
+    pos_a: NDArray[np.int32]
+    pos_b: NDArray[np.int32]
+    neg_bins: NDArray[np.int16]
+    neg_a: NDArray[np.int32]
+    neg_b: NDArray[np.int32]
+    units: int
+
+
+def pool_pairs(
+    vectors: NDArray[np.float32], pool: Pool, *, chunk: int = DEFAULT_CHUNK
+) -> PairSample:
+    """The bins and units of every positive and negative pair of the pool (all pairs, exact)."""
+    unit = pool.negative.astype(np.int32)
+    parts: dict[str, list[NDArray[np.int32]]] = {
+        k: [] for k in ("pb", "pa", "pbb", "nb", "na", "nbb")
+    }
+    for start, block in iter_upper_blocks(vectors, chunk=chunk):
+        rows = block.shape[0]
+        pos_mask, neg_mask = label_block(pool, start, rows, start, block.shape[1])
+        valid = np.isfinite(block)
+        for mask, (bins_key, a_key, b_key) in (
+            (pos_mask & valid, ("pb", "pa", "pbb")),
+            (neg_mask & valid, ("nb", "na", "nbb")),
+        ):
+            rel_i, rel_j = np.nonzero(mask)
+            parts[bins_key].append(_bins(block[rel_i, rel_j]).astype(np.int32))
+            parts[a_key].append(unit[start + rel_i])
+            parts[b_key].append(unit[start + rel_j])
+
+    def joined(key: str) -> NDArray[np.int32]:
+        return np.concatenate(parts[key]) if parts[key] else np.empty(0, dtype=np.int32)
+
+    return PairSample(
+        joined("pb").astype(np.int16),
+        joined("pa"),
+        joined("pbb"),
+        joined("nb").astype(np.int16),
+        joined("na"),
+        joined("nbb"),
+        int(unit.max()) + 1 if len(unit) and unit.max() >= 0 else 0,
+    )
+
+
+def bootstrap_both_sides(
+    sample: PairSample, threshold: float, *, resamples: int = 1000, seed: int = 0
+) -> BootstrapResult:
+    """Sensitivity check: resample units with replacement and reweight positives *and* negatives.
+
+    A unit drawn ``w`` times weighs ``w``; a pair inside one unit weighs ``w``, a pair between two
+    units the product of their weights. The protocol's interval (:func:`bootstrap_positive_groups`)
+    keeps the negatives fixed; comparing the two widths shows whether that choice matters.
+    """
+    if sample.units < 2:
+        return BootstrapResult(None, None, None, None)
+    rng = np.random.default_rng(seed)
+    target = bin_of(threshold, NBINS)
+    aucs = np.full(resamples, np.nan)
+    aps = np.full(resamples, np.nan)
+    precisions = np.full(resamples, np.nan)
+    recalls = np.full(resamples, np.nan)
+    same_unit = sample.pos_a == sample.pos_b
+    for index in range(resamples):
+        weights = rng.multinomial(sample.units, np.full(sample.units, 1.0 / sample.units))
+        w = np.append(weights.astype(np.float64), 1.0)  # position -1: no unit, weight 1
+        pos_w = np.where(same_unit, w[sample.pos_a], w[sample.pos_a] * w[sample.pos_b])
+        neg_w = w[sample.neg_a] * w[sample.neg_b]
+        pos = np.rint(np.bincount(sample.pos_bins, weights=pos_w, minlength=NBINS)).astype(np.int64)
+        neg = np.rint(np.bincount(sample.neg_bins, weights=neg_w, minlength=NBINS)).astype(np.int64)
+        curve = curve_from_histograms(pos, neg)
+        if curve.positives == 0 or curve.negatives == 0:
+            continue
+        value, ap = auc(curve), average_precision(curve)
+        aucs[index] = np.nan if value is None else value
+        aps[index] = np.nan if ap is None else ap
+        support = curve.tp[target] + curve.fp[target]
+        precisions[index] = curve.tp[target] / support if support else np.nan
+        recalls[index] = curve.tp[target] / curve.positives
+    return BootstrapResult(
+        _percentile_interval(aucs),
+        _percentile_interval(aps),
+        _percentile_interval(precisions),
+        _percentile_interval(recalls),
+    )

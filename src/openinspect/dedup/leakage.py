@@ -312,12 +312,12 @@ def key_overlap(
     key_subgroup_name: str,
 ) -> KeyOverlap | None:
     """How similarity groups line up with the source's own grouping key; ``None`` without a key."""
-    if not any(item.group for item in items):
+    if not any(item.group_id for item in items):
         return None
     from openinspect.dedup.calibrate import codes as make_codes
 
-    group_codes = make_codes([item.group for item in items])
-    subgroup_codes = make_codes([item.subgroup for item in items])
+    group_codes = make_codes([item.group_id for item in items])
+    subgroup_codes = make_codes([item.subgroup_id for item in items])
     predicted = [int(x) for x in labels]
     vs_group = partition_agreement(predicted, [int(x) for x in group_codes])
     vs_subgroup = partition_agreement(predicted, [int(x) for x in subgroup_codes])
@@ -401,7 +401,12 @@ def key_overlap(
 
 @dataclass(frozen=True)
 class GroupRow:
-    """One similarity group, ready for the leakage-groups table."""
+    """One visual similarity component (a potential leakage group), ready for the groups table.
+
+    A connected component chains: its members are linked by edges at or above the threshold,
+    but two members can be far less alike. ``chaining_gap`` (weakest edge minus weakest member
+    pair) says how far: near 0 for a tight group, large when the component is a chain.
+    """
 
     group_id: str
     level: str
@@ -410,15 +415,24 @@ class GroupRow:
     sources: list[str]
     splits: list[str]
     n_annotations: int
-    max_similarity: float
-    min_similarity: float
-    mean_similarity: float
+    all_pairs_max_similarity: float
+    all_pairs_min_similarity: float
+    all_pairs_mean_similarity: float
     n_edges: int
-    min_edge_similarity: float
+    edge_min_similarity: float
+    edge_mean_similarity: float
     cross_split: bool
     crosses: list[str]
     cross_source: bool
     n_keys: int
+
+    @property
+    def size(self) -> int:
+        return len(self.members)
+
+    @property
+    def chaining_gap(self) -> float:
+        return self.edge_min_similarity - self.all_pairs_min_similarity
 
 
 def build_group_rows(
@@ -452,7 +466,7 @@ def _row(
 ) -> GroupRow:
     member_items = [items[m] for m in group.members.tolist()]
     stats = member_pair_stats(vectors, group.members)
-    n_edges, weakest_edge, _ = edge_info.get(group.label, (0, float("nan"), float("nan")))
+    n_edges, weakest_edge, mean_edge = edge_info.get(group.label, (0, float("nan"), float("nan")))
     per_source: dict[str, set[str]] = {}
     for item in member_items:
         if item.split:
@@ -462,7 +476,7 @@ def _row(
         for source, splits in sorted(per_source.items())
         if len(splits) > 1
     ]
-    keys = {(item.source, item.group) for item in member_items if item.group}
+    keys = {(item.source, item.group_id) for item in member_items if item.group_id}
     sources = sorted({item.source for item in member_items})
     return GroupRow(
         group_id=group_id,
@@ -474,11 +488,12 @@ def _row(
             f"{source}:{split}" for source, splits in per_source.items() for split in splits
         ),
         n_annotations=sum(item.n_annotations for item in member_items),
-        max_similarity=stats.maximum,
-        min_similarity=stats.minimum,
-        mean_similarity=stats.mean,
+        all_pairs_max_similarity=stats.maximum,
+        all_pairs_min_similarity=stats.minimum,
+        all_pairs_mean_similarity=stats.mean,
         n_edges=n_edges,
-        min_edge_similarity=weakest_edge,
+        edge_min_similarity=weakest_edge,
+        edge_mean_similarity=mean_edge,
         cross_split=bool(crosses),
         crosses=crosses,
         cross_source=len(sources) > 1,

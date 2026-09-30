@@ -26,3 +26,25 @@ models:
     weights_sha256: d73036b56966966d07975d696bde331762f37297e2f095de8cea0040c3aa0841
     dim: 768
     licence: Apache-2.0
+
+# What each source's generic keys mean and which of its pairs calibrate the thresholds
+# (docs/M3_PROTOCOL.md section 5; docs/DECISIONS.md T24). The audit's algorithms only know
+# group_id and subgroup_id; the ingest adapters fill them, and the names below are what they mean.
+# acquisition_id groups sources of one kind of acquisition (the source-diversity check).
+sources:
+  dspcbsd-plus:
+    acquisition_id: factory-aoi   # AOI line, etch-stage crops (manifest provenance_risks)
+    # no group key in the archive (T13): no calibration pool
+  pcb-ind:
+    acquisition_id: factory-aoi
+    group_id: batch               # production batch, first 4 characters of the file name
+    subgroup_id: (batch, side)    # batch and board side
+    pools:
+      - {name: "(batch, side)", positive: subgroup_id, negative: group_id, used_in_rule: true}
+  pcb-defect:
+    acquisition_id: lab-flatbed-scan
+    group_id: design family A     # first field of the original scan name <A>-<B>-<C>
+    subgroup_id: (A, B)
+    pools:
+      - {name: "family A", positive: group_id, negative: group_id, used_in_rule: true}
+      - {name: "(A, B)", positive: subgroup_id, negative: group_id, used_in_rule: false}

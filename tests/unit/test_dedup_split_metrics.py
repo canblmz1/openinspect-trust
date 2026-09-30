@@ -139,3 +139,19 @@ def test_quantiles_of_a_known_sequence() -> None:
     assert q.p95 == pytest.approx(95.0)
     assert q.mean == pytest.approx(50.0)
     assert quantiles(np.array([], dtype=np.float32)) is None
+
+
+def test_group_aware_split_keeps_groups_whole_but_not_sources() -> None:
+    # six items of source "a" in three groups, six of source "b" in three groups
+    sources = ["a"] * 6 + ["b"] * 6
+    group_of = [0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5]
+    split = group_aware_split(group_of, {"train": 2.0, "test": 1.0}, seed=0)
+    assert groups_crossing(group_of, split) == 0  # group integrity holds
+    per_source = {s: {sp for src, sp in zip(sources, split, strict=True) if src == s} for s in "ab"}
+    assert per_source["a"] == {"train", "test"} or per_source["b"] == {"train", "test"}
+    # source integrity is the job of the source-held-out assignment
+    held_out = leave_one_source_out(sources, "b")
+    assert {sp for src, sp in zip(sources, held_out, strict=True) if src == "b"} == {"test"}
+    assert {sp for src, sp in zip(sources, held_out, strict=True) if src == "a"} == {"train"}
+    source_as_group = [0 if s == "a" else 1 for s in sources]
+    assert groups_crossing(source_as_group, held_out) == 0

@@ -34,8 +34,8 @@ def item(
         path=Path(f"/nonexistent/{index}.png"),
         sha256=f"{index:064x}",
         split=split,
-        group=group,
-        subgroup=subgroup,
+        group_id=group,
+        subgroup_id=subgroup,
         n_annotations=annotations,
         dhash=0,
         width=10,
@@ -279,10 +279,38 @@ def test_group_rows_carry_members_sources_splits_and_statistics() -> None:
     assert first.splits == ["a:train", "a:val", "b:train"]
     assert first.n_annotations == 2 + 3 + 1
     assert first.n_edges == 2
-    assert first.min_edge_similarity == pytest.approx(0.8, abs=1e-6)
-    assert first.min_similarity <= first.mean_similarity <= first.max_similarity
+    assert first.edge_min_similarity == pytest.approx(0.8, abs=1e-6)
+    assert first.all_pairs_min_similarity <= first.all_pairs_mean_similarity
+    assert first.all_pairs_mean_similarity <= first.all_pairs_max_similarity
+    assert first.size == len(first.members)
+    assert first.chaining_gap == pytest.approx(
+        first.edge_min_similarity - first.all_pairs_min_similarity
+    )
     assert first.n_keys == 2
     assert second.cross_split is False  # both test images
     assert second.sources == ["a"]
     assert second.crosses == []
-    assert second.max_similarity == pytest.approx(float(vectors[4] @ vectors[5]), abs=1e-5)
+    assert second.all_pairs_max_similarity == pytest.approx(
+        float(vectors[4] @ vectors[5]), abs=1e-5
+    )
+
+
+def test_a_chain_is_one_component_and_its_gap_shows_it() -> None:
+    # A ~ B and B ~ C at the threshold, while A and C are far apart
+    a = np.array([1.0, 0.0], dtype=np.float32)
+    c = np.array([0.0, 1.0], dtype=np.float32)
+    b = (a + c) / np.linalg.norm(a + c)
+    vectors = np.stack([a, b.astype(np.float32), c])
+    items = [item(0, "train"), item(1, "train"), item(2, "val")]
+    i = np.array([0, 1], dtype=np.int64)
+    j = np.array([1, 2], dtype=np.int64)
+    sims = np.array([vectors[0] @ vectors[1], vectors[1] @ vectors[2]], dtype=np.float32)
+    labels = components(3, [(i, j)])
+    (row,) = build_group_rows(
+        items, vectors, labels, (i, j, sims), level="family", threshold=0.7, prefix="VSG-family"
+    )
+    assert row.size == 3
+    assert row.edge_min_similarity == pytest.approx(np.sqrt(0.5), abs=1e-6)
+    assert row.all_pairs_min_similarity == pytest.approx(0.0, abs=1e-6)  # A and C
+    assert row.chaining_gap == pytest.approx(np.sqrt(0.5), abs=1e-6)
+    assert row.cross_split is True  # the chain reaches the validation image

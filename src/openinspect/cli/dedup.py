@@ -15,6 +15,7 @@ from typing import Annotated
 
 import typer
 
+from openinspect.assurance import collect_provenance
 from openinspect.cli.common import (
     AllOption,
     DataDirOption,
@@ -25,10 +26,17 @@ from openinspect.cli.common import (
     select_sources,
     setup,
 )
-from openinspect.dedup.analysis import AnalysisError, Settings, run_analysis
+from openinspect.dedup.analysis import (
+    AnalysisError,
+    AnalysisResult,
+    Settings,
+    robustness,
+    run_analysis,
+    settings_from_config,
+)
 from openinspect.dedup.cache import EmbeddingCache
 from openinspect.dedup.compute import ComputeError, FeatureSet, HashStore, compute_features
-from openinspect.dedup.config import ConfigError, ModelEntry, load_config
+from openinspect.dedup.config import ConfigError, DedupConfig, ModelEntry, load_config
 from openinspect.dedup.embedder import (
     Embedder,
     EmbedderError,
@@ -105,6 +113,14 @@ ReportsOption = Annotated[
     Path | None,
     typer.Option("--reports", file_okay=False, help="Report folder (default: reports/m3)."),
 ]
+RobustnessOption = Annotated[
+    str | None,
+    typer.Option(
+        "--robustness-model",
+        help="Second model for the representation check (its features and synthetic copies "
+        "must be cached: run features and synthetic with --model first).",
+    ),
+]
 
 
 def load_embedder_for(  # pragma: no cover - needs torch and the pinned weights
@@ -164,6 +180,7 @@ def sample_items(items: list[ImageItem], per_source: int | None, seed: int) -> l
 class Context:
     root: Path
     data: Path
+    config: DedupConfig
     spec: EmbedderSpec
     entry: ModelEntry
     items: list[ImageItem]
@@ -183,10 +200,13 @@ def context(
         config = load_config(root)
         _, entry = config.model(model)
         spec = spec_from_config(config, model)
-        items, skipped = load_items(data, [lm.manifest.slug for lm in selected])
+        acquisition = {slug: source.acquisition_id for slug, source in config.sources.items()}
+        items, skipped = load_items(
+            data, [lm.manifest.slug for lm in selected], acquisition=acquisition
+        )
     except (ConfigError, InventoryError) as exc:
         fail(str(exc))
-    return Context(root, data, spec, entry, items, skipped)
+    return Context(root, data, config, spec, entry, items, skipped)
 
 
 def run_features(
@@ -321,33 +341,89 @@ def run_synthetic(
     return pairs
 
 
-def run_analyze(ctx: Context, *, seed: int, per_source: int, out: Path, reports: Path) -> None:
+def analyse_model(
+    ctx: Context,
+    spec: EmbedderSpec,
+    weights_sha256: str,
+    *,
+    seed: int,
+    per_source: int,
+    timings: list[StageTiming] | None,
+) -> tuple[FeatureSet, AnalysisResult]:
+    """Features of ``spec`` from its caches (no model), its synthetic pairs, and the whole audit."""
+    stages = timings if timings is not None else []
+    with timed("load features", stages):
+        features = compute_features(
+            ctx.items,
+            spec=spec,
+            cache=originals_cache(ctx.data, spec),
+            hashes=hash_store(ctx.data),
+            make_embedder=None,
+        )
+    synthetic = read_pairs(synthetic_path(ctx.data, spec, seed, per_source))
+    log(f"{spec.name}: {len(features.items):,} images, {len(synthetic):,} synthetic pairs")
+    result = run_analysis(
+        features,
+        synthetic,
+        spec=spec,
+        weights_sha256=weights_sha256,
+        skipped=ctx.skipped,
+        settings=settings_from_config(ctx.config, Settings(seed=seed)),
+        timings=timings,
+    )
+    return features, result
+
+
+def run_analyze(
+    ctx: Context,
+    *,
+    seed: int,
+    per_source: int,
+    out: Path,
+    reports: Path,
+    robustness_model: str | None = None,
+) -> None:
+    commit, dirty = code_version(ctx.root)  # the code of this process was loaded at its start
     timings: list[StageTiming] = []
     try:
-        with timed("load features", timings):
-            features = compute_features(
-                ctx.items,
-                spec=ctx.spec,
-                cache=originals_cache(ctx.data, ctx.spec),
-                hashes=hash_store(ctx.data),
-                make_embedder=None,
-            )
-        synthetic = read_pairs(synthetic_path(ctx.data, ctx.spec, seed, per_source))
-        log(f"{len(features.items):,} images with features, {len(synthetic):,} synthetic pairs")
-        result = run_analysis(
-            features,
-            synthetic,
-            spec=ctx.spec,
-            weights_sha256=ctx.entry.weights_sha256,
-            skipped=ctx.skipped,
-            settings=Settings(seed=seed),
+        features, result = analyse_model(
+            ctx,
+            ctx.spec,
+            ctx.entry.weights_sha256,
+            seed=seed,
+            per_source=per_source,
             timings=timings,
         )
+        check = None
+        if robustness_model is not None:
+            with timed(f"robustness ({robustness_model})", timings):
+                other_name, other_entry = ctx.config.model(robustness_model)
+                other_spec = spec_from_config(ctx.config, other_name)
+                _, other = analyse_model(
+                    ctx,
+                    other_spec,
+                    other_entry.weights_sha256,
+                    seed=seed,
+                    per_source=per_source,
+                    timings=None,
+                )
+                check = robustness(
+                    result, other, other_model=f"{other_spec.model_id}@{other_spec.revision[:12]}"
+                )
         with timed("artifacts", timings):
             digests = write_artifacts(out, features, result)
-    except (ComputeError, SyntheticError, AnalysisError, CalibrationError, GraphError) as exc:
+        slugs = sorted({item.source for item in ctx.items})
+        acquisition = {slug: entry.acquisition_id for slug, entry in ctx.config.sources.items()}
+        provenance = collect_provenance(ctx.root, slugs, acquisition)
+    except (
+        ComputeError,
+        SyntheticError,
+        AnalysisError,
+        CalibrationError,
+        GraphError,
+        ConfigError,
+    ) as exc:
         fail(str(exc))
-    commit, dirty = code_version(ctx.root)
     cache_files, cache_bytes = originals_cache(ctx.data, ctx.spec).stats()
     performance = build_performance(
         timings,
@@ -368,6 +444,8 @@ def run_analyze(ctx: Context, *, seed: int, per_source: int, out: Path, reports:
             ),
             "performance": performance,
             "artifacts": digests,
+            "robustness": check,
+            "provenance": provenance,
         }
     )
     write_audit(out / AUDIT, audit)
@@ -449,6 +527,7 @@ def analyze_command(
     seed: SeedOption = 0,
     out: OutOption = None,
     reports: ReportsOption = None,
+    robustness_model: RobustnessOption = None,
     data_dir: DataDirOption = None,
     repo_root: RepoRootOption = None,
 ) -> None:
@@ -460,6 +539,7 @@ def analyze_command(
         per_source=per_source,
         out=out or ctx.root / ARTIFACTS,
         reports=reports or ctx.root / REPORTS,
+        robustness_model=robustness_model,
     )
 
 
@@ -517,6 +597,7 @@ def run_command(
     workers: Annotated[int, typer.Option("--workers", min=1, help="Decoder threads.")] = 2,
     out: OutOption = None,
     reports: ReportsOption = None,
+    robustness_model: RobustnessOption = None,
     data_dir: DataDirOption = None,
     repo_root: RepoRootOption = None,
 ) -> None:
@@ -528,6 +609,11 @@ def run_command(
     )
     run_synthetic(ctx, per_source=per_source, seed=seed, batch_size=batch_size, threads=threads)
     run_analyze(
-        ctx, seed=seed, per_source=per_source, out=artifacts, reports=reports or ctx.root / REPORTS
+        ctx,
+        seed=seed,
+        per_source=per_source,
+        out=artifacts,
+        reports=reports or ctx.root / REPORTS,
+        robustness_model=robustness_model,
     )
     run_review(ctx, artifacts=artifacts, target=ctx.data / "m3" / "review")

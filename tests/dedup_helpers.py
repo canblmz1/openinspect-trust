@@ -17,7 +17,9 @@ import numpy as np
 from numpy.typing import NDArray
 from PIL import Image
 
+from openinspect.dedup.analysis import Settings, settings_from_config
 from openinspect.dedup.compute import FeatureSet
+from openinspect.dedup.config import load_config
 from openinspect.dedup.embedder import EmbedderSpec
 from openinspect.dedup.inventory import ImageItem
 from openinspect.dedup.synthetic import SyntheticPair
@@ -25,6 +27,13 @@ from openinspect.ingest.imaging import dhash64
 from openinspect.provenance.records import ImageRecord
 
 DIM = 24
+REPO_ROOT = Path(__file__).resolve().parents[1]
+
+
+def repository_settings(*, permutations: int = 1000, resamples: int = 1000) -> Settings:
+    """Audit settings with the pools and key names of the repository's ``configs/dedup.yaml``."""
+    base = Settings(permutations=permutations, resamples=resamples)
+    return settings_from_config(load_config(REPO_ROOT), base)
 
 
 def make_spec(
@@ -101,8 +110,8 @@ def write_items(data_dir: Path, source: str, specs: list[Spec]) -> list[ImageIte
                 path=path,
                 sha256=hashlib.sha256(data).hexdigest(),
                 split=spec.split,
-                group=spec.group,
-                subgroup=spec.subgroup,
+                group_id=spec.group,
+                subgroup_id=spec.subgroup,
                 n_annotations=spec.n_annotations,
                 dhash=int(dhash64(spec.image), 16),
                 width=spec.image.width,
@@ -133,8 +142,8 @@ def write_records(data_dir: Path, source: str, items: list[ImageItem]) -> None:
             mode="RGB",
             dhash=f"{item.dhash:016x}" if item.dhash is not None else None,
             original_split=item.split,  # type: ignore[arg-type]
-            source_group_id=item.group,
-            source_subgroup_id=item.subgroup,
+            source_group_id=item.group_id,
+            source_subgroup_id=item.subgroup_id,
             n_annotations=item.n_annotations,
             annotation_source="coco",
         )
@@ -152,8 +161,8 @@ def corrupt_copy(item: ImageItem) -> ImageItem:
         path=item.path,
         sha256=hashlib.sha256(data).hexdigest(),
         split=item.split,
-        group=item.group,
-        subgroup=item.subgroup,
+        group_id=item.group_id,
+        subgroup_id=item.subgroup_id,
         n_annotations=item.n_annotations,
         dhash=item.dhash,
         width=None,

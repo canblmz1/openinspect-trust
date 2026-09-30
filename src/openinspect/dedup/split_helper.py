@@ -1,9 +1,16 @@
-"""A group-aware split for measurement (M3G); not the release split (that is M5).
+"""Group-aware and source-held-out assignments for measurement (M3G); not the release splits (M5).
 
-``group_aware_split`` assigns whole groups to splits so that the image counts follow the wanted
-ratios as closely as the group sizes allow. It is used to *measure* what a split without leakage
-groups would look like (for example for DsPCBSD+), and to test the invariant that no group, and no
-source, is ever cut by a split boundary.
+Two different guarantees, kept apart on purpose:
+
+* ``group_aware_split`` assigns whole groups to splits so that the image counts follow the wanted
+  ratios as closely as the group sizes allow. It guarantees **group integrity** (no group is cut
+  by a split boundary) and nothing else: it does not know which source an item comes from, so a
+  source's items can land in every split.
+* ``leave_one_source_out`` guarantees **source integrity**: every item of the held-out source is
+  in ``test`` and no other item is.
+
+M3 uses the first to measure what a split without similarity groups across its boundary would
+look like; the source-held-out evaluation (split B) is built from the second.
 """
 
 from __future__ import annotations
@@ -23,11 +30,12 @@ def group_aware_split(
     *,
     seed: int = 0,
 ) -> list[str]:
-    """Split name for every item; all items of a group get the same split.
+    """Split name for every item; all items of a group get the same split (group integrity only).
 
     ``group_of[i]`` is the group id of item ``i`` (singletons are groups of one). Groups are placed
     largest first into the split with the largest remaining deficit, ties broken by a seeded shuffle,
-    so the result is a pure function of the inputs.
+    so the result is a pure function of the inputs. Sources are not an input: to keep a source
+    whole, use :func:`leave_one_source_out` (or make the source part of the group id).
     """
     if not ratios or any(r <= 0 for r in ratios.values()):
         raise SplitError("ratios must be positive")

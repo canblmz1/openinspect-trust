@@ -8,7 +8,6 @@ from openinspect.dedup.analysis import (
     AnalysisError,
     AnalysisResult,
     Neighbours,
-    Settings,
     allocate,
     candidate_pairs,
     category_counts,
@@ -25,15 +24,18 @@ from openinspect.dedup.analysis import (
     source_graphs,
     sweep_grid,
     sweep_labels,
+    synthetic_recall,
     synthetic_summary,
 )
 from openinspect.dedup.audit_models import Audit, LevelResult
+from openinspect.dedup.calibrate import NBINS, bin_of, curve_from_histograms
 from openinspect.dedup.compute import FeatureSet
 from openinspect.dedup.graph import GraphError, collect_edges, components
 from openinspect.dedup.inventory import Unreadable
 from openinspect.dedup.leakage import SourceLeakage
-from openinspect.dedup.thresholds import CATEGORIES
-from tests.dedup_helpers import Clustered, clustered_features, make_spec
+from openinspect.dedup.synthetic import SyntheticPair
+from openinspect.dedup.thresholds import CATEGORIES, PoolCurve, select_thresholds
+from tests.dedup_helpers import Clustered, clustered_features, make_spec, repository_settings
 
 SPEC = make_spec(dim=16)
 
@@ -52,7 +54,7 @@ def result(clustered: Clustered) -> AnalysisResult:
         spec=SPEC,
         weights_sha256="0" * 64,
         skipped=skipped,
-        settings=Settings(permutations=200, resamples=200),
+        settings=repository_settings(permutations=200, resamples=200),
     )
 
 
@@ -178,7 +180,14 @@ def test_the_review_queue_is_seeded_stratified_and_bounded(
     assert len(queue) == 300
     assert len({r.pair_id for r in queue}) == 300
     assert len({(r.i, r.j) for r in queue}) == 300
-    assert any(r.suggested_category == CONTROL for r in queue)
+    assert any(r.machine_category == CONTROL for r in queue)
+    strata = {r.stratum for r in queue}
+    # the four axes: scope, the rule's band, the split relation and the metadata relation
+    assert all(len(s.split("|")) == 4 for s in strata)
+    assert any(s.endswith("|cross-split|other-group") for s in strata)
+    assert any(s.endswith("|same-group") for s in strata)
+    assert any("|no-split|" in s for s in strata)
+    assert any(s.startswith("across|") for s in strata)
     again = review_queue(
         clustered.features,
         result.pairs,
@@ -220,7 +229,7 @@ def test_the_same_inputs_give_the_same_audit(clustered: Clustered, result: Analy
         spec=SPEC,
         weights_sha256="0" * 64,
         skipped=[Unreadable("pcb-ind", "YOLO/broken.jpg", "f" * 64, "ingest", "truncated")],
-        settings=Settings(permutations=200, resamples=200),
+        settings=repository_settings(permutations=200, resamples=200),
     )
     assert again.audit == result.audit
 
@@ -359,3 +368,74 @@ def test_synthetic_summary_and_control_pairs(clustered: Clustered, result: Analy
     )
     assert (real.cosine < result.audit.thresholds.review).all()
     assert (real.category == -1).all()
+
+
+def test_a_family_threshold_above_the_synthetic_one_lowers_the_achieved_recall() -> None:
+    # the labelled pool puts family near 0.85; the synthetic copies of "s" spread from 0.70 to 0.99
+    pos = np.zeros(NBINS, dtype=np.int64)
+    neg = np.zeros(NBINS, dtype=np.int64)
+    pos[bin_of(0.95)] = 100
+    neg[bin_of(0.85)] = 1000
+    curve = PoolCurve("pool-source", "g", True, curve_from_histograms(pos, neg))
+    cosines = np.linspace(0.70, 0.99, 100)
+    synthetic = [
+        SyntheticPair("s", f"{k}.png", f"{k:064x}", "blur", "photometric", True, float(c), 1, 1)
+        for k, c in enumerate(cosines)
+    ]
+    thresholds = select_thresholds([curve], synthetic, model="stub")
+    (source,) = thresholds.from_synthetic
+    assert source.near < thresholds.family  # the copies alone would allow a lower threshold
+    assert thresholds.near == thresholds.family  # the rule takes the larger value
+    (row,) = synthetic_recall(synthetic, thresholds)
+    assert row.target_recall == 0.95
+    assert row.source_threshold == source.near
+    assert row.final_near_threshold == thresholds.near
+    assert row.n_pairs == 100
+    assert row.achieved_recall == pytest.approx(float((cosines >= thresholds.near).mean()))
+    assert row.achieved_recall < 0.95
+    assert row.meets_target is False
+
+
+def test_the_achieved_recall_is_reported_where_the_target_holds(result: AnalysisResult) -> None:
+    rows = {row.source: row for row in result.audit.synthetic_recall}
+    assert set(rows) == {"dspcbsd-plus", "pcb-defect", "pcb-ind"}
+    t = result.audit.thresholds
+    assert all(row.final_near_threshold == t.near for row in rows.values())
+    assert all(row.meets_target and row.achieved_recall >= 0.95 for row in rows.values())
+    lowest = min(rows.values(), key=lambda row: row.source_threshold)
+    assert lowest.source_threshold == pytest.approx(t.near)  # near came from this source
+
+
+def test_components_report_their_chaining(result: AnalysisResult) -> None:
+    for level in result.audit.levels:
+        for cohesion in level.cohesion:
+            assert cohesion.chaining_gap is not None
+            assert cohesion.chaining_gap.minimum >= -1e-6  # the weakest edge is a member pair
+            sizes = [c.size for c in cohesion.largest]
+            assert sizes == sorted(sizes, reverse=True)
+            assert len(cohesion.largest) == min(5, cohesion.groups)
+            for component in cohesion.largest:
+                assert component.chaining_gap == pytest.approx(
+                    component.edge_min_similarity - component.all_pairs_min_similarity, abs=2e-6
+                )
+                assert component.edge_min_similarity >= level.threshold - 1e-6
+
+
+def test_every_pool_has_both_uncertainty_intervals(result: AnalysisResult) -> None:
+    for pool in result.audit.pools:
+        assert [u.metric for u in pool.uncertainty] == [
+            "ROC AUC",
+            "average precision",
+            "precision at family",
+            "recall at family",
+        ]
+        assert pool.negative_units is not None
+        assert pool.negative_units >= 2
+        auc_check = pool.uncertainty[0]
+        assert auc_check.primary is not None
+        assert auc_check.both_sides is not None
+        if auc_check.primary.high > auc_check.primary.low:
+            assert auc_check.width_ratio is not None
+            assert auc_check.width_ratio > 0
+        else:  # a zero-width interval has no ratio
+            assert auc_check.width_ratio is None

@@ -11,7 +11,16 @@ from PIL import ImageEnhance
 
 from openinspect.dedup.embedder import EmbedderSpec
 from openinspect.dedup.perf import read_runs
-from openinspect.dedup.tables import AUDIT, GROUPS, NEIGHBOURS, PAIRS, REVIEW, read_audit
+from openinspect.dedup.tables import (
+    AUDIT,
+    GROUPS,
+    NEIGHBOURS,
+    PAIRS,
+    REVIEW,
+    SYNTHETIC_RECALL,
+    THRESHOLDS,
+    read_audit,
+)
 from tests.conftest import Repo
 from tests.dedup_helpers import (
     Spec,
@@ -37,6 +46,28 @@ models:
     weights_sha256: "0000000000000000000000000000000000000000000000000000000000000000"
     dim: 24
     licence: Apache-2.0
+  stub2:
+    model_id: stub/model
+    revision: "1111111111111111111111111111111111111111"
+    weights_file: model.safetensors
+    weights_sha256: "1111111111111111111111111111111111111111111111111111111111111111"
+    dim: 24
+    licence: Apache-2.0
+sources:
+  dspcbsd-plus:
+    acquisition_id: line-a
+  pcb-ind:
+    acquisition_id: line-a
+    group_id: batch
+    subgroup_id: (batch, side)
+    pools:
+      - {name: "(batch, side)", positive: subgroup_id, negative: group_id, used_in_rule: true}
+  pcb-defect:
+    acquisition_id: scanner
+    group_id: family
+    subgroup_id: (A, B)
+    pools:
+      - {name: "family A", positive: group_id, negative: group_id, used_in_rule: true}
 """
 
 
@@ -144,7 +175,8 @@ def test_the_audit_runs_stage_by_stage(setup: Setup) -> None:
     audit = read_audit(out / AUDIT)
     assert audit.run.images == 100
     assert audit.run.code_commit is None  # the throw-away repository is not a git repository
-    assert set(audit.artifacts) == {PAIRS, NEIGHBOURS, GROUPS, REVIEW}
+    assert set(audit.artifacts) == {PAIRS, NEIGHBOURS, GROUPS, REVIEW, THRESHOLDS, SYNTHETIC_RECALL}
+    assert [row.source for row in audit.synthetic_recall] == list(SOURCES)
     assert audit.performance is not None
     stages = [s.stage for s in audit.performance.stages]
     assert stages[:2] == ["embeddings (cache build)", "synthetic copies"]
@@ -236,3 +268,30 @@ def test_an_embedder_for_another_model_is_refused(
     result = setup.cli("features", "pcb-defect")
     assert result.exit_code == 1
     assert "does not match" in result.output
+
+
+def test_a_second_representation_is_compared(setup: Setup) -> None:
+    out, reports = setup.tmp / "artifacts", setup.tmp / "reports"
+    args = ["--all", "--per-source", "2", "--out", str(out), "--reports", str(reports)]
+    assert setup.cli("features", "--all").exit_code == 0
+    assert setup.cli("synthetic", "--all", "--per-source", "2").exit_code == 0
+    missing = setup.cli("analyze", *args, "--robustness-model", "stub2")
+    assert missing.exit_code == 1
+    assert "no embedding in the cache" in missing.output
+    unknown = setup.cli("analyze", *args, "--robustness-model", "nothing")
+    assert unknown.exit_code == 1
+    assert "unknown model" in unknown.output
+    assert setup.cli("features", "--all", "--model", "stub2").exit_code == 0
+    assert setup.cli("synthetic", "--all", "--per-source", "2", "--model", "stub2").exit_code == 0
+    result = setup.cli("analyze", *args, "--robustness-model", "stub2")
+    assert result.exit_code == 0, result.output
+    audit = read_audit(out / AUDIT)
+    assert audit.robustness is not None
+    assert audit.robustness.other_model == "stub/model@111111111111"
+    assert [p.source for p in audit.provenance] == list(SOURCES)
+    assert audit.performance is not None
+    assert any(s.stage == "robustness (stub2)" for s in audit.performance.stages)
+    text = (reports / "representation-robustness.md").read_text(encoding="utf-8")
+    assert "same under both representations for" in text
+    assurance = (reports / "dataset-assurance.md").read_text(encoding="utf-8")
+    assert "Assessment of the pool" in assurance

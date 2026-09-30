@@ -1,9 +1,9 @@
-"""The audit configuration (``configs/dedup.yaml``): pinned model weights and preprocessing."""
+"""The audit configuration (``configs/dedup.yaml``): pinned models, preprocessing, and what each source's keys mean."""
 
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Annotated
+from typing import Annotated, Literal
 
 import yaml
 from pydantic import Field, ValidationError, model_validator
@@ -31,12 +31,38 @@ class Preprocessing(StrictModel):
     version: str = Field(min_length=1)
 
 
+KeyName = Literal["group_id", "subgroup_id"]
+
+
+class PoolConfig(StrictModel):
+    """A calibration pool: pairs sharing ``positive`` are positives, pairs differing in ``negative`` negatives."""
+
+    name: str = Field(min_length=1)
+    positive: KeyName
+    negative: KeyName
+    used_in_rule: bool
+
+
+class SourceConfig(StrictModel):
+    """What a source's generic keys mean, and which of its pairs calibrate the thresholds.
+
+    The audit's algorithms only know ``group_id`` and ``subgroup_id``; the names here are what the
+    ingest adapter put into them for this source, and appear in the reports.
+    """
+
+    acquisition_id: str | None = None  # the kind of acquisition, shared by sources of one kind
+    group_id: str | None = None  # meaning of group_id for this source, if it has one
+    subgroup_id: str | None = None
+    pools: list[PoolConfig] = Field(default_factory=list)
+
+
 class DedupConfig(StrictModel):
     schema_version: int
     preprocessing: Preprocessing
     backend: str = Field(min_length=1)
     default_model: str
     models: dict[str, ModelEntry]
+    sources: dict[str, SourceConfig] = Field(default_factory=dict)
 
     @model_validator(mode="after")
     def _default_exists(self) -> DedupConfig:

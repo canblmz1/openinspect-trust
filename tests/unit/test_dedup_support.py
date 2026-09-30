@@ -59,21 +59,22 @@ def review_row(pair_id: str, a: str, b: str, source: str = "src") -> dict[str, s
     row.update(
         {
             "pair_id": pair_id,
-            "stratum": f"within:{source}|NEAR_DUPLICATE",
-            "suggested_category": "NEAR_DUPLICATE",
+            "stratum": f"within:{source}|NEAR_DUPLICATE|cross-split|same-group",
+            "source": source,
+            "machine_category": "NEAR_DUPLICATE",
             "cosine": "0.990000",
             "phash_distance": "2",
             "dhash_distance": "3",
             "source_a": source,
             "image_a": a,
             "split_a": "train",
-            "group_a": "g1",
-            "subgroup_a": "g1_b",
+            "metadata_group_a": "g1",
+            "metadata_subgroup_a": "g1_b",
             "source_b": source,
             "image_b": b,
             "split_b": "val",
-            "group_near": "VSG-near-00001",
-            "group_family": "VSG-family-00001",
+            "component_near": "VSG-near-00001",
+            "component_family": "VSG-family-00001",
         }
     )
     return row
@@ -95,7 +96,8 @@ def test_the_review_pack_embeds_both_images_and_marks_missing_ones(tmp_path: Pat
             "sources": ["src"],
             "members": ["src:a.png", "src:b.png", "src:c.png"],
             "splits": ["src:train"],
-            "min_similarity": 0.93,
+            "all_pairs_min_similarity": 0.93,
+            "chaining_gap": 0.01,
         },
     ]
     path = write_review_pack(rows, [items[0], items[1], broken], tmp_path / "pack", groups=groups)
@@ -332,8 +334,8 @@ def test_load_items_lists_undecodable_images_apart(tmp_path: Path) -> None:
     records.write_text("\n".join([*lines, bad.model_dump_json()]) + "\n", encoding="utf-8")
     loaded, skipped = load_items(tmp_path, ["src"])
     assert [item.item_id for item in loaded] == ["a.png", "b.png"]
-    assert loaded[1].group == "g"
-    assert loaded[1].subgroup == "g_1"
+    assert loaded[1].group_id == "g"
+    assert loaded[1].subgroup_id == "g_1"
     assert loaded[1].dhash is not None
     assert [(s.item_id, s.stage, s.error) for s in skipped] == [
         ("broken.png", "ingest", "truncated")

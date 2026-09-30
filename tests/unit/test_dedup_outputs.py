@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import re
 from pathlib import Path
 
@@ -8,7 +9,7 @@ import pyarrow.parquet as pq
 import pytest
 from defusedxml import ElementTree
 
-from openinspect.dedup.analysis import AnalysisResult, PairTable, Settings, run_analysis
+from openinspect.dedup.analysis import AnalysisResult, PairTable, run_analysis
 from openinspect.dedup.audit_models import Audit
 from openinspect.dedup.leakage import PermutationBaseline
 from openinspect.dedup.perf import StageTiming, build_performance
@@ -28,14 +29,16 @@ from openinspect.dedup.tables import (
     PAIRS,
     REVIEW,
     REVIEW_COLUMNS,
+    SYNTHETIC_RECALL,
+    THRESHOLDS,
     pairs_table,
     read_audit,
     read_review,
     write_artifacts,
     write_audit,
 )
-from openinspect.dedup.thresholds import CATEGORIES
-from tests.dedup_helpers import Clustered, clustered_features, make_spec
+from openinspect.dedup.thresholds import CATEGORIES, Thresholds
+from tests.dedup_helpers import Clustered, clustered_features, make_spec, repository_settings
 
 
 @pytest.fixture(scope="module")
@@ -50,7 +53,7 @@ def result(clustered: Clustered) -> AnalysisResult:
         clustered.synthetic,
         spec=make_spec(dim=16),
         weights_sha256="0" * 64,
-        settings=Settings(permutations=100, resamples=100),
+        settings=repository_settings(permutations=100, resamples=100),
     )
 
 
@@ -92,7 +95,12 @@ def test_artifacts_are_readable_complete_and_deterministic(
     first = write_artifacts(tmp_path / "a", clustered.features, result)
     second = write_artifacts(tmp_path / "b", clustered.features, result)
     assert first == second  # same inputs, same bytes
-    assert set(first) == {PAIRS, NEIGHBOURS, GROUPS, REVIEW}
+    assert set(first) == {PAIRS, NEIGHBOURS, GROUPS, REVIEW, THRESHOLDS, SYNTHETIC_RECALL}
+    thresholds = Thresholds.model_validate_json((tmp_path / "a" / THRESHOLDS).read_text("utf-8"))
+    assert thresholds == result.audit.thresholds
+    recall = json.loads((tmp_path / "a" / SYNTHETIC_RECALL).read_text("utf-8"))
+    assert [row["source"] for row in recall] == ["dspcbsd-plus", "pcb-defect", "pcb-ind"]
+    assert all(row["final_near_threshold"] == thresholds.near for row in recall)
     pairs = pq.read_table(tmp_path / "a" / PAIRS).to_pylist()
     assert len(pairs) == len(result.pairs.i)
     assert {row["decision"] for row in pairs} == {"review"}
@@ -112,7 +120,8 @@ def test_artifacts_are_readable_complete_and_deterministic(
     review = read_review(tmp_path / "a" / REVIEW)
     assert len(review) == len(result.review)
     assert tuple(review[0]) == REVIEW_COLUMNS
-    assert {row["reviewer_decision"] for row in review} == {""}
+    assert {row["human_decision"] for row in review} == {""}
+    assert {row["human_notes"] for row in review} == {""}
     assert (tmp_path / "a" / REVIEW).read_bytes().count(b"\r") == 0
 
 
@@ -163,9 +172,9 @@ def test_every_report_and_figure_is_rendered_and_linked(result: AnalysisResult) 
     assert linked == figures
     for name in REPORTS:
         text = files[name]
-        assert "not proof that two images show the same physical board" in text
+        assert "not proof that two images show the same physical object" in text
         assert "`aaaaaaaaaaaa` with uncommitted changes" in text
-        assert "same board" not in text.replace("same physical board", "")
+        assert "near-duplicate group" not in text  # a component is a potential leakage group
 
 
 def test_the_reports_state_the_numbers_of_the_audit(result: AnalysisResult) -> None:
@@ -183,8 +192,16 @@ def test_the_reports_state_the_numbers_of_the_audit(result: AnalysisResult) -> N
     assert "never reached" in calibration  # pcb-defect misses precision 0.90
     assert "## Synthetic positives" in calibration
     comparison = files["source-comparison.md"]
-    assert "production-batch key against DINOv2 groups" in comparison
-    assert "not run in M3" in comparison
+    assert "`pcb-ind`: its own keys (batch; (batch, side)) against DINOv2 components" in comparison
+    assert "`dspcbsd-plus`: is there a latent grouping?" in comparison
+    assert "second representation: not run" in comparison
+    assert "## Largest visual similarity components" in comparison
+    assert "## Synthetic recall at the final near threshold" in calibration
+    assert "## Uncertainty: the protocol's bootstrap and a both-sides check" in calibration
+    assert "## The sources' own keys across the splits" in leakage
+    assert "Not run" in files["representation-robustness.md"]
+    assert "No scalar score is given" in files["dataset-assurance.md"]
+    assert "Leakage is not a score" in files["limitations.md"]
     performance = files["performance.md"]
     assert "embeddings (cache build)" in performance
     assert "b" * 64 in performance
