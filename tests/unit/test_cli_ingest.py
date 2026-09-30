@@ -79,6 +79,8 @@ def test_download_extract_inspect_run_and_report(
     assert (dirs.raw / "PCB_Defect.zip").read_bytes() == setup.payload
     record = setup.repo.root / "manifests" / "ingest" / "pcb-defect" / "download.json"
     first_record = record.read_bytes()
+    assert first_record.endswith(b"}\n")
+    assert b"\r" not in first_record  # LF on every platform, so the file hashes the same everywhere
     manifest = load_registry(setup.repo.root).get("pcb-defect")
     assert manifest is not None
     assert manifest.manifest.acquisition.download_date is not None

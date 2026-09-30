@@ -167,7 +167,8 @@ def _write_download_record(root: Path, slug: str, records: list[DownloadRecord])
         return  # nothing new happened: keep the original record (and its timestamps)
     path.parent.mkdir(parents=True, exist_ok=True)
     payload = {"slug": slug, "files": [r.as_dict() for r in records]}
-    path.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    text = json.dumps(payload, indent=2, sort_keys=True) + "\n"
+    path.write_bytes(text.encode("utf-8"))  # LF on every platform, like the other reports
 
 
 # ---------------------------------------------------------------------------------- extract
