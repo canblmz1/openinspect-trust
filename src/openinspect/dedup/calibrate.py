@@ -25,7 +25,8 @@ from openinspect.dedup.hashing import hamming_block
 from openinspect.dedup.similarity import DEFAULT_CHUNK, iter_upper_blocks
 
 NBINS = 4000  # cosine in [-1, 1], bin width 0.0005
-COARSE = 8  # fine bins per coarse bin (bootstrap resolution 0.004)
+# Fine bins per bootstrap bin: 1, so an interval refers to the same threshold as its estimate.
+COARSE = 1
 
 # The selection rule (frozen before any leakage number was computed; docs/M3_PROTOCOL.md).
 PRECISION_REVIEW = 0.50
@@ -186,7 +187,12 @@ def average_precision(curve: Curve) -> float | None:
 
 
 def bin_of(threshold: float, nbins: int = NBINS) -> int:
-    return int(np.clip(np.floor((threshold + 1.0) * (nbins / 2.0)), 0, nbins - 1))
+    """The bin whose lower edge is the largest one at or below ``threshold``.
+
+    The small offset absorbs rounding: ``threshold_of`` gives decimal edges such as 0.9235 that
+    are not exact in binary, and without it about one edge in seven maps to the bin below.
+    """
+    return int(np.clip(np.floor((threshold + 1.0) * (nbins / 2.0) + 1e-6), 0, nbins - 1))
 
 
 def threshold_of(bin_index: int, nbins: int = NBINS) -> float:
@@ -284,7 +290,8 @@ def bootstrap_positive_groups(
     rng = np.random.default_rng(seed)
     neg_coarse = histograms.negative.reshape(-1, COARSE).sum(axis=1)
     weights = rng.multinomial(len(groups), np.full(len(groups), 1.0 / len(groups)), size=resamples)
-    pos_boot = weights @ groups  # (resamples, coarse bins)
+    # float64 so the product runs in BLAS; the counts stay exact far below 2**53
+    pos_boot = weights.astype(np.float64) @ groups.astype(np.float64)  # (resamples, bins)
     coarse_bins = NBINS // COARSE
     target = bin_of(threshold, NBINS) // COARSE
     aucs = np.full(resamples, np.nan)

@@ -1,9 +1,15 @@
-"""``openinspect dedup features | ...``: the duplicate and leakage audit (Milestone 3)."""
+"""``openinspect dedup features | synthetic | analyze | review | report | run`` (Milestone 3).
+
+The audit detects, groups, measures and reports; it never deletes, excludes or re-labels an image.
+Heavy inputs (embedding cache, synthetic copies, the HTML review pack) stay in the data directory;
+the repository receives the small artifacts (``artifacts/m3``) and the reports (``reports/m3``).
+"""
 
 from __future__ import annotations
 
 import os
 import random
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Annotated
 
@@ -19,9 +25,10 @@ from openinspect.cli.common import (
     select_sources,
     setup,
 )
+from openinspect.dedup.analysis import AnalysisError, Settings, run_analysis
 from openinspect.dedup.cache import EmbeddingCache
-from openinspect.dedup.compute import ComputeError, HashStore, compute_features
-from openinspect.dedup.config import ConfigError, load_config
+from openinspect.dedup.compute import ComputeError, FeatureSet, HashStore, compute_features
+from openinspect.dedup.config import ConfigError, ModelEntry, load_config
 from openinspect.dedup.embedder import (
     Embedder,
     EmbedderError,
@@ -29,14 +36,48 @@ from openinspect.dedup.embedder import (
     load_dinov2,
     spec_from_config,
 )
+from openinspect.dedup.features import DecodeError
+from openinspect.dedup.graph import GraphError
 from openinspect.dedup.hashing import PHASH_VERSION
-from openinspect.dedup.inventory import ImageItem, InventoryError, load_items
-from openinspect.dedup.perf import StageTiming, timed
+from openinspect.dedup.inventory import ImageItem, InventoryError, Unreadable, load_items
+from openinspect.dedup.perf import (
+    StageTiming,
+    append_run,
+    build_performance,
+    code_version,
+    cpu_name,
+    read_runs,
+    timed,
+)
+from openinspect.dedup.report import write_reports
+from openinspect.dedup.review import ReviewError, write_review_pack
+from openinspect.dedup.synthetic import (
+    SyntheticError,
+    SyntheticPair,
+    compute_synthetic,
+    read_pairs,
+    sample_for_synthetic,
+    write_pairs,
+)
+from openinspect.dedup.tables import (
+    AUDIT,
+    REVIEW,
+    read_audit,
+    read_review,
+    write_artifacts,
+    write_audit,
+)
+from openinspect.dedup.thresholds import CalibrationError
+from openinspect.dedup.transforms import TRANSFORMS
 
 dedup_app = typer.Typer(
     help="Duplicate and leakage audit: hashes, embeddings, similarity groups, review packs.",
     no_args_is_help=True,
 )
+
+SYNTHETIC_PER_SOURCE = 100  # docs/M3_PROTOCOL.md section 5
+ARTIFACTS = Path("artifacts") / "m3"
+REPORTS = Path("reports") / "m3"
 
 ModelOption = Annotated[
     str | None,
@@ -48,13 +89,58 @@ SampleOption = Annotated[
         "--sample", min=1, help="Seeded random sample of N images per source (smoke runs)."
     ),
 ]
+SeedOption = Annotated[int, typer.Option("--seed", help="Seed of every sampled step.")]
+PerSourceOption = Annotated[
+    int, typer.Option("--per-source", min=1, help="Images per source for the synthetic copies.")
+]
+BatchOption = Annotated[int, typer.Option("--batch-size", min=1)]
+ThreadsOption = Annotated[int | None, typer.Option("--threads", min=1, help="Torch threads.")]
+OutOption = Annotated[
+    Path | None,
+    typer.Option("--out", file_okay=False, help="Artifact folder (default: artifacts/m3)."),
+]
+ReportsOption = Annotated[
+    Path | None,
+    typer.Option("--reports", file_okay=False, help="Report folder (default: reports/m3)."),
+]
 
 
-def load_embedder_for(spec: EmbedderSpec, root: Path, data: Path, threads: int | None) -> Embedder:
+def load_embedder_for(  # pragma: no cover - needs torch and the pinned weights
+    spec: EmbedderSpec, root: Path, data: Path, threads: int | None
+) -> Embedder:
     """The embedding model of ``spec`` (hook for tests: they replace this with a stub)."""
     config = load_config(root)
     _, entry = config.model(spec.name)
-    return load_dinov2(spec, entry, data_dir=data, threads=threads)  # pragma: no cover
+    return load_dinov2(spec, entry, data_dir=data, threads=threads)
+
+
+def originals_cache(data: Path, spec: EmbedderSpec) -> EmbeddingCache:
+    return EmbeddingCache(
+        data,
+        model_key=spec.model_key,
+        preprocessing_version=spec.preprocessing_version,
+        backend=spec.backend,
+        dim=spec.dim,
+    )
+
+
+def synthetic_cache(data: Path, spec: EmbedderSpec) -> EmbeddingCache:
+    return EmbeddingCache(
+        data / "m3" / "synthetic",
+        model_key=spec.model_key,
+        preprocessing_version=spec.preprocessing_version,
+        backend=spec.backend,
+        dim=spec.dim,
+    )
+
+
+def synthetic_path(data: Path, spec: EmbedderSpec, seed: int, per_source: int) -> Path:
+    """The synthetic pairs of one model, preprocessing, backend, seed and sample size."""
+    return synthetic_cache(data, spec).directory / f"pairs-seed{seed}-n{per_source}.jsonl"
+
+
+def hash_store(data: Path) -> HashStore:
+    return HashStore(data / "m3" / "hashes" / f"{PHASH_VERSION}.jsonl")
 
 
 def sample_items(items: list[ImageItem], per_source: int | None, seed: int) -> list[ImageItem]:
@@ -72,47 +158,58 @@ def sample_items(items: list[ImageItem], per_source: int | None, seed: int) -> l
     return chosen
 
 
-@dedup_app.command("features")
-def features_command(
-    slugs: SlugsArgument = None,
-    all_sources: AllOption = False,
-    model: ModelOption = None,
-    sample: SampleOption = None,
-    seed: Annotated[int, typer.Option("--seed", help="Seed of --sample.")] = 0,
-    batch_size: Annotated[int, typer.Option("--batch-size", min=1)] = 32,
-    threads: Annotated[int | None, typer.Option("--threads", min=1, help="Torch threads.")] = None,
-    workers: Annotated[int, typer.Option("--workers", min=1, help="Decoder threads.")] = 2,
-    data_dir: DataDirOption = None,
-    repo_root: RepoRootOption = None,
-) -> None:
-    """Decode every image once; compute perceptual hashes and embeddings; cache both."""
+@dataclass(frozen=True)
+class Context:
+    root: Path
+    data: Path
+    spec: EmbedderSpec
+    entry: ModelEntry
+    items: list[ImageItem]
+    skipped: list[Unreadable]
+
+
+def context(
+    repo_root: Path | None,
+    data_dir: Path | None,
+    slugs: list[str] | None,
+    all_sources: bool,
+    model: str | None,
+) -> Context:
     root, data, registry = setup(repo_root, data_dir)
     selected = select_sources(registry, slugs, all_sources)
     try:
-        spec = spec_from_config(load_config(root), model)
+        config = load_config(root)
+        _, entry = config.model(model)
+        spec = spec_from_config(config, model)
         items, skipped = load_items(data, [lm.manifest.slug for lm in selected])
     except (ConfigError, InventoryError) as exc:
         fail(str(exc))
-    items = sample_items(items, sample, seed)
-    cache = EmbeddingCache(
-        data,
-        model_key=spec.model_key,
-        preprocessing_version=spec.preprocessing_version,
-        backend=spec.backend,
-        dim=spec.dim,
-    )
-    hashes = HashStore(data / "m3" / "hashes" / f"{PHASH_VERSION}.jsonl")
+    return Context(root, data, spec, entry, items, skipped)
+
+
+def run_features(
+    ctx: Context,
+    *,
+    batch_size: int,
+    threads: int | None,
+    workers: int,
+    sample: int | None,
+    seed: int,
+) -> FeatureSet:
+    items = sample_items(ctx.items, sample, seed)
     timings: list[StageTiming] = []
-    log(f"{len(items):,} images, model {spec.name} ({spec.model_key}), backend {spec.backend}")
+    log(
+        f"{len(items):,} images, model {ctx.spec.name} ({ctx.spec.model_key}), backend {ctx.spec.backend}"
+    )
     try:
         with timed("features", timings):
             result = compute_features(
                 items,
-                spec=spec,
-                cache=cache,
-                hashes=hashes,
+                spec=ctx.spec,
+                cache=originals_cache(ctx.data, ctx.spec),
+                hashes=hash_store(ctx.data),
                 make_embedder=lambda: load_embedder_for(
-                    spec, root, data, threads or os.cpu_count()
+                    ctx.spec, ctx.root, ctx.data, threads or os.cpu_count()
                 ),
                 batch_size=batch_size,
                 workers=workers,
@@ -123,21 +220,304 @@ def features_command(
     stats = result.stats
     if stats is None:  # pragma: no cover - compute_features always returns stats
         fail("no statistics")
-    rate = stats.images_per_second
+    peak = timings[-1].peak_ram_bytes
+    append_run(
+        ctx.data,
+        "features",
+        {
+            "model_key": ctx.spec.model_key,
+            "items": stats.items,
+            "unique": stats.unique_images,
+            "cache_hits": stats.cache_hits,
+            "embedded": stats.embedded,
+            "failed": stats.failed,
+            "wall_seconds": round(stats.wall_seconds, 3),
+            "embed_seconds": round(stats.embed_seconds, 3),
+            "images_per_second": stats.images_per_second,
+            "model_images_per_second": stats.model_images_per_second,
+            "cache_files": stats.cache_files,
+            "cache_bytes": stats.cache_bytes,
+            "peak_ram_bytes": peak,
+            "batch_size": batch_size,
+            "threads": threads,
+            "workers": workers,
+            "cpu": cpu_name(),
+        },
+    )
     typer.echo(
         f"{stats.items:,} images ({stats.unique_images:,} distinct): {stats.cache_hits:,} from cache, "
-        f"{stats.embedded:,} embedded, {stats.failed} failed, {len(skipped)} undecodable at ingest"
+        f"{stats.embedded:,} embedded, {stats.failed} failed, {len(ctx.skipped)} undecodable at ingest"
     )
-    if rate is not None:
+    if stats.images_per_second is not None:
         typer.echo(
-            f"throughput {rate:.1f} images/s overall, {stats.model_images_per_second or 0:.1f} "
-            f"images/s in the model; wall {stats.wall_seconds:.0f} s"
+            f"throughput {stats.images_per_second:.1f} images/s overall, "
+            f"{stats.model_images_per_second or 0:.1f} images/s in the model; "
+            f"wall {stats.wall_seconds:.0f} s"
         )
     typer.echo(f"cache: {stats.cache_files:,} files, {stats.cache_bytes / 1e6:.1f} MB")
-    peak = timings[-1].peak_ram_bytes
     if peak is not None:
         typer.echo(f"peak RAM {peak / 1e9:.2f} GB")
     for failure in result.failures:
         typer.echo(
             f"FAILED {failure.source}:{failure.item_id} [{failure.stage}] {failure.error}", err=True
         )
+    return result
+
+
+def run_synthetic(
+    ctx: Context, *, per_source: int, seed: int, batch_size: int, threads: int | None
+) -> list[SyntheticPair]:
+    sample = sample_for_synthetic(ctx.items, per_source, seed)
+    cache = synthetic_cache(ctx.data, ctx.spec)
+    before, _ = cache.stats()
+    timings: list[StageTiming] = []
+    log(f"{len(sample):,} images x {len(TRANSFORMS)} transforms, model {ctx.spec.name}")
+    try:
+        with timed("synthetic", timings):
+            pairs = compute_synthetic(
+                sample,
+                originals=originals_cache(ctx.data, ctx.spec),
+                cache=cache,
+                spec=ctx.spec,
+                make_embedder=lambda: load_embedder_for(
+                    ctx.spec, ctx.root, ctx.data, threads or os.cpu_count()
+                ),
+                seed=seed,
+                batch_size=batch_size,
+                progress=log,
+            )
+    except (SyntheticError, EmbedderError, DecodeError) as exc:
+        fail(str(exc))
+    target = synthetic_path(ctx.data, ctx.spec, seed, per_source)
+    write_pairs(target, pairs)
+    after, size = cache.stats()
+    timing = timings[-1]
+    append_run(
+        ctx.data,
+        "synthetic",
+        {
+            "model_key": ctx.spec.model_key,
+            "images": len(sample),
+            "pairs": len(pairs),
+            "embedded": after - before,
+            "wall_seconds": round(timing.seconds, 3),
+            "peak_ram_bytes": timing.peak_ram_bytes,
+            "cache_files": after,
+            "cache_bytes": size,
+            "seed": seed,
+            "cpu": cpu_name(),
+        },
+    )
+    typer.echo(
+        f"{len(pairs):,} synthetic pairs from {len(sample):,} images: "
+        f"{after - before:,} copies embedded, {len(pairs) - (after - before):,} from cache; "
+        f"{timing.seconds:.0f} s"
+    )
+    typer.echo(f"cache: {after:,} files, {size / 1e6:.1f} MB; pairs: {target.name}")
+    if timing.peak_ram_bytes is not None:
+        typer.echo(f"peak RAM {timing.peak_ram_bytes / 1e9:.2f} GB")
+    return pairs
+
+
+def run_analyze(ctx: Context, *, seed: int, per_source: int, out: Path, reports: Path) -> None:
+    timings: list[StageTiming] = []
+    try:
+        with timed("load features", timings):
+            features = compute_features(
+                ctx.items,
+                spec=ctx.spec,
+                cache=originals_cache(ctx.data, ctx.spec),
+                hashes=hash_store(ctx.data),
+                make_embedder=None,
+            )
+        synthetic = read_pairs(synthetic_path(ctx.data, ctx.spec, seed, per_source))
+        log(f"{len(features.items):,} images with features, {len(synthetic):,} synthetic pairs")
+        result = run_analysis(
+            features,
+            synthetic,
+            spec=ctx.spec,
+            weights_sha256=ctx.entry.weights_sha256,
+            skipped=ctx.skipped,
+            settings=Settings(seed=seed),
+            timings=timings,
+        )
+        with timed("artifacts", timings):
+            digests = write_artifacts(out, features, result)
+    except (ComputeError, SyntheticError, AnalysisError, CalibrationError, GraphError) as exc:
+        fail(str(exc))
+    commit, dirty = code_version(ctx.root)
+    cache_files, cache_bytes = originals_cache(ctx.data, ctx.spec).stats()
+    performance = build_performance(
+        timings,
+        features_runs=[
+            r for r in read_runs(ctx.data, "features") if r.get("model_key") == ctx.spec.model_key
+        ],
+        synthetic_runs=[
+            r for r in read_runs(ctx.data, "synthetic") if r.get("model_key") == ctx.spec.model_key
+        ],
+        cache_files=cache_files,
+        cache_bytes=cache_bytes,
+        dim=ctx.spec.dim,
+    )
+    audit = result.audit.model_copy(
+        update={
+            "run": result.audit.run.model_copy(
+                update={"code_commit": commit, "code_dirty": dirty, "seed": seed}
+            ),
+            "performance": performance,
+            "artifacts": digests,
+        }
+    )
+    write_audit(out / AUDIT, audit)
+    written = write_reports(reports, audit)
+    thresholds = audit.thresholds
+    typer.echo(
+        f"thresholds: review {thresholds.review}, family {thresholds.family}, near {thresholds.near}, "
+        f"pHash <= {thresholds.phash_candidate}"
+    )
+    for note in result.notes:
+        typer.echo(f"note: {note}")
+    for name in sorted(digests):
+        typer.echo(f"{name}: {(out / name).stat().st_size / 1e6:.2f} MB")
+    typer.echo(f"reports: {len(written)} files in {reports.as_posix()}")
+
+
+def run_review(ctx: Context, *, artifacts: Path, target: Path) -> Path:
+    try:
+        rows = read_review(artifacts / REVIEW)
+        audit = read_audit(artifacts / AUDIT)
+        path = write_review_pack(rows, ctx.items, target, audit=audit)
+    except (OSError, ValueError, ReviewError) as exc:
+        fail(str(exc))
+    typer.echo(f"review pack: {len(rows):,} pairs in {path.as_posix()}")
+    return path
+
+
+@dedup_app.command("features")
+def features_command(
+    slugs: SlugsArgument = None,
+    all_sources: AllOption = False,
+    model: ModelOption = None,
+    sample: SampleOption = None,
+    seed: SeedOption = 0,
+    batch_size: BatchOption = 32,
+    threads: ThreadsOption = None,
+    workers: Annotated[int, typer.Option("--workers", min=1, help="Decoder threads.")] = 2,
+    data_dir: DataDirOption = None,
+    repo_root: RepoRootOption = None,
+) -> None:
+    """Decode every image once; compute perceptual hashes and embeddings; cache both."""
+    ctx = context(repo_root, data_dir, slugs, all_sources, model)
+    run_features(
+        ctx, batch_size=batch_size, threads=threads, workers=workers, sample=sample, seed=seed
+    )
+
+
+@dedup_app.command("synthetic")
+def synthetic_command(
+    slugs: SlugsArgument = None,
+    all_sources: AllOption = False,
+    model: ModelOption = None,
+    per_source: PerSourceOption = SYNTHETIC_PER_SOURCE,
+    seed: SeedOption = 0,
+    batch_size: BatchOption = 32,
+    threads: ThreadsOption = None,
+    data_dir: DataDirOption = None,
+    repo_root: RepoRootOption = None,
+) -> None:
+    """Embed seeded, mildly transformed copies of a sample of images (synthetic positives)."""
+    ctx = context(repo_root, data_dir, slugs, all_sources, model)
+    run_synthetic(ctx, per_source=per_source, seed=seed, batch_size=batch_size, threads=threads)
+
+
+@dedup_app.command("analyze")
+def analyze_command(
+    slugs: SlugsArgument = None,
+    all_sources: AllOption = False,
+    model: ModelOption = None,
+    per_source: PerSourceOption = SYNTHETIC_PER_SOURCE,
+    seed: SeedOption = 0,
+    out: OutOption = None,
+    reports: ReportsOption = None,
+    data_dir: DataDirOption = None,
+    repo_root: RepoRootOption = None,
+) -> None:
+    """Thresholds, similarity groups, split leakage, review queue; artifacts and reports (no model needed)."""
+    ctx = context(repo_root, data_dir, slugs, all_sources, model)
+    run_analyze(
+        ctx,
+        seed=seed,
+        per_source=per_source,
+        out=out or ctx.root / ARTIFACTS,
+        reports=reports or ctx.root / REPORTS,
+    )
+
+
+@dedup_app.command("review")
+def review_command(
+    slugs: SlugsArgument = None,
+    all_sources: AllOption = False,
+    out: OutOption = None,
+    target: Annotated[
+        Path | None,
+        typer.Option(
+            "--target",
+            file_okay=False,
+            help="Where the HTML pack goes (default: <data>/m3/review).",
+        ),
+    ] = None,
+    data_dir: DataDirOption = None,
+    repo_root: RepoRootOption = None,
+) -> None:
+    """A local HTML contact sheet of the review queue (images stay outside the repository)."""
+    ctx = context(repo_root, data_dir, slugs, all_sources, None)
+    run_review(
+        ctx, artifacts=out or ctx.root / ARTIFACTS, target=target or ctx.data / "m3" / "review"
+    )
+
+
+@dedup_app.command("report")
+def report_command(
+    out: OutOption = None,
+    reports: ReportsOption = None,
+    repo_root: RepoRootOption = None,
+) -> None:
+    """Re-render the reports from artifacts/m3/audit.json (no data directory needed)."""
+    from openinspect.provenance.registry import find_repo_root
+
+    root = repo_root.resolve() if repo_root is not None else find_repo_root()
+    source = (out or root / ARTIFACTS) / AUDIT
+    try:
+        audit = read_audit(source)
+    except (OSError, ValueError) as exc:
+        fail(f"cannot read {source.name}: {exc}")
+    written = write_reports(reports or root / REPORTS, audit)
+    typer.echo(f"reports: {len(written)} files")
+
+
+@dedup_app.command("run")
+def run_command(
+    slugs: SlugsArgument = None,
+    all_sources: AllOption = False,
+    model: ModelOption = None,
+    per_source: PerSourceOption = SYNTHETIC_PER_SOURCE,
+    seed: SeedOption = 0,
+    batch_size: BatchOption = 32,
+    threads: ThreadsOption = None,
+    workers: Annotated[int, typer.Option("--workers", min=1, help="Decoder threads.")] = 2,
+    out: OutOption = None,
+    reports: ReportsOption = None,
+    data_dir: DataDirOption = None,
+    repo_root: RepoRootOption = None,
+) -> None:
+    """features, synthetic, analyze and review in one go; cached work is not repeated."""
+    ctx = context(repo_root, data_dir, slugs, all_sources, model)
+    artifacts = out or ctx.root / ARTIFACTS
+    run_features(
+        ctx, batch_size=batch_size, threads=threads, workers=workers, sample=None, seed=seed
+    )
+    run_synthetic(ctx, per_source=per_source, seed=seed, batch_size=batch_size, threads=threads)
+    run_analyze(
+        ctx, seed=seed, per_source=per_source, out=artifacts, reports=reports or ctx.root / REPORTS
+    )
+    run_review(ctx, artifacts=artifacts, target=ctx.data / "m3" / "review")

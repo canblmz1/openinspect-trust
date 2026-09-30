@@ -5,6 +5,7 @@ The reports commit their figures as text, so diffs are readable and the output i
 
 from __future__ import annotations
 
+import math
 from collections.abc import Sequence
 from dataclasses import dataclass
 from html import escape
@@ -104,6 +105,92 @@ def line_chart(
             f'<line x1="{left + plot_w + 12}" y1="{legend_y - 4}" x2="{left + plot_w + 30}" '
             f'y2="{legend_y - 4}" stroke="{color}" stroke-width="2"{dash}/>'
             f'<text x="{left + plot_w + 35}" y="{legend_y}">{escape(item.name)}</text>'
+        )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n"
+
+
+@dataclass(frozen=True)
+class Bars:
+    """One series of a grouped bar chart: a value per category."""
+
+    name: str
+    values: Sequence[float]
+    color: str | None = None
+
+
+def _nice_max(value: float) -> float:
+    """A round axis maximum at or above ``value`` (1, 2 or 5 times a power of ten)."""
+    if value <= 0:
+        return 1.0
+    power = 10 ** math.floor(math.log10(value))
+    for step in (1, 2, 5, 10):
+        if value <= step * power:
+            return float(step * power)
+    return float(10 * power)  # pragma: no cover - the loop always returns
+
+
+def bar_chart(
+    title: str,
+    x_label: str,
+    y_label: str,
+    categories: Sequence[str],
+    bars: Sequence[Bars],
+    *,
+    y_max: float | None = None,
+    width: int = 640,
+    height: int = 400,
+) -> str:
+    """Grouped vertical bars starting at zero, with the value written above each bar."""
+    left, right, top, bottom = 64, 168, 34, 64
+    plot_w, plot_h = width - left - right, height - top - bottom
+    highest = max((v for b in bars for v in b.values), default=0.0)
+    y1 = y_max if y_max is not None else _nice_max(highest)
+    slot = plot_w / max(len(categories), 1)
+    bar_w = slot * 0.8 / max(len(bars), 1)
+
+    def py(y: float) -> float:
+        return top + plot_h - min(max(y, 0.0), y1) / y1 * plot_h
+
+    parts = [
+        f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {width} {height}" '
+        f'width="{width}" height="{height}" font-family="sans-serif" font-size="11">',
+        f'<rect width="{width}" height="{height}" fill="white"/>',
+        f'<text x="{left}" y="20" font-size="13" font-weight="bold">{escape(title)}</text>',
+    ]
+    for tick in _ticks(0.0, y1):
+        parts.append(
+            f'<line x1="{left}" y1="{py(tick):.1f}" x2="{left + plot_w}" y2="{py(tick):.1f}" stroke="#eee"/>'
+            f'<text x="{left - 6}" y="{py(tick) + 4:.1f}" text-anchor="end">{_fmt(tick)}</text>'
+        )
+    parts.append(
+        f'<line x1="{left}" y1="{top + plot_h}" x2="{left + plot_w}" y2="{top + plot_h}" stroke="#999"/>'
+    )
+    for c, category in enumerate(categories):
+        x_mid = left + slot * (c + 0.5)
+        parts.append(
+            f'<text x="{x_mid:.1f}" y="{top + plot_h + 15}" text-anchor="middle">{escape(category)}</text>'
+        )
+        for b, series in enumerate(bars):
+            value = series.values[c] if c < len(series.values) else 0.0
+            color = series.color or PALETTE[b % len(PALETTE)]
+            x = left + slot * c + slot * 0.1 + b * bar_w
+            y = py(value)
+            parts.append(
+                f'<rect x="{x:.1f}" y="{y:.1f}" width="{bar_w:.1f}" height="{top + plot_h - y:.1f}" fill="{color}"/>'
+                f'<text x="{x + bar_w / 2:.1f}" y="{y - 3:.1f}" text-anchor="middle" font-size="10">{_fmt(value)}</text>'
+            )
+    parts.append(
+        f'<text x="{left + plot_w / 2:.0f}" y="{height - 10}" text-anchor="middle">{escape(x_label)}</text>'
+        f'<text transform="translate(16 {top + plot_h / 2:.0f}) rotate(-90)" text-anchor="middle">'
+        f"{escape(y_label)}</text>"
+    )
+    for index, series in enumerate(bars):
+        color = series.color or PALETTE[index % len(PALETTE)]
+        legend_y = top + 14 + index * 16
+        parts.append(
+            f'<rect x="{left + plot_w + 12}" y="{legend_y - 9}" width="14" height="10" fill="{color}"/>'
+            f'<text x="{left + plot_w + 32}" y="{legend_y}">{escape(series.name)}</text>'
         )
     parts.append("</svg>")
     return "\n".join(parts) + "\n"

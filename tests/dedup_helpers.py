@@ -17,8 +17,10 @@ import numpy as np
 from numpy.typing import NDArray
 from PIL import Image
 
+from openinspect.dedup.compute import FeatureSet
 from openinspect.dedup.embedder import EmbedderSpec
 from openinspect.dedup.inventory import ImageItem
+from openinspect.dedup.synthetic import SyntheticPair
 from openinspect.ingest.imaging import dhash64
 from openinspect.provenance.records import ImageRecord
 
@@ -161,3 +163,162 @@ def corrupt_copy(item: ImageItem) -> ImageItem:
 
 def json_lines(path: Path) -> list[dict[str, object]]:
     return [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines()]
+
+
+# ------------------------------------------------------------ features without images
+
+
+def _unit(rng: np.random.Generator, dim: int) -> NDArray[np.float64]:
+    v = rng.standard_normal(dim)
+    return v / np.linalg.norm(v)
+
+
+def _near(
+    rng: np.random.Generator, centre: NDArray[np.float64], noise: float
+) -> NDArray[np.float64]:
+    v = centre + noise * rng.standard_normal(len(centre))
+    return v / np.linalg.norm(v)
+
+
+@dataclass
+class Clustered:
+    """A feature set with planted structure, and synthetic pairs for it (no image is read)."""
+
+    features: FeatureSet
+    synthetic: list[SyntheticPair]
+
+
+def clustered_features(seed: int = 0, dim: int = 16) -> Clustered:
+    """Three sources named like the real ones, with the structure the audit must find.
+
+    * ``dspcbsd-plus``: 40 images, train/val; eight tight clusters of three (four cross train|val),
+      one exact duplicate, the rest unrelated.
+    * ``pcb-ind``: 60 images in 12 (batch, side) groups of five (6 batches x 2 sides), each group in
+      one split; the two sides of batch b5 in different splits; one near-identical pair across
+      batches b0 (train) and b3 (test), which the key cannot see.
+    * ``pcb-defect``: 24 images, 3 families x 2 subgroups x 4, no split.
+    """
+    rng = np.random.default_rng(seed)
+    rows: list[tuple[str, str, str | None, str | None, str | None, NDArray[np.float64]]] = []
+    # dspcbsd-plus
+    for c in range(8):
+        centre = _unit(rng, dim)
+        for m in range(3):
+            split = "val" if (c < 4 and m == 2) else "train"
+            rows.append(
+                ("dspcbsd-plus", f"S_{c:02d}_{m}.jpg", split, None, None, _near(rng, centre, 0.02))
+            )
+    for k in range(15):
+        rows.append(
+            (
+                "dspcbsd-plus",
+                f"S_x{k:02d}.jpg",
+                "val" if k < 4 else "train",
+                None,
+                None,
+                _unit(rng, dim),
+            )
+        )
+    # pcb-ind
+    side_split = {
+        (0, "b"): "train",
+        (0, "t"): "train",
+        (1, "b"): "train",
+        (1, "t"): "train",
+        (2, "b"): "val",
+        (2, "t"): "val",
+        (3, "b"): "test",
+        (3, "t"): "test",
+        (4, "b"): "train",
+        (4, "t"): "train",
+        (5, "b"): "train",
+        (5, "t"): "val",
+    }
+    ind_centres: dict[tuple[int, str], NDArray[np.float64]] = {}
+    for batch in range(6):
+        for side in ("b", "t"):
+            centre = _unit(rng, dim)
+            ind_centres[(batch, side)] = centre
+            for m in range(5):
+                rows.append(
+                    (
+                        "pcb-ind",
+                        f"YOLO/{batch:04d}_{side}_{m:03d}.jpg",
+                        side_split[(batch, side)],
+                        f"{batch:04d}",
+                        f"{batch:04d}_{side}",
+                        _near(rng, centre, 0.08),
+                    )
+                )
+    # the cross-batch twin: b3/t member 4 looks like b0/b member 0
+    twin = next(i for i, r in enumerate(rows) if r[1] == "YOLO/0003_t_004.jpg")
+    base = next(r for r in rows if r[1] == "YOLO/0000_b_000.jpg")
+    rows[twin] = (*rows[twin][:5], _near(rng, base[5], 0.01))
+    # pcb-defect
+    for family in range(3):
+        f_centre = _unit(rng, dim)
+        for b in range(2):
+            s_centre = _near(rng, f_centre, 0.35)
+            for m in range(4):
+                rows.append(
+                    (
+                        "pcb-defect",
+                        f"images/{family + 1:02d}-{b + 1}-{m:02d}.png",
+                        None,
+                        f"{family + 1:02d}",
+                        f"{family + 1:02d}-{b + 1}",
+                        _near(rng, s_centre, 0.05),
+                    )
+                )
+    rows.sort(key=lambda r: (r[0], r[1]))
+    items: list[ImageItem] = []
+    for index, (source, item_id, item_split, group, sub, _) in enumerate(rows):
+        sha = hashlib.sha256(f"{source}:{item_id}".encode()).hexdigest()
+        items.append(
+            ImageItem(
+                source,
+                item_id,
+                Path("missing") / source / item_id,
+                sha,
+                item_split,
+                group,
+                sub,
+                1 + index % 3,
+                None,
+                64,
+                64,
+            )
+        )
+    vectors = np.array([r[5] for r in rows], dtype=np.float32)
+    # one exact duplicate inside dspcbsd-plus: same bytes, same vector
+    dup = next(i for i, item in enumerate(items) if item.item_id == "S_x05.jpg")
+    src = next(i for i, item in enumerate(items) if item.item_id == "S_x04.jpg")
+    items[dup] = ImageItem(**{**items[dup].__dict__, "sha256": items[src].sha256})
+    vectors[dup] = vectors[src]
+    vectors /= np.linalg.norm(vectors.astype(np.float64), axis=1, keepdims=True).astype(np.float32)
+    hash_rng = np.random.default_rng(seed + 1)
+    phash = hash_rng.integers(0, 2**63, size=len(items), dtype=np.int64).astype(np.uint64)
+    dhash = hash_rng.integers(0, 2**63, size=len(items), dtype=np.int64).astype(np.uint64)
+    phash[dup], dhash[dup] = phash[src], dhash[src]
+    # a pair whose hashes agree while the embeddings do not (hash hint, "hash and embedding disagree")
+    a = next(i for i, item in enumerate(items) if item.item_id == "S_x07.jpg")
+    b = next(i for i, item in enumerate(items) if item.item_id == "S_x08.jpg")
+    phash[b] = phash[a] ^ np.uint64(0b11)
+    features = FeatureSet(items, vectors.astype(np.float32), phash, dhash)
+    synthetic: list[SyntheticPair] = []
+    for source in ("dspcbsd-plus", "pcb-defect", "pcb-ind"):
+        own = [item for item in items if item.source == source][:5]
+        for item in own:
+            for name, kind, near_dup, cosine, bits in (
+                ("jpeg_q75", "photometric", True, 0.999, 1),
+                ("brightness_up", "photometric", True, 0.995, 2),
+                ("blur", "photometric", True, 0.990, 3),
+                ("crop_90", "geometric", True, 0.985, 12),
+                ("crop_80", "partial", False, 0.95, 20),
+            ):
+                synthetic.append(
+                    SyntheticPair(
+                        source, item.item_id, item.sha256, name, kind, near_dup, cosine, bits, bits
+                    )
+                )
+    return Clustered(features, synthetic)

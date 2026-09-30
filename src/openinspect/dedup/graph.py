@@ -182,6 +182,8 @@ def edge_stats_by_label(
 ) -> dict[int, tuple[int, float, float]]:
     """(number of edges, weakest edge, mean edge) of every component that has edges."""
     i, _, sims = edges
+    if len(i) == 0:
+        return {}
     label_of_edge = labels[i]
     result: dict[int, tuple[int, float, float]] = {}
     order = np.argsort(label_of_edge, kind="stable")

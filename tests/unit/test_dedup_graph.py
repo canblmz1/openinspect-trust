@@ -130,3 +130,8 @@ def test_edge_statistics_per_component() -> None:
     assert weakest == pytest.approx(0.7, abs=1e-6)
     assert mean == pytest.approx(0.8, abs=1e-6)
     assert info[3][0] == 1
+
+
+def test_edge_statistics_of_a_graph_without_edges_are_empty() -> None:
+    empty = (np.empty(0, np.int64), np.empty(0, np.int64), np.empty(0, np.float32))
+    assert edge_stats_by_label(np.arange(3, dtype=np.int64), empty) == {}

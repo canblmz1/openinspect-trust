@@ -42,3 +42,6 @@ Thumbs.db
 desktop.ini
 .DS_Store
 ~$*
+
+# --- M3: the neighbour table is regenerable and listed by SHA-256 in artifacts/m3/audit.json (T20)
+artifacts/m3/nearest-neighbors.parquet

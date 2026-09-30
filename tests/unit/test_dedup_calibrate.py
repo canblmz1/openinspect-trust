@@ -5,7 +5,10 @@ import pytest
 from numpy.typing import NDArray
 
 from openinspect.dedup.calibrate import (
+    COARSE,
     NBINS,
+    Histograms,
+    Interval,
     Pool,
     auc,
     average_precision,
@@ -76,7 +79,7 @@ def test_histograms_count_every_labelled_pair() -> None:
     hist = pool_histograms(vectors, pool, chunk=4)
     assert int(hist.positive.sum()) == 15 + 10 + 6
     assert int(hist.negative.sum()) == 6 * 5 + 6 * 4 + 5 * 4
-    assert hist.group_positive.shape == (3, NBINS // 8)
+    assert hist.group_positive.shape == (3, NBINS // COARSE)
     assert int(hist.group_positive.sum()) == int(hist.positive.sum())
 
 
@@ -230,3 +233,31 @@ def test_quantile_threshold_keeps_the_wanted_share_above_it() -> None:
     assert (values >= threshold + 0.02).mean() < 0.95
     with pytest.raises(ValueError, match="no values"):
         quantile_threshold(np.array([]), 0.95)
+
+
+def test_every_bin_edge_maps_back_to_its_own_bin() -> None:
+    # decimal edges such as 0.9235 are not exact in binary; without care one in seven slips a bin
+    assert all(bin_of(threshold_of(b)) == b for b in range(NBINS))
+
+
+def test_metrics_at_a_bin_edge_count_exactly_the_pairs_at_or_above_it() -> None:
+    pos = np.zeros(NBINS, dtype=np.int64)
+    neg = np.zeros(NBINS, dtype=np.int64)
+    pos[bin_of(0.9235)] = 5
+    neg[bin_of(0.9235) - 1] = 7  # just below the threshold: must not count
+    point = metrics_at(curve_from_histograms(pos, neg), 0.9235)
+    assert point.pairs_above == 5
+    assert point.precision == 1.0
+
+
+def test_bootstrap_intervals_refer_to_the_exact_threshold() -> None:
+    threshold = 0.9235
+    edge = bin_of(threshold)
+    groups = np.zeros((12, NBINS), dtype=np.int64)
+    groups[:, edge] = 3  # every positive sits in the threshold's own bin
+    negative = np.zeros(NBINS, dtype=np.int64)
+    negative[edge - 1] = 1000  # one bin below: outside, however coarse the bootstrap
+    histograms = Histograms(groups.sum(axis=0), negative, groups)
+    result = bootstrap_positive_groups(histograms, threshold, resamples=200)
+    assert result.precision == Interval(1.0, 1.0)
+    assert result.recall == Interval(1.0, 1.0)

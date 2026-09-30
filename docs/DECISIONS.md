@@ -1,6 +1,6 @@
 # Decision log
 
-Decisions D1–D10 come from [SPEC §12](SPEC.md); T1–T7 are technical choices made while building M1, T8–T14 while building M2. Each has the same five fields. All were taken on 2026-09-30 under the maintainer's autonomous-execution directive. **D3, the code licence, is the exception: the maintainer chose it (Apache-2.0).**
+Decisions D1–D10 come from [SPEC §12](SPEC.md); T1–T7 are technical choices made while building M1, T8–T14 while building M2, T15–T23 while building M3. Each has the same five fields. All were taken on 2026-09-30 under the maintainer's autonomous-execution directive. **D3, the code licence, is the exception: the maintainer chose it (Apache-2.0).**
 
 ## D1 — Domain
 - **Decision:** PCB surface-defect detection with bounding boxes.
@@ -169,3 +169,66 @@ Decisions D1–D10 come from [SPEC §12](SPEC.md); T1–T7 are technical choices
 - **Reason:** breaking a string only to satisfy a linter makes diffs and searches worse.
 - **Risk:** none notable.
 - **Revisit when:** a style guide is adopted.
+
+## T15 — The audit never removes anything
+- **Decision:** M3 detects, groups, measures, reports and prepares review. No image is deleted, excluded or re-labelled; every candidate pair carries `decision = review`, and the category is a suggestion, not a verdict.
+- **Evidence:** [M3_PROTOCOL](M3_PROTOCOL.md) section 2; SPEC 6.4 allows automatic decisions only for exact duplicates, and there are none (0 identical SHA-256 inside or across the sources).
+- **Reason:** a visual similarity group is not proof of the same physical board; what to do with a group (keep one, keep all in one split, not a duplicate) is a later, human decision that feeds release assembly (M5).
+- **Risk:** the review queue can wait for a long time; until it is reviewed the thresholds rest on noisy group labels only.
+- **Revisit when:** the maintainer reviews the queue, or M5 assembles the first release.
+
+## T16 — Perceptual hash in house
+- **Decision:** the 64-bit pHash (32x32 grayscale, 2-D DCT, 8x8 low-frequency block against its median) is computed with NumPy and Pillow (`openinspect.dedup.hashing`, version `phash-v1`), instead of the `imagehash` package planned in [DEPENDENCIES](DEPENDENCIES.md).
+- **Evidence:** the definition is about twenty lines; `imagehash` would add a dependency (and SciPy) for one function.
+- **Reason:** fewer dependencies; the version string is part of the hash store, so a change of definition cannot mix with old values.
+- **Risk:** values can differ in detail from `imagehash`'s (resampling filter), so distances are not directly comparable with papers that used it.
+- **Revisit when:** a comparison with published pHash distances is needed.
+
+## T17 — torch from the CPU-only index, as an optional extra
+- **Decision:** `torch` and `transformers` form the optional extra `embeddings`; `torch` comes from the official CPU-only index (`pyproject.toml`, `[tool.uv.sources]`). CI does not install the extra: tests use a stub embedder, and mypy ignores the missing imports.
+- **Evidence:** the CUDA wheels are about 2 GB and the machine's GPU has 4 GB of VRAM; DINOv2-small on the CPU (i5-11300H) embedded 15,158 images at 10.2 images/s in the model (1,548 s in all).
+- **Reason:** one backend on every platform (`cpu-fp32`, part of the cache key), a small CI, and results that do not depend on a GPU driver.
+- **Risk:** larger models (DINOv2-base, the robustness check) are slower on the CPU.
+- **Revisit when:** a GPU run is needed; it gets its own backend name and cache directory.
+
+## T18 — Exact search with NumPy, no approximate index
+- **Decision:** cosine similarity on L2-normalised vectors in row blocks of 1,024 (`openinspect.dedup.similarity`); no FAISS.
+- **Evidence:** 15,278 vectors of 384 numbers: the global top-10 takes about 4 s and all pairs of a source a few seconds.
+- **Reason:** an approximate index would put search error into the calibration and the leakage counts (protocol section 4).
+- **Risk:** memory grows with the square of a block, not of the data; beyond about a million images a real index is needed.
+- **Revisit when:** the pool grows by an order of magnitude.
+
+## T19 — Embedding cache and pinned weights
+- **Decision:** one `.npy` file per image under `<data>/embeddings/<model>@<revision>/<preprocessing>/<backend>/`, keyed by the image SHA-256; the model is pinned by Hub revision and the SHA-256 of its safetensors file (`configs/dedup.yaml`), checked before loading.
+- **Evidence:** a changed image, model, revision, preprocessing or backend changes the numbers; each of them is part of the key, so a stale vector cannot be read.
+- **Reason:** an interrupted run resumes where it stopped, and the analysis needs no model at all.
+- **Risk:** reading 15,278 small files takes about 90 s on Windows; a packed matrix would be faster.
+- **Revisit when:** the read time matters, or a second model is added (DINOv2-base has its own directory).
+
+## T20 — What M3 puts in git
+- **Decision:** tracked: `artifacts/m3/audit.json` (every number of the reports), `leakage-groups.parquet`, `duplicate-pairs.parquet`, `review-candidates.csv`, the reports in `reports/m3/` and their SVG figures. Not tracked: `nearest-neighbors.parquet` (about 1.4 MB, regenerable, listed with its SHA-256 in `audit.json`), the embedding and synthetic caches, the run records and logs, and the HTML review pack, which embeds thumbnails of dataset images (all under `<data>/m3/`).
+- **Evidence:** the tracked tables are each under 0.3 MB and hold file names, similarities and group memberships, no pixels.
+- **Reason:** a reader can check every reported number against a tracked table; nothing of the datasets' pixels enters the repository (licence and size).
+- **Risk:** a different pyarrow version writes different Parquet bytes; the digests in `audit.json` then change on a rerun although the content does not.
+- **Revisit when:** a table passes 1 MB, or a release needs the neighbour table.
+
+## T21 — Protocol first, amendments apart
+- **Decision:** the M3 rules were committed before any number was computed; the file stays byte-identical (a test checks its SHA-256), and every later correction or clarification goes to [M3_PROTOCOL_AMENDMENT](M3_PROTOCOL_AMENDMENT.md) with its time relative to the first run.
+- **Evidence:** `8572b7e` (protocol) precedes `d844365` (rule code) and the first end-to-end run (2026-09-30 23:12).
+- **Reason:** a reader can tell which choices could have been influenced by the results.
+- **Risk:** a real error in the protocol would stay in the frozen file; the amendment file must be read with it.
+- **Revisit when:** the next audit (a new source or model) starts; it gets its own protocol.
+
+## T22 — A branch for the resumed milestone
+- **Decision:** M3 was finished on `m3-resume` (a recovery snapshot of the uncommitted work first) and merged into `main` by fast-forward, without a pull request. This departs from T7 (work on `main`) for one milestone, at the maintainer's request.
+- **Evidence:** the previous session stopped with uncommitted work; a branch made it safe to push that work before it was finished.
+- **Reason:** nothing unfinished reached `main`, whose CI must stay green.
+- **Risk:** none beyond T7's (no review gate).
+- **Revisit when:** a second contributor joins (then pull requests).
+
+## T23 — Run records for the performance report
+- **Decision:** `dedup features` and `dedup synthetic` append one JSON line per run to `<data>/m3/runs/<stage>.jsonl`; the performance report takes, per stage, the run that embedded the most images, next to the measured stages of the analysis.
+- **Evidence:** a rerun reads the caches and embeds nothing, so its time would hide the real cost of the model.
+- **Reason:** the report shows what embedding actually costs on this machine.
+- **Risk:** the two runs made before the record existed were transcribed from their console logs (amendment N5); their values are rounded as printed.
+- **Revisit when:** the cache is rebuilt, which writes a complete record.

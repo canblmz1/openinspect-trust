@@ -52,6 +52,9 @@ class RunInfo(StrictModel):
     sources: list[SourceCounts]
     failures: list[FailureInfo]
     skipped_at_ingest: int
+    code_commit: str | None = None  # HEAD when the numbers were produced
+    code_dirty: bool | None = None  # tracked files differed from HEAD
+    seed: int = 0
 
 
 class StageTimingInfo(StrictModel):
@@ -111,6 +114,13 @@ class Top1Stats(StrictModel):
     share_near: float | None
     nearest_is_other_source: int  # images whose most similar image of all is in another source
     other_source_family: int  # ... and at or above the family threshold
+    top1_same_group: float | None = None  # share whose most similar image shares the group key
+    top1_same_subgroup: float | None = None
+    chance_same_group: float | None = None  # the same for a random other image of the source
+    chance_same_subgroup: float | None = None
+    cdf: list[tuple[float, float]] = Field(
+        default_factory=list
+    )  # (cosine, share of images at or below)
 
 
 # -------------------------------------------------------------------------- calibration

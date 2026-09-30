@@ -58,10 +58,12 @@ class SourceThreshold(StrictModel):
     source: str
     pool: str
     used_in_rule: bool
-    review: float | None  # lowest cosine with precision >= 0.50
-    family: float | None  # lowest cosine with precision >= 0.90
+    review: float | None  # value used for review: precision_050, or the fallback
+    family: float | None  # value used for family: precision_090, or the fallback
     f1_optimal: float | None
     fallback: str | None = None
+    precision_050: float | None = None  # lowest cosine with precision >= 0.50 (None: never)
+    precision_090: float | None = None  # lowest cosine with precision >= 0.90 (None: never)
 
 
 class SyntheticThreshold(StrictModel):
@@ -133,15 +135,19 @@ def select_thresholds(
     """Apply the frozen rule to the calibration curves and the synthetic positives."""
     from_pools: list[SourceThreshold] = []
     for pool_curve in curves:
-        review = threshold_at_precision(pool_curve.curve, PRECISION_REVIEW)
-        family = threshold_at_precision(pool_curve.curve, PRECISION_FAMILY)
+        raw_review = threshold_at_precision(pool_curve.curve, PRECISION_REVIEW)
+        raw_family = threshold_at_precision(pool_curve.curve, PRECISION_FAMILY)
         f1 = f1_optimal_threshold(pool_curve.curve)
-        fallback = None
+        fallbacks: list[str] = []
+        family = raw_family
         if family is None:
-            family, fallback = f1, "precision 0.90 is never reached: the F1-optimal cosine is used"
+            family = f1
+            fallbacks.append("precision 0.90 is never reached: the F1-optimal cosine is used")
+        review = raw_review
         if review is None:
-            review = f1 if fallback else family
-            fallback = fallback or "precision 0.50 is never reached: the family cosine is used"
+            review = f1 if raw_family is None else family
+            used = "F1-optimal" if raw_family is None else "family"
+            fallbacks.append(f"precision 0.50 is never reached: the {used} cosine is used")
         from_pools.append(
             SourceThreshold(
                 source=pool_curve.source,
@@ -150,7 +156,9 @@ def select_thresholds(
                 review=review,
                 family=family,
                 f1_optimal=f1,
-                fallback=fallback,
+                fallback="; ".join(fallbacks) or None,
+                precision_050=raw_review,
+                precision_090=raw_family,
             )
         )
     ruled = [p for p in from_pools if p.used_in_rule and p.family is not None]

@@ -10,3 +10,4 @@ manifests/evidence/** -text
 *.zip binary
 *.pt binary
 *.npy binary
+*.parquet binary
