@@ -6,11 +6,21 @@ import json
 from collections.abc import Sequence
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import Annotated, NoReturn
+from typing import Annotated
 
 import httpx
 import typer
 
+from openinspect.cli.common import (
+    AllOption,
+    DataDirOption,
+    RepoRootOption,
+    SlugsArgument,
+)
+from openinspect.cli.common import fail as _fail
+from openinspect.cli.common import log as _log
+from openinspect.cli.common import select_sources as _select
+from openinspect.cli.common import setup as _setup
 from openinspect.ingest.download import DownloadError, DownloadRecord, download
 from openinspect.ingest.extract import ExtractError
 from openinspect.ingest.inventory import summarize_tree
@@ -23,80 +33,18 @@ from openinspect.ingest.pipeline import (
     run_source,
 )
 from openinspect.ingest.report import SourceReport, render_markdown, write_json
-from openinspect.provenance.registry import LoadedManifest, Registry, find_repo_root, load_registry
-from openinspect.settings import DataDirError, ensure_free_space, resolve_data_dir
+from openinspect.provenance.registry import LoadedManifest, Registry
+from openinspect.settings import DataDirError, ensure_free_space
 
 ingest_app = typer.Typer(
     help="Download, verify, unpack, inspect and ingest the archives of accepted sources.",
     no_args_is_help=True,
 )
 
-RepoRootOption = Annotated[
-    Path | None,
-    typer.Option(
-        "--repo-root", envvar="OPENINSPECT_REPO_ROOT", file_okay=False, help="Repository root."
-    ),
-]
-DataDirOption = Annotated[
-    Path | None,
-    typer.Option(
-        "--data-dir",
-        file_okay=False,
-        help="Data directory (default: $OPENINSPECT_DATA_DIR, then .env); not in the repo or OneDrive.",
-    ),
-]
-AllOption = Annotated[bool, typer.Option("--all", help="All accepted sources.")]
-SlugsArgument = Annotated[list[str] | None, typer.Argument(help="Source ids.")]
-
 
 def _http_client() -> httpx.Client | None:
     """Hook for tests: return a client with a mock transport. ``None`` means the default client."""
     return None
-
-
-def _fail(message: str) -> NoReturn:
-    typer.echo(f"ERROR {message}", err=True)
-    raise typer.Exit(code=1)
-
-
-def _log(message: str) -> None:
-    typer.echo(message, err=True)
-
-
-def _setup(repo_root: Path | None, data_dir: Path | None) -> tuple[Path, Path, Registry]:
-    root = repo_root.resolve() if repo_root is not None else find_repo_root()
-    try:
-        data = resolve_data_dir(data_dir, repo_root=root)
-    except DataDirError as exc:
-        _fail(str(exc))
-    registry = load_registry(root)
-    if any(issue.level == "error" for issue in registry.issues):
-        for issue in registry.issues:
-            typer.echo(f"{issue.code} {issue.message}", err=True)
-        _fail("the source registry has errors; run `openinspect source validate`")
-    return root, data, registry
-
-
-def _select(registry: Registry, slugs: list[str] | None, all_sources: bool) -> list[LoadedManifest]:
-    if all_sources:
-        chosen = [lm for lm in registry.loaded if lm.manifest.usable_for_ingest]
-    else:
-        if not slugs:
-            _fail("name at least one source, or pass --all")
-        chosen = []
-        for slug in slugs:
-            item = registry.get(slug)
-            if item is None:
-                _fail(f"no source with slug {slug!r} (known: {', '.join(registry.slugs)})")
-            if not item.manifest.usable_for_ingest:
-                _fail(
-                    f"source {slug!r} is {item.manifest.status}: "
-                    "only accepted sources may be ingested"
-                )
-            chosen.append(item)
-    if not chosen:
-        _fail("no accepted source selected")
-    return chosen
 
 
 def _ingest_dir(root: Path, slug: str) -> Path:
