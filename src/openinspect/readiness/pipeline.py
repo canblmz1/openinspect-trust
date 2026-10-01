@@ -53,6 +53,7 @@ DESIGN_SEEDS = (0, 1, 2)
 EXPERIMENTS = Path("manifests") / "experiments"
 ARTIFACTS = Path("artifacts") / "m5_5"
 REPORTS = Path("reports") / "m5_5"
+M6_RECORD = "artifacts/m6/evren-smoke-test.json"
 
 CHANGES = [
     "C0 trains on the group-mates of the probe test items (the other members of their A1 "
@@ -573,6 +574,7 @@ def plan(
             "probes and controls are different kinds of items (probes sit in groups, controls are mostly singletons): each is compared between C0 and C1, never with the other",
             "uncertainty: paired bootstrap over test items grouped by their A1 constraint group (1,000 resamples), on the same test set for C0 and C1; seed-to-seed spread reported next to it",
             "replication: the sign and size of C0 - C1 on designs 1 and 2 (one seed each)",
+            "C0 - C1 is also reported per source, next to the DINOv2-base similar pairs that each condition keeps between train and test (representation-sensitivity.md): where C1 keeps such pairs, that part of the contrast holds only under the DINOv2-small grouping",
             "A0 and A1 are reported per source and described, not differenced as a leakage effect",
             "B-strict and B-natural are read as source shift (the source probe shows strong source signatures), not as leakage",
         ],

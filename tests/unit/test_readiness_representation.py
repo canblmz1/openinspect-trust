@@ -128,4 +128,7 @@ def test_pairs_train_test_counts_only_pairs_between_train_and_test() -> None:
         ("a", "a1.jpg", "a", "a3.jpg"),  # test - test
         ("a", "zz.jpg", "a", "a1.jpg"),  # not released
     ]
-    assert pairs_train_test(v, split, pairs) == 2
+    assert pairs_train_test(v, split, pairs) == {"a": 2, "b": 0}
+    across = [("a", "a0.jpg", "b", "b1.jpg")]
+    split[len(v.items) // 2 + 1] = "test"  # b1.jpg
+    assert pairs_train_test(v, split, across) == {"a": 0, "a|b": 1, "b": 0}

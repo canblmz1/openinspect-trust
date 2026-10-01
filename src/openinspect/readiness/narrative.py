@@ -26,6 +26,10 @@ def _pct(value: float) -> str:
     return f"{100 * value:.1f}%"
 
 
+def _by_source(counts: dict[str, int]) -> str:
+    return ", ".join(f"`{s}` {v:,}" for s, v in counts.items() if v) or "none"
+
+
 def best_probe(probe: ProbeResult, features: str, folds: str = "stratified") -> float:
     return max(
         s.balanced_accuracy for s in probe.scores if s.features == features and s.folds == folds
@@ -59,6 +63,21 @@ def limitations(
             + "). Results from A1, B and C hold for the DINOv2-small grouping; the base-built A1 "
             f"would leave {representation.a1_base_primary_pairs_crossing:,} small-level primary pairs "
             "across its splits."
+        )
+    c1 = {
+        name: counts
+        for name, counts in representation.designs_base_pairs_train_test.items()
+        if name.startswith("C1-") and any(counts.values())
+    }
+    if c1:
+        found.append(
+            "Under DINOv2-base, C1 does not separate train and test completely: "
+            + "; ".join(
+                f"`{name}` keeps {sum(counts.values()):,} base similar pairs between them ({_by_source(counts)})"
+                for name, counts in c1.items()
+            )
+            + ". The C contrast is defined by the DINOv2-small grouping, so C0 - C1 is reported per "
+            "source and the part of a source with such pairs holds only under that grouping."
         )
     if giant.largest_group > 0.5 * giant.items:
         tested = [d.probes.get(giant.source, 0) + d.controls.get(giant.source, 0) for d in designs]
@@ -171,13 +190,15 @@ def answer_texts(
         )
     natural = [h for h in held_out if h.regime == "B-natural"]
     strict = [h for h in held_out if h.regime == "B-strict"]
+    c0_pairs = representation.designs_base_pairs_train_test.get(f"C0-d{d0.seed}", {})
+    c1_pairs = representation.designs_base_pairs_train_test.get(f"C1-d{d0.seed}", {})
     return [
         f"{m6_verdict}. The 20-item YOLO Detection package imported with matching counts, classes and the supplied 10/5/5 split, and a frozen version kept it (reports/m6/evren-smoke-test.md).",
         f"Packages checked: {packages}. Each was read by an in-repository parser that shares no code with the exporter and by the Ultralytics dataset checks.",
         f"{labels.findings} findings: {labels.by_category['FATAL']} FATAL, {labels.by_category['TRAINING_RELEVANT']} TRAINING_RELEVANT, {labels.by_category['LIMITATION_ONLY']} LIMITATION_ONLY, {labels.by_category['NOT_IN_RELEASE']} NOT_IN_RELEASE; released items affected: {labels.released_items_affected['TRAINING_RELEVANT']} training-relevant and {labels.released_items_affected['LIMITATION_ONLY']} limitation-only.",
         f"Not as a leakage effect. A0 tests {sum(estimand.a0_test.values()):,} items, A1 {sum(estimand.a1_test.values()):,}; they share {estimand.test_overlap} test items, A0 trains on {estimand.a0_train_holds_a1_test} of A1's test items, and A1 has no test item from {', '.join(estimand.a1_test_without_source) or 'no source missing'}. A0 - A1 stays descriptive.",
         f"Yes: C0/C1 with one common test set of {d0.test_items} items ({sum(d0.probes.values())} probes exposed in C0, {sum(d0.controls.values())} controls) and one validation set; C0 exposes {by['C0'].exposed_test_items} test items through {by['C0'].measure.supplied_groups_crossing} crossing constraint groups, C1 exposes {by['C1'].exposed_test_items} ({by['C1'].measure.supplied_groups_crossing} crossing). Three seeded designs exist.",
-        f"Materially: an A1 built from DINOv2-base components moves {representation.changed_items:,} items ({_pct(representation.changed_share)}) to another split, and would leave {representation.a1_base_primary_pairs_crossing:,} small-level primary pairs across its splits; the committed A1 cuts {sum(representation.a1_cuts_base.values())} base constraint groups. In design {d0.seed}, {representation.designs_base_pairs_train_test.get(f'C1-d{d0.seed}', 0):,} DINOv2-base similar pairs lie between C1's train and test sets ({representation.designs_base_pairs_train_test.get(f'C0-d{d0.seed}', 0):,} in C0).",
+        f"Materially: an A1 built from DINOv2-base components moves {representation.changed_items:,} items ({_pct(representation.changed_share)}) to another split, and would leave {representation.a1_base_primary_pairs_crossing:,} small-level primary pairs across its splits; the committed A1 cuts {sum(representation.a1_cuts_base.values())} base constraint groups. In design {d0.seed}, {sum(c1_pairs.values()):,} DINOv2-base similar pairs lie between C1's train and test sets ({_by_source(c1_pairs)}; {sum(c0_pairs.values()):,} in C0).",
         f"Verdict {giant.verdict}: " + "; ".join(giant.causes or ["no cause rule fired"]) + ".",
         f"Very predictable: {_pct(best_probe(probe, 'metadata'))} balanced accuracy from size and format, {_pct(best_probe(probe, 'boxes+pixels'))} from boxes and colour statistics (majority baseline {_pct(probe.majority_baseline)}).",
         "The held-out source is the whole test set; every other item is available for training and validation (group-aware), and naturally similar cross-source items are kept: "

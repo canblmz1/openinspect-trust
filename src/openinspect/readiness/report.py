@@ -334,6 +334,7 @@ def controlled_design(r: Readiness) -> str:
 
 def representation(r: Readiness) -> str:
     x = r.representation
+    sources = _sources(r)
     lines = _header(r, "M5.5: representation sensitivity of the release splits")
     lines += [
         "> Would choosing DINOv2-base instead of DINOv2-small materially change the actual training and evaluation population?",
@@ -441,9 +442,21 @@ def representation(r: Readiness) -> str:
             for s in sorted(x.split_presence["A1"])
         )
         + ".",
-        "- DINOv2-base similar pairs with one image in train and one in test of the C designs: "
-        + ", ".join(f"{k} {_n(v)}" for k, v in x.designs_base_pairs_train_test.items())
-        + ".",
+        "",
+        "DINOv2-base similar pairs with one image in train and one in test of the C designs (none of "
+        "them is a constraint: the designs are built from the DINOv2-small grouping):",
+        "",
+        *_table(
+            ["condition", "pairs", *(f"`{s}`" for s in sources)],
+            [
+                [
+                    f"`{name}`",
+                    _n(sum(counts.values())),
+                    *(_n(counts.get(s, 0)) for s in sources),
+                ]
+                for name, counts in x.designs_base_pairs_train_test.items()
+            ],
+        ),
         "",
         *_table(
             ["B-strict fold", "excluded under small", "excluded under base"],
@@ -617,7 +630,14 @@ def label_quality(r: Readiness) -> str:
         ),
         "",
         "Rules: FATAL = a released box with non-finite, inverted, zero-area or out-of-image "
-        "geometry (it would be excluded by a documented rule; there is none); TRAINING_RELEVANT = "
+        "geometry, to be excluded by a documented rule ("
+        + (
+            "none is found"
+            if not x.fatal_items
+            else f"found in {len(x.fatal_items)} items: "
+            + ", ".join(f"`{i}`" for i in x.fatal_items)
+        )
+        + "); TRAINING_RELEVANT = "
         "a released box thinner than two pixels, a box drawn twice, a format disagreement, or a "
         "near-duplicate pair of released images with different labels; LIMITATION_ONLY = a size or "
         "shape outlier, an ambiguous mapping, or a label conflict whose counterpart is not "

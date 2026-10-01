@@ -2,10 +2,12 @@
 
 No data directory is needed. Re-derived from committed files: the controlled designs, the
 B-natural folds, the label-finding intersection, the source probe (from its committed feature
-table), the base-built A1 (from the committed base components). Checked: the purity of every
-held-out split, the identity of the common test and validation sets, that no input of an earlier
-milestone changed, that every output still has its recorded SHA-256, and that the reports are what
-``readiness.json`` renders.
+table), the base-built A1 (from the committed base components), the base pairs across the C
+designs, the A0/A1 estimand record, the negative policy, and from the committed numbers the
+blockers, the limitations, the verdict, the twelve answers and the M7 plan. Checked: the purity of
+every held-out split, the identity of the common test and validation sets, that no input of an
+earlier milestone changed, that every output still has its recorded SHA-256, and that the reports
+are what ``readiness.json`` renders.
 """
 
 from __future__ import annotations
@@ -16,14 +18,27 @@ import pyarrow.parquet as pq
 
 from openinspect.files import sha256_file
 from openinspect.readiness.heldout import purity
-from openinspect.readiness.labels import QUEUE, place, read_findings, summarize
-from openinspect.readiness.models import Readiness
-from openinspect.readiness.pipeline import design_stage, heldout_stage
+from openinspect.readiness.labels import QUEUE, LabelSummary, place, read_findings, summarize
+from openinspect.readiness.models import DesignSummary, HeldOutSummary, Readiness
+from openinspect.readiness.narrative import answer_texts, limitations
+from openinspect.readiness.pipeline import (
+    M6_RECORD,
+    answers,
+    blockers,
+    design_stage,
+    estimand,
+    heldout_stage,
+    load_json,
+    negatives,
+    plan,
+    verdict,
+)
 from openinspect.readiness.probe import FEATURES, ProbeResult, run_probe
-from openinspect.readiness.release_view import load_view, reproduce
+from openinspect.readiness.release_view import ReleaseView, load_view, reproduce
 from openinspect.readiness.report import render_all
 from openinspect.readiness.representation import constraints_with, pairs_train_test
 from openinspect.release.splits import EXCLUDED, group_split
+from openinspect.validation import read_validation
 
 
 def check_committed(root: Path, readiness: Readiness) -> list[str]:
@@ -37,7 +52,8 @@ def check_committed(root: Path, readiness: Readiness) -> list[str]:
     if problems:
         return problems
     view = load_view(root)
-    if not reproduce(view).ok:
+    reproduced = reproduce(view).ok
+    if not reproduced:
         problems.append("the committed M5 splits do not reproduce")
     designs, design_files, design_splits = design_stage(view, readiness.provenance.design_seeds)
     held, held_files, held_splits = heldout_stage(view)
@@ -118,10 +134,85 @@ def check_committed(root: Path, readiness: Readiness) -> list[str]:
     }
     if found != readiness.representation.designs_base_pairs_train_test:
         problems.append("the base similar pairs between train and test of the C designs differ")
+    problems += _decision_problems(root, readiness, view, reproduced, labels, designs, held)
+    slugs = sorted(s.source for s in view.manifest.sources)
+    differs = [s for s in slugs if held_splits[f"B-natural-{s}"] != held_splits[f"B-strict-{s}"]]
+    if (
+        plan(readiness.provenance.design_seeds, slugs, differs, view.config.version)
+        != readiness.plan
+    ):
+        problems.append("the M7 plan does not re-derive")
     for path, text in render_all(readiness).items():
         target = root / path
         if not target.is_file() or target.read_text(encoding="utf-8") != text:
             problems.append(f"{path} is not what readiness.json renders")
+    return problems
+
+
+def _decision_problems(
+    root: Path,
+    readiness: Readiness,
+    view: ReleaseView,
+    reproduced: bool,
+    labels: LabelSummary,
+    designs: list[DesignSummary],
+    held: list[HeldOutSummary],
+) -> list[str]:
+    """The estimand, the negatives, the blockers, the limitations, the verdict and the answers."""
+    problems: list[str] = []
+    est = estimand(view)
+    if est != readiness.estimand:
+        problems.append("the A0/A1 estimand record does not re-derive")
+    negative = negatives(root, view)
+    if negative != readiness.negatives:
+        problems.append("the record of images without a box does not re-derive")
+    m6_verdict = str(load_json(root / M6_RECORD)["verdict"])
+    blocking = blockers(
+        m6_verdict=m6_verdict,
+        reproduced=reproduced,
+        exports_ok=all(
+            p.internal_ok and (p.ultralytics is None or p.ultralytics.ok)
+            for p in readiness.export.packages
+        ),
+        fatal=labels.by_category["FATAL"],
+        designs=designs,
+        held_out=held,
+    )
+    status = read_validation(root).status
+    limits = limitations(
+        validation_status=status,
+        representation=readiness.representation,
+        giant=readiness.giant,
+        designs=designs,
+        labels=labels,
+        negatives=negative,
+        phash=readiness.phash_only,
+        probe=readiness.probe,
+        held_out=held,
+    )
+    decided = verdict(blocking, limits)
+    if (blocking, limits, decided) != (
+        readiness.blockers,
+        readiness.limitations,
+        readiness.verdict,
+    ):
+        problems.append("the blockers, limitations or verdict do not follow from the numbers")
+    texts = answer_texts(
+        m6_verdict=m6_verdict,
+        export=readiness.export,
+        labels=labels,
+        estimand=est,
+        designs=designs,
+        representation=readiness.representation,
+        giant=readiness.giant,
+        probe=readiness.probe,
+        held_out=held,
+        validation_status=status,
+        verdict=decided,
+        blockers=blocking,
+    )
+    if answers(texts) != readiness.answers:
+        problems.append("the twelve answers do not follow from the numbers")
     return problems
 
 

@@ -78,7 +78,8 @@ class RepresentationResult(StrictModel):
     a1_base_pairs_train_test: dict[str, int]
     a1_base_pairs_crossing_base: int  # base similar pairs across the base-built A1
     a1_pairs_crossing_base: int  # base similar pairs across the committed A1
-    designs_base_pairs_train_test: dict[str, int]  # C split -> base similar pairs train-test
+    # C split -> source (or 'a|b' across sources) -> base similar pairs between train and test
+    designs_base_pairs_train_test: dict[str, dict[str, int]]
     changed_items: int
     changed_share: float
     split_changes: list[SplitChange]
@@ -175,17 +176,17 @@ def pairs_crossing(
 
 def pairs_train_test(
     view: ReleaseView, split: Sequence[str], pairs: Sequence[tuple[str, str, str, str]]
-) -> int:
-    """Image pairs with one image in train and the other in test."""
+) -> dict[str, int]:
+    """Image pairs with one image in train and the other in test, by source (``a|b`` across)."""
     by_image: dict[tuple[str, str], set[str]] = {}
     for item, name in zip(view.items, split, strict=True):
         by_image.setdefault(item.item.key, set()).add(name)
-    count = 0
+    counts = Counter(dict.fromkeys(sorted({i.source for i in view.items}), 0))
     for sa, ia, sb, ib in pairs:
         a, b = by_image.get((sa, ia), set()), by_image.get((sb, ib), set())
         if ("train" in a and "test" in b) or ("test" in a and "train" in b):
-            count += 1
-    return count
+            counts[sa if sa == sb else "|".join(sorted((sa, sb)))] += 1
+    return dict(sorted(counts.items()))
 
 
 def _shares(view: ReleaseView, split: Sequence[str], name: str) -> dict[str, float]:

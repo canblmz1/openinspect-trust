@@ -50,6 +50,7 @@ from openinspect.readiness.narrative import answer_texts, limitations
 from openinspect.readiness.pipeline import (
     ARTIFACTS,
     DESIGN_SEEDS,
+    M6_RECORD,
     VERDICT_RULE,
     answers,
     blockers,
@@ -73,7 +74,6 @@ from openinspect.release.verify import release_dir
 from openinspect.validation import read_validation
 
 Log = Callable[[str], None]
-M6_RECORD = "artifacts/m6/evren-smoke-test.json"
 ULTRALYTICS_SCRIPT = Path("scripts") / "validate_export_ultralytics.py"
 SWEEP = [round(0.90 + 0.005 * k, 3) for k in range(20)]
 
