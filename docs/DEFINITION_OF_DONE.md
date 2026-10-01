@@ -116,6 +116,7 @@ A milestone is done only when every item on its list is true and the milestone r
 - [x] Every package of the M7 plan read by Ultralytics (separate environment) and by a parser that shares no code with the exporter (T43): all 14 packages valid.
 - [x] `reports/m5_5/TRAINING_READINESS.md` answers the twelve questions and ends with one verdict decided by a coded rule (T48): **TRAINING READY WITH EXPLICIT LIMITATIONS**.
 - [x] The M7 plan written and not executed; no EVREN credits, GPU or training job used.
+- [x] GitHub Actions re-derived the M5.5 outputs with `openinspect readiness check` on Ubuntu and Windows, without data (run 36916854075 on commit 230a553: all six jobs green).
 - [ ] Human validation of the similarity findings (0 / 300 pairs reviewed).
 
 ## v0.1 release
