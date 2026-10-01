@@ -79,6 +79,7 @@ A milestone is done only when every item on its list is true and the milestone r
 - [x] The cost of the whole-image rule (SPEC 7.4) is measured per source.
 - [x] Label-quality checks flag 437 findings as `REVIEW_REQUIRED` (`artifacts/m4/review-required.csv`); nothing is relabelled or dropped (T31).
 - [x] `openinspect taxonomy check` runs in CI without data; integration tests check the committed reports against `artifacts/m4/audit.json`, the digests, the taxonomy hash, the original-label counts against the ingest reports and the eligibility rule.
+- [x] GitHub Actions ran ruff, mypy, pytest and manifest validation, now including `openinspect taxonomy check`, without downloading any dataset (run 36860398174 on commit ee7ce82: all six jobs green on Ubuntu and Windows).
 - [ ] An independent review of the mapping statuses and of the label-quality queue.
 
 ## M5: release assembly and canonical splits
@@ -91,6 +92,7 @@ A milestone is done only when every item on its list is true and the milestone r
 - [x] Invariants I1 to I9 pass at build time and in CI from the committed files (`openinspect release check`); I10 holds for the smoke package.
 - [x] A machine-readable manifest (`release.json`): sources, versions, licences, counts, taxonomy, split methods and measurements, M3 limitations, the unresolved human validation, hashes, generating commit; `reports/m5/release.md` rendered from it.
 - [x] The EVREN smoke package: a deterministic YOLO Detection ZIP of 10/5/5 known A1 items in the data directory, its SHA-256 and the expected split of every item committed before upload (T36).
+- [x] GitHub Actions re-checked the committed release with `openinspect release check` on Ubuntu and Windows, without data (run 36860398174 on commit ee7ce82: all six jobs green).
 - [ ] The import into EVREN and the split-preservation check (M6).
 
 ## v0.1 release
