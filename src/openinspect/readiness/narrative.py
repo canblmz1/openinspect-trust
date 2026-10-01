@@ -8,6 +8,7 @@ from __future__ import annotations
 
 from collections.abc import Sequence
 
+from openinspect.readiness.design import SHORTFALLS
 from openinspect.readiness.giant import GiantComponent
 from openinspect.readiness.labels import LabelSummary
 from openinspect.readiness.models import (
@@ -99,7 +100,7 @@ def limitations(
         found.append(
             "The C designs miss their targets for "
             + ", ".join(
-                f"`{s}` ({', '.join(f'{k} {v}' for k, v in v.items() if v)})"
+                f"`{s}` ({', '.join(f'{k} {v[k]}' for k in SHORTFALLS if v.get(k))})"
                 for s, v in sorted(shortfall.items())
             )
             + ": too few groups small enough to be split or held out."

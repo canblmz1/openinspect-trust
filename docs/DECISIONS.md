@@ -323,3 +323,87 @@ Decisions D1–D10 come from [SPEC §12](SPEC.md); T1–T7 are technical choices
 - **Reason:** a small package answers the split question cheaply, and global-id file names make the check item by item.
 - **Risk:** the package mixes JPEG patches and PNG crops, as the full release does; EVREN may rename, re-encode or re-split on import, which the smoke test is meant to reveal.
 - **Revisit when:** the M6 import has been observed.
+
+## T37 — M6: the EVREN import smoke test passed
+- **Decision:** M6 is PASS. The maintainer's observations in the EVREN web UI are recorded as text (`manifests/releases/v0.1/evren-smoke/observed.yaml`); `openinspect release smoke-verify` compares each with the expectation committed before the upload and, with the data directory, with the ZIP itself, and keeps four kinds of statement apart: observed in EVREN, verified locally, not tested, unknown (`artifacts/m6/evren-smoke-test.json`, `reports/m6/evren-smoke-test.md`). Auto Split was not used; the version `v0.1-smoke` was created and frozen with "Alt Küme ile Versiyonla" and "Split Dağılımını Yeniden Ata" off; no training was started. No screenshot of the maintainer's account is committed.
+- **Evidence:** 13 of 13 comparisons MATCH: format YOLO Detection; 20 images, 37 annotations, 4 classes, 0 unlabelled; classes `short` 8, `open` 8, `mouse_bite` 11, `spurious_copper` 10; split 10 / 5 / 5 after the import and in the frozen version; one item per split opened with the expected split and labels; the ZIP in the data directory has the SHA-256 recorded before the upload.
+- **Reason:** the maintainer performed the test on the real platform; the repository records what was seen and changes an EVREN fact only on that direct evidence.
+- **Risk:** 17 of the 20 items were not checked one by one; the observations are transcribed, not exported; the Dataset Health grade (A, 81) is an EVREN platform score of a 20-image dataset and must not be read as an assurance result.
+- **Revisit when:** EVREN offers a machine-readable list of items per split, or a full package is imported (M7).
+
+## T38 — The local split stays canonical after M6
+- **Decision:** split preservation is recorded as observed for the tested package only; every later import is re-checked against its split file (counts per split and known items) before training, with Auto Split off. `docs/EVREN.md` upgrades only the observed facts.
+- **Evidence:** M6 checked the aggregate counts and one known item per split of one 20-item YOLO Detection package.
+- **Reason:** the group and source guarantees of the splits must not rest on a platform behaviour seen once.
+- **Risk:** each import costs a check.
+- **Revisit when:** an EVREN export or API makes the check automatic.
+
+## T39 — A0 and A1 stay historical regimes; the controlled estimand is C0 − C1
+- **Decision:** A0 − A1 is not called a leakage effect: the two regimes evaluate different test sets of different composition, and A1 has no PCB-Defect test item. The controlled comparison is a paired common-evaluation design (`openinspect.readiness.design`): one test set and one validation set; C0 trains on a core set plus the group-mates of half of the test items (*probes*), C1 on the same core plus as many *replacements* of the same source and, where possible, the same boxes per class, from groups that touch no test or validation item; whole groups held out of training form the *controls*. Groups larger than 50 items stay whole in training. Three seeded designs (0, 1, 2) are committed in `manifests/experiments/v0.1/` with the role of every item. A0, A1 and B stay reproducible as they are. SPEC §2 (RQ2, H2) and §7.6 are amended to this estimand before any model result; the analysis plan had not been tagged (`analysis-plan-v0.1` does not exist yet).
+- **Evidence:** A0 tests 438 items and A1 369; A1 has no PCB-Defect test item. Design 0: a common test set of 407 items (194 probes, 213 controls) and 698 validation items; 3,102 training items in both conditions with equal counts per source; C0 crosses 103 constraint groups and exposes all 194 probes, C1 crosses none and exposes none; 208 of 213 replacements have the mate's boxes per class.
+- **Reason:** "if two runs differ, which factor caused it?": in C0 − C1 only the presence of group-mates of the probes in training changes; the controls measure what the swap does by itself.
+- **Risk:** the groups are machine-detected (T29), so the estimand is the effect of *machine-defined* group-mates; PCB-Defect contributes one exposure group and one control group and no validation item; a small residual difference of training boxes per class.
+- **Revisit when:** the controls show a non-zero swap effect in M7, or reviewed groups replace the machine groups.
+
+## T40 — Representation sensitivity is measured on the release; A1 stays on DINOv2-small
+- **Decision:** the release's components are recomputed under DINOv2-base (same rule, its own thresholds and chaining) and A1 is rebuilt from them with the same algorithm, seed and targets (A1-base, measurement only). Materiality was fixed before the computation: at least 10% of the items change split, a source gains or loses a split, or a source's share of the test set moves by 5 points or more. A1, B and the C designs keep the primary representation of the protocol; their results are stated as results under the DINOv2-small grouping.
+- **Evidence:** `reports/m5_5/representation-sensitivity.md`: A1-base moves 1,212 items (27.4%) to another split and holds PCB-Defect in train only; under base, B-strict would exclude no training item (85 and 181 under small); 266 small primary-level pairs would cross A1-base, and 36 base pairs cross the committed A1; DINOv2-base similar pairs between train and test of the C designs: C0-d0 46 (dspcbsd-plus 6, pcb-defect 39, pcb-ind 1); C0-d1 39 (dspcbsd-plus 3, pcb-defect 33, pcb-ind 3); C0-d2 49 (dspcbsd-plus 7, pcb-defect 41, pcb-ind 1); C1-d0 35 (dspcbsd-plus 1, pcb-defect 33, pcb-ind 1); C1-d1 22 (pcb-defect 22); C1-d2 37 (dspcbsd-plus 1, pcb-defect 35, pcb-ind 1). The DINOv2-small components recomputed from the cache equal the committed M3 table.
+- **Reason:** no ground truth says which representation is right; the protocol fixed DINOv2-small before any result, and DINOv2-base misses more synthetic near-duplicates (M3).
+- **Risk:** the training and evaluation population depends materially on the representation; a reader must not generalize an A1 or B result beyond the small grouping. C1 keeps DINOv2-base similar pairs between train and test (most of them PCB-Defect scans), so M7 reports C0 − C1 per source, and the part of a source with such pairs holds only under the small grouping.
+- **Revisit when:** human review, or crop-level embeddings, give evidence for one grouping.
+
+## T41 — B is B-strict; B-natural is added
+- **Decision:** the M5 split `B-<source>` is named B-strict (training items that share a constraint directly with a held-out item are excluded) and keeps its file. B-natural holds the same source out and keeps every other item for training and validation (group-aware), including machine-similar cross-source items (`manifests/experiments/v0.1/B-natural-<source>__seed0.csv`).
+- **Evidence:** B-natural keeps the 85 PCB-IND items of the DsPCBSD+ fold and the 181 DsPCBSD+ items of the PCB-IND fold that B-strict excludes; in each of these two folds 4 similarity components and 12 primary-level pairs cross train and test. The PCB-Defect folds are identical (no constraint links PCB-Defect to another source). B-strict's direct-only exclusion leaves 535 training items of its DsPCBSD+ fold transitively linked to the test set (B-natural: 620).
+- **Reason:** the two regimes answer two questions: generalization under natural cross-source similarity, and generalization with the known machine-similarity overlap removed.
+- **Risk:** B-strict is not transitively clean; B-natural contains machine-similar pairs across its boundary by design.
+- **Revisit when:** the M7 results show whether the two differ.
+
+## T42 — M4 findings in the release: four categories, no correction
+- **Decision:** each of the 437 M4 findings is placed against the released boxes and images by fixed rules (`openinspect.readiness.labels`): FATAL (invalid geometry of a released box: excluded by a documented rule), TRAINING_RELEVANT, LIMITATION_ONLY, NOT_IN_RELEASE. Nothing is relabelled.
+- **Evidence:** 0 FATAL, 1 TRAINING_RELEVANT (a `short` box 1.998 px wide in `OI_dspcbsd-plus_e2692329fa2c`), 48 LIMITATION_ONLY (39 size outliers, 9 label conflicts whose counterpart is not released), 388 NOT_IN_RELEASE (`artifacts/m5_5/release-label-findings.csv`).
+- **Reason:** training readiness needs the exact released counts; labels change only after review (T31).
+- **Risk:** the queue is unreviewed; a LIMITATION_ONLY item may still be a labelling error.
+- **Revisit when:** someone reviews the queue.
+
+## T43 — Export validation that shares no code with the exporter
+- **Decision:** every package of the M7 plan is read by two independent parsers: the Ultralytics dataset checks (`check_det_dataset`, `verify_image_label`), run in a separate environment by `scripts/validate_export_ultralytics.py` (Ultralytics is AGPL-3.0 and is not a project dependency), and `openinspect.exportcheck`, which imports nothing from `openinspect` (a test enforces it). A box may leave its image by at most half a pixel, the box rule of the ingest contract (M2, `box_in_bounds`), stated again in the parser; every smaller overhang is counted in the report, not hidden. The first version of the parser allowed 0.01 px and failed 4 boxes of A1 that leave their 226 px image by 0.0113 px: DsPCBSD+ labels with four decimals, kept as the release holds them, and accepted by Ultralytics.
+- **Evidence:** 14 packages (`A0`, `A1`, `B-dspcbsd-plus`, `B-pcb-defect`, `B-pcb-ind`, `C0-d0`, `C1-d0`, `C0-d1`, `C1-d1`, `C0-d2`, `C1-d2`, `B-natural-dspcbsd-plus`, `B-natural-pcb-defect`, `B-natural-pcb-ind`), written from the committed release and split files; every one passes both parsers (Ultralytics 8.4.171: 0 corrupt images, 0 missing labels, no message) and its boxes per class equal the release's. 14 of the 14 packages hold 5 to 6 boxes that leave their image by less than half a pixel (at most 0.0113 px); they pass and are counted in `reports/m5_5/export-validation.md`.
+- **Reason:** an error in the exporter must not hide behind the same error in its own check; Ultralytics' loader is what trains YOLO11.
+- **Risk:** the checks cover the format and geometry, not label semantics; Ultralytics versions change.
+- **Revisit when:** EVREN offers a scriptable import validation.
+
+## T44 — Source identity probe: two simple NumPy models
+- **Decision:** multinomial logistic regression and a depth-three decision tree, written in NumPy (no scikit-learn dependency), on image size, format, box and colour statistics; five folds, stratified by source and, as a check, group-aware.
+- **Evidence:** balanced accuracy 100% from image size and file format alone (width ≤ 263 px is DsPCBSD+, PNG is PCB-Defect), 89.9% from box and colour statistics alone; majority baseline 40.0%.
+- **Reason:** the question is whether the benchmark carries obvious source signatures, not how well a model can learn them.
+- **Risk:** simple features understate what a CNN can pick up, so the source shift is if anything larger.
+- **Revisit when:** B results are interpreted (M9).
+
+## T45 — Negatives stay excluded in v0.1
+- **Decision:** the release keeps `negatives: exclude` (T34); M5.5 records the consequence instead of redesigning the release.
+- **Evidence:** 127 PCB-IND hard negatives (AOI false calls) are the only images without a box; the same policy applies to every regime.
+- **Reason:** changing the release now would void A0, A1, B and the smoke test.
+- **Risk:** precision on defect-free patches and the rejection of AOI false alarms are not measured.
+- **Revisit when:** a release adds a negative test set.
+
+## T46 — pHash-only candidate pairs stay unconstrained (P2)
+- **Decision:** M3 pairs that only the hash put in review are listed with their DINOv2-small and DINOv2-base cosines and their split relation in every regime (`artifacts/m5_5/phash-only-pairs.csv`); they are not constraints and do not block training.
+- **Evidence:** 626 pHash-only pairs with both images released (572 within a source, 54 across sources); Hamming distance: 0 bits 66, 2 bits 164, 4 bits 396; DINOv2-small cosine 0.203 to 0.918 (median 0.748), DINOv2-base 0.245 to 0.928 (median 0.685); pairs between train and test per regime: A0 89, A1 65, C0-d0 73, C1-d0 68, B-strict-dspcbsd-plus 53, B-natural-dspcbsd-plus 52, B-strict-pcb-defect 0, B-natural-pcb-defect 0, B-strict-pcb-ind 47, B-natural-pcb-ind 48.
+- **Reason:** the M3 protocol defines no pHash similarity level; promoting them now would tune the benchmark after seeing results.
+- **Risk:** some may be real near-duplicates across train and test.
+- **Revisit when:** a publication-level review of the pairs.
+
+## T47 — The PCB-Defect giant component is diagnosed, not broken
+- **Decision:** the component is explained by rules fixed before the diagnostics (A cohesive, B chaining, C crop generation, D representation, E mixture); the group is not cut by hand to obtain nicer split ratios.
+- **Evidence:** one A1 constraint group holds 859 of the 939 PCB-Defect crops; the DINOv2-small scan component under it has an edge minimum of 0.934 but an all-pair minimum of 0.712 (chaining gap 0.222, diameter 9 edges); components computed on the crops give a largest group of 71 instead of 859; DINOv2-base's largest scan component holds 149 of 230 scans, so rule D does not hold. Rules B and C hold: verdict E.
+- **Reason:** cutting a machine group because it is inconvenient would make A1 a tuned split.
+- **Risk:** PCB-Defect cannot take part in every A1 split; it is tested as a whole only when held out.
+- **Revisit when:** crop-level components or reviewed groups replace the inherited scan-level components.
+
+## T48 — The M5.5 verdict rule
+- **Decision:** NOT TRAINING READY if M6 failed, the M5 splits do not reproduce, a package fails the independent validation, a released box is FATAL, a C design leaves a test item exposed in C1 or none in C0, or a held-out split mixes sources; otherwise TRAINING READY WITH EXPLICIT LIMITATIONS if any limitation is recorded, else TRAINING READY. The rule is code (`openinspect.readiness.pipeline.verdict`) and is re-checked in CI.
+- **Evidence:** **TRAINING READY WITH EXPLICIT LIMITATIONS**: 0 blockers; 11 explicit limitations (`reports/m5_5/TRAINING_READINESS.md`).
+- **Reason:** the verdict must follow from the evidence, not be chosen in advance.
+- **Risk:** the split between blockers and limitations is a policy; it is stated in the report.
+- **Revisit when:** M7 results show a limitation was in fact a blocker.

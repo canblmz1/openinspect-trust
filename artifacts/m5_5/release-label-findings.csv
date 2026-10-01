@@ -1,0 +1,438 @@
+review_id,check,signal,source,image,ann_index,category,released_items,related_items,reason
+LQ-00001,geometry,zero_area_box,pcb-ind,YOLO/images/val/5799_t_038.jpg,4,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00002,geometry,tiny_box,dspcbsd-plus,Data_COCO/train2017/2200_data.jpg,0,TRAINING_RELEVANT,OI_dspcbsd-plus_e2692329fa2c,,the flagged box is released
+LQ-00003,geometry,tiny_box,dspcbsd-plus,Data_COCO/train2017/E_003632.jpg,2,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00004,geometry,tiny_box,dspcbsd-plus,Data_COCO/train2017/S_11065881.jpg,6,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00005,geometry,tiny_box,pcb-ind,YOLO/images/train/6090_t_003.jpg,1,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00006,geometry,extreme_aspect_ratio,dspcbsd-plus,Data_COCO/train2017/S_11153597.jpg,2,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00007,geometry,extreme_aspect_ratio,dspcbsd-plus,Data_COCO/train2017/S_12128912.jpg,3,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00008,geometry,extreme_aspect_ratio,pcb-ind,YOLO/images/train/6090_t_003.jpg,1,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00009,class_consistency,conflicting_box,dspcbsd-plus,Data_COCO/train2017/S_10030996.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00010,class_consistency,conflicting_box,dspcbsd-plus,Data_COCO/train2017/S_10310848.jpg,1,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00011,class_consistency,conflicting_box,dspcbsd-plus,Data_COCO/train2017/S_12160115.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00012,class_consistency,conflicting_box,dspcbsd-plus,Data_COCO/train2017/S_12617158.jpg,2,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00013,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/0004990.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00014,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/0035494.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00015,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/0058262.jpg,4,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00016,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/0058408.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00017,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/0058474.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00018,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/0066415.jpg,1,LIMITATION_ONLY,OI_dspcbsd-plus_285a529450a7,,the flagged box is released
+LQ-00019,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/0069056.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00020,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/0069057.jpg,4,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00021,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/0069368.jpg,1,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00022,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/0075054.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00023,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/0100690.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00024,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/0101393.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00025,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/0102000.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00026,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/0102717.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00027,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/0104600.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00028,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/0105373.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00029,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/0105551.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00030,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/0273883.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00031,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/0273888.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00032,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/0273894.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00033,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/0337543.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00034,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/0370608.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00035,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/0391822.jpg,2,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00036,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/0391894.jpg,2,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00037,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/0392080.jpg,1,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00038,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/0394634.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00039,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/0395878.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00040,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/0403838.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00041,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/1007_data.jpg,1,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00042,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/1007_data.jpg,2,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00043,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/1044_data.jpg,0,LIMITATION_ONLY,OI_dspcbsd-plus_37cac0ad82b0,,the flagged box is released
+LQ-00044,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/1045_data.jpg,1,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00045,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/1069_data.jpg,0,LIMITATION_ONLY,OI_dspcbsd-plus_9ad7cdfaa6d7,,the flagged box is released
+LQ-00046,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/1083_data.jpg,1,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00047,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/1162_data.jpg,2,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00048,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/1182_data.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00049,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/1182_data.jpg,1,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00050,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/1182_data.jpg,2,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00051,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/1182_data.jpg,4,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00052,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/1205_data.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00053,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/1205_data.jpg,2,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00054,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/1325_data.jpg,0,LIMITATION_ONLY,OI_dspcbsd-plus_510a11cde06f,,the flagged box is released
+LQ-00055,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/2001_data.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00056,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/2242_data.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00057,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/2242_data.jpg,2,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00058,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/2959_data.jpg,0,LIMITATION_ONLY,OI_dspcbsd-plus_75ced0a777aa,,the flagged box is released
+LQ-00059,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/467_data.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00060,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/467_data.jpg,1,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00061,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/467_data.jpg,2,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00062,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/939_data.jpg,1,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00063,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/984_data.jpg,0,LIMITATION_ONLY,OI_dspcbsd-plus_4e9d53b17d4c,,the flagged box is released
+LQ-00064,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/985_data.jpg,1,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00065,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/985_data.jpg,2,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00066,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/996_data.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00067,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/996_data.jpg,1,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00068,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/E_001369.jpg,1,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00069,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/E_003452.jpg,3,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00070,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/E_003453.jpg,2,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00071,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/E_003495.jpg,2,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00072,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/E_004841.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00073,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/E_005290.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00074,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/E_005291.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00075,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/S_10005579.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00076,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/S_10060765.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00077,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/S_10067905.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00078,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/S_10099360.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00079,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/S_10100627.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00080,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/S_10107271.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00081,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/S_10136790.jpg,2,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00082,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/S_10166506.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00083,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/S_10181979.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00084,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/S_10237014.jpg,1,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00085,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/S_10277917.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00086,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/S_10277918.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00087,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/S_10278342.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00088,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/S_10279487.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00089,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/S_10279488.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00090,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/S_10279865.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00091,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/S_10302290.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00092,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/S_10308450.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00093,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/S_10317012.jpg,1,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00094,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/S_10330061.jpg,2,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00095,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/S_10369784.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00096,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/S_10377392.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00097,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/S_10397138.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00098,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/S_10433131.jpg,1,LIMITATION_ONLY,OI_dspcbsd-plus_68e22ef8c7c4,,the flagged box is released
+LQ-00099,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/S_10469242.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00100,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/S_11004777.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00101,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/S_11048580.jpg,1,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00102,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/S_11049506.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00103,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/S_11049507.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00104,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/S_11136532.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00105,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/S_11176846.jpg,0,LIMITATION_ONLY,OI_dspcbsd-plus_36d4f5a2aecd,,the flagged box is released
+LQ-00106,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/S_11177210.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00107,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/S_11300917.jpg,2,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00108,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/S_11350098.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00109,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/S_11350102.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00110,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/S_11350133.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00111,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/S_11350135.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00112,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/S_11350366.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00113,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/S_11379009.jpg,0,LIMITATION_ONLY,OI_dspcbsd-plus_bdc935fa9972,,the flagged box is released
+LQ-00114,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/S_11379080.jpg,1,LIMITATION_ONLY,OI_dspcbsd-plus_a6feb356dba8,,the flagged box is released
+LQ-00115,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/S_11379129.jpg,3,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00116,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/S_11379163.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00117,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/S_11379163.jpg,1,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00118,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/S_11462535.jpg,2,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00119,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/S_11463383.jpg,1,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00120,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/S_11463583.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00121,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/S_11525958.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00122,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/S_11572613.jpg,2,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00123,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/S_11631842.jpg,1,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00124,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/S_11758274.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00125,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/S_11762131.jpg,2,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00126,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/S_11767761.jpg,2,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00127,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/S_11832994.jpg,1,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00128,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/S_11833237.jpg,2,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00129,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/S_11833239.jpg,4,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00130,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/S_11833717.jpg,1,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00131,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/S_11833745.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00132,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/S_11833745.jpg,2,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00133,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/S_11833838.jpg,1,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00134,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/S_11845056.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00135,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/S_11853647.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00136,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/S_11854143.jpg,1,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00137,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/S_11918720.jpg,5,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00138,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/S_12074115.jpg,1,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00139,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/S_12085877.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00140,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/S_12127799.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00141,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/S_12154867.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00142,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/S_12214229.jpg,2,LIMITATION_ONLY,OI_dspcbsd-plus_18b005344990,,the flagged box is released
+LQ-00143,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/S_12214229.jpg,3,LIMITATION_ONLY,OI_dspcbsd-plus_18b005344990,,the flagged box is released
+LQ-00144,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/S_12214230.jpg,0,LIMITATION_ONLY,OI_dspcbsd-plus_2ff95854845a,,the flagged box is released
+LQ-00145,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/S_12214230.jpg,1,LIMITATION_ONLY,OI_dspcbsd-plus_2ff95854845a,,the flagged box is released
+LQ-00146,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/S_12214230.jpg,2,LIMITATION_ONLY,OI_dspcbsd-plus_2ff95854845a,,the flagged box is released
+LQ-00147,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/S_12220607.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00148,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/S_12232808.jpg,1,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00149,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/S_12236818.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00150,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/S_12451947.jpg,2,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00151,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/S_12466832.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00152,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/S_12467447.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00153,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/S_12615468.jpg,1,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00154,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/S_12616660.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00155,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/S_12617221.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00156,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/Y_000305.jpg,2,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00157,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/Y_000467.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00158,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/Y_000698.jpg,3,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00159,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/Y_001257.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00160,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/Y_001451.jpg,1,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00161,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/Y_001452.jpg,2,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00162,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/Y_001820.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00163,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/Y_001826.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00164,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/Y_001827.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00165,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/Y_001926.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00166,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/Y_001927.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00167,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/Y_002386.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00168,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/Y_002387.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00169,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/Y_002531.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00170,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/Y_004841.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00171,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/train2017/Y_009371.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00172,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/val2017/0103984.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00173,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/val2017/0273884.jpg,1,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00174,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/val2017/0370610.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00175,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/val2017/0392022.jpg,4,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00176,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/val2017/0394636.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00177,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/val2017/0420193.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00178,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/val2017/1006_data.jpg,1,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00179,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/val2017/1006_data.jpg,2,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00180,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/val2017/1181_data.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00181,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/val2017/1348_data.jpg,0,LIMITATION_ONLY,OI_dspcbsd-plus_93accb8cf5af,,the flagged box is released
+LQ-00182,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/val2017/1368_data.jpg,2,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00183,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/val2017/1996_data.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00184,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/val2017/2012_data.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00185,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/val2017/2012_data.jpg,1,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00186,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/val2017/912_data.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00187,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/val2017/982_data.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00188,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/val2017/E_004842.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00189,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/val2017/S_10046125.jpg,1,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00190,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/val2017/S_10098185.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00191,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/val2017/S_10279489.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00192,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/val2017/S_10279866.jpg,1,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00193,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/val2017/S_10292947.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00194,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/val2017/S_10293640.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00195,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/val2017/S_10309487.jpg,0,LIMITATION_ONLY,OI_dspcbsd-plus_dda48a6f621d,,the flagged box is released
+LQ-00196,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/val2017/S_10309489.jpg,0,LIMITATION_ONLY,OI_dspcbsd-plus_7256a8070201,,the flagged box is released
+LQ-00197,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/val2017/S_11014398.jpg,1,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00198,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/val2017/S_11016457.jpg,2,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00199,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/val2017/S_11226244.jpg,1,LIMITATION_ONLY,OI_dspcbsd-plus_112b746d984e,,the flagged box is released
+LQ-00200,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/val2017/S_11379101.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00201,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/val2017/S_11462597.jpg,0,LIMITATION_ONLY,OI_dspcbsd-plus_40408cca793c,,the flagged box is released
+LQ-00202,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/val2017/S_11534893.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00203,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/val2017/S_11624246.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00204,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/val2017/S_11626474.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00205,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/val2017/S_11626474.jpg,1,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00206,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/val2017/S_11833654.jpg,1,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00207,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/val2017/S_11833659.jpg,2,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00208,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/val2017/S_11833664.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00209,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/val2017/S_12336617.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00210,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/val2017/S_12368741.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00211,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/val2017/S_12511054.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00212,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/val2017/Y_000680.jpg,1,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00213,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/val2017/Y_000812.jpg,1,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00214,class_consistency,class_size_outlier,dspcbsd-plus,Data_COCO/val2017/Y_001255.jpg,3,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00215,class_consistency,class_size_outlier,pcb-defect,PCB_Defect/images/pcb_defect_096.jpg,6,LIMITATION_ONLY,OI_pcb-defect_df661eaab92b,,the flagged box is released
+LQ-00216,class_consistency,class_size_outlier,pcb-defect,PCB_Defect/images/pcb_defect_097.jpg,0,LIMITATION_ONLY,OI_pcb-defect_182c21559ebb,,the flagged box is released
+LQ-00217,class_consistency,class_size_outlier,pcb-defect,PCB_Defect/images/pcb_defect_097.jpg,7,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00218,class_consistency,class_size_outlier,pcb-defect,PCB_Defect/images/pcb_defect_097.jpg,8,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00219,class_consistency,class_size_outlier,pcb-defect,PCB_Defect/images/pcb_defect_170.jpg,8,LIMITATION_ONLY,OI_pcb-defect_7acfa3a9d349,,the flagged box is released
+LQ-00220,class_consistency,class_size_outlier,pcb-defect,PCB_Defect/images/pcb_defect_194.jpg,3,LIMITATION_ONLY,OI_pcb-defect_1e295719c544,,the flagged box is released
+LQ-00221,class_consistency,class_size_outlier,pcb-defect,PCB_Defect/images/pcb_defect_204.jpg,4,LIMITATION_ONLY,OI_pcb-defect_a1c2b0f2e0c3,,the flagged box is released
+LQ-00222,class_consistency,class_size_outlier,pcb-defect,PCB_Defect/images/pcb_defect_213.jpg,7,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00223,class_consistency,class_size_outlier,pcb-defect,PCB_Defect/images/pcb_defect_213.jpg,9,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00224,class_consistency,class_size_outlier,pcb-defect,PCB_Defect/images/pcb_defect_214.jpg,8,LIMITATION_ONLY,OI_pcb-defect_621cdc3aa8a6,,the flagged box is released
+LQ-00225,class_consistency,class_size_outlier,pcb-defect,PCB_Defect/images/pcb_defect_214.jpg,9,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00226,class_consistency,class_size_outlier,pcb-defect,PCB_Defect/images/pcb_defect_214.jpg,10,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00227,class_consistency,class_size_outlier,pcb-defect,PCB_Defect/images/pcb_defect_214.jpg,12,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00228,class_consistency,class_size_outlier,pcb-ind,YOLO/images/test/5897_b_053.jpg,0,LIMITATION_ONLY,OI_pcb-ind_669c77ab449a,,the flagged box is released
+LQ-00229,class_consistency,class_size_outlier,pcb-ind,YOLO/images/test/6103_b_002.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00230,class_consistency,class_size_outlier,pcb-ind,YOLO/images/test/6108_t_016.jpg,0,LIMITATION_ONLY,OI_pcb-ind_887978662a99,,the flagged box is released
+LQ-00231,class_consistency,class_size_outlier,pcb-ind,YOLO/images/test/6108_t_017.jpg,0,LIMITATION_ONLY,OI_pcb-ind_3f4d59a35a89,,the flagged box is released
+LQ-00232,class_consistency,class_size_outlier,pcb-ind,YOLO/images/test/6201_b_018.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00233,class_consistency,class_size_outlier,pcb-ind,YOLO/images/test/6223_t_004.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00234,class_consistency,class_size_outlier,pcb-ind,YOLO/images/test/6334_t_097.jpg,1,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00235,class_consistency,class_size_outlier,pcb-ind,YOLO/images/test/6334_t_108.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00236,class_consistency,class_size_outlier,pcb-ind,YOLO/images/test/6334_t_115.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00237,class_consistency,class_size_outlier,pcb-ind,YOLO/images/test/6334_t_133.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00238,class_consistency,class_size_outlier,pcb-ind,YOLO/images/test/6334_t_141.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00239,class_consistency,class_size_outlier,pcb-ind,YOLO/images/test/6334_t_191.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00240,class_consistency,class_size_outlier,pcb-ind,YOLO/images/test/6571_b_015.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00241,class_consistency,class_size_outlier,pcb-ind,YOLO/images/test/6573_t_021.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00242,class_consistency,class_size_outlier,pcb-ind,YOLO/images/test/9287_t_235.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00243,class_consistency,class_size_outlier,pcb-ind,YOLO/images/test/9287_t_235.jpg,1,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00244,class_consistency,class_size_outlier,pcb-ind,YOLO/images/test/9287_t_253.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00245,class_consistency,class_size_outlier,pcb-ind,YOLO/images/train/5801_b_001.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00246,class_consistency,class_size_outlier,pcb-ind,YOLO/images/train/5801_b_057.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00247,class_consistency,class_size_outlier,pcb-ind,YOLO/images/train/5802_b_002.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00248,class_consistency,class_size_outlier,pcb-ind,YOLO/images/train/5802_t_216.jpg,2,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00249,class_consistency,class_size_outlier,pcb-ind,YOLO/images/train/5802_t_230.jpg,1,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00250,class_consistency,class_size_outlier,pcb-ind,YOLO/images/train/5806_b_002.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00251,class_consistency,class_size_outlier,pcb-ind,YOLO/images/train/5806_b_016.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00252,class_consistency,class_size_outlier,pcb-ind,YOLO/images/train/5812_b_018.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00253,class_consistency,class_size_outlier,pcb-ind,YOLO/images/train/5821_t_016.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00254,class_consistency,class_size_outlier,pcb-ind,YOLO/images/train/5830_b_049.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00255,class_consistency,class_size_outlier,pcb-ind,YOLO/images/train/5919_b_032.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00256,class_consistency,class_size_outlier,pcb-ind,YOLO/images/train/5946_t_003.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00257,class_consistency,class_size_outlier,pcb-ind,YOLO/images/train/6088_b_032.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00258,class_consistency,class_size_outlier,pcb-ind,YOLO/images/train/6089_t_035.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00259,class_consistency,class_size_outlier,pcb-ind,YOLO/images/train/6090_b_002.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00260,class_consistency,class_size_outlier,pcb-ind,YOLO/images/train/6090_t_002.jpg,0,LIMITATION_ONLY,OI_pcb-ind_569b7acfda33,,the flagged box is released
+LQ-00261,class_consistency,class_size_outlier,pcb-ind,YOLO/images/train/6090_t_003.jpg,1,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00262,class_consistency,class_size_outlier,pcb-ind,YOLO/images/train/6090_t_004.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00263,class_consistency,class_size_outlier,pcb-ind,YOLO/images/train/6092_t_002.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00264,class_consistency,class_size_outlier,pcb-ind,YOLO/images/train/6096_b_001.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00265,class_consistency,class_size_outlier,pcb-ind,YOLO/images/train/6096_b_008.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00266,class_consistency,class_size_outlier,pcb-ind,YOLO/images/train/6102_b_011.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00267,class_consistency,class_size_outlier,pcb-ind,YOLO/images/train/6123_b_001.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00268,class_consistency,class_size_outlier,pcb-ind,YOLO/images/train/6145_b_001.jpg,0,LIMITATION_ONLY,OI_pcb-ind_11296373768b,,the flagged box is released
+LQ-00269,class_consistency,class_size_outlier,pcb-ind,YOLO/images/train/6211_t_006.jpg,0,LIMITATION_ONLY,OI_pcb-ind_4642d51814eb,,the flagged box is released
+LQ-00270,class_consistency,class_size_outlier,pcb-ind,YOLO/images/train/6212_t_011.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00271,class_consistency,class_size_outlier,pcb-ind,YOLO/images/train/6222_b_146.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00272,class_consistency,class_size_outlier,pcb-ind,YOLO/images/train/6235_b_005.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00273,class_consistency,class_size_outlier,pcb-ind,YOLO/images/train/6235_b_058.jpg,0,LIMITATION_ONLY,OI_pcb-ind_1a6d3769c939,,the flagged box is released
+LQ-00274,class_consistency,class_size_outlier,pcb-ind,YOLO/images/train/6244_b_001.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00275,class_consistency,class_size_outlier,pcb-ind,YOLO/images/train/6245_b_017.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00276,class_consistency,class_size_outlier,pcb-ind,YOLO/images/train/6251_t_002.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00277,class_consistency,class_size_outlier,pcb-ind,YOLO/images/train/6254_t_002.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00278,class_consistency,class_size_outlier,pcb-ind,YOLO/images/train/6296_b_007.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00279,class_consistency,class_size_outlier,pcb-ind,YOLO/images/train/6310_b_004.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00280,class_consistency,class_size_outlier,pcb-ind,YOLO/images/train/6311_b_005.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00281,class_consistency,class_size_outlier,pcb-ind,YOLO/images/train/6329_b_005.jpg,0,LIMITATION_ONLY,OI_pcb-ind_934c4a880fdf,,the flagged box is released
+LQ-00282,class_consistency,class_size_outlier,pcb-ind,YOLO/images/train/6329_b_054.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00283,class_consistency,class_size_outlier,pcb-ind,YOLO/images/train/6329_b_065.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00284,class_consistency,class_size_outlier,pcb-ind,YOLO/images/train/6329_b_065.jpg,2,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00285,class_consistency,class_size_outlier,pcb-ind,YOLO/images/train/6329_b_066.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00286,class_consistency,class_size_outlier,pcb-ind,YOLO/images/train/6329_b_066.jpg,2,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00287,class_consistency,class_size_outlier,pcb-ind,YOLO/images/train/6329_b_070.jpg,1,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00288,class_consistency,class_size_outlier,pcb-ind,YOLO/images/train/6329_b_072.jpg,1,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00289,class_consistency,class_size_outlier,pcb-ind,YOLO/images/train/6329_b_076.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00290,class_consistency,class_size_outlier,pcb-ind,YOLO/images/train/6329_b_076.jpg,1,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00291,class_consistency,class_size_outlier,pcb-ind,YOLO/images/train/6329_b_085.jpg,1,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00292,class_consistency,class_size_outlier,pcb-ind,YOLO/images/train/6331_b_229.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00293,class_consistency,class_size_outlier,pcb-ind,YOLO/images/train/6331_b_251.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00294,class_consistency,class_size_outlier,pcb-ind,YOLO/images/train/6331_b_267.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00295,class_consistency,class_size_outlier,pcb-ind,YOLO/images/train/6331_b_269.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00296,class_consistency,class_size_outlier,pcb-ind,YOLO/images/train/6331_b_278.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00297,class_consistency,class_size_outlier,pcb-ind,YOLO/images/train/6331_b_283.jpg,0,LIMITATION_ONLY,OI_pcb-ind_2fa54a890398,,the flagged box is released
+LQ-00298,class_consistency,class_size_outlier,pcb-ind,YOLO/images/train/6331_b_298.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00299,class_consistency,class_size_outlier,pcb-ind,YOLO/images/train/6331_b_304.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00300,class_consistency,class_size_outlier,pcb-ind,YOLO/images/train/6331_t_039.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00301,class_consistency,class_size_outlier,pcb-ind,YOLO/images/train/6334_b_161.jpg,1,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00302,class_consistency,class_size_outlier,pcb-ind,YOLO/images/train/6334_b_228.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00303,class_consistency,class_size_outlier,pcb-ind,YOLO/images/train/6334_b_229.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00304,class_consistency,class_size_outlier,pcb-ind,YOLO/images/train/6334_b_237.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00305,class_consistency,class_size_outlier,pcb-ind,YOLO/images/train/6400_t_007.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00306,class_consistency,class_size_outlier,pcb-ind,YOLO/images/train/6406_b_013.jpg,1,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00307,class_consistency,class_size_outlier,pcb-ind,YOLO/images/train/6406_b_018.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00308,class_consistency,class_size_outlier,pcb-ind,YOLO/images/train/6406_b_043.jpg,1,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00309,class_consistency,class_size_outlier,pcb-ind,YOLO/images/train/6406_b_136.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00310,class_consistency,class_size_outlier,pcb-ind,YOLO/images/train/6406_b_138.jpg,1,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00311,class_consistency,class_size_outlier,pcb-ind,YOLO/images/train/6406_t_011.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00312,class_consistency,class_size_outlier,pcb-ind,YOLO/images/train/6416_t_010.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00313,class_consistency,class_size_outlier,pcb-ind,YOLO/images/train/6443_b_007.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00314,class_consistency,class_size_outlier,pcb-ind,YOLO/images/train/6538_b_002.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00315,class_consistency,class_size_outlier,pcb-ind,YOLO/images/train/6577_t_022.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00316,class_consistency,class_size_outlier,pcb-ind,YOLO/images/train/8897_t_003.jpg,0,LIMITATION_ONLY,OI_pcb-ind_29b95c8a25a6,,the flagged box is released
+LQ-00317,class_consistency,class_size_outlier,pcb-ind,YOLO/images/train/8897_t_004.jpg,0,LIMITATION_ONLY,OI_pcb-ind_620db6f78d7d,,the flagged box is released
+LQ-00318,class_consistency,class_size_outlier,pcb-ind,YOLO/images/train/8897_t_005.jpg,0,LIMITATION_ONLY,OI_pcb-ind_3ec85e0413ba,,the flagged box is released
+LQ-00319,class_consistency,class_size_outlier,pcb-ind,YOLO/images/train/9284_t_570.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00320,class_consistency,class_size_outlier,pcb-ind,YOLO/images/train/9284_t_571.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00321,class_consistency,class_size_outlier,pcb-ind,YOLO/images/train/9284_t_572.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00322,class_consistency,class_size_outlier,pcb-ind,YOLO/images/train/9284_t_573.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00323,class_consistency,class_size_outlier,pcb-ind,YOLO/images/train/9284_t_576.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00324,class_consistency,class_size_outlier,pcb-ind,YOLO/images/train/9284_t_577.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00325,class_consistency,class_size_outlier,pcb-ind,YOLO/images/train/9284_t_580.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00326,class_consistency,class_size_outlier,pcb-ind,YOLO/images/train/9284_t_581.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00327,class_consistency,class_size_outlier,pcb-ind,YOLO/images/train/9284_t_582.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00328,class_consistency,class_size_outlier,pcb-ind,YOLO/images/train/9284_t_583.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00329,class_consistency,class_size_outlier,pcb-ind,YOLO/images/train/9284_t_584.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00330,class_consistency,class_size_outlier,pcb-ind,YOLO/images/train/9284_t_588.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00331,class_consistency,class_size_outlier,pcb-ind,YOLO/images/train/9284_t_589.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00332,class_consistency,class_size_outlier,pcb-ind,YOLO/images/train/9284_t_590.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00333,class_consistency,class_size_outlier,pcb-ind,YOLO/images/train/9284_t_591.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00334,class_consistency,class_size_outlier,pcb-ind,YOLO/images/train/9284_t_592.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00335,class_consistency,class_size_outlier,pcb-ind,YOLO/images/train/9314_b_002.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00336,class_consistency,class_size_outlier,pcb-ind,YOLO/images/train/9387_b_145.jpg,2,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00337,class_consistency,class_size_outlier,pcb-ind,YOLO/images/train/9387_b_145.jpg,3,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00338,class_consistency,class_size_outlier,pcb-ind,YOLO/images/train/9387_b_147.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00339,class_consistency,class_size_outlier,pcb-ind,YOLO/images/train/9550_t_003.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00340,class_consistency,class_size_outlier,pcb-ind,YOLO/images/val/5896_b_022.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00341,class_consistency,class_size_outlier,pcb-ind,YOLO/images/val/6053_b_040.jpg,2,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00342,class_consistency,class_size_outlier,pcb-ind,YOLO/images/val/6448_b_035.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00343,class_consistency,class_size_outlier,pcb-ind,YOLO/images/val/6567_t_011.jpg,0,NOT_IN_RELEASE,,,the flagged box is not released
+LQ-00344,class_consistency,class_size_outlier,pcb-ind,YOLO/images/val/9369_t_001.jpg,0,LIMITATION_ONLY,OI_pcb-ind_0ef04e0cfca8,,the flagged box is released
+LQ-00345,source_format,source_format_disagreement,pcb-ind,YOLO/images/train/6194_b_017.jpg,,NOT_IN_RELEASE,,,the flagged image is not released
+LQ-00346,source_format,source_format_disagreement,pcb-ind,YOLO/images/val/5799_t_038.jpg,,NOT_IN_RELEASE,,,the flagged image is not released
+LQ-00347,neighbour_label,near_duplicate_label_conflict,dspcbsd-plus,Data_COCO/train2017/E_001868.jpg,,NOT_IN_RELEASE,,,neither image of the pair is released
+LQ-00348,neighbour_label,near_duplicate_label_conflict,dspcbsd-plus,Data_COCO/train2017/S_10105470.jpg,,NOT_IN_RELEASE,,,neither image of the pair is released
+LQ-00349,neighbour_label,near_duplicate_label_conflict,dspcbsd-plus,Data_COCO/train2017/S_10310142.jpg,,LIMITATION_ONLY,,OI_dspcbsd-plus_a6f493e08d9c,only one image of the pair is released
+LQ-00350,neighbour_label,near_duplicate_label_conflict,dspcbsd-plus,Data_COCO/train2017/S_11033398.jpg,,LIMITATION_ONLY,OI_dspcbsd-plus_3e49c7e082a3,,only one image of the pair is released
+LQ-00351,neighbour_label,near_duplicate_label_conflict,dspcbsd-plus,Data_COCO/train2017/S_11047161.jpg,,LIMITATION_ONLY,OI_dspcbsd-plus_66c759c1989f,,only one image of the pair is released
+LQ-00352,neighbour_label,near_duplicate_label_conflict,dspcbsd-plus,Data_COCO/train2017/S_11128983.jpg,,NOT_IN_RELEASE,,,neither image of the pair is released
+LQ-00353,neighbour_label,near_duplicate_label_conflict,dspcbsd-plus,Data_COCO/train2017/S_11144106.jpg,,NOT_IN_RELEASE,,,neither image of the pair is released
+LQ-00354,neighbour_label,near_duplicate_label_conflict,dspcbsd-plus,Data_COCO/train2017/S_11145842.jpg,,NOT_IN_RELEASE,,,neither image of the pair is released
+LQ-00355,neighbour_label,near_duplicate_label_conflict,dspcbsd-plus,Data_COCO/train2017/S_11147537.jpg,,NOT_IN_RELEASE,,,neither image of the pair is released
+LQ-00356,neighbour_label,near_duplicate_label_conflict,dspcbsd-plus,Data_COCO/train2017/S_11462623.jpg,,LIMITATION_ONLY,,OI_dspcbsd-plus_f4fe64ae650d,only one image of the pair is released
+LQ-00357,neighbour_label,near_duplicate_label_conflict,dspcbsd-plus,Data_COCO/train2017/S_11861651.jpg,,LIMITATION_ONLY,,OI_dspcbsd-plus_16c13fbc9497,only one image of the pair is released
+LQ-00358,neighbour_label,near_duplicate_label_conflict,dspcbsd-plus,Data_COCO/train2017/S_11882197.jpg,,NOT_IN_RELEASE,,,neither image of the pair is released
+LQ-00359,neighbour_label,near_duplicate_label_conflict,dspcbsd-plus,Data_COCO/train2017/S_11888779.jpg,,NOT_IN_RELEASE,,,neither image of the pair is released
+LQ-00360,neighbour_label,near_duplicate_label_conflict,dspcbsd-plus,Data_COCO/train2017/S_11891006.jpg,,NOT_IN_RELEASE,,,neither image of the pair is released
+LQ-00361,neighbour_label,near_duplicate_label_conflict,dspcbsd-plus,Data_COCO/train2017/S_11891006.jpg,,NOT_IN_RELEASE,,,neither image of the pair is released
+LQ-00362,neighbour_label,near_duplicate_label_conflict,dspcbsd-plus,Data_COCO/train2017/S_11891006.jpg,,NOT_IN_RELEASE,,,neither image of the pair is released
+LQ-00363,neighbour_label,near_duplicate_label_conflict,dspcbsd-plus,Data_COCO/train2017/S_11893609.jpg,,NOT_IN_RELEASE,,,neither image of the pair is released
+LQ-00364,neighbour_label,near_duplicate_label_conflict,dspcbsd-plus,Data_COCO/train2017/S_11893609.jpg,,NOT_IN_RELEASE,,,neither image of the pair is released
+LQ-00365,neighbour_label,near_duplicate_label_conflict,dspcbsd-plus,Data_COCO/train2017/S_11893609.jpg,,NOT_IN_RELEASE,,,neither image of the pair is released
+LQ-00366,neighbour_label,near_duplicate_label_conflict,dspcbsd-plus,Data_COCO/train2017/S_11894552.jpg,,NOT_IN_RELEASE,,,neither image of the pair is released
+LQ-00367,neighbour_label,near_duplicate_label_conflict,dspcbsd-plus,Data_COCO/train2017/S_11894552.jpg,,NOT_IN_RELEASE,,,neither image of the pair is released
+LQ-00368,neighbour_label,near_duplicate_label_conflict,dspcbsd-plus,Data_COCO/train2017/S_11894552.jpg,,NOT_IN_RELEASE,,,neither image of the pair is released
+LQ-00369,neighbour_label,near_duplicate_label_conflict,dspcbsd-plus,Data_COCO/train2017/S_11894552.jpg,,NOT_IN_RELEASE,,,neither image of the pair is released
+LQ-00370,neighbour_label,near_duplicate_label_conflict,dspcbsd-plus,Data_COCO/train2017/S_11895553.jpg,,NOT_IN_RELEASE,,,neither image of the pair is released
+LQ-00371,neighbour_label,near_duplicate_label_conflict,dspcbsd-plus,Data_COCO/train2017/S_11895553.jpg,,NOT_IN_RELEASE,,,neither image of the pair is released
+LQ-00372,neighbour_label,near_duplicate_label_conflict,dspcbsd-plus,Data_COCO/train2017/S_11895553.jpg,,NOT_IN_RELEASE,,,neither image of the pair is released
+LQ-00373,neighbour_label,near_duplicate_label_conflict,dspcbsd-plus,Data_COCO/train2017/S_11895553.jpg,,NOT_IN_RELEASE,,,neither image of the pair is released
+LQ-00374,neighbour_label,near_duplicate_label_conflict,dspcbsd-plus,Data_COCO/train2017/S_11896199.jpg,,NOT_IN_RELEASE,,,neither image of the pair is released
+LQ-00375,neighbour_label,near_duplicate_label_conflict,dspcbsd-plus,Data_COCO/train2017/S_11896428.jpg,,NOT_IN_RELEASE,,,neither image of the pair is released
+LQ-00376,neighbour_label,near_duplicate_label_conflict,dspcbsd-plus,Data_COCO/train2017/S_11896428.jpg,,NOT_IN_RELEASE,,,neither image of the pair is released
+LQ-00377,neighbour_label,near_duplicate_label_conflict,dspcbsd-plus,Data_COCO/train2017/S_11902330.jpg,,NOT_IN_RELEASE,,,neither image of the pair is released
+LQ-00378,neighbour_label,near_duplicate_label_conflict,dspcbsd-plus,Data_COCO/train2017/S_11917961.jpg,,NOT_IN_RELEASE,,,neither image of the pair is released
+LQ-00379,neighbour_label,near_duplicate_label_conflict,dspcbsd-plus,Data_COCO/train2017/S_11917961.jpg,,NOT_IN_RELEASE,,,neither image of the pair is released
+LQ-00380,neighbour_label,near_duplicate_label_conflict,dspcbsd-plus,Data_COCO/train2017/S_11924890.jpg,,NOT_IN_RELEASE,,,neither image of the pair is released
+LQ-00381,neighbour_label,near_duplicate_label_conflict,dspcbsd-plus,Data_COCO/train2017/S_12091432.jpg,,NOT_IN_RELEASE,,,neither image of the pair is released
+LQ-00382,neighbour_label,near_duplicate_label_conflict,dspcbsd-plus,Data_COCO/train2017/S_12228571.jpg,,NOT_IN_RELEASE,,,neither image of the pair is released
+LQ-00383,neighbour_label,near_duplicate_label_conflict,dspcbsd-plus,Data_COCO/train2017/S_12345428.jpg,,NOT_IN_RELEASE,,,neither image of the pair is released
+LQ-00384,neighbour_label,near_duplicate_label_conflict,dspcbsd-plus,Data_COCO/train2017/Y_000608.jpg,,NOT_IN_RELEASE,,,neither image of the pair is released
+LQ-00385,neighbour_label,near_duplicate_label_conflict,dspcbsd-plus,Data_COCO/train2017/Y_000613.jpg,,NOT_IN_RELEASE,,,neither image of the pair is released
+LQ-00386,neighbour_label,near_duplicate_label_conflict,dspcbsd-plus,Data_COCO/train2017/Y_000664.jpg,,NOT_IN_RELEASE,,,neither image of the pair is released
+LQ-00387,neighbour_label,near_duplicate_label_conflict,dspcbsd-plus,Data_COCO/train2017/Y_000669.jpg,,NOT_IN_RELEASE,,,neither image of the pair is released
+LQ-00388,neighbour_label,near_duplicate_label_conflict,dspcbsd-plus,Data_COCO/train2017/Y_000673.jpg,,NOT_IN_RELEASE,,,neither image of the pair is released
+LQ-00389,neighbour_label,near_duplicate_label_conflict,dspcbsd-plus,Data_COCO/train2017/Y_000684.jpg,,NOT_IN_RELEASE,,,neither image of the pair is released
+LQ-00390,neighbour_label,near_duplicate_label_conflict,dspcbsd-plus,Data_COCO/train2017/Y_000694.jpg,,NOT_IN_RELEASE,,,neither image of the pair is released
+LQ-00391,neighbour_label,near_duplicate_label_conflict,dspcbsd-plus,Data_COCO/train2017/Y_000698.jpg,,NOT_IN_RELEASE,,,neither image of the pair is released
+LQ-00392,neighbour_label,near_duplicate_label_conflict,dspcbsd-plus,Data_COCO/train2017/Y_000704.jpg,,NOT_IN_RELEASE,,,neither image of the pair is released
+LQ-00393,neighbour_label,near_duplicate_label_conflict,dspcbsd-plus,Data_COCO/train2017/Y_000704.jpg,,NOT_IN_RELEASE,,,neither image of the pair is released
+LQ-00394,neighbour_label,near_duplicate_label_conflict,dspcbsd-plus,Data_COCO/train2017/Y_000709.jpg,,NOT_IN_RELEASE,,,neither image of the pair is released
+LQ-00395,neighbour_label,near_duplicate_label_conflict,dspcbsd-plus,Data_COCO/train2017/Y_000710.jpg,,NOT_IN_RELEASE,,,neither image of the pair is released
+LQ-00396,neighbour_label,near_duplicate_label_conflict,dspcbsd-plus,Data_COCO/train2017/Y_000711.jpg,,NOT_IN_RELEASE,,,neither image of the pair is released
+LQ-00397,neighbour_label,near_duplicate_label_conflict,dspcbsd-plus,Data_COCO/train2017/Y_000711.jpg,,NOT_IN_RELEASE,,,neither image of the pair is released
+LQ-00398,neighbour_label,near_duplicate_label_conflict,dspcbsd-plus,Data_COCO/train2017/Y_000711.jpg,,NOT_IN_RELEASE,,,neither image of the pair is released
+LQ-00399,neighbour_label,near_duplicate_label_conflict,dspcbsd-plus,Data_COCO/train2017/Y_000711.jpg,,NOT_IN_RELEASE,,,neither image of the pair is released
+LQ-00400,neighbour_label,near_duplicate_label_conflict,dspcbsd-plus,Data_COCO/train2017/Y_000711.jpg,,NOT_IN_RELEASE,,,neither image of the pair is released
+LQ-00401,neighbour_label,near_duplicate_label_conflict,dspcbsd-plus,Data_COCO/train2017/Y_000711.jpg,,NOT_IN_RELEASE,,,neither image of the pair is released
+LQ-00402,neighbour_label,near_duplicate_label_conflict,dspcbsd-plus,Data_COCO/train2017/Y_000712.jpg,,NOT_IN_RELEASE,,,neither image of the pair is released
+LQ-00403,neighbour_label,near_duplicate_label_conflict,dspcbsd-plus,Data_COCO/train2017/Y_000723.jpg,,NOT_IN_RELEASE,,,neither image of the pair is released
+LQ-00404,neighbour_label,near_duplicate_label_conflict,dspcbsd-plus,Data_COCO/train2017/Y_000723.jpg,,NOT_IN_RELEASE,,,neither image of the pair is released
+LQ-00405,neighbour_label,near_duplicate_label_conflict,dspcbsd-plus,Data_COCO/train2017/Y_000727.jpg,,NOT_IN_RELEASE,,,neither image of the pair is released
+LQ-00406,neighbour_label,near_duplicate_label_conflict,dspcbsd-plus,Data_COCO/train2017/Y_000727.jpg,,NOT_IN_RELEASE,,,neither image of the pair is released
+LQ-00407,neighbour_label,near_duplicate_label_conflict,dspcbsd-plus,Data_COCO/train2017/Y_000793.jpg,,NOT_IN_RELEASE,,,neither image of the pair is released
+LQ-00408,neighbour_label,near_duplicate_label_conflict,dspcbsd-plus,Data_COCO/train2017/Y_000799.jpg,,NOT_IN_RELEASE,,,neither image of the pair is released
+LQ-00409,neighbour_label,near_duplicate_label_conflict,dspcbsd-plus,Data_COCO/train2017/Y_000817.jpg,,NOT_IN_RELEASE,,,neither image of the pair is released
+LQ-00410,neighbour_label,near_duplicate_label_conflict,dspcbsd-plus,Data_COCO/train2017/Y_000817.jpg,,NOT_IN_RELEASE,,,neither image of the pair is released
+LQ-00411,neighbour_label,near_duplicate_label_conflict,dspcbsd-plus,Data_COCO/train2017/Y_000830.jpg,,NOT_IN_RELEASE,,,neither image of the pair is released
+LQ-00412,neighbour_label,near_duplicate_label_conflict,dspcbsd-plus,Data_COCO/train2017/Y_000830.jpg,,NOT_IN_RELEASE,,,neither image of the pair is released
+LQ-00413,neighbour_label,near_duplicate_label_conflict,dspcbsd-plus,Data_COCO/train2017/Y_000837.jpg,,NOT_IN_RELEASE,,,neither image of the pair is released
+LQ-00414,neighbour_label,near_duplicate_label_conflict,dspcbsd-plus,Data_COCO/train2017/Y_000838.jpg,,NOT_IN_RELEASE,,,neither image of the pair is released
+LQ-00415,neighbour_label,near_duplicate_label_conflict,dspcbsd-plus,Data_COCO/train2017/Y_000838.jpg,,NOT_IN_RELEASE,,,neither image of the pair is released
+LQ-00416,neighbour_label,near_duplicate_label_conflict,dspcbsd-plus,Data_COCO/train2017/Y_000847.jpg,,NOT_IN_RELEASE,,,neither image of the pair is released
+LQ-00417,neighbour_label,near_duplicate_label_conflict,dspcbsd-plus,Data_COCO/train2017/Y_000853.jpg,,NOT_IN_RELEASE,,,neither image of the pair is released
+LQ-00418,neighbour_label,near_duplicate_label_conflict,dspcbsd-plus,Data_COCO/train2017/Y_000861.jpg,,NOT_IN_RELEASE,,,neither image of the pair is released
+LQ-00419,neighbour_label,near_duplicate_label_conflict,dspcbsd-plus,Data_COCO/train2017/Y_000873.jpg,,NOT_IN_RELEASE,,,neither image of the pair is released
+LQ-00420,neighbour_label,near_duplicate_label_conflict,dspcbsd-plus,Data_COCO/train2017/Y_000874.jpg,,NOT_IN_RELEASE,,,neither image of the pair is released
+LQ-00421,neighbour_label,near_duplicate_label_conflict,dspcbsd-plus,Data_COCO/train2017/Y_000888.jpg,,NOT_IN_RELEASE,,,neither image of the pair is released
+LQ-00422,neighbour_label,near_duplicate_label_conflict,dspcbsd-plus,Data_COCO/train2017/Y_000967.jpg,,NOT_IN_RELEASE,,,neither image of the pair is released
+LQ-00423,neighbour_label,near_duplicate_label_conflict,dspcbsd-plus,Data_COCO/train2017/Y_001179.jpg,,NOT_IN_RELEASE,,,neither image of the pair is released
+LQ-00424,neighbour_label,near_duplicate_label_conflict,dspcbsd-plus,Data_COCO/train2017/Y_001205.jpg,,NOT_IN_RELEASE,,,neither image of the pair is released
+LQ-00425,neighbour_label,near_duplicate_label_conflict,dspcbsd-plus,Data_COCO/train2017/Y_002286.jpg,,NOT_IN_RELEASE,,,neither image of the pair is released
+LQ-00426,neighbour_label,near_duplicate_label_conflict,dspcbsd-plus,Data_COCO/train2017/Y_005057.jpg,,NOT_IN_RELEASE,,,neither image of the pair is released
+LQ-00427,neighbour_label,near_duplicate_label_conflict,dspcbsd-plus,Data_COCO/val2017/S_11881099.jpg,,NOT_IN_RELEASE,,,neither image of the pair is released
+LQ-00428,neighbour_label,near_duplicate_label_conflict,dspcbsd-plus,Data_COCO/val2017/S_11886061.jpg,,NOT_IN_RELEASE,,,neither image of the pair is released
+LQ-00429,neighbour_label,near_duplicate_label_conflict,dspcbsd-plus,Data_COCO/val2017/S_11886061.jpg,,NOT_IN_RELEASE,,,neither image of the pair is released
+LQ-00430,neighbour_label,near_duplicate_label_conflict,dspcbsd-plus,Data_COCO/val2017/S_11889468.jpg,,NOT_IN_RELEASE,,,neither image of the pair is released
+LQ-00431,neighbour_label,near_duplicate_label_conflict,dspcbsd-plus,Data_COCO/val2017/S_11917713.jpg,,NOT_IN_RELEASE,,,neither image of the pair is released
+LQ-00432,neighbour_label,near_duplicate_label_conflict,pcb-ind,YOLO/images/test/6333_t_002.jpg,,LIMITATION_ONLY,OI_pcb-ind_39fc58be65b5,,only one image of the pair is released
+LQ-00433,neighbour_label,near_duplicate_label_conflict,pcb-ind,YOLO/images/train/6295_b_006.jpg,,LIMITATION_ONLY,OI_pcb-ind_544222bcb6a5,,only one image of the pair is released
+LQ-00434,neighbour_label,near_duplicate_label_conflict,pcb-ind,YOLO/images/train/6321_b_006.jpg,,LIMITATION_ONLY,OI_pcb-ind_24ecc09c2269,,only one image of the pair is released
+LQ-00435,neighbour_label,near_duplicate_label_conflict,pcb-ind,YOLO/images/train/6353_t_009.jpg,,LIMITATION_ONLY,OI_pcb-ind_a1e6ca76b40d,,only one image of the pair is released
+LQ-00436,mapping,mapping_ambiguity,pcb-ind,,,NOT_IN_RELEASE,,,the flagged image is not released
+LQ-00437,mapping,mapping_ambiguity,pcb-ind,,,NOT_IN_RELEASE,,,the flagged image is not released

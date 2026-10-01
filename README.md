@@ -2,7 +2,7 @@
 
 A reproducible dataset and benchmark assurance preflight for industrial vision.
 
-**Status: early development.** Milestones 1 (source registry), 2 (ingest), 3 (similarity and leakage audit), 4 (taxonomy and label audit) and 5 (release assembly and canonical splits) are implemented and have been run on three public PCB defect datasets. No model has been trained yet; the next step is the EVREN import smoke test (Milestone 6).
+**Status: early development.** Milestones 1 (source registry), 2 (ingest), 3 (similarity and leakage audit), 4 (taxonomy and label audit), 5 (release assembly and canonical splits), 6 (the EVREN import smoke test, PASS) and 5.5 (training readiness) are done on three public PCB defect datasets. No model has been trained yet; the M5.5 verdict is TRAINING READY WITH EXPLICIT LIMITATIONS, and the next step is Milestone 7, the controlled YOLO11n experiments on EVREN, once the maintainer approves the compute.
 
 ## What it is
 
@@ -34,7 +34,8 @@ Defect-detection benchmarks are usually scored on a random train/test split of o
 3. Audit the pool before training (implemented): exact and perceptual hashes, DINOv2 similarity with thresholds from a rule frozen before any result, visual similarity components, split leakage against random splits, the sources' own keys across splits, a dimensional assurance report and a review queue (not yet reviewed by a person).
 4. Map source labels to a normalized taxonomy with a status and evidence per label, and flag suspicious annotations for review (implemented; original labels are never changed).
 5. Assemble a release with stable ids, provenance per item and three split regimes, A0, A1 and B, whose leakage invariants are measured and checked in CI (implemented).
-6. Train YOLO11n (later RT-DETR) on EVREN or locally with identical settings per regime; evaluate every model with one local evaluator.
+6. Check training readiness before any training: re-derive the splits, build a controlled design whose conditions differ in one factor, measure how the splits depend on the representation, place the label findings in the release, probe how predictable the source is, and read every training package with two parsers that share no code with the exporter (implemented).
+7. Train YOLO11n (later RT-DETR) on EVREN or locally with identical settings per regime; evaluate every model with one local evaluator.
 
 Details, data contracts, invariants and risks: [docs/SPEC.md](docs/SPEC.md). Decisions and their evidence: [docs/DECISIONS.md](docs/DECISIONS.md).
 
@@ -44,9 +45,11 @@ Details, data contracts, invariants and risks: [docs/SPEC.md](docs/SPEC.md). Dec
 |---|---|
 | A0 | raw, random split of the pool |
 | A1 | cleaned, group-aware split of the same sources: no similarity component or metadata group crosses it |
-| B | source-held-out: train on some sources, test on another |
+| B (B-strict) | source-held-out: train on the other sources, test on the held-out one; training items that share a constraint with it are excluded |
+| B-natural | source-held-out, keeping the machine-similar cross-source items in training |
+| C0 / C1 | a controlled pair on one common test set: C0 trains on the group-mates of half of the test items (*probes*), C1 on replacements of the same source; the other test items (*controls*) have no group-mate in either |
 
-A0 − A1 approximates the effect of split leakage. A1 − B approximates a residual source or domain shift. **A0 − B is not leakage:** between sources the acquisition hardware, the factory, the lighting, the resolution, the annotation style, the taxonomy and the label distribution all change, and each of them moves the score.
+C0 − C1 on the probes estimates the effect of training on group-mates of a test item, and the controls check that the swap alone changes nothing. A0 − A1 compares two different test sets (A1 has no PCB-Defect test item), so it is reported descriptively, not as a leakage effect (Milestone 5.5). A1 − B approximates a residual source or domain shift. **A0 − B is not leakage:** between sources the acquisition hardware, the factory, the lighting, the resolution, the annotation style, the taxonomy and the label distribution all change, and each of them moves the score.
 
 ## Dataset sources
 
@@ -106,13 +109,39 @@ The manifest is [manifests/releases/v0.1/release.json](manifests/releases/v0.1/r
 - **B** (source held out, 15% group-aware validation): one fold per source; training items that share a visual similarity component with the held-out source are excluded (85 PCB-IND items when DsPCBSD+ is held out, 181 DsPCBSD+ items when PCB-IND is held out); 0 constraints cross.
 - Invariants I1 to I9 pass at build time and are re-checked from the committed files by `openinspect release check` in CI.
 
-A0 − A1 approximates the leakage and split-structure effect; A1 − B approximates a residual source or domain shift; A0 − B is not leakage. The visual-similarity audit behind A1 is machine-generated and has not been independently human-validated.
+M5 read A0 − A1 as the leakage and split-structure effect; Milestone 5.5 showed that the two regimes evaluate different test sets and replaced that reading with a controlled design (below). A0 − B is not leakage. The visual-similarity audit behind A1 is machine-generated and has not been independently human-validated.
 
-**EVREN smoke package.** `openinspect release smoke` wrote `openinspect-trust-v0.1-evren-smoke-yolo.zip` (YOLO Detection, 20 known items of A1: 10 train, 5 val, 5 test, all four classes in every split; file names are global ids) to `<OPENINSPECT_DATA_DIR>/exports/v0.1/`. Its SHA-256 and the expected split of every item were committed before any upload: [manifests/releases/v0.1/evren-smoke/](manifests/releases/v0.1/evren-smoke/). Whether EVREN keeps the imported split is the open question of Milestone 6 ([docs/EVREN.md](docs/EVREN.md)).
+**EVREN smoke package.** `openinspect release smoke` wrote `openinspect-trust-v0.1-evren-smoke-yolo.zip` (YOLO Detection, 20 known items of A1: 10 train, 5 val, 5 test, all four classes in every split; file names are global ids) to `<OPENINSPECT_DATA_DIR>/exports/v0.1/`. Its SHA-256 and the expected split of every item were committed before any upload: [manifests/releases/v0.1/evren-smoke/](manifests/releases/v0.1/evren-smoke/). Milestone 6 imported it into EVREN (below).
+
+## The EVREN import smoke test (Milestone 6)
+
+On 2026-10-01 the maintainer imported the 20-item package in the EVREN web UI as a private dataset (YOLO Detection, Auto Split off) and froze it as version `v0.1-smoke`; no training was started. The observations are recorded as text in [observed.yaml](manifests/releases/v0.1/evren-smoke/observed.yaml) (no screenshot is committed), and `openinspect release smoke-verify` compares them with the expectation committed before the upload and with the ZIP: **PASS, 13 of 13 comparisons match** ([reports/m6/evren-smoke-test.md](reports/m6/evren-smoke-test.md)).
+
+- Observed in EVREN: the ZIP was identified as YOLO Detection and imported with 20 images, 37 annotations, 4 classes and 0 unlabelled images; the class names and box counts match (`short` 8, `open` 8, `mouse_bite` 11, `spurious_copper` 10); the supplied split (10 / 5 / 5) was kept on import and in the frozen version; one item opened per split had the expected split and labels, with its boxes drawn where the defects are.
+- Not tested: the split of each of the other 17 items, Auto Split, a full release or a COCO import, training and inference. Unknown: whether EVREN keeps the files byte for byte, and its APIs.
+- EVREN's Dataset Health panel showed A / 81; that is the platform's score of a 20-image dataset, not an assurance result of this project.
+
+Split preservation is therefore *observed for this package*; every later import is checked again against its split file (decision T38).
+
+## Training readiness (Milestone 5.5)
+
+Before any training, Milestone 5.5 asks: if two EVREN YOLO runs produce different scores, can we say which experimental factor caused the difference? **Verdict: TRAINING READY WITH EXPLICIT LIMITATIONS** ([reports/m5_5/TRAINING_READINESS.md](reports/m5_5/TRAINING_READINESS.md)). Every number is in [artifacts/m5_5/readiness.json](artifacts/m5_5/readiness.json), and `openinspect readiness check` re-derives the outputs from committed files in CI.
+
+- **A0 − A1 is not a leakage effect.** A0 tests 438 items and A1 369; they share 38, A0 trains on 254 of A1's test items, and A1 has no PCB-Defect test item. The difference stays descriptive.
+- **The controlled estimand is C0 − C1** on one common test set, in three seeded designs ([controlled-design.md](reports/m5_5/controlled-design.md)). Design 0: 407 test items (194 probes, 213 controls), 698 validation items, and 3,102 training items in both conditions with equal counts per source. Between the conditions only the probes' group-mates are swapped for replacements of the same source and, where possible, the same boxes per class (208 of 213); C0 exposes all 194 probes through 103 constraint groups, C1 exposes none.
+- **B-strict and B-natural.** The M5 split B is now called B-strict; B-natural keeps the machine-similar cross-source items (85 PCB-IND items in the DsPCBSD+ fold, 181 DsPCBSD+ items in the PCB-IND fold). B-strict excludes only direct links, so 535 training items of its DsPCBSD+ fold stay transitively linked to the test set.
+- **The splits depend materially on the representation** ([representation-sensitivity.md](reports/m5_5/representation-sensitivity.md)). An A1 built from DINOv2-base components moves 1,212 items (27.4%) to another split, and under base B-strict would exclude nothing; in design 0, 35 DINOv2-base similar pairs lie between C1's train and test sets (dspcbsd-plus 1, pcb-defect 33, pcb-ind 1; 46 in C0), so C0 − C1 is reported per source. A1, B and C are results *under the DINOv2-small grouping*.
+- **PCB-Defect's giant group** (859 of its 939 crops) is a mixture (verdict E): transitive chaining of the scan-level components (chaining gap 0.22 over a diameter of 9 edges) and crop generation (components computed on the crops give a largest group of 71, a design family, instead of 859). It is diagnosed, not cut by hand ([pcb-defect-component.md](reports/m5_5/pcb-defect-component.md)).
+- **Label findings in the release:** of the 437 M4 findings, 0 are FATAL, 1 is training-relevant (a box under 2 px), 48 are limitation-only and 388 concern images outside the release; nothing was relabelled ([release-label-quality.md](reports/m5_5/release-label-quality.md)).
+- **Source identity is trivially predictable:** balanced accuracy 100% from image size and file format alone, 89.9% from box and colour statistics (majority baseline 40%); B measures a large source and domain shift ([source-probe.md](reports/m5_5/source-probe.md)).
+- **Export:** All 14 YOLO packages of the M7 plan pass two independent readers: Ultralytics 8.4.171 in a separate environment and a parser that shares no code with the exporter; their boxes per class equal the release's ([export-validation.md](reports/m5_5/export-validation.md)).
+- Human validation stays NOT PERFORMED (0 / 300 pairs reviewed), so the reports speak of machine-detected potential leakage, visual similarity groups and embedding-defined components only.
+
+The M7 training plan (YOLO11n with one configuration for every run, three training seeds for C0 and C1) is [reports/m5_5/m7-plan.md](reports/m5_5/m7-plan.md); it is not executed.
 
 ## Results
 
-The dataset-structure results of Milestones 3 to 5 are above. There are no model results yet; the roadmap is in [docs/SPEC.md](docs/SPEC.md) §13.
+The dataset-structure results of Milestones 3 to 5.5 are above. There are no model results yet; the roadmap is in [docs/SPEC.md](docs/SPEC.md) §13.
 
 ## Reproduction
 
@@ -141,7 +170,13 @@ uv run openinspect taxonomy audit --all                              # map, revi
 uv run openinspect release build                                     # release v0.1: images, splits, manifest, reports/m5
 uv run openinspect release check                                     # no data needed: hashes and invariants
 uv run openinspect release smoke                                     # the EVREN smoke-test ZIP and its expected splits
+uv run openinspect release smoke-verify                              # M6: the recorded EVREN observations against the expectation
+uv run openinspect release smoke-report                              # no data needed: re-renders reports/m6 from its record
+uv run openinspect readiness compute --ultralytics-python PYTHON     # M5.5, about 40 min; PYTHON: see below
+uv run openinspect readiness check                                   # no data needed: re-derives the M5.5 outputs
 ```
+
+`--ultralytics-python` names the interpreter of a separate environment with Ultralytics installed (`pip install ultralytics`): Ultralytics is AGPL-3.0, so it reads the packages from outside and is not a dependency of this project ([docs/DEPENDENCIES.md](docs/DEPENDENCIES.md)).
 
 `dedup analyze` needs no model: it reads the caches. `dedup report` re-renders [reports/m3/](reports/m3/) from `artifacts/m3/audit.json` without any data. `dedup review` writes a local HTML contact sheet of the review queue into the data directory (it embeds dataset thumbnails, so it is never committed); decisions go into `artifacts/m3/review-candidates.csv`.
 

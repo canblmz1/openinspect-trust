@@ -13,13 +13,14 @@ All notable changes are recorded here. Format: [Keep a Changelog](https://keepac
 - B-natural folds next to the M5 split B, renamed B-strict in the documentation (its files are unchanged).
 - `openinspect.exportcheck`: a YOLO package parser that imports nothing from `openinspect`; `scripts/validate_export_ultralytics.py` for the Ultralytics checks in a separate environment (Ultralytics stays outside the project).
 - Reports: `TRAINING_READINESS.md` (verdict, blockers, limitations, the twelve questions), `controlled-design.md`, `representation-sensitivity.md`, `pcb-defect-component.md`, `release-label-quality.md`, `source-probe.md`, `export-validation.md`, `m7-plan.md` (not executed).
+- Verdict: TRAINING READY WITH EXPLICIT LIMITATIONS (`reports/m5_5/TRAINING_READINESS.md`).
 - CI runs `openinspect readiness check`.
 - Decisions T39–T48.
 
 ### Added — M6: EVREN import smoke test
 
 - `manifests/releases/v0.1/evren-smoke/observed.yaml`: the maintainer's observations in the EVREN UI, as text.
-- `openinspect release smoke-verify`: compares every observation with the expectation committed before the upload and, with the data directory, with the ZIP; writes `artifacts/m6/evren-smoke-test.json` and `reports/m6/evren-smoke-test.md`. Verdict: PASS (13 of 13 comparisons match).
+- `openinspect release smoke-verify`: compares every observation with the expectation committed before the upload and, with the data directory, with the ZIP; writes `artifacts/m6/evren-smoke-test.json` and `reports/m6/evren-smoke-test.md`. Verdict: PASS (13 of 13 comparisons match). `openinspect release smoke-report` re-renders the report from the record without data.
 - `docs/EVREN.md`: YOLO Detection import, class import, split preservation for the tested package, version creation and freezing, and the Dataset Health panel are now OBSERVED; everything else keeps its status.
 - Decisions T37–T38.
 

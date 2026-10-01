@@ -103,6 +103,21 @@ A milestone is done only when every item on its list is true and the milestone r
 - [x] `docs/EVREN.md` changes only the facts that were observed (import, classes, split preservation for this package, version creation and freezing, Dataset Health); everything else keeps its status.
 - [x] No EVREN training job was started.
 
+## M5.5: training readiness
+
+- [x] A0, A1 and every B fold re-derive exactly from the committed release and configuration (`openinspect readiness check`, in CI).
+- [x] A0 − A1 is documented as a descriptive comparison of two test sets; the controlled estimand is C0 − C1 on one common test set, with what changes and what stays constant stated (T39).
+- [x] Three seeded C0/C1 designs with the role of every item committed (`manifests/experiments/v0.1/`); C1 exposes no test item and C0 exposes every probe, checked in CI.
+- [x] B-natural next to B-strict (the M5 split B, unchanged) for every source; every held-out test set holds exactly its source (T41).
+- [x] Representation sensitivity measured on the release with materiality criteria fixed before the computation (T40).
+- [x] The PCB-Defect giant component diagnosed by rules fixed before the diagnostics; not cut by hand (T47).
+- [x] The 437 M4 findings placed against the release in four categories, with exact counts; nothing relabelled (T42).
+- [x] The source identity probe (T44), the negative policy (T45) and the pHash-only pairs (T46) recorded.
+- [x] Every package of the M7 plan read by Ultralytics (separate environment) and by a parser that shares no code with the exporter (T43): all 14 packages valid.
+- [x] `reports/m5_5/TRAINING_READINESS.md` answers the twelve questions and ends with one verdict decided by a coded rule (T48): **TRAINING READY WITH EXPLICIT LIMITATIONS**.
+- [x] The M7 plan written and not executed; no EVREN credits, GPU or training job used.
+- [ ] Human validation of the similarity findings (0 / 300 pairs reviewed).
+
 ## v0.1 release
 
 - [x] 3 sources `accepted` with archived evidence; ingest gates G7 and G8 passed (M2, 2026-09-30).

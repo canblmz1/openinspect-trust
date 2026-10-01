@@ -30,6 +30,7 @@ from openinspect.release.pool import Candidate
 from openinspect.release.splits import EXCLUDED
 
 ROLES = ("probe", "control", "val", "core", "mate", "replacement")
+SHORTFALLS = ("exposed", "control", "val")  # the targets a design can miss
 
 
 class DesignError(Exception):

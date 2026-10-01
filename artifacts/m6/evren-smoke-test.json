@@ -1,0 +1,243 @@
+{
+  "checks": [
+    {
+      "capability": "YOLO Detection ZIP import",
+      "evidence": "package openinspect-trust-v0.1-evren-smoke-yolo.zip; the committed format is YOLO Detection (Ultralytics layout: data.yaml, images/<split>/, labels/<split>/)",
+      "expected": "YOLO Detection; import completed: True",
+      "observed": "YOLO Detection; import completed: True",
+      "result": "MATCH",
+      "status": "OBSERVED_IN_EVREN"
+    },
+    {
+      "capability": "import counts (images, annotations, classes, unlabelled images)",
+      "evidence": "expected-splits.csv (one row per item, boxes per item) and smoke.json (classes)",
+      "expected": "20, 37, 4, 0",
+      "observed": "20, 37, 4, 0",
+      "result": "MATCH",
+      "status": "OBSERVED_IN_EVREN"
+    },
+    {
+      "capability": "class names and box counts per class",
+      "evidence": "annotations.parquet rows of the 20 smoke items",
+      "expected": "short 8, open 8, mouse_bite 11, spurious_copper 10",
+      "observed": "short 8, open 8, mouse_bite 11, spurious_copper 10",
+      "result": "MATCH",
+      "status": "OBSERVED_IN_EVREN"
+    },
+    {
+      "capability": "supplied train/val/test split kept on import (aggregate counts)",
+      "evidence": "split panel after the import, Auto Split not run; expected-splits.csv",
+      "expected": "train 10, val 5, test 5",
+      "observed": "train 10, val 5, test 5",
+      "result": "MATCH",
+      "status": "OBSERVED_IN_EVREN"
+    },
+    {
+      "capability": "item OI_dspcbsd-plus_75ced0a777aa.jpg: split and labels",
+      "evidence": "the item opened in the UI; expected-splits.csv",
+      "expected": "test (Test); mouse_bite;short",
+      "observed": "test (Test); mouse_bite;short",
+      "result": "MATCH",
+      "status": "OBSERVED_IN_EVREN"
+    },
+    {
+      "capability": "item OI_dspcbsd-plus_5bc38d492c6c.jpg: split and labels",
+      "evidence": "the item opened in the UI; expected-splits.csv",
+      "expected": "val (Do\u011frulama); mouse_bite;open;spurious_copper",
+      "observed": "val (Do\u011frulama); mouse_bite;open;spurious_copper",
+      "result": "MATCH",
+      "status": "OBSERVED_IN_EVREN"
+    },
+    {
+      "capability": "item OI_dspcbsd-plus_28e688ce162e.jpg: split and labels",
+      "evidence": "the item opened in the UI; expected-splits.csv",
+      "expected": "train (E\u011fitim); spurious_copper",
+      "observed": "train (E\u011fitim); spurious_copper",
+      "result": "MATCH",
+      "status": "OBSERVED_IN_EVREN"
+    },
+    {
+      "capability": "frozen dataset version keeps the counts",
+      "evidence": "version v0.1-smoke: 'Versiyon olu\u015fturuldu ve donduruldu'",
+      "expected": "frozen: True; 20 items, 20 labelled, 37 annotations, 4 classes",
+      "observed": "frozen: True; 20 items, 20 labelled, 37 annotations, 4 classes",
+      "result": "MATCH",
+      "status": "OBSERVED_IN_EVREN"
+    },
+    {
+      "capability": "frozen dataset version keeps the supplied split",
+      "evidence": "version created with 'Alt K\u00fcme ile Versiyonla' and 'Split Da\u011f\u0131l\u0131m\u0131n\u0131 Yeniden Ata' left off",
+      "expected": "train 10, val 5, test 5",
+      "observed": "train 10, val 5, test 5",
+      "result": "MATCH",
+      "status": "OBSERVED_IN_EVREN"
+    },
+    {
+      "capability": "Auto Split not used",
+      "evidence": "the protocol of docs/EVREN.md: never re-split an imported dataset",
+      "expected": "False",
+      "observed": "False",
+      "result": "MATCH",
+      "status": "OBSERVED_IN_EVREN"
+    },
+    {
+      "capability": "local ZIP is the recorded package",
+      "evidence": "SHA-256 of the file in <OPENINSPECT_DATA_DIR>/exports/ against smoke.json",
+      "expected": "7a3bafd5d7b1e19be1023f880cf8ab4569f3f76930342ec4a642610df63c08c4",
+      "observed": "7a3bafd5d7b1e19be1023f880cf8ab4569f3f76930342ec4a642610df63c08c4",
+      "result": "MATCH",
+      "status": "LOCALLY_VERIFIED"
+    },
+    {
+      "capability": "local ZIP contents (images, annotations, splits, class names)",
+      "evidence": "members of the archive counted directly",
+      "expected": "20, 37, train 10, val 5, test 5, short;open;mouse_bite;spurious_copper",
+      "observed": "20, 37, train 10, val 5, test 5, short;open;mouse_bite;spurious_copper",
+      "result": "MATCH",
+      "status": "LOCALLY_VERIFIED"
+    },
+    {
+      "capability": "local ZIP box counts per class",
+      "evidence": "label lines of the archive",
+      "expected": "short 8, open 8, mouse_bite 11, spurious_copper 10",
+      "observed": "short 8, open 8, mouse_bite 11, spurious_copper 10",
+      "result": "MATCH",
+      "status": "LOCALLY_VERIFIED"
+    }
+  ],
+  "dataset": {
+    "licence": "CC BY 4.0",
+    "name": "OpenInspect-Trust v0.1 EVREN Smoke Test",
+    "tags": [
+      "openinspect",
+      "pcb",
+      "object-detection",
+      "smoke-test"
+    ],
+    "visibility": "private"
+  },
+  "dataset_health": {
+    "grade": "A",
+    "label_ui": "M\u00fckemmel",
+    "score": 81,
+    "subscores": {
+      "class_balance": 73,
+      "data_volume": 12,
+      "labelling_completion": 100,
+      "split_distribution": 100
+    },
+    "warning": "fewer than 50 images can reduce training quality"
+  },
+  "expected_package": "openinspect-trust-v0.1-evren-smoke-yolo.zip",
+  "expected_zip_sha256": "7a3bafd5d7b1e19be1023f880cf8ab4569f3f76930342ec4a642610df63c08c4",
+  "generated_by": {
+    "code_commit": "2a24d6a216515a65f6ceceb89ae6ca8bbfc0fa88",
+    "code_dirty": false,
+    "command": "openinspect release smoke-verify"
+  },
+  "inputs": {
+    "manifests/releases/v0.1/annotations.parquet": "279052b2351277fadac19d2497264ae556507bc77188e5cf597e7b414b5c93ff",
+    "manifests/releases/v0.1/evren-smoke/expected-splits.csv": "ef2786cb431ea221e7ea4f6d1df441606d07c16630182cd534d1ee1c6aa6fd23",
+    "manifests/releases/v0.1/evren-smoke/observed.yaml": "575d6a4e035f413e5938831bed58c1585244e3e2c89035573e4df4237b4c3b6a",
+    "manifests/releases/v0.1/evren-smoke/smoke.json": "08a8dc00cec57a0843ba266fc29cab080a27ff7ee40f3051af26a2a15eb09436"
+  },
+  "milestone": "M6",
+  "observed_on": "2026-10-01",
+  "observer": "project-maintainer",
+  "platform": "EVREN web UI",
+  "schema_version": 1,
+  "statements": [
+    {
+      "capability": "bounding boxes drawn where the defects are",
+      "note": "judged visually by the maintainer on the 3 of 3 items opened; not measured",
+      "status": "OBSERVED_IN_EVREN"
+    },
+    {
+      "capability": "dataset version creation and freezing",
+      "note": "version v0.1-smoke created and frozen ('Versiyon olu\u015fturuldu ve donduruldu')",
+      "status": "OBSERVED_IN_EVREN"
+    },
+    {
+      "capability": "Dataset Health panel",
+      "note": "grade A, score 81; an EVREN platform score, not an OpenInspect assurance result; data volume is low by design (20 items)",
+      "status": "OBSERVED_IN_EVREN"
+    },
+    {
+      "capability": "split of every one of the 20 items, item by item",
+      "note": "aggregate counts matched and 3 items (one per split) were opened; the other 17 were not checked individually and no machine-readable export or API listing was available",
+      "status": "NOT_TESTED"
+    },
+    {
+      "capability": "file names, pixels and label files kept byte for byte",
+      "note": "the opened items showed their global-id file names; no EVREN export was downloaded and hashed",
+      "status": "UNKNOWN"
+    },
+    {
+      "capability": "Auto Split and the version options that re-split",
+      "note": "deliberately left off",
+      "status": "NOT_TESTED"
+    },
+    {
+      "capability": "import of the full release, other split schemes or COCO JSON",
+      "note": "only the 20-item YOLO Detection smoke package was imported",
+      "status": "NOT_TESTED"
+    },
+    {
+      "capability": "training, evaluation and the inference API",
+      "note": "no training job was started (training_started: false); max_det and the confidence floor stay UNKNOWN",
+      "status": "NOT_TESTED"
+    },
+    {
+      "capability": "dataset, version and training APIs",
+      "note": "everything was done in the UI; no endpoint was used or seen",
+      "status": "UNKNOWN"
+    }
+  ],
+  "verdict": "PASS",
+  "verdict_rule": "PASS when every comparison between an EVREN observation and the committed expectation is a MATCH (format, import counts, class names and counts, split counts after import, the items opened one by one, the frozen version and its split), Auto Split was not used, and, when the ZIP was available locally, its SHA-256 and contents match the record made before the upload.",
+  "version": {
+    "description": "OpenInspect-Trust EVREN import smoke test",
+    "frozen": true,
+    "message_ui": "Versiyon olu\u015fturuldu ve donduruldu",
+    "name": "v0.1-smoke",
+    "options_left_off": [
+      "Alt K\u00fcme ile Versiyonla",
+      "Split Da\u011f\u0131l\u0131m\u0131n\u0131 Yeniden Ata"
+    ],
+    "splits": {
+      "test": 5,
+      "train": 10,
+      "val": 5
+    },
+    "summary": {
+      "annotations": 37,
+      "classes": 4,
+      "items": 20,
+      "labelled": 20
+    }
+  },
+  "zip_check": {
+    "annotations": 37,
+    "boxes_per_class": {
+      "mouse_bite": 11,
+      "open": 8,
+      "short": 8,
+      "spurious_copper": 10
+    },
+    "data_yaml_names": [
+      "short",
+      "open",
+      "mouse_bite",
+      "spurious_copper"
+    ],
+    "images": 20,
+    "label_files": 20,
+    "matches_record": true,
+    "sha256": "7a3bafd5d7b1e19be1023f880cf8ab4569f3f76930342ec4a642610df63c08c4",
+    "splits": {
+      "test": 5,
+      "train": 10,
+      "val": 5
+    }
+  }
+}

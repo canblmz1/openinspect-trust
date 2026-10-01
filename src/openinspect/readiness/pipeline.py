@@ -467,6 +467,27 @@ def verdict(blocking: Sequence[str], limitations: Sequence[str]) -> str:
     return "TRAINING READY WITH EXPLICIT LIMITATIONS" if limitations else "TRAINING READY"
 
 
+TRAINING_CONFIG: dict[str, str | int | float | bool] = {
+    "imgsz": 640,
+    "epochs": 100,
+    "patience": 20,
+    "batch": 32,
+    "optimizer": "SGD",
+    "lr0": 0.01,
+    "lrf": 0.01,
+    "momentum": 0.937,
+    "weight_decay": 0.0005,
+    "warmup_epochs": 3,
+    "augmentation": "Ultralytics defaults for detection (mosaic 1.0 closed for the last 10 epochs, HSV jitter, translate 0.1, scale 0.5, fliplr 0.5; no rotation, no mixup)",
+    "deterministic": True,
+    "val_metric_for_early_stopping": "mAP50-95 on the run's own validation split",
+    "conf_for_evaluation": 0.001,
+    "iou_nms": 0.7,
+    "max_det": 300,
+    "same_for_every_run": True,
+}
+
+
 def plan(
     design_seeds: Sequence[int],
     sources: Sequence[str],
@@ -542,25 +563,7 @@ def plan(
         )
     return TrainingPlan(
         model="YOLO11n, initialised from the official COCO-pretrained yolo11n.pt",
-        config={
-            "imgsz": 640,
-            "epochs": 100,
-            "patience": 20,
-            "batch": 32,
-            "optimizer": "SGD",
-            "lr0": 0.01,
-            "lrf": 0.01,
-            "momentum": 0.937,
-            "weight_decay": 0.0005,
-            "warmup_epochs": 3,
-            "augmentation": "Ultralytics defaults for detection (mosaic 1.0 closed for the last 10 epochs, HSV jitter, translate 0.1, scale 0.5, fliplr 0.5; no rotation, no mixup)",
-            "deterministic": True,
-            "val_metric_for_early_stopping": "mAP50-95 on the run's own validation split",
-            "conf_for_evaluation": 0.001,
-            "iou_nms": 0.7,
-            "max_det": 300,
-            "same_for_every_run": True,
-        },
+        config=dict(TRAINING_CONFIG),
         runs=runs,
         metrics=[
             "mAP50 and mAP50-95 on the test split, from one local evaluator on the raw predictions",

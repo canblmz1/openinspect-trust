@@ -319,7 +319,7 @@ Logged with evidence, reason, risk and revisit condition in [DECISIONS](DECISION
 | M1 | source registry and provenance manifest generator: `openinspect source add/list/validate` | M |
 | M2 | ingest: reproducible downloader, SHA-256 manifests, integrity, metadata, image and annotation records, per-source report (done 2026-09-30) | L |
 | M3 | exact and near-duplicate audit, embeddings, calibration, split leakage, assurance report, review files (done 2026-10-01) | L |
-| M4 | taxonomy mapping and label-quality audit with review queue | M |
+| M4 | taxonomy mapping and label-quality audit with review queue (done 2026-10-01) | M |
 | M5 | release assembly (global ids, normalisation and crop policy D7), splits A0/A1/B, leakage tests in CI (done 2026-10-01) | M |
 | M6 | EVREN import smoke test: the 20-item YOLO package imported and frozen in the EVREN UI, observations compared with the committed expectation (done 2026-10-01, PASS) | S |
 | M5.5 | training readiness: a controlled common-evaluation design (C0/C1), B-strict and B-natural, representation sensitivity, the PCB-Defect component, release label findings, source probe, independent export validation, the M7 plan (done 2026-10-01) | M |
@@ -330,7 +330,7 @@ Logged with evidence, reason, risk and revisit condition in [DECISIONS](DECISION
 | M11 | research poster and SAYZEK project brief | M |
 | optional | FastAPI backend (brief §33), after M9 | M |
 
-Status on 2026-10-01: M0 to M5 are done; the human review of the M3 queue is skipped for now (T29); M6 (the EVREN import smoke test with the prepared package) is next.
+Status on 2026-10-01: M0 to M6 and M5.5 are done; M6 passed; the M5.5 verdict is TRAINING READY WITH EXPLICIT LIMITATIONS (`reports/m5_5/TRAINING_READINESS.md`). The human review of the M3 queue is skipped for now (T29). M7 (the EVREN runs of the M7 plan) is next and needs the maintainer's approval of the compute.
 
 ## 14. Related work and positioning
 

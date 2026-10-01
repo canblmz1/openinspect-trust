@@ -32,6 +32,8 @@ SPLITS: tuple[Split, ...] = ("train", "val", "test")
 Status = Literal["OBSERVED_IN_EVREN", "LOCALLY_VERIFIED", "NOT_TESTED", "UNKNOWN"]
 Result = Literal["MATCH", "MISMATCH", "N/A"]
 OBSERVED = "observed.yaml"
+# the order of EVREN's Dataset Health panel (the record stores its keys sorted)
+SUBSCORES = ("labelling_completion", "split_distribution", "class_balance", "data_volume")
 
 
 class SmokeRecordError(Exception):
@@ -570,7 +572,13 @@ def render(record: SmokeRecord, smoke_dir: str) -> str:
         "## EVREN's Dataset Health panel",
         "",
         f"Grade **{health.grade}**, score {health.score} ({health.label_ui!r}); subscores "
-        + ", ".join(f"{k.replace('_', ' ')} {v}%" for k, v in health.subscores.items())
+        + ", ".join(
+            f"{k.replace('_', ' ')} {health.subscores[k]}%"
+            for k in [
+                *(k for k in SUBSCORES if k in health.subscores),
+                *sorted(set(health.subscores) - set(SUBSCORES)),
+            ]
+        )
         + f". Warning shown: {health.warning}.",
         "",
         "This is EVREN's platform health score of a 20-image smoke dataset. It is not an "

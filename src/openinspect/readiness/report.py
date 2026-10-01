@@ -2,11 +2,23 @@
 
 from __future__ import annotations
 
-from collections.abc import Mapping, Sequence
+from collections.abc import Iterable, Mapping, Sequence
+from dataclasses import fields
 from pathlib import Path
 
 from openinspect.files import replace_bytes
+from openinspect.readiness.design import LINKS, ROLES, SHORTFALLS, DesignParams
+from openinspect.readiness.labels import CATEGORIES
 from openinspect.readiness.models import Readiness
+from openinspect.readiness.pipeline import TRAINING_CONFIG
+from openinspect.readiness.probe import FEATURE_SETS
+
+
+def _ordered[V](mapping: Mapping[str, V], order: Iterable[str]) -> list[tuple[str, V]]:
+    """``mapping``'s items in a fixed order (readiness.json stores its keys sorted)."""
+    first = [k for k in order if k in mapping]
+    return [(k, mapping[k]) for k in [*first, *sorted(set(mapping) - set(first))]]
+
 
 FOLDER = "reports/m5_5"
 SPLITS = ("train", "val", "test", "excluded")
@@ -190,7 +202,7 @@ def controlled_design(r: Readiness) -> str:
     params = r.designs[0].params
     lines += [
         "Parameters (every design): "
-        + ", ".join(f"{k} {v}" for k, v in params.items())
+        + ", ".join(f"{k} {v}" for k, v in _ordered(params, (f.name for f in fields(DesignParams))))
         + ". Groups larger than `max_group` stay whole in training.",
         "",
         "In the condition tables, *M3 pairs train-test* counts M3 candidate pairs, by machine "
@@ -206,7 +218,7 @@ def controlled_design(r: Readiness) -> str:
             f"### Design {d.seed}",
             "",
             "Roles: "
-            + ", ".join(f"{k} {_n(v)}" for k, v in d.roles.items())
+            + ", ".join(f"{k} {_n(v)}" for k, v in _ordered(d.roles, ROLES))
             + f" (file `{d.roles_file}`).",
             "",
             *_table(
@@ -226,7 +238,7 @@ def controlled_design(r: Readiness) -> str:
             ),
             "",
             "How each probe is linked to its mates (the strongest direct link): "
-            + ", ".join(f"{k} {_n(v)}" for k, v in d.probe_links.items())
+            + ", ".join(f"{k} {_n(v)}" for k, v in _ordered(d.probe_links, LINKS))
             + ". *Similar pair* means an M3 pair at the source's primary level; *same metadata "
             "group* means the same production batch or design family without such a pair.",
             "",
@@ -276,7 +288,7 @@ def controlled_design(r: Readiness) -> str:
             "",
             "Shortfalls against the targets: "
             + "; ".join(
-                f"`{s}` " + ", ".join(f"{k} {v}" for k, v in values.items() if v)
+                f"`{s}` " + ", ".join(f"{k} {v}" for k, v in _ordered(values, SHORTFALLS) if v)
                 for s, values in d.shortfalls.items()
                 if any(values.values())
             )
@@ -599,6 +611,7 @@ def giant(r: Readiness) -> str:
 
 def label_quality(r: Readiness) -> str:
     x = r.labels
+    cats = [c for c in CATEGORIES if c in x.by_category]
     lines = _header(r, "M5.5: label findings in the release, negatives, pHash-only pairs")
     lines += [
         f"## M4 findings against release {r.provenance.release}",
@@ -615,18 +628,18 @@ def label_quality(r: Readiness) -> str:
                     _n(x.released_items_affected[c]),
                     _n(x.released_boxes_affected[c]),
                 ]
-                for c in x.by_category
+                for c in cats
             ],
         ),
         "",
         *_table(
-            ["signal", *x.by_category],
-            [[f"`{s}`", *(_n(v.get(c, 0)) for c in x.by_category)] for s, v in x.by_signal.items()],
+            ["signal", *cats],
+            [[f"`{s}`", *(_n(v.get(c, 0)) for c in cats)] for s, v in x.by_signal.items()],
         ),
         "",
         *_table(
-            ["source", *x.by_category],
-            [[f"`{s}`", *(_n(v.get(c, 0)) for c in x.by_category)] for s, v in x.by_source.items()],
+            ["source", *cats],
+            [[f"`{s}`", *(_n(v.get(c, 0)) for c in cats)] for s, v in x.by_source.items()],
         ),
         "",
         "Rules: FATAL = a released box with non-finite, inverted, zero-area or out-of-image "
@@ -710,7 +723,7 @@ def source_probe(r: Readiness) -> str:
         "",
         *_table(
             ["feature set", "features"],
-            [[k, ", ".join(f"`{f}`" for f in v)] for k, v in p.features.items()],
+            [[k, ", ".join(f"`{f}`" for f in v)] for k, v in _ordered(p.features, FEATURE_SETS)],
         ),
         "",
         *_table(
@@ -839,7 +852,9 @@ def m7_plan(r: Readiness) -> str:
         "",
         f"Model: {plan.model}. The configuration below is the same for every run.",
         "",
-        *_table(["setting", "value"], [[f"`{k}`", v] for k, v in plan.config.items()]),
+        *_table(
+            ["setting", "value"], [[f"`{k}`", v] for k, v in _ordered(plan.config, TRAINING_CONFIG)]
+        ),
         "",
         "## Runs",
         "",

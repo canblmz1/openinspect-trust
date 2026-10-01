@@ -66,6 +66,7 @@ from openinspect.release.pool import ReleaseError
 from openinspect.release.report import write_report
 from openinspect.release.smoke_record import (
     OBSERVED,
+    SmokeRecord,
     SmokeRecordError,
     check_zip,
     load_expected,
@@ -424,15 +425,34 @@ def smoke_verify_command(data_dir: DataDirOption = None, repo_root: RepoRootOpti
             command="openinspect release smoke-verify", code_commit=commit, code_dirty=dirty
         ),
     )
-    replace_bytes(root / M6_ARTIFACT, json_bytes(record.model_dump(mode="json")))
+    blob = json_bytes(record.model_dump(mode="json"))
+    replace_bytes(root / M6_ARTIFACT, blob)
+    written = SmokeRecord.model_validate_json(
+        blob
+    )  # render what is committed, as smoke-report does
     replace_bytes(
-        root / M6_REPORT, render_smoke(record, smoke.relative_to(root).as_posix()).encode("utf-8")
+        root / M6_REPORT, render_smoke(written, smoke.relative_to(root).as_posix()).encode("utf-8")
     )
     for c in record.checks:
         typer.echo(f"{c.result:9} {c.status:18} {c.capability}")
     typer.echo(f"M6 verdict: {record.verdict}")
     if record.verdict != "PASS":
         fail("an observation disagrees with the committed expectation")
+
+
+@release_app.command("smoke-report")
+def smoke_report_command(repo_root: RepoRootOption = None) -> None:
+    """M6: re-render reports/m6/ from artifacts/m6/evren-smoke-test.json (no data needed)."""
+    root = repo_root.resolve() if repo_root is not None else find_repo_root()
+    smoke = release_dir(root, _config(root).version) / SMOKE_DIR
+    try:
+        record = SmokeRecord.model_validate_json((root / M6_ARTIFACT).read_text(encoding="utf-8"))
+    except (OSError, ValidationError) as exc:
+        fail(f"cannot read {M6_ARTIFACT.as_posix()}: {exc}")
+    replace_bytes(
+        root / M6_REPORT, render_smoke(record, smoke.relative_to(root).as_posix()).encode("utf-8")
+    )
+    typer.echo(f"report: {M6_REPORT.as_posix()}")
 
 
 @release_app.command("export")

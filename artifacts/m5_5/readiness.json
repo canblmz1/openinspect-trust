@@ -1,0 +1,4213 @@
+{
+  "answers": [
+    {
+      "answer": "PASS. The 20-item YOLO Detection package imported with matching counts, classes and the supplied 10/5/5 split, and a frozen version kept it (reports/m6/evren-smoke-test.md).",
+      "number": 1,
+      "question": "Is M6 PASS?"
+    },
+    {
+      "answer": "Packages checked: `A0` valid, `A1` valid, `B-dspcbsd-plus` valid, `B-pcb-defect` valid, `B-pcb-ind` valid, `C0-d0` valid, `C1-d0` valid, `C0-d1` valid, `C1-d1` valid, `C0-d2` valid, `C1-d2` valid, `B-natural-dspcbsd-plus` valid, `B-natural-pcb-defect` valid, `B-natural-pcb-ind` valid (boxes that leave their image by less than half a pixel pass, at most 0.0113 px; see export-validation.md). Each was read by an in-repository parser that shares no code with the exporter and by the Ultralytics dataset checks.",
+      "number": 2,
+      "question": "Is the full export structurally valid?"
+    },
+    {
+      "answer": "437 findings: 0 FATAL, 1 TRAINING_RELEVANT, 48 LIMITATION_ONLY, 388 NOT_IN_RELEASE; released items affected: 1 training-relevant and 42 limitation-only.",
+      "number": 3,
+      "question": "How many release items are affected by M4 review findings?"
+    },
+    {
+      "answer": "Not as a leakage effect. A0 tests 438 items, A1 369; they share 38 test items, A0 trains on 254 of A1's test items, and A1 has no test item from pcb-defect. A0 - A1 stays descriptive.",
+      "number": 4,
+      "question": "Can A0/A1 score differences be interpreted?"
+    },
+    {
+      "answer": "Yes: C0/C1 with one common test set of 407 items (194 probes exposed in C0, 213 controls) and one validation set; C0 exposes 194 test items through 103 crossing constraint groups, C1 exposes 0 (0 crossing). Three seeded designs exist.",
+      "number": 5,
+      "question": "Is a paired/common evaluation design available?"
+    },
+    {
+      "answer": "Materially: an A1 built from DINOv2-base components moves 1,212 items (27.4%) to another split, and would leave 266 small-level primary pairs across its splits; the committed A1 cuts 3 base constraint groups. In design 0, 35 DINOv2-base similar pairs lie between C1's train and test sets (`dspcbsd-plus` 1, `pcb-defect` 33, `pcb-ind` 1; 46 in C0).",
+      "number": 6,
+      "question": "How representation-sensitive is A1?"
+    },
+    {
+      "answer": "Verdict E: B: chaining gap 0.222, diameter 9 edges; C: crop-level components give a largest group of 71 instead of the inherited 859.",
+      "number": 7,
+      "question": "What is happening with the PCB-Defect giant component?"
+    },
+    {
+      "answer": "Very predictable: 100.0% balanced accuracy from size and format, 89.9% from boxes and colour statistics (majority baseline 40.0%).",
+      "number": 8,
+      "question": "How predictable is source identity?"
+    },
+    {
+      "answer": "The held-out source is the whole test set; every other item is available for training and validation (group-aware), and naturally similar cross-source items are kept: `dspcbsd-plus` keeps 620 linked training items, `pcb-defect` keeps 0 linked training items, `pcb-ind` keeps 181 linked training items.",
+      "number": 9,
+      "question": "What is B-natural?"
+    },
+    {
+      "answer": "The M5 split B: the held-out source is the test set and training items that share a constraint directly with a held-out item are excluded: `dspcbsd-plus` excludes 85, `pcb-defect` excludes 0, `pcb-ind` excludes 181.",
+      "number": 10,
+      "question": "What is B-strict?"
+    },
+    {
+      "answer": "Human validation is NOT PERFORMED. Allowed: machine-detected potential leakage, visual similarity group, embedding-defined component, and measured differences between regimes defined by them. Not allowed: confirmed duplicate, confirmed leakage, same physical board, human-validated leakage.",
+      "number": 11,
+      "question": "What claims are allowed without human review?"
+    },
+    {
+      "answer": "TRAINING READY WITH EXPLICIT LIMITATIONS. Yes, with the explicit limitations above, once the maintainer approves the EVREN compute; the M7 plan (m7-plan.md) is not executed here.",
+      "number": 12,
+      "question": "Can M7 EVREN training begin?"
+    }
+  ],
+  "blockers": [],
+  "designs": [
+    {
+      "changes": [
+        "C0 trains on the group-mates of the probe test items (the other members of their A1 constraint groups); C1 trains on replacements instead: the same number of items, of the same source and, where possible, the same boxes per class, from groups that touch no test or validation item."
+      ],
+      "conditions": [
+        {
+          "boxes": {
+            "excluded": {
+              "mouse_bite": 85,
+              "open": 59,
+              "short": 33,
+              "spurious_copper": 86
+            },
+            "test": {
+              "mouse_bite": 194,
+              "open": 85,
+              "short": 58,
+              "spurious_copper": 163
+            },
+            "train": {
+              "mouse_bite": 1391,
+              "open": 831,
+              "short": 510,
+              "spurious_copper": 920
+            },
+            "val": {
+              "mouse_bite": 330,
+              "open": 145,
+              "short": 130,
+              "spurious_copper": 277
+            }
+          },
+          "exposed_test_items": 194,
+          "file": "manifests/experiments/v0.1/C0__design0.csv",
+          "items": {
+            "excluded": {
+              "dspcbsd-plus": 95,
+              "pcb-defect": 21,
+              "pcb-ind": 97
+            },
+            "test": {
+              "dspcbsd-plus": 177,
+              "pcb-defect": 59,
+              "pcb-ind": 171
+            },
+            "train": {
+              "dspcbsd-plus": 1142,
+              "pcb-defect": 859,
+              "pcb-ind": 1101
+            },
+            "val": {
+              "dspcbsd-plus": 354,
+              "pcb-ind": 344
+            }
+          },
+          "measure": {
+            "boxes": {
+              "excluded": {
+                "mouse_bite": 85,
+                "open": 59,
+                "short": 33,
+                "spurious_copper": 86
+              },
+              "test": {
+                "mouse_bite": 194,
+                "open": 85,
+                "short": 58,
+                "spurious_copper": 163
+              },
+              "train": {
+                "mouse_bite": 1391,
+                "open": 831,
+                "short": 510,
+                "spurious_copper": 920
+              },
+              "val": {
+                "mouse_bite": 330,
+                "open": 145,
+                "short": 130,
+                "spurious_copper": 277
+              }
+            },
+            "constraints_crossing": {
+              "crop_parent": 9,
+              "exact_duplicate": 0,
+              "metadata_group": 39,
+              "similarity_component": 55
+            },
+            "images": {
+              "excluded": {
+                "dspcbsd-plus": 95,
+                "pcb-defect": 21,
+                "pcb-ind": 97
+              },
+              "test": {
+                "dspcbsd-plus": 177,
+                "pcb-defect": 59,
+                "pcb-ind": 171
+              },
+              "train": {
+                "dspcbsd-plus": 1142,
+                "pcb-defect": 859,
+                "pcb-ind": 1101
+              },
+              "val": {
+                "dspcbsd-plus": 354,
+                "pcb-ind": 344
+              }
+            },
+            "pairs_crossing": {
+              "NEAR_DUPLICATE": 40,
+              "REVIEW_REQUIRED": 252,
+              "SAME_FAMILY_OR_SCENE": 76
+            },
+            "pairs_train_test": {
+              "NEAR_DUPLICATE": 40,
+              "REVIEW_REQUIRED": 73,
+              "SAME_FAMILY_OR_SCENE": 76
+            },
+            "primary_pairs_crossing": 88,
+            "sha256_crossing": 0,
+            "shares": {
+              "test": 0.09674352270026147,
+              "train": 0.7373425243641549,
+              "val": 0.16591395293558356
+            }
+          },
+          "name": "C0",
+          "sha256": "eee6f785a7a6e73953c703feda77dcc04f69b63cbdecce5b6833448e4f816ee0"
+        },
+        {
+          "boxes": {
+            "excluded": {
+              "mouse_bite": 85,
+              "open": 64,
+              "short": 39,
+              "spurious_copper": 90
+            },
+            "test": {
+              "mouse_bite": 194,
+              "open": 85,
+              "short": 58,
+              "spurious_copper": 163
+            },
+            "train": {
+              "mouse_bite": 1391,
+              "open": 826,
+              "short": 504,
+              "spurious_copper": 916
+            },
+            "val": {
+              "mouse_bite": 330,
+              "open": 145,
+              "short": 130,
+              "spurious_copper": 277
+            }
+          },
+          "exposed_test_items": 0,
+          "file": "manifests/experiments/v0.1/C1__design0.csv",
+          "items": {
+            "excluded": {
+              "dspcbsd-plus": 95,
+              "pcb-defect": 21,
+              "pcb-ind": 97
+            },
+            "test": {
+              "dspcbsd-plus": 177,
+              "pcb-defect": 59,
+              "pcb-ind": 171
+            },
+            "train": {
+              "dspcbsd-plus": 1142,
+              "pcb-defect": 859,
+              "pcb-ind": 1101
+            },
+            "val": {
+              "dspcbsd-plus": 354,
+              "pcb-ind": 344
+            }
+          },
+          "measure": {
+            "boxes": {
+              "excluded": {
+                "mouse_bite": 85,
+                "open": 64,
+                "short": 39,
+                "spurious_copper": 90
+              },
+              "test": {
+                "mouse_bite": 194,
+                "open": 85,
+                "short": 58,
+                "spurious_copper": 163
+              },
+              "train": {
+                "mouse_bite": 1391,
+                "open": 826,
+                "short": 504,
+                "spurious_copper": 916
+              },
+              "val": {
+                "mouse_bite": 330,
+                "open": 145,
+                "short": 130,
+                "spurious_copper": 277
+              }
+            },
+            "constraints_crossing": {
+              "crop_parent": 0,
+              "exact_duplicate": 0,
+              "metadata_group": 0,
+              "similarity_component": 0
+            },
+            "images": {
+              "excluded": {
+                "dspcbsd-plus": 95,
+                "pcb-defect": 21,
+                "pcb-ind": 97
+              },
+              "test": {
+                "dspcbsd-plus": 177,
+                "pcb-defect": 59,
+                "pcb-ind": 171
+              },
+              "train": {
+                "dspcbsd-plus": 1142,
+                "pcb-defect": 859,
+                "pcb-ind": 1101
+              },
+              "val": {
+                "dspcbsd-plus": 354,
+                "pcb-ind": 344
+              }
+            },
+            "pairs_crossing": {
+              "REVIEW_REQUIRED": 240,
+              "SAME_FAMILY_OR_SCENE": 23
+            },
+            "pairs_train_test": {
+              "REVIEW_REQUIRED": 68,
+              "SAME_FAMILY_OR_SCENE": 23
+            },
+            "primary_pairs_crossing": 0,
+            "sha256_crossing": 0,
+            "shares": {
+              "test": 0.09674352270026147,
+              "train": 0.7373425243641549,
+              "val": 0.16591395293558356
+            }
+          },
+          "name": "C1",
+          "sha256": "7b25fb3576b49d27d630fc53d72edc7fa0d6bbc3fd1e2aa3af5edfe02ac49222"
+        }
+      ],
+      "constant": [
+        "the test set (probes and controls) and the validation set, item for item;",
+        "the training-set size and the number of training items per source;",
+        "the class mix of the training set (equal boxes per class wherever a mate has a replacement with the same boxes; the residual difference is reported);",
+        "every other training item (the core);",
+        "the release, the taxonomy, the image files, the training configuration and the seeds."
+      ],
+      "controls": {
+        "dspcbsd-plus": 89,
+        "pcb-defect": 39,
+        "pcb-ind": 85
+      },
+      "params": {
+        "exposed_fraction": 0.5,
+        "max_group": 50,
+        "probe_fraction": 0.5,
+        "test_share": 0.1,
+        "val_share": 0.2
+      },
+      "probe_links": {
+        "crop sibling": 17,
+        "same component": 27,
+        "same metadata group": 83,
+        "similar pair": 67,
+        "transitive only": 0
+      },
+      "probes": {
+        "dspcbsd-plus": 88,
+        "pcb-defect": 20,
+        "pcb-ind": 86
+      },
+      "replacements": {
+        "classes": 4,
+        "closest": 1,
+        "profile": 208
+      },
+      "roles": {
+        "control": 213,
+        "core": 2889,
+        "mate": 213,
+        "probe": 194,
+        "replacement": 213,
+        "val": 698
+      },
+      "roles_file": "manifests/experiments/v0.1/C-design0-roles.csv",
+      "roles_sha256": "a39a5841df34e3e04755984e86c142722435536e368944d1b7994a297b1bbbe6",
+      "seed": 0,
+      "shortfalls": {
+        "dspcbsd-plus": {
+          "control": 0,
+          "exposed": 0,
+          "val": 0
+        },
+        "pcb-defect": {
+          "control": 8,
+          "exposed": 27,
+          "val": 188
+        },
+        "pcb-ind": {
+          "control": 0,
+          "exposed": 0,
+          "val": 0
+        }
+      },
+      "test_items": 407,
+      "train_box_difference": {
+        "mouse_bite": 0,
+        "open": 5,
+        "short": 6,
+        "spurious_copper": 4
+      },
+      "train_items_equal_by_source": true
+    },
+    {
+      "changes": [
+        "C0 trains on the group-mates of the probe test items (the other members of their A1 constraint groups); C1 trains on replacements instead: the same number of items, of the same source and, where possible, the same boxes per class, from groups that touch no test or validation item."
+      ],
+      "conditions": [
+        {
+          "boxes": {
+            "excluded": {
+              "mouse_bite": 89,
+              "open": 53,
+              "short": 36,
+              "spurious_copper": 80
+            },
+            "test": {
+              "mouse_bite": 193,
+              "open": 97,
+              "short": 59,
+              "spurious_copper": 139
+            },
+            "train": {
+              "mouse_bite": 1362,
+              "open": 828,
+              "short": 541,
+              "spurious_copper": 929
+            },
+            "val": {
+              "mouse_bite": 356,
+              "open": 142,
+              "short": 95,
+              "spurious_copper": 298
+            }
+          },
+          "exposed_test_items": 193,
+          "file": "manifests/experiments/v0.1/C0__design1.csv",
+          "items": {
+            "excluded": {
+              "dspcbsd-plus": 95,
+              "pcb-defect": 20,
+              "pcb-ind": 99
+            },
+            "test": {
+              "dspcbsd-plus": 177,
+              "pcb-defect": 60,
+              "pcb-ind": 171
+            },
+            "train": {
+              "dspcbsd-plus": 1142,
+              "pcb-defect": 859,
+              "pcb-ind": 1098
+            },
+            "val": {
+              "dspcbsd-plus": 354,
+              "pcb-ind": 345
+            }
+          },
+          "measure": {
+            "boxes": {
+              "excluded": {
+                "mouse_bite": 89,
+                "open": 53,
+                "short": 36,
+                "spurious_copper": 80
+              },
+              "test": {
+                "mouse_bite": 193,
+                "open": 97,
+                "short": 59,
+                "spurious_copper": 139
+              },
+              "train": {
+                "mouse_bite": 1362,
+                "open": 828,
+                "short": 541,
+                "spurious_copper": 929
+              },
+              "val": {
+                "mouse_bite": 356,
+                "open": 142,
+                "short": 95,
+                "spurious_copper": 298
+              }
+            },
+            "constraints_crossing": {
+              "crop_parent": 7,
+              "exact_duplicate": 0,
+              "metadata_group": 36,
+              "similarity_component": 59
+            },
+            "images": {
+              "excluded": {
+                "dspcbsd-plus": 95,
+                "pcb-defect": 20,
+                "pcb-ind": 99
+              },
+              "test": {
+                "dspcbsd-plus": 177,
+                "pcb-defect": 60,
+                "pcb-ind": 171
+              },
+              "train": {
+                "dspcbsd-plus": 1142,
+                "pcb-defect": 859,
+                "pcb-ind": 1098
+              },
+              "val": {
+                "dspcbsd-plus": 354,
+                "pcb-ind": 345
+              }
+            },
+            "pairs_crossing": {
+              "NEAR_DUPLICATE": 54,
+              "REVIEW_REQUIRED": 313,
+              "SAME_FAMILY_OR_SCENE": 70
+            },
+            "pairs_train_test": {
+              "NEAR_DUPLICATE": 54,
+              "REVIEW_REQUIRED": 108,
+              "SAME_FAMILY_OR_SCENE": 70
+            },
+            "primary_pairs_crossing": 102,
+            "sha256_crossing": 0,
+            "shares": {
+              "test": 0.09700427960057062,
+              "train": 0.7368045649072753,
+              "val": 0.16619115549215407
+            }
+          },
+          "name": "C0",
+          "sha256": "397f661472888d012ceb73ffc0b10b91bfe8749d0a61210a7bcf71a0fc20a47b"
+        },
+        {
+          "boxes": {
+            "excluded": {
+              "mouse_bite": 88,
+              "open": 59,
+              "short": 38,
+              "spurious_copper": 83
+            },
+            "test": {
+              "mouse_bite": 193,
+              "open": 97,
+              "short": 59,
+              "spurious_copper": 139
+            },
+            "train": {
+              "mouse_bite": 1363,
+              "open": 822,
+              "short": 539,
+              "spurious_copper": 926
+            },
+            "val": {
+              "mouse_bite": 356,
+              "open": 142,
+              "short": 95,
+              "spurious_copper": 298
+            }
+          },
+          "exposed_test_items": 0,
+          "file": "manifests/experiments/v0.1/C1__design1.csv",
+          "items": {
+            "excluded": {
+              "dspcbsd-plus": 95,
+              "pcb-defect": 20,
+              "pcb-ind": 99
+            },
+            "test": {
+              "dspcbsd-plus": 177,
+              "pcb-defect": 60,
+              "pcb-ind": 171
+            },
+            "train": {
+              "dspcbsd-plus": 1142,
+              "pcb-defect": 859,
+              "pcb-ind": 1098
+            },
+            "val": {
+              "dspcbsd-plus": 354,
+              "pcb-ind": 345
+            }
+          },
+          "measure": {
+            "boxes": {
+              "excluded": {
+                "mouse_bite": 88,
+                "open": 59,
+                "short": 38,
+                "spurious_copper": 83
+              },
+              "test": {
+                "mouse_bite": 193,
+                "open": 97,
+                "short": 59,
+                "spurious_copper": 139
+              },
+              "train": {
+                "mouse_bite": 1363,
+                "open": 822,
+                "short": 539,
+                "spurious_copper": 926
+              },
+              "val": {
+                "mouse_bite": 356,
+                "open": 142,
+                "short": 95,
+                "spurious_copper": 298
+              }
+            },
+            "constraints_crossing": {
+              "crop_parent": 0,
+              "exact_duplicate": 0,
+              "metadata_group": 0,
+              "similarity_component": 0
+            },
+            "images": {
+              "excluded": {
+                "dspcbsd-plus": 95,
+                "pcb-defect": 20,
+                "pcb-ind": 99
+              },
+              "test": {
+                "dspcbsd-plus": 177,
+                "pcb-defect": 60,
+                "pcb-ind": 171
+              },
+              "train": {
+                "dspcbsd-plus": 1142,
+                "pcb-defect": 859,
+                "pcb-ind": 1098
+              },
+              "val": {
+                "dspcbsd-plus": 354,
+                "pcb-ind": 345
+              }
+            },
+            "pairs_crossing": {
+              "REVIEW_REQUIRED": 274,
+              "SAME_FAMILY_OR_SCENE": 21
+            },
+            "pairs_train_test": {
+              "REVIEW_REQUIRED": 88,
+              "SAME_FAMILY_OR_SCENE": 21
+            },
+            "primary_pairs_crossing": 0,
+            "sha256_crossing": 0,
+            "shares": {
+              "test": 0.09700427960057062,
+              "train": 0.7368045649072753,
+              "val": 0.16619115549215407
+            }
+          },
+          "name": "C1",
+          "sha256": "38f26388511816a0c85da448d2c3a31b822349d947563373715fc79dd4cae6c5"
+        }
+      ],
+      "constant": [
+        "the test set (probes and controls) and the validation set, item for item;",
+        "the training-set size and the number of training items per source;",
+        "the class mix of the training set (equal boxes per class wherever a mate has a replacement with the same boxes; the residual difference is reported);",
+        "every other training item (the core);",
+        "the release, the taxonomy, the image files, the training configuration and the seeds."
+      ],
+      "controls": {
+        "dspcbsd-plus": 89,
+        "pcb-defect": 41,
+        "pcb-ind": 85
+      },
+      "params": {
+        "exposed_fraction": 0.5,
+        "max_group": 50,
+        "probe_fraction": 0.5,
+        "test_share": 0.1,
+        "val_share": 0.2
+      },
+      "probe_links": {
+        "crop sibling": 19,
+        "same component": 31,
+        "same metadata group": 77,
+        "similar pair": 66,
+        "transitive only": 0
+      },
+      "probes": {
+        "dspcbsd-plus": 88,
+        "pcb-defect": 19,
+        "pcb-ind": 86
+      },
+      "replacements": {
+        "classes": 3,
+        "closest": 3,
+        "profile": 208
+      },
+      "roles": {
+        "control": 215,
+        "core": 2885,
+        "mate": 214,
+        "probe": 193,
+        "replacement": 214,
+        "val": 699
+      },
+      "roles_file": "manifests/experiments/v0.1/C-design1-roles.csv",
+      "roles_sha256": "b2d14030f1123d819cb09db610eb0ca225da6c1b677a98c5c041c99c18c8759d",
+      "seed": 1,
+      "shortfalls": {
+        "dspcbsd-plus": {
+          "control": 0,
+          "exposed": 0,
+          "val": 0
+        },
+        "pcb-defect": {
+          "control": 6,
+          "exposed": 28,
+          "val": 188
+        },
+        "pcb-ind": {
+          "control": 0,
+          "exposed": 0,
+          "val": 0
+        }
+      },
+      "test_items": 408,
+      "train_box_difference": {
+        "mouse_bite": -1,
+        "open": 6,
+        "short": 2,
+        "spurious_copper": 3
+      },
+      "train_items_equal_by_source": true
+    },
+    {
+      "changes": [
+        "C0 trains on the group-mates of the probe test items (the other members of their A1 constraint groups); C1 trains on replacements instead: the same number of items, of the same source and, where possible, the same boxes per class, from groups that touch no test or validation item."
+      ],
+      "conditions": [
+        {
+          "boxes": {
+            "excluded": {
+              "mouse_bite": 72,
+              "open": 55,
+              "short": 36,
+              "spurious_copper": 92
+            },
+            "test": {
+              "mouse_bite": 174,
+              "open": 102,
+              "short": 52,
+              "spurious_copper": 171
+            },
+            "train": {
+              "mouse_bite": 1393,
+              "open": 814,
+              "short": 539,
+              "spurious_copper": 950
+            },
+            "val": {
+              "mouse_bite": 361,
+              "open": 149,
+              "short": 104,
+              "spurious_copper": 233
+            }
+          },
+          "exposed_test_items": 194,
+          "file": "manifests/experiments/v0.1/C0__design2.csv",
+          "items": {
+            "excluded": {
+              "dspcbsd-plus": 95,
+              "pcb-defect": 21,
+              "pcb-ind": 94
+            },
+            "test": {
+              "dspcbsd-plus": 177,
+              "pcb-defect": 59,
+              "pcb-ind": 173
+            },
+            "train": {
+              "dspcbsd-plus": 1142,
+              "pcb-defect": 859,
+              "pcb-ind": 1102
+            },
+            "val": {
+              "dspcbsd-plus": 354,
+              "pcb-ind": 344
+            }
+          },
+          "measure": {
+            "boxes": {
+              "excluded": {
+                "mouse_bite": 72,
+                "open": 55,
+                "short": 36,
+                "spurious_copper": 92
+              },
+              "test": {
+                "mouse_bite": 174,
+                "open": 102,
+                "short": 52,
+                "spurious_copper": 171
+              },
+              "train": {
+                "mouse_bite": 1393,
+                "open": 814,
+                "short": 539,
+                "spurious_copper": 950
+              },
+              "val": {
+                "mouse_bite": 361,
+                "open": 149,
+                "short": 104,
+                "spurious_copper": 233
+              }
+            },
+            "constraints_crossing": {
+              "crop_parent": 10,
+              "exact_duplicate": 0,
+              "metadata_group": 34,
+              "similarity_component": 59
+            },
+            "images": {
+              "excluded": {
+                "dspcbsd-plus": 95,
+                "pcb-defect": 21,
+                "pcb-ind": 94
+              },
+              "test": {
+                "dspcbsd-plus": 177,
+                "pcb-defect": 59,
+                "pcb-ind": 173
+              },
+              "train": {
+                "dspcbsd-plus": 1142,
+                "pcb-defect": 859,
+                "pcb-ind": 1102
+              },
+              "val": {
+                "dspcbsd-plus": 354,
+                "pcb-ind": 344
+              }
+            },
+            "pairs_crossing": {
+              "NEAR_DUPLICATE": 46,
+              "REVIEW_REQUIRED": 282,
+              "SAME_FAMILY_OR_SCENE": 88
+            },
+            "pairs_train_test": {
+              "NEAR_DUPLICATE": 46,
+              "REVIEW_REQUIRED": 98,
+              "SAME_FAMILY_OR_SCENE": 88
+            },
+            "primary_pairs_crossing": 105,
+            "sha256_crossing": 0,
+            "shares": {
+              "test": 0.09714964370546318,
+              "train": 0.7370546318289786,
+              "val": 0.1657957244655582
+            }
+          },
+          "name": "C0",
+          "sha256": "305c8a77f1c16f467809ca543a7e755911632a02c4446a54dbade8d5c3388939"
+        },
+        {
+          "boxes": {
+            "excluded": {
+              "mouse_bite": 73,
+              "open": 59,
+              "short": 40,
+              "spurious_copper": 93
+            },
+            "test": {
+              "mouse_bite": 174,
+              "open": 102,
+              "short": 52,
+              "spurious_copper": 171
+            },
+            "train": {
+              "mouse_bite": 1392,
+              "open": 810,
+              "short": 535,
+              "spurious_copper": 949
+            },
+            "val": {
+              "mouse_bite": 361,
+              "open": 149,
+              "short": 104,
+              "spurious_copper": 233
+            }
+          },
+          "exposed_test_items": 0,
+          "file": "manifests/experiments/v0.1/C1__design2.csv",
+          "items": {
+            "excluded": {
+              "dspcbsd-plus": 95,
+              "pcb-defect": 21,
+              "pcb-ind": 94
+            },
+            "test": {
+              "dspcbsd-plus": 177,
+              "pcb-defect": 59,
+              "pcb-ind": 173
+            },
+            "train": {
+              "dspcbsd-plus": 1142,
+              "pcb-defect": 859,
+              "pcb-ind": 1102
+            },
+            "val": {
+              "dspcbsd-plus": 354,
+              "pcb-ind": 344
+            }
+          },
+          "measure": {
+            "boxes": {
+              "excluded": {
+                "mouse_bite": 73,
+                "open": 59,
+                "short": 40,
+                "spurious_copper": 93
+              },
+              "test": {
+                "mouse_bite": 174,
+                "open": 102,
+                "short": 52,
+                "spurious_copper": 171
+              },
+              "train": {
+                "mouse_bite": 1392,
+                "open": 810,
+                "short": 535,
+                "spurious_copper": 949
+              },
+              "val": {
+                "mouse_bite": 361,
+                "open": 149,
+                "short": 104,
+                "spurious_copper": 233
+              }
+            },
+            "constraints_crossing": {
+              "crop_parent": 0,
+              "exact_duplicate": 0,
+              "metadata_group": 0,
+              "similarity_component": 0
+            },
+            "images": {
+              "excluded": {
+                "dspcbsd-plus": 95,
+                "pcb-defect": 21,
+                "pcb-ind": 94
+              },
+              "test": {
+                "dspcbsd-plus": 177,
+                "pcb-defect": 59,
+                "pcb-ind": 173
+              },
+              "train": {
+                "dspcbsd-plus": 1142,
+                "pcb-defect": 859,
+                "pcb-ind": 1102
+              },
+              "val": {
+                "dspcbsd-plus": 354,
+                "pcb-ind": 344
+              }
+            },
+            "pairs_crossing": {
+              "REVIEW_REQUIRED": 248,
+              "SAME_FAMILY_OR_SCENE": 24
+            },
+            "pairs_train_test": {
+              "REVIEW_REQUIRED": 76,
+              "SAME_FAMILY_OR_SCENE": 24
+            },
+            "primary_pairs_crossing": 0,
+            "sha256_crossing": 0,
+            "shares": {
+              "test": 0.09714964370546318,
+              "train": 0.7370546318289786,
+              "val": 0.1657957244655582
+            }
+          },
+          "name": "C1",
+          "sha256": "7f46026a84d4a3f3f47b1d29bf49409764ce44fcecce576e72924199f7862b35"
+        }
+      ],
+      "constant": [
+        "the test set (probes and controls) and the validation set, item for item;",
+        "the training-set size and the number of training items per source;",
+        "the class mix of the training set (equal boxes per class wherever a mate has a replacement with the same boxes; the residual difference is reported);",
+        "every other training item (the core);",
+        "the release, the taxonomy, the image files, the training configuration and the seeds."
+      ],
+      "controls": {
+        "dspcbsd-plus": 89,
+        "pcb-defect": 39,
+        "pcb-ind": 87
+      },
+      "params": {
+        "exposed_fraction": 0.5,
+        "max_group": 50,
+        "probe_fraction": 0.5,
+        "test_share": 0.1,
+        "val_share": 0.2
+      },
+      "probe_links": {
+        "crop sibling": 17,
+        "same component": 23,
+        "same metadata group": 78,
+        "similar pair": 76,
+        "transitive only": 0
+      },
+      "probes": {
+        "dspcbsd-plus": 88,
+        "pcb-defect": 20,
+        "pcb-ind": 86
+      },
+      "replacements": {
+        "classes": 4,
+        "profile": 206
+      },
+      "roles": {
+        "control": 215,
+        "core": 2893,
+        "mate": 210,
+        "probe": 194,
+        "replacement": 210,
+        "val": 698
+      },
+      "roles_file": "manifests/experiments/v0.1/C-design2-roles.csv",
+      "roles_sha256": "b12a74d80906d64c4ba2962af036617572a1f736800606c79af2ba2fe5686036",
+      "seed": 2,
+      "shortfalls": {
+        "dspcbsd-plus": {
+          "control": 0,
+          "exposed": 0,
+          "val": 0
+        },
+        "pcb-defect": {
+          "control": 8,
+          "exposed": 27,
+          "val": 188
+        },
+        "pcb-ind": {
+          "control": 0,
+          "exposed": 0,
+          "val": 0
+        }
+      },
+      "test_items": 409,
+      "train_box_difference": {
+        "mouse_bite": 1,
+        "open": 4,
+        "short": 4,
+        "spurious_copper": 1
+      },
+      "train_items_equal_by_source": true
+    }
+  ],
+  "estimand": {
+    "a0_test": {
+      "dspcbsd-plus": 175,
+      "pcb-defect": 93,
+      "pcb-ind": 170
+    },
+    "a0_train_holds_a1_test": 254,
+    "a1_test": {
+      "dspcbsd-plus": 191,
+      "pcb-defect": 0,
+      "pcb-ind": 178
+    },
+    "a1_test_without_source": [
+      "pcb-defect"
+    ],
+    "reading": [
+      "A0 and A1 do not share their test sets: they are different evaluation sets of different size and composition.",
+      "A1 has no PCB-Defect test item, A0 has; a pooled A0 - A1 difference therefore mixes leakage with a change of what is evaluated.",
+      "A0 - A1 stays a descriptive comparison of two historical split regimes. The controlled estimand is C0 - C1 on one common test set."
+    ],
+    "test_overlap": 38
+  },
+  "export": {
+    "independence": [
+      "Ultralytics dataset checks (ultralytics.data.utils.verify_image_label and check_det_dataset), run in a separate environment: an external implementation of the loader that trains YOLO11, sharing nothing with this repository.",
+      "openinspect.exportcheck: an in-repository parser that imports nothing from openinspect (a test enforces it) and rebuilds every box from the archive alone.",
+      "EVREN itself, for the 20-item smoke package only (M6): a platform import, not a check of the full packages."
+    ],
+    "packages": [
+      {
+        "boxes": {
+          "mouse_bite": 2000,
+          "open": 1120,
+          "short": 731,
+          "spurious_copper": 1446
+        },
+        "bytes": 149852713,
+        "expected_boxes": {
+          "mouse_bite": 2000,
+          "open": 1120,
+          "short": 731,
+          "spurious_copper": 1446
+        },
+        "internal_examples": [],
+        "internal_max_overhang_px": 0.0113,
+        "internal_ok": true,
+        "internal_overhangs": 6,
+        "internal_problems": {},
+        "internal_rows": 5297,
+        "items": {
+          "test": 438,
+          "train": 3091,
+          "val": 891
+        },
+        "package": "openinspect-trust-v0.1-A0-yolo.zip",
+        "scheme": "A0",
+        "sha256": "3487547c2859788de75e98ed6078cd30d3c31dcb191227ca3740da893726874e",
+        "ultralytics": {
+          "boxes_per_class": {
+            "mouse_bite": 2000,
+            "open": 1120,
+            "short": 731,
+            "spurious_copper": 1446
+          },
+          "messages": [],
+          "messages_total": 0,
+          "ok": true,
+          "totals": {
+            "boxes": 5297,
+            "corrupt": 0,
+            "empty_labels": 0,
+            "found_labels": 4420,
+            "images": 4420,
+            "missing_labels": 0
+          },
+          "version": "8.4.171"
+        }
+      },
+      {
+        "boxes": {
+          "mouse_bite": 2000,
+          "open": 1120,
+          "short": 731,
+          "spurious_copper": 1446
+        },
+        "bytes": 149853757,
+        "expected_boxes": {
+          "mouse_bite": 2000,
+          "open": 1120,
+          "short": 731,
+          "spurious_copper": 1446
+        },
+        "internal_examples": [],
+        "internal_max_overhang_px": 0.0113,
+        "internal_ok": true,
+        "internal_overhangs": 6,
+        "internal_problems": {},
+        "internal_rows": 5297,
+        "items": {
+          "test": 369,
+          "train": 3256,
+          "val": 795
+        },
+        "package": "openinspect-trust-v0.1-A1-yolo.zip",
+        "scheme": "A1",
+        "sha256": "aa0dadefc4a734506ff81dee5663d17ab385dc6d8adb160f7f165763a4770855",
+        "ultralytics": {
+          "boxes_per_class": {
+            "mouse_bite": 2000,
+            "open": 1120,
+            "short": 731,
+            "spurious_copper": 1446
+          },
+          "messages": [],
+          "messages_total": 0,
+          "ok": true,
+          "totals": {
+            "boxes": 5297,
+            "corrupt": 0,
+            "empty_labels": 0,
+            "found_labels": 4420,
+            "images": 4420,
+            "missing_labels": 0
+          },
+          "version": "8.4.171"
+        }
+      },
+      {
+        "boxes": {
+          "mouse_bite": 1961,
+          "open": 1115,
+          "short": 696,
+          "spurious_copper": 1440
+        },
+        "bytes": 148986376,
+        "expected_boxes": {
+          "mouse_bite": 1961,
+          "open": 1115,
+          "short": 696,
+          "spurious_copper": 1440
+        },
+        "internal_examples": [],
+        "internal_max_overhang_px": 0.0113,
+        "internal_ok": true,
+        "internal_overhangs": 6,
+        "internal_problems": {},
+        "internal_rows": 5212,
+        "items": {
+          "test": 1768,
+          "train": 2223,
+          "val": 344
+        },
+        "package": "openinspect-trust-v0.1-B-dspcbsd-plus-yolo.zip",
+        "scheme": "B-dspcbsd-plus",
+        "sha256": "5baaeb3adb050770a21d1045bbd96526264f6c253da6216c1e7600075cb47f5f",
+        "ultralytics": {
+          "boxes_per_class": {
+            "mouse_bite": 1961,
+            "open": 1115,
+            "short": 696,
+            "spurious_copper": 1440
+          },
+          "messages": [],
+          "messages_total": 0,
+          "ok": true,
+          "totals": {
+            "boxes": 5212,
+            "corrupt": 0,
+            "empty_labels": 0,
+            "found_labels": 4335,
+            "images": 4335,
+            "missing_labels": 0
+          },
+          "version": "8.4.171"
+        }
+      },
+      {
+        "boxes": {
+          "mouse_bite": 2000,
+          "open": 1120,
+          "short": 731,
+          "spurious_copper": 1446
+        },
+        "bytes": 149853895,
+        "expected_boxes": {
+          "mouse_bite": 2000,
+          "open": 1120,
+          "short": 731,
+          "spurious_copper": 1446
+        },
+        "internal_examples": [],
+        "internal_max_overhang_px": 0.0113,
+        "internal_ok": true,
+        "internal_overhangs": 6,
+        "internal_problems": {},
+        "internal_rows": 5297,
+        "items": {
+          "test": 939,
+          "train": 2987,
+          "val": 494
+        },
+        "package": "openinspect-trust-v0.1-B-pcb-defect-yolo.zip",
+        "scheme": "B-pcb-defect",
+        "sha256": "6e7d396c675ad3677a02f121a3eb9ee7fa916522134b6cdcec1b2c35fc900bd9",
+        "ultralytics": {
+          "boxes_per_class": {
+            "mouse_bite": 2000,
+            "open": 1120,
+            "short": 731,
+            "spurious_copper": 1446
+          },
+          "messages": [],
+          "messages_total": 0,
+          "ok": true,
+          "totals": {
+            "boxes": 5297,
+            "corrupt": 0,
+            "empty_labels": 0,
+            "found_labels": 4420,
+            "images": 4420,
+            "missing_labels": 0
+          },
+          "version": "8.4.171"
+        }
+      },
+      {
+        "boxes": {
+          "mouse_bite": 1882,
+          "open": 981,
+          "short": 721,
+          "spurious_copper": 1420
+        },
+        "bytes": 148584960,
+        "expected_boxes": {
+          "mouse_bite": 1882,
+          "open": 981,
+          "short": 721,
+          "spurious_copper": 1420
+        },
+        "internal_examples": [],
+        "internal_max_overhang_px": 0.0113,
+        "internal_ok": true,
+        "internal_overhangs": 6,
+        "internal_problems": {},
+        "internal_rows": 5004,
+        "items": {
+          "test": 1713,
+          "train": 2226,
+          "val": 300
+        },
+        "package": "openinspect-trust-v0.1-B-pcb-ind-yolo.zip",
+        "scheme": "B-pcb-ind",
+        "sha256": "677f078b15ee3b64c4fab466c2203247be26d3d01d91f63e8afc8c0444a7df6f",
+        "ultralytics": {
+          "boxes_per_class": {
+            "mouse_bite": 1882,
+            "open": 981,
+            "short": 721,
+            "spurious_copper": 1420
+          },
+          "messages": [],
+          "messages_total": 0,
+          "ok": true,
+          "totals": {
+            "boxes": 5004,
+            "corrupt": 0,
+            "empty_labels": 0,
+            "found_labels": 4239,
+            "images": 4239,
+            "missing_labels": 0
+          },
+          "version": "8.4.171"
+        }
+      },
+      {
+        "boxes": {
+          "mouse_bite": 1915,
+          "open": 1061,
+          "short": 698,
+          "spurious_copper": 1360
+        },
+        "bytes": 145731397,
+        "expected_boxes": {
+          "mouse_bite": 1915,
+          "open": 1061,
+          "short": 698,
+          "spurious_copper": 1360
+        },
+        "internal_examples": [],
+        "internal_max_overhang_px": 0.0113,
+        "internal_ok": true,
+        "internal_overhangs": 5,
+        "internal_problems": {},
+        "internal_rows": 5034,
+        "items": {
+          "test": 407,
+          "train": 3102,
+          "val": 698
+        },
+        "package": "openinspect-trust-v0.1-C0-d0-yolo.zip",
+        "scheme": "C0-d0",
+        "sha256": "d66643ab1622ce7726316e0f427a4313d44bb9fdaea2eb321ce9ba5e700a27a8",
+        "ultralytics": {
+          "boxes_per_class": {
+            "mouse_bite": 1915,
+            "open": 1061,
+            "short": 698,
+            "spurious_copper": 1360
+          },
+          "messages": [],
+          "messages_total": 0,
+          "ok": true,
+          "totals": {
+            "boxes": 5034,
+            "corrupt": 0,
+            "empty_labels": 0,
+            "found_labels": 4207,
+            "images": 4207,
+            "missing_labels": 0
+          },
+          "version": "8.4.171"
+        }
+      },
+      {
+        "boxes": {
+          "mouse_bite": 1915,
+          "open": 1056,
+          "short": 692,
+          "spurious_copper": 1356
+        },
+        "bytes": 146120633,
+        "expected_boxes": {
+          "mouse_bite": 1915,
+          "open": 1056,
+          "short": 692,
+          "spurious_copper": 1356
+        },
+        "internal_examples": [],
+        "internal_max_overhang_px": 0.0113,
+        "internal_ok": true,
+        "internal_overhangs": 6,
+        "internal_problems": {},
+        "internal_rows": 5019,
+        "items": {
+          "test": 407,
+          "train": 3102,
+          "val": 698
+        },
+        "package": "openinspect-trust-v0.1-C1-d0-yolo.zip",
+        "scheme": "C1-d0",
+        "sha256": "823e0647f351d0bc0f7dfaf35a5730f024ac42381dffacb734b459535be8c6fc",
+        "ultralytics": {
+          "boxes_per_class": {
+            "mouse_bite": 1915,
+            "open": 1056,
+            "short": 692,
+            "spurious_copper": 1356
+          },
+          "messages": [],
+          "messages_total": 0,
+          "ok": true,
+          "totals": {
+            "boxes": 5019,
+            "corrupt": 0,
+            "empty_labels": 0,
+            "found_labels": 4207,
+            "images": 4207,
+            "missing_labels": 0
+          },
+          "version": "8.4.171"
+        }
+      },
+      {
+        "boxes": {
+          "mouse_bite": 1911,
+          "open": 1067,
+          "short": 695,
+          "spurious_copper": 1366
+        },
+        "bytes": 146172044,
+        "expected_boxes": {
+          "mouse_bite": 1911,
+          "open": 1067,
+          "short": 695,
+          "spurious_copper": 1366
+        },
+        "internal_examples": [],
+        "internal_max_overhang_px": 0.0113,
+        "internal_ok": true,
+        "internal_overhangs": 6,
+        "internal_problems": {},
+        "internal_rows": 5039,
+        "items": {
+          "test": 408,
+          "train": 3099,
+          "val": 699
+        },
+        "package": "openinspect-trust-v0.1-C0-d1-yolo.zip",
+        "scheme": "C0-d1",
+        "sha256": "1b973044a35d087ed92a2b862e802960fb1c757b638b6ca53f54d2719d8b4414",
+        "ultralytics": {
+          "boxes_per_class": {
+            "mouse_bite": 1911,
+            "open": 1067,
+            "short": 695,
+            "spurious_copper": 1366
+          },
+          "messages": [],
+          "messages_total": 0,
+          "ok": true,
+          "totals": {
+            "boxes": 5039,
+            "corrupt": 0,
+            "empty_labels": 0,
+            "found_labels": 4206,
+            "images": 4206,
+            "missing_labels": 0
+          },
+          "version": "8.4.171"
+        }
+      },
+      {
+        "boxes": {
+          "mouse_bite": 1912,
+          "open": 1061,
+          "short": 693,
+          "spurious_copper": 1363
+        },
+        "bytes": 146021544,
+        "expected_boxes": {
+          "mouse_bite": 1912,
+          "open": 1061,
+          "short": 693,
+          "spurious_copper": 1363
+        },
+        "internal_examples": [],
+        "internal_max_overhang_px": 0.0113,
+        "internal_ok": true,
+        "internal_overhangs": 6,
+        "internal_problems": {},
+        "internal_rows": 5029,
+        "items": {
+          "test": 408,
+          "train": 3099,
+          "val": 699
+        },
+        "package": "openinspect-trust-v0.1-C1-d1-yolo.zip",
+        "scheme": "C1-d1",
+        "sha256": "0f2f676298f1205c3480048d3d8af2aea07f86fd12f29663fbaba9d2b7d0872a",
+        "ultralytics": {
+          "boxes_per_class": {
+            "mouse_bite": 1912,
+            "open": 1061,
+            "short": 693,
+            "spurious_copper": 1363
+          },
+          "messages": [],
+          "messages_total": 0,
+          "ok": true,
+          "totals": {
+            "boxes": 5029,
+            "corrupt": 0,
+            "empty_labels": 0,
+            "found_labels": 4206,
+            "images": 4206,
+            "missing_labels": 0
+          },
+          "version": "8.4.171"
+        }
+      },
+      {
+        "boxes": {
+          "mouse_bite": 1928,
+          "open": 1065,
+          "short": 695,
+          "spurious_copper": 1354
+        },
+        "bytes": 145306860,
+        "expected_boxes": {
+          "mouse_bite": 1928,
+          "open": 1065,
+          "short": 695,
+          "spurious_copper": 1354
+        },
+        "internal_examples": [],
+        "internal_max_overhang_px": 0.0113,
+        "internal_ok": true,
+        "internal_overhangs": 6,
+        "internal_problems": {},
+        "internal_rows": 5042,
+        "items": {
+          "test": 409,
+          "train": 3103,
+          "val": 698
+        },
+        "package": "openinspect-trust-v0.1-C0-d2-yolo.zip",
+        "scheme": "C0-d2",
+        "sha256": "64b47fc9aa52b125cd7fadee55a1f4252b3b367374d814ebddd351e5594d1435",
+        "ultralytics": {
+          "boxes_per_class": {
+            "mouse_bite": 1928,
+            "open": 1065,
+            "short": 695,
+            "spurious_copper": 1354
+          },
+          "messages": [],
+          "messages_total": 0,
+          "ok": true,
+          "totals": {
+            "boxes": 5042,
+            "corrupt": 0,
+            "empty_labels": 0,
+            "found_labels": 4210,
+            "images": 4210,
+            "missing_labels": 0
+          },
+          "version": "8.4.171"
+        }
+      },
+      {
+        "boxes": {
+          "mouse_bite": 1927,
+          "open": 1061,
+          "short": 691,
+          "spurious_copper": 1353
+        },
+        "bytes": 145884148,
+        "expected_boxes": {
+          "mouse_bite": 1927,
+          "open": 1061,
+          "short": 691,
+          "spurious_copper": 1353
+        },
+        "internal_examples": [],
+        "internal_max_overhang_px": 0.0113,
+        "internal_ok": true,
+        "internal_overhangs": 6,
+        "internal_problems": {},
+        "internal_rows": 5032,
+        "items": {
+          "test": 409,
+          "train": 3103,
+          "val": 698
+        },
+        "package": "openinspect-trust-v0.1-C1-d2-yolo.zip",
+        "scheme": "C1-d2",
+        "sha256": "4f58e73b475dcdba8a14625cfd8eda1a34326418f3541f3dfcbc5f3b4738099c",
+        "ultralytics": {
+          "boxes_per_class": {
+            "mouse_bite": 1927,
+            "open": 1061,
+            "short": 691,
+            "spurious_copper": 1353
+          },
+          "messages": [],
+          "messages_total": 0,
+          "ok": true,
+          "totals": {
+            "boxes": 5032,
+            "corrupt": 0,
+            "empty_labels": 0,
+            "found_labels": 4210,
+            "images": 4210,
+            "missing_labels": 0
+          },
+          "version": "8.4.171"
+        }
+      },
+      {
+        "boxes": {
+          "mouse_bite": 2000,
+          "open": 1120,
+          "short": 731,
+          "spurious_copper": 1446
+        },
+        "bytes": 149851645,
+        "expected_boxes": {
+          "mouse_bite": 2000,
+          "open": 1120,
+          "short": 731,
+          "spurious_copper": 1446
+        },
+        "internal_examples": [],
+        "internal_max_overhang_px": 0.0113,
+        "internal_ok": true,
+        "internal_overhangs": 6,
+        "internal_problems": {},
+        "internal_rows": 5297,
+        "items": {
+          "test": 1768,
+          "train": 2290,
+          "val": 362
+        },
+        "package": "openinspect-trust-v0.1-B-natural-dspcbsd-plus-yolo.zip",
+        "scheme": "B-natural-dspcbsd-plus",
+        "sha256": "b1d4c5c3c70c3237867524ae80e0dfc2dd606daca136d634842fbd94b41ed2a7",
+        "ultralytics": {
+          "boxes_per_class": {
+            "mouse_bite": 2000,
+            "open": 1120,
+            "short": 731,
+            "spurious_copper": 1446
+          },
+          "messages": [],
+          "messages_total": 0,
+          "ok": true,
+          "totals": {
+            "boxes": 5297,
+            "corrupt": 0,
+            "empty_labels": 0,
+            "found_labels": 4420,
+            "images": 4420,
+            "missing_labels": 0
+          },
+          "version": "8.4.171"
+        }
+      },
+      {
+        "boxes": {
+          "mouse_bite": 2000,
+          "open": 1120,
+          "short": 731,
+          "spurious_copper": 1446
+        },
+        "bytes": 149853903,
+        "expected_boxes": {
+          "mouse_bite": 2000,
+          "open": 1120,
+          "short": 731,
+          "spurious_copper": 1446
+        },
+        "internal_examples": [],
+        "internal_max_overhang_px": 0.0113,
+        "internal_ok": true,
+        "internal_overhangs": 6,
+        "internal_problems": {},
+        "internal_rows": 5297,
+        "items": {
+          "test": 939,
+          "train": 2987,
+          "val": 494
+        },
+        "package": "openinspect-trust-v0.1-B-natural-pcb-defect-yolo.zip",
+        "scheme": "B-natural-pcb-defect",
+        "sha256": "a2dd24644fab2c2cef08860b6c49b1f2d60963df6d5ccbc0cef4f8ddddccdb0c",
+        "ultralytics": {
+          "boxes_per_class": {
+            "mouse_bite": 2000,
+            "open": 1120,
+            "short": 731,
+            "spurious_copper": 1446
+          },
+          "messages": [],
+          "messages_total": 0,
+          "ok": true,
+          "totals": {
+            "boxes": 5297,
+            "corrupt": 0,
+            "empty_labels": 0,
+            "found_labels": 4420,
+            "images": 4420,
+            "missing_labels": 0
+          },
+          "version": "8.4.171"
+        }
+      },
+      {
+        "boxes": {
+          "mouse_bite": 2000,
+          "open": 1120,
+          "short": 731,
+          "spurious_copper": 1446
+        },
+        "bytes": 149852140,
+        "expected_boxes": {
+          "mouse_bite": 2000,
+          "open": 1120,
+          "short": 731,
+          "spurious_copper": 1446
+        },
+        "internal_examples": [],
+        "internal_max_overhang_px": 0.0113,
+        "internal_ok": true,
+        "internal_overhangs": 6,
+        "internal_problems": {},
+        "internal_rows": 5297,
+        "items": {
+          "test": 1713,
+          "train": 2380,
+          "val": 327
+        },
+        "package": "openinspect-trust-v0.1-B-natural-pcb-ind-yolo.zip",
+        "scheme": "B-natural-pcb-ind",
+        "sha256": "84555b83f56573f27b5f3aa59e85fc65a4594356a4e4b9475b0c146b27be792d",
+        "ultralytics": {
+          "boxes_per_class": {
+            "mouse_bite": 2000,
+            "open": 1120,
+            "short": 731,
+            "spurious_copper": 1446
+          },
+          "messages": [],
+          "messages_total": 0,
+          "ok": true,
+          "totals": {
+            "boxes": 5297,
+            "corrupt": 0,
+            "empty_labels": 0,
+            "found_labels": 4420,
+            "images": 4420,
+            "missing_labels": 0
+          },
+          "version": "8.4.171"
+        }
+      }
+    ]
+  },
+  "giant": {
+    "causes": [
+      "B: chaining gap 0.222, diameter 9 edges",
+      "C: crop-level components give a largest group of 71 instead of the inherited 859"
+    ],
+    "crop_graphs": [
+      {
+        "crops": 939,
+        "cross_family_edges": 1,
+        "cross_scan_edges": 8,
+        "largest_component": 2,
+        "largest_group_with_constraints": 71,
+        "model": "dinov2-small",
+        "threshold": 0.933905
+      },
+      {
+        "crops": 939,
+        "cross_family_edges": 0,
+        "cross_scan_edges": 2,
+        "largest_component": 2,
+        "largest_group_with_constraints": 71,
+        "model": "dinov2-base",
+        "threshold": 0.958
+      }
+    ],
+    "decomposition": [
+      {
+        "groups": 230,
+        "kinds": [
+          "crop_parent"
+        ],
+        "largest": 13,
+        "singletons": 0
+      },
+      {
+        "groups": 22,
+        "kinds": [
+          "crop_parent",
+          "metadata_group"
+        ],
+        "largest": 71,
+        "singletons": 0
+      },
+      {
+        "groups": 70,
+        "kinds": [
+          "crop_parent",
+          "similarity_component"
+        ],
+        "largest": 420,
+        "singletons": 0
+      },
+      {
+        "groups": 24,
+        "kinds": [
+          "similarity_component"
+        ],
+        "largest": 420,
+        "singletons": 186
+      },
+      {
+        "groups": 22,
+        "kinds": [
+          "metadata_group"
+        ],
+        "largest": 71,
+        "singletons": 0
+      },
+      {
+        "groups": 3,
+        "kinds": [
+          "metadata_group",
+          "similarity_component",
+          "exact_duplicate",
+          "crop_parent"
+        ],
+        "largest": 859,
+        "singletons": 0
+      }
+    ],
+    "items": 939,
+    "largest_group": 859,
+    "rules": [
+      "A (visually cohesive): every pair of scans in the largest primary-level component is itself at or above the threshold (all-pair minimum >= threshold).",
+      "B (transitive chaining): the chaining gap (edge minimum minus all-pair minimum) is at least 0.05 and the diameter is at least 3 edges.",
+      "C (crop-generation style): with components computed on the crops instead of inherited from the scans, the largest group (with crop parents, design families and identical files) is below 50% of the inherited group.",
+      "D (representation artifact): the other model's largest scan component at its own primary threshold holds less than 25% of the scans, while the primary's holds more.",
+      "E (mixture): two or more of B, C and D hold."
+    ],
+    "scan_graphs": [
+      {
+        "all_pairs_mean": 0.887137,
+        "all_pairs_min": 0.711589,
+        "chaining_gap": 0.222337,
+        "components": 24,
+        "diameter": 9,
+        "edge_min": 0.933926,
+        "edges": 410,
+        "families": 22,
+        "largest": 111,
+        "largest_families": 17,
+        "mean_path": 3.4804,
+        "model": "dinov2-small",
+        "scans": 230,
+        "threshold": 0.933905
+      },
+      {
+        "all_pairs_mean": 0.926,
+        "all_pairs_min": 0.806412,
+        "chaining_gap": 0.151597,
+        "components": 14,
+        "diameter": 10,
+        "edge_min": 0.958009,
+        "edges": 763,
+        "families": 22,
+        "largest": 149,
+        "largest_families": 22,
+        "mean_path": 3.5603,
+        "model": "dinov2-base",
+        "scans": 230,
+        "threshold": 0.958
+      }
+    ],
+    "source": "pcb-defect",
+    "sweep": [
+      {
+        "components": 2,
+        "largest_share": 0.982609,
+        "model": "dinov2-small",
+        "threshold": 0.9
+      },
+      {
+        "components": 3,
+        "largest_share": 0.956522,
+        "model": "dinov2-small",
+        "threshold": 0.905
+      },
+      {
+        "components": 4,
+        "largest_share": 0.930435,
+        "model": "dinov2-small",
+        "threshold": 0.91
+      },
+      {
+        "components": 8,
+        "largest_share": 0.852174,
+        "model": "dinov2-small",
+        "threshold": 0.915
+      },
+      {
+        "components": 10,
+        "largest_share": 0.8,
+        "model": "dinov2-small",
+        "threshold": 0.92
+      },
+      {
+        "components": 11,
+        "largest_share": 0.734783,
+        "model": "dinov2-small",
+        "threshold": 0.925
+      },
+      {
+        "components": 18,
+        "largest_share": 0.56087,
+        "model": "dinov2-small",
+        "threshold": 0.93
+      },
+      {
+        "components": 24,
+        "largest_share": 0.473913,
+        "model": "dinov2-small",
+        "threshold": 0.935
+      },
+      {
+        "components": 28,
+        "largest_share": 0.369565,
+        "model": "dinov2-small",
+        "threshold": 0.94
+      },
+      {
+        "components": 35,
+        "largest_share": 0.252174,
+        "model": "dinov2-small",
+        "threshold": 0.945
+      },
+      {
+        "components": 40,
+        "largest_share": 0.117391,
+        "model": "dinov2-small",
+        "threshold": 0.95
+      },
+      {
+        "components": 38,
+        "largest_share": 0.065217,
+        "model": "dinov2-small",
+        "threshold": 0.955
+      },
+      {
+        "components": 35,
+        "largest_share": 0.034783,
+        "model": "dinov2-small",
+        "threshold": 0.96
+      },
+      {
+        "components": 25,
+        "largest_share": 0.034783,
+        "model": "dinov2-small",
+        "threshold": 0.965
+      },
+      {
+        "components": 14,
+        "largest_share": 0.026087,
+        "model": "dinov2-small",
+        "threshold": 0.97
+      },
+      {
+        "components": 7,
+        "largest_share": 0.008696,
+        "model": "dinov2-small",
+        "threshold": 0.975
+      },
+      {
+        "components": 2,
+        "largest_share": 0.008696,
+        "model": "dinov2-small",
+        "threshold": 0.98
+      },
+      {
+        "components": 0,
+        "largest_share": 0.004348,
+        "model": "dinov2-small",
+        "threshold": 0.985
+      },
+      {
+        "components": 0,
+        "largest_share": 0.004348,
+        "model": "dinov2-small",
+        "threshold": 0.99
+      },
+      {
+        "components": 0,
+        "largest_share": 0.004348,
+        "model": "dinov2-small",
+        "threshold": 0.995
+      },
+      {
+        "components": 1,
+        "largest_share": 1.0,
+        "model": "dinov2-base",
+        "threshold": 0.9
+      },
+      {
+        "components": 1,
+        "largest_share": 1.0,
+        "model": "dinov2-base",
+        "threshold": 0.905
+      },
+      {
+        "components": 1,
+        "largest_share": 1.0,
+        "model": "dinov2-base",
+        "threshold": 0.91
+      },
+      {
+        "components": 1,
+        "largest_share": 1.0,
+        "model": "dinov2-base",
+        "threshold": 0.915
+      },
+      {
+        "components": 1,
+        "largest_share": 0.995652,
+        "model": "dinov2-base",
+        "threshold": 0.92
+      },
+      {
+        "components": 1,
+        "largest_share": 0.986957,
+        "model": "dinov2-base",
+        "threshold": 0.925
+      },
+      {
+        "components": 2,
+        "largest_share": 0.969565,
+        "model": "dinov2-base",
+        "threshold": 0.93
+      },
+      {
+        "components": 3,
+        "largest_share": 0.956522,
+        "model": "dinov2-base",
+        "threshold": 0.935
+      },
+      {
+        "components": 4,
+        "largest_share": 0.921739,
+        "model": "dinov2-base",
+        "threshold": 0.94
+      },
+      {
+        "components": 5,
+        "largest_share": 0.873913,
+        "model": "dinov2-base",
+        "threshold": 0.945
+      },
+      {
+        "components": 7,
+        "largest_share": 0.8,
+        "model": "dinov2-base",
+        "threshold": 0.95
+      },
+      {
+        "components": 11,
+        "largest_share": 0.704348,
+        "model": "dinov2-base",
+        "threshold": 0.955
+      },
+      {
+        "components": 15,
+        "largest_share": 0.595652,
+        "model": "dinov2-base",
+        "threshold": 0.96
+      },
+      {
+        "components": 27,
+        "largest_share": 0.304348,
+        "model": "dinov2-base",
+        "threshold": 0.965
+      },
+      {
+        "components": 27,
+        "largest_share": 0.169565,
+        "model": "dinov2-base",
+        "threshold": 0.97
+      },
+      {
+        "components": 21,
+        "largest_share": 0.073913,
+        "model": "dinov2-base",
+        "threshold": 0.975
+      },
+      {
+        "components": 16,
+        "largest_share": 0.021739,
+        "model": "dinov2-base",
+        "threshold": 0.98
+      },
+      {
+        "components": 4,
+        "largest_share": 0.013043,
+        "model": "dinov2-base",
+        "threshold": 0.985
+      },
+      {
+        "components": 1,
+        "largest_share": 0.008696,
+        "model": "dinov2-base",
+        "threshold": 0.99
+      },
+      {
+        "components": 0,
+        "largest_share": 0.004348,
+        "model": "dinov2-base",
+        "threshold": 0.995
+      }
+    ],
+    "verdict": "E"
+  },
+  "held_out": [
+    {
+      "excluded": 85,
+      "file": "manifests/splits/v0.1/B-dspcbsd-plus__seed0.csv",
+      "fold": "dspcbsd-plus",
+      "items": {
+        "excluded": {
+          "pcb-ind": 85
+        },
+        "test": {
+          "dspcbsd-plus": 1768
+        },
+        "train": {
+          "pcb-defect": 859,
+          "pcb-ind": 1364
+        },
+        "val": {
+          "pcb-defect": 80,
+          "pcb-ind": 264
+        }
+      },
+      "linked_training_items": 535,
+      "measure": {
+        "boxes": {
+          "excluded": {
+            "mouse_bite": 39,
+            "open": 5,
+            "short": 35,
+            "spurious_copper": 6
+          },
+          "test": {
+            "mouse_bite": 950,
+            "open": 755,
+            "short": 164,
+            "spurious_copper": 603
+          },
+          "train": {
+            "mouse_bite": 876,
+            "open": 309,
+            "short": 457,
+            "spurious_copper": 721
+          },
+          "val": {
+            "mouse_bite": 135,
+            "open": 51,
+            "short": 75,
+            "spurious_copper": 116
+          }
+        },
+        "constraints_crossing": {
+          "crop_parent": 0,
+          "exact_duplicate": 0,
+          "metadata_group": 0,
+          "similarity_component": 0
+        },
+        "images": {
+          "excluded": {
+            "pcb-ind": 85
+          },
+          "test": {
+            "dspcbsd-plus": 1768
+          },
+          "train": {
+            "pcb-defect": 859,
+            "pcb-ind": 1364
+          },
+          "val": {
+            "pcb-defect": 80,
+            "pcb-ind": 264
+          }
+        },
+        "pairs_crossing": {
+          "REVIEW_REQUIRED": 88,
+          "SAME_FAMILY_OR_SCENE": 24
+        },
+        "pairs_train_test": {
+          "REVIEW_REQUIRED": 53
+        },
+        "primary_pairs_crossing": 0,
+        "sha256_crossing": 0,
+        "shares": {
+          "test": 0.40784313725490196,
+          "train": 0.5128027681660899,
+          "val": 0.07935409457900808
+        }
+      },
+      "pure": true,
+      "regime": "B-strict",
+      "sha256": "1fef083084adf56335dba4c55665b6658002f67a393ef682bd660a4fd0ba4cc4",
+      "test_sources": [
+        "dspcbsd-plus"
+      ]
+    },
+    {
+      "excluded": 0,
+      "file": "manifests/experiments/v0.1/B-natural-dspcbsd-plus__seed0.csv",
+      "fold": "dspcbsd-plus",
+      "items": {
+        "test": {
+          "dspcbsd-plus": 1768
+        },
+        "train": {
+          "pcb-defect": 859,
+          "pcb-ind": 1431
+        },
+        "val": {
+          "pcb-defect": 80,
+          "pcb-ind": 282
+        }
+      },
+      "linked_training_items": 620,
+      "measure": {
+        "boxes": {
+          "test": {
+            "mouse_bite": 950,
+            "open": 755,
+            "short": 164,
+            "spurious_copper": 603
+          },
+          "train": {
+            "mouse_bite": 910,
+            "open": 311,
+            "short": 485,
+            "spurious_copper": 727
+          },
+          "val": {
+            "mouse_bite": 140,
+            "open": 54,
+            "short": 82,
+            "spurious_copper": 116
+          }
+        },
+        "constraints_crossing": {
+          "crop_parent": 0,
+          "exact_duplicate": 0,
+          "metadata_group": 0,
+          "similarity_component": 4
+        },
+        "images": {
+          "test": {
+            "dspcbsd-plus": 1768
+          },
+          "train": {
+            "pcb-defect": 859,
+            "pcb-ind": 1431
+          },
+          "val": {
+            "pcb-defect": 80,
+            "pcb-ind": 282
+          }
+        },
+        "pairs_crossing": {
+          "NEAR_DUPLICATE": 3,
+          "REVIEW_REQUIRED": 91,
+          "SAME_FAMILY_OR_SCENE": 33
+        },
+        "pairs_train_test": {
+          "NEAR_DUPLICATE": 3,
+          "REVIEW_REQUIRED": 52,
+          "SAME_FAMILY_OR_SCENE": 9
+        },
+        "primary_pairs_crossing": 12,
+        "sha256_crossing": 0,
+        "shares": {
+          "test": 0.4,
+          "train": 0.5180995475113123,
+          "val": 0.08190045248868778
+        }
+      },
+      "pure": true,
+      "regime": "B-natural",
+      "sha256": "718294cf6bc4181b85f81b3f3f0d585c393705eae580074b6e562796fda8dd04",
+      "test_sources": [
+        "dspcbsd-plus"
+      ]
+    },
+    {
+      "excluded": 0,
+      "file": "manifests/splits/v0.1/B-pcb-defect__seed0.csv",
+      "fold": "pcb-defect",
+      "items": {
+        "test": {
+          "pcb-defect": 939
+        },
+        "train": {
+          "dspcbsd-plus": 1504,
+          "pcb-ind": 1483
+        },
+        "val": {
+          "dspcbsd-plus": 264,
+          "pcb-ind": 230
+        }
+      },
+      "linked_training_items": 0,
+      "measure": {
+        "boxes": {
+          "test": {
+            "mouse_bite": 304,
+            "open": 241,
+            "short": 222,
+            "spurious_copper": 204
+          },
+          "train": {
+            "mouse_bite": 1445,
+            "open": 742,
+            "short": 440,
+            "spurious_copper": 1053
+          },
+          "val": {
+            "mouse_bite": 251,
+            "open": 137,
+            "short": 69,
+            "spurious_copper": 189
+          }
+        },
+        "constraints_crossing": {
+          "crop_parent": 0,
+          "exact_duplicate": 0,
+          "metadata_group": 0,
+          "similarity_component": 0
+        },
+        "images": {
+          "test": {
+            "pcb-defect": 939
+          },
+          "train": {
+            "dspcbsd-plus": 1504,
+            "pcb-ind": 1483
+          },
+          "val": {
+            "dspcbsd-plus": 264,
+            "pcb-ind": 230
+          }
+        },
+        "pairs_crossing": {
+          "REVIEW_REQUIRED": 119
+        },
+        "pairs_train_test": {},
+        "primary_pairs_crossing": 0,
+        "sha256_crossing": 0,
+        "shares": {
+          "test": 0.21244343891402714,
+          "train": 0.67579185520362,
+          "val": 0.11176470588235295
+        }
+      },
+      "pure": true,
+      "regime": "B-strict",
+      "sha256": "d75ed433cd095c09e602844eee18db4e6b736e0ecbe949b825550dae9cf39c6c",
+      "test_sources": [
+        "pcb-defect"
+      ]
+    },
+    {
+      "excluded": 0,
+      "file": "manifests/experiments/v0.1/B-natural-pcb-defect__seed0.csv",
+      "fold": "pcb-defect",
+      "items": {
+        "test": {
+          "pcb-defect": 939
+        },
+        "train": {
+          "dspcbsd-plus": 1504,
+          "pcb-ind": 1483
+        },
+        "val": {
+          "dspcbsd-plus": 264,
+          "pcb-ind": 230
+        }
+      },
+      "linked_training_items": 0,
+      "measure": {
+        "boxes": {
+          "test": {
+            "mouse_bite": 304,
+            "open": 241,
+            "short": 222,
+            "spurious_copper": 204
+          },
+          "train": {
+            "mouse_bite": 1445,
+            "open": 742,
+            "short": 440,
+            "spurious_copper": 1053
+          },
+          "val": {
+            "mouse_bite": 251,
+            "open": 137,
+            "short": 69,
+            "spurious_copper": 189
+          }
+        },
+        "constraints_crossing": {
+          "crop_parent": 0,
+          "exact_duplicate": 0,
+          "metadata_group": 0,
+          "similarity_component": 0
+        },
+        "images": {
+          "test": {
+            "pcb-defect": 939
+          },
+          "train": {
+            "dspcbsd-plus": 1504,
+            "pcb-ind": 1483
+          },
+          "val": {
+            "dspcbsd-plus": 264,
+            "pcb-ind": 230
+          }
+        },
+        "pairs_crossing": {
+          "REVIEW_REQUIRED": 119
+        },
+        "pairs_train_test": {},
+        "primary_pairs_crossing": 0,
+        "sha256_crossing": 0,
+        "shares": {
+          "test": 0.21244343891402714,
+          "train": 0.67579185520362,
+          "val": 0.11176470588235295
+        }
+      },
+      "pure": true,
+      "regime": "B-natural",
+      "sha256": "d75ed433cd095c09e602844eee18db4e6b736e0ecbe949b825550dae9cf39c6c",
+      "test_sources": [
+        "pcb-defect"
+      ]
+    },
+    {
+      "excluded": 181,
+      "file": "manifests/splits/v0.1/B-pcb-ind__seed0.csv",
+      "fold": "pcb-ind",
+      "items": {
+        "excluded": {
+          "dspcbsd-plus": 181
+        },
+        "test": {
+          "pcb-ind": 1713
+        },
+        "train": {
+          "dspcbsd-plus": 1326,
+          "pcb-defect": 900
+        },
+        "val": {
+          "dspcbsd-plus": 261,
+          "pcb-defect": 39
+        }
+      },
+      "linked_training_items": 0,
+      "measure": {
+        "boxes": {
+          "excluded": {
+            "mouse_bite": 118,
+            "open": 139,
+            "short": 10,
+            "spurious_copper": 26
+          },
+          "test": {
+            "mouse_bite": 746,
+            "open": 124,
+            "short": 345,
+            "spurious_copper": 639
+          },
+          "train": {
+            "mouse_bite": 977,
+            "open": 728,
+            "short": 310,
+            "spurious_copper": 665
+          },
+          "val": {
+            "mouse_bite": 159,
+            "open": 129,
+            "short": 66,
+            "spurious_copper": 116
+          }
+        },
+        "constraints_crossing": {
+          "crop_parent": 0,
+          "exact_duplicate": 0,
+          "metadata_group": 0,
+          "similarity_component": 0
+        },
+        "images": {
+          "excluded": {
+            "dspcbsd-plus": 181
+          },
+          "test": {
+            "pcb-ind": 1713
+          },
+          "train": {
+            "dspcbsd-plus": 1326,
+            "pcb-defect": 900
+          },
+          "val": {
+            "dspcbsd-plus": 261,
+            "pcb-defect": 39
+          }
+        },
+        "pairs_crossing": {
+          "REVIEW_REQUIRED": 79,
+          "SAME_FAMILY_OR_SCENE": 17
+        },
+        "pairs_train_test": {
+          "REVIEW_REQUIRED": 47
+        },
+        "primary_pairs_crossing": 0,
+        "sha256_crossing": 0,
+        "shares": {
+          "test": 0.4041047416843595,
+          "train": 0.5251238499646143,
+          "val": 0.07077140835102619
+        }
+      },
+      "pure": true,
+      "regime": "B-strict",
+      "sha256": "c748dcab805386636229bf3df4146c1a99b8df2a25f7b77afa9996a3a56b0a63",
+      "test_sources": [
+        "pcb-ind"
+      ]
+    },
+    {
+      "excluded": 0,
+      "file": "manifests/experiments/v0.1/B-natural-pcb-ind__seed0.csv",
+      "fold": "pcb-ind",
+      "items": {
+        "test": {
+          "pcb-ind": 1713
+        },
+        "train": {
+          "dspcbsd-plus": 1482,
+          "pcb-defect": 898
+        },
+        "val": {
+          "dspcbsd-plus": 286,
+          "pcb-defect": 41
+        }
+      },
+      "linked_training_items": 181,
+      "measure": {
+        "boxes": {
+          "test": {
+            "mouse_bite": 746,
+            "open": 124,
+            "short": 345,
+            "spurious_copper": 639
+          },
+          "train": {
+            "mouse_bite": 1055,
+            "open": 849,
+            "short": 321,
+            "spurious_copper": 685
+          },
+          "val": {
+            "mouse_bite": 199,
+            "open": 147,
+            "short": 65,
+            "spurious_copper": 122
+          }
+        },
+        "constraints_crossing": {
+          "crop_parent": 0,
+          "exact_duplicate": 0,
+          "metadata_group": 0,
+          "similarity_component": 4
+        },
+        "images": {
+          "test": {
+            "pcb-ind": 1713
+          },
+          "train": {
+            "dspcbsd-plus": 1482,
+            "pcb-defect": 898
+          },
+          "val": {
+            "dspcbsd-plus": 286,
+            "pcb-defect": 41
+          }
+        },
+        "pairs_crossing": {
+          "NEAR_DUPLICATE": 3,
+          "REVIEW_REQUIRED": 119,
+          "SAME_FAMILY_OR_SCENE": 16
+        },
+        "pairs_train_test": {
+          "NEAR_DUPLICATE": 3,
+          "REVIEW_REQUIRED": 48,
+          "SAME_FAMILY_OR_SCENE": 9
+        },
+        "primary_pairs_crossing": 12,
+        "sha256_crossing": 0,
+        "shares": {
+          "test": 0.38755656108597286,
+          "train": 0.5384615384615384,
+          "val": 0.07398190045248869
+        }
+      },
+      "pure": true,
+      "regime": "B-natural",
+      "sha256": "0933e368f865fb80f241e6b43723ce85d228b001526954be74e777d98654b0ce",
+      "test_sources": [
+        "pcb-ind"
+      ]
+    }
+  ],
+  "human_validation": {
+    "limitation": "The similarity findings have not yet been independently human-validated. Thresholds are based on proxy metadata, synthetic transforms and representation-based similarity.",
+    "queue": "artifacts/m3/review-candidates.csv",
+    "queued": 300,
+    "reviewed": 0,
+    "status": "NOT PERFORMED"
+  },
+  "labels": {
+    "by_category": {
+      "FATAL": 0,
+      "LIMITATION_ONLY": 48,
+      "NOT_IN_RELEASE": 388,
+      "TRAINING_RELEVANT": 1
+    },
+    "by_signal": {
+      "class_size_outlier": {
+        "LIMITATION_ONLY": 39,
+        "NOT_IN_RELEASE": 293
+      },
+      "conflicting_box": {
+        "NOT_IN_RELEASE": 4
+      },
+      "extreme_aspect_ratio": {
+        "NOT_IN_RELEASE": 3
+      },
+      "mapping_ambiguity": {
+        "NOT_IN_RELEASE": 2
+      },
+      "near_duplicate_label_conflict": {
+        "LIMITATION_ONLY": 9,
+        "NOT_IN_RELEASE": 80
+      },
+      "source_format_disagreement": {
+        "NOT_IN_RELEASE": 2
+      },
+      "tiny_box": {
+        "NOT_IN_RELEASE": 3,
+        "TRAINING_RELEVANT": 1
+      },
+      "zero_area_box": {
+        "NOT_IN_RELEASE": 1
+      }
+    },
+    "by_source": {
+      "dspcbsd-plus": {
+        "LIMITATION_ONLY": 25,
+        "NOT_IN_RELEASE": 270,
+        "TRAINING_RELEVANT": 1
+      },
+      "pcb-defect": {
+        "LIMITATION_ONLY": 6,
+        "NOT_IN_RELEASE": 7
+      },
+      "pcb-ind": {
+        "LIMITATION_ONLY": 17,
+        "NOT_IN_RELEASE": 111
+      }
+    },
+    "fatal_items": [],
+    "findings": 437,
+    "pairs_across_splits": {
+      "A0": 0,
+      "A1": 0,
+      "B-natural-dspcbsd-plus": 0,
+      "B-natural-pcb-defect": 0,
+      "B-natural-pcb-ind": 0,
+      "B-strict-dspcbsd-plus": 0,
+      "B-strict-pcb-defect": 0,
+      "B-strict-pcb-ind": 0,
+      "C0-d0": 0,
+      "C1-d0": 0
+    },
+    "released_boxes_affected": {
+      "FATAL": 0,
+      "LIMITATION_ONLY": 39,
+      "NOT_IN_RELEASE": 0,
+      "TRAINING_RELEVANT": 1
+    },
+    "released_items_affected": {
+      "FATAL": 0,
+      "LIMITATION_ONLY": 42,
+      "NOT_IN_RELEASE": 0,
+      "TRAINING_RELEVANT": 1
+    }
+  },
+  "labels_file": "artifacts/m5_5/release-label-findings.csv",
+  "labels_sha256": "3eccba9e692ae4919a99b5eaf7218f5707af16ae49a8c9b95f2e0720c413db58",
+  "limitations": [
+    "Human validation of the M3 similarity findings: NOT PERFORMED. Every visual similarity component that A1, B and the C designs rely on is machine-detected potential leakage; no person has checked whether its images are duplicates.",
+    "The group-aware split is representation-sensitive: an A1 built from DINOv2-base components differs materially (27.4% of the items change split (threshold 10%); `pcb-defect` is in train/val under A1 and in train under A1-base). Results from A1, B and C hold for the DINOv2-small grouping; the base-built A1 would leave 266 small-level primary pairs across its splits.",
+    "Under DINOv2-base, C1 does not separate train and test completely: `C1-d0` keeps 35 base similar pairs between them (`dspcbsd-plus` 1, `pcb-defect` 33, `pcb-ind` 1); `C1-d1` keeps 22 base similar pairs between them (`pcb-defect` 22); `C1-d2` keeps 37 base similar pairs between them (`dspcbsd-plus` 1, `pcb-defect` 35, `pcb-ind` 1). The C contrast is defined by the DINOv2-small grouping, so C0 - C1 is reported per source and the part of a source with such pairs holds only under that grouping.",
+    "`pcb-defect`: one constraint group holds 859 of its 939 crops (verdict E). It has no A1 test item and no validation item in the C designs; the C designs test only crops outside that group (59, 60, 59 in designs 0, 1, 2), and the whole source is tested only when it is held out (B).",
+    "The C designs miss their targets for `pcb-defect` (exposed 27, control 8, val 188): too few groups small enough to be split or held out.",
+    "C0 and C1 training boxes per class differ slightly (design 0, C0 minus C1: open +5, short +6, spurious_copper +4) where no replacement with the same boxes per class was left.",
+    "Released items with an unreviewed M4 finding: 1 with a training-relevant finding and 42 with limitation-only findings (49 findings); no label was corrected.",
+    "Images without a defect are excluded from every regime (127 available, all PCB-IND hard negatives): false positives on clean patches are not measured.",
+    "65 pHash-only candidate pairs lie across A1 train and test; they are not a similarity level of the M3 protocol and stay unconstrained (P2).",
+    "Source identity is trivially predictable (balanced accuracy 100.0% from image size and file format; 89.9% from box and colour statistics alone): B measures a large source and domain shift, not only generalization.",
+    "B-strict removes training items that share a constraint *directly* with a held-out item; 535 training items of the `dspcbsd-plus` fold remain linked transitively."
+  ],
+  "m6_verdict": "PASS",
+  "milestone": "M5.5",
+  "negatives": {
+    "available": {
+      "dspcbsd-plus": 0,
+      "pcb-defect": 0,
+      "pcb-ind": 127
+    },
+    "excluded_reason": "no_boxes (configs/release.yaml: negatives: exclude; decision T34)",
+    "policy": "images without a box are excluded from the release, so from every split regime",
+    "released": 0,
+    "same_in_every_regime": true,
+    "untested": [
+      "false positives on defect-free patches: no test set contains an image without a defect, so precision on clean images is not measured;",
+      "PCB-IND's hard negatives are AOI false calls (patches the inspection machine flagged that hold no defect): the deployment case of rejecting a false alarm is not tested;",
+      "image-level defect/no-defect decisions: every test image holds at least one box, so a model that always predicts a defect is not penalised at image level."
+    ]
+  },
+  "notes": [],
+  "phash_only": {
+    "cosine_base": {
+      "max": 0.927604,
+      "median": 0.684518,
+      "min": 0.245483
+    },
+    "cosine_small": {
+      "max": 0.917764,
+      "median": 0.748286,
+      "min": 0.202685
+    },
+    "cross_source": 54,
+    "file": "artifacts/m5_5/phash-only-pairs.csv",
+    "pairs": 626,
+    "phash_distance": {
+      "0": 66,
+      "2": 164,
+      "4": 396
+    },
+    "relations": [
+      {
+        "not_both_assigned": 0,
+        "regime": "A0",
+        "same_split": 344,
+        "train_test": 89,
+        "train_val": 173,
+        "val_test": 20
+      },
+      {
+        "not_both_assigned": 0,
+        "regime": "A1",
+        "same_split": 458,
+        "train_test": 65,
+        "train_val": 94,
+        "val_test": 9
+      },
+      {
+        "not_both_assigned": 45,
+        "regime": "C0-d0",
+        "same_split": 329,
+        "train_test": 73,
+        "train_val": 161,
+        "val_test": 18
+      },
+      {
+        "not_both_assigned": 81,
+        "regime": "C1-d0",
+        "same_split": 305,
+        "train_test": 68,
+        "train_val": 154,
+        "val_test": 18
+      },
+      {
+        "not_both_assigned": 0,
+        "regime": "B-strict-dspcbsd-plus",
+        "same_split": 538,
+        "train_test": 53,
+        "train_val": 34,
+        "val_test": 1
+      },
+      {
+        "not_both_assigned": 0,
+        "regime": "B-natural-dspcbsd-plus",
+        "same_split": 535,
+        "train_test": 52,
+        "train_val": 37,
+        "val_test": 2
+      },
+      {
+        "not_both_assigned": 0,
+        "regime": "B-strict-pcb-defect",
+        "same_split": 507,
+        "train_test": 0,
+        "train_val": 119,
+        "val_test": 0
+      },
+      {
+        "not_both_assigned": 0,
+        "regime": "B-natural-pcb-defect",
+        "same_split": 507,
+        "train_test": 0,
+        "train_val": 119,
+        "val_test": 0
+      },
+      {
+        "not_both_assigned": 1,
+        "regime": "B-strict-pcb-ind",
+        "same_split": 546,
+        "train_test": 47,
+        "train_val": 26,
+        "val_test": 6
+      },
+      {
+        "not_both_assigned": 0,
+        "regime": "B-natural-pcb-ind",
+        "same_split": 507,
+        "train_test": 48,
+        "train_val": 65,
+        "val_test": 6
+      }
+    ],
+    "same_source": 572,
+    "sha256": "bd27b1288fd74a4f8056387aacd7a3fe77f35a85a3621ce007e5c1e73dda975e"
+  },
+  "plan": {
+    "analysis": [
+      "primary estimand: mAP50-95(C0) - mAP50-95(C1) on the probes of design 0, mean over the three training seeds; the controls estimate what the swap itself does and should be near zero",
+      "the probes are also split by their link to the mates (`probe_link` in the roles file): visually linked (crop sibling, similar pair, same component) and metadata only (same batch or design family), because the two kinds of exposure may differ in effect",
+      "probes and controls are different kinds of items (probes sit in groups, controls are mostly singletons): each is compared between C0 and C1, never with the other",
+      "uncertainty: paired bootstrap over test items grouped by their A1 constraint group (1,000 resamples), on the same test set for C0 and C1; seed-to-seed spread reported next to it",
+      "replication: the sign and size of C0 - C1 on designs 1 and 2 (one seed each)",
+      "C0 - C1 is also reported per source, next to the DINOv2-base similar pairs that each condition keeps between train and test (representation-sensitivity.md): where C1 keeps such pairs, that part of the contrast holds only under the DINOv2-small grouping",
+      "A0 and A1 are reported per source and described, not differenced as a leakage effect",
+      "B-strict and B-natural are read as source shift (the source probe shows strong source signatures), not as leakage"
+    ],
+    "config": {
+      "augmentation": "Ultralytics defaults for detection (mosaic 1.0 closed for the last 10 epochs, HSV jitter, translate 0.1, scale 0.5, fliplr 0.5; no rotation, no mixup)",
+      "batch": 32,
+      "conf_for_evaluation": 0.001,
+      "deterministic": true,
+      "epochs": 100,
+      "imgsz": 640,
+      "iou_nms": 0.7,
+      "lr0": 0.01,
+      "lrf": 0.01,
+      "max_det": 300,
+      "momentum": 0.937,
+      "optimizer": "SGD",
+      "patience": 20,
+      "same_for_every_run": true,
+      "val_metric_for_early_stopping": "mAP50-95 on the run's own validation split",
+      "warmup_epochs": 3,
+      "weight_decay": 0.0005
+    },
+    "metrics": [
+      "mAP50 and mAP50-95 on the test split, from one local evaluator on the raw predictions",
+      "AP50 per class (short, open, mouse_bite, spurious_copper)",
+      "per source on every test set that mixes sources",
+      "for C0 and C1: separately on the probes (exposed in C0) and on the controls (exposed in neither)"
+    ],
+    "model": "YOLO11n, initialised from the official COCO-pretrained yolo11n.pt",
+    "not_executed": "Nothing of this plan has run. M7 starts only after the maintainer approves the EVREN compute budget.",
+    "runs": [
+      {
+        "package": "<data>/exports/v0.1/openinspect-trust-v0.1-C0-d0-yolo.zip",
+        "purpose": "primary paired contrast C0 - C1 on the common test set",
+        "regime": "C0 (design 0)",
+        "run_id": "C0-d0-s0",
+        "split_file": "manifests/experiments/v0.1/C0__design0.csv",
+        "training_seed": 0
+      },
+      {
+        "package": "<data>/exports/v0.1/openinspect-trust-v0.1-C1-d0-yolo.zip",
+        "purpose": "primary paired contrast C0 - C1 on the common test set",
+        "regime": "C1 (design 0)",
+        "run_id": "C1-d0-s0",
+        "split_file": "manifests/experiments/v0.1/C1__design0.csv",
+        "training_seed": 0
+      },
+      {
+        "package": "<data>/exports/v0.1/openinspect-trust-v0.1-C0-d0-yolo.zip",
+        "purpose": "primary paired contrast C0 - C1 on the common test set",
+        "regime": "C0 (design 0)",
+        "run_id": "C0-d0-s1",
+        "split_file": "manifests/experiments/v0.1/C0__design0.csv",
+        "training_seed": 1
+      },
+      {
+        "package": "<data>/exports/v0.1/openinspect-trust-v0.1-C1-d0-yolo.zip",
+        "purpose": "primary paired contrast C0 - C1 on the common test set",
+        "regime": "C1 (design 0)",
+        "run_id": "C1-d0-s1",
+        "split_file": "manifests/experiments/v0.1/C1__design0.csv",
+        "training_seed": 1
+      },
+      {
+        "package": "<data>/exports/v0.1/openinspect-trust-v0.1-C0-d0-yolo.zip",
+        "purpose": "primary paired contrast C0 - C1 on the common test set",
+        "regime": "C0 (design 0)",
+        "run_id": "C0-d0-s2",
+        "split_file": "manifests/experiments/v0.1/C0__design0.csv",
+        "training_seed": 2
+      },
+      {
+        "package": "<data>/exports/v0.1/openinspect-trust-v0.1-C1-d0-yolo.zip",
+        "purpose": "primary paired contrast C0 - C1 on the common test set",
+        "regime": "C1 (design 0)",
+        "run_id": "C1-d0-s2",
+        "split_file": "manifests/experiments/v0.1/C1__design0.csv",
+        "training_seed": 2
+      },
+      {
+        "package": "<data>/exports/v0.1/openinspect-trust-v0.1-C0-d1-yolo.zip",
+        "purpose": "replication over another seeded design draw",
+        "regime": "C0 (design 1)",
+        "run_id": "C0-d1-s0",
+        "split_file": "manifests/experiments/v0.1/C0__design1.csv",
+        "training_seed": 0
+      },
+      {
+        "package": "<data>/exports/v0.1/openinspect-trust-v0.1-C1-d1-yolo.zip",
+        "purpose": "replication over another seeded design draw",
+        "regime": "C1 (design 1)",
+        "run_id": "C1-d1-s0",
+        "split_file": "manifests/experiments/v0.1/C1__design1.csv",
+        "training_seed": 0
+      },
+      {
+        "package": "<data>/exports/v0.1/openinspect-trust-v0.1-C0-d2-yolo.zip",
+        "purpose": "replication over another seeded design draw",
+        "regime": "C0 (design 2)",
+        "run_id": "C0-d2-s0",
+        "split_file": "manifests/experiments/v0.1/C0__design2.csv",
+        "training_seed": 0
+      },
+      {
+        "package": "<data>/exports/v0.1/openinspect-trust-v0.1-C1-d2-yolo.zip",
+        "purpose": "replication over another seeded design draw",
+        "regime": "C1 (design 2)",
+        "run_id": "C1-d2-s0",
+        "split_file": "manifests/experiments/v0.1/C1__design2.csv",
+        "training_seed": 0
+      },
+      {
+        "package": "<data>/exports/v0.1/openinspect-trust-v0.1-A0-yolo.zip",
+        "purpose": "historical regime, descriptive only (different test sets)",
+        "regime": "A0",
+        "run_id": "A0-s0",
+        "split_file": "manifests/splits/v0.1/A0__seed0.csv",
+        "training_seed": 0
+      },
+      {
+        "package": "<data>/exports/v0.1/openinspect-trust-v0.1-A1-yolo.zip",
+        "purpose": "historical regime, descriptive only (different test sets)",
+        "regime": "A1",
+        "run_id": "A1-s0",
+        "split_file": "manifests/splits/v0.1/A1__seed0.csv",
+        "training_seed": 0
+      },
+      {
+        "package": "<data>/exports/v0.1/openinspect-trust-v0.1-B-dspcbsd-plus-yolo.zip",
+        "purpose": "unseen source, known machine-similarity overlap removed",
+        "regime": "B-strict, dspcbsd-plus held out",
+        "run_id": "B-strict-dspcbsd-plus-s0",
+        "split_file": "manifests/splits/v0.1/B-dspcbsd-plus__seed0.csv",
+        "training_seed": 0
+      },
+      {
+        "package": "<data>/exports/v0.1/openinspect-trust-v0.1-B-pcb-defect-yolo.zip",
+        "purpose": "unseen source, known machine-similarity overlap removed",
+        "regime": "B-strict, pcb-defect held out",
+        "run_id": "B-strict-pcb-defect-s0",
+        "split_file": "manifests/splits/v0.1/B-pcb-defect__seed0.csv",
+        "training_seed": 0
+      },
+      {
+        "package": "<data>/exports/v0.1/openinspect-trust-v0.1-B-pcb-ind-yolo.zip",
+        "purpose": "unseen source, known machine-similarity overlap removed",
+        "regime": "B-strict, pcb-ind held out",
+        "run_id": "B-strict-pcb-ind-s0",
+        "split_file": "manifests/splits/v0.1/B-pcb-ind__seed0.csv",
+        "training_seed": 0
+      },
+      {
+        "package": "<data>/exports/v0.1/openinspect-trust-v0.1-B-natural-dspcbsd-plus-yolo.zip",
+        "purpose": "unseen source under naturally occurring cross-source similarity",
+        "regime": "B-natural, dspcbsd-plus held out",
+        "run_id": "B-natural-dspcbsd-plus-s0",
+        "split_file": "manifests/experiments/v0.1/B-natural-dspcbsd-plus__seed0.csv",
+        "training_seed": 0
+      },
+      {
+        "package": "<data>/exports/v0.1/openinspect-trust-v0.1-B-natural-pcb-ind-yolo.zip",
+        "purpose": "unseen source under naturally occurring cross-source similarity",
+        "regime": "B-natural, pcb-ind held out",
+        "run_id": "B-natural-pcb-ind-s0",
+        "split_file": "manifests/experiments/v0.1/B-natural-pcb-ind__seed0.csv",
+        "training_seed": 0
+      }
+    ]
+  },
+  "probe": {
+    "features": {
+      "all": [
+        "width",
+        "height",
+        "aspect",
+        "log_pixels",
+        "is_png",
+        "n_boxes",
+        "mean_rel_side",
+        "min_rel_side",
+        "max_rel_side",
+        "mean_cx",
+        "mean_cy",
+        "std_cx",
+        "std_cy",
+        "mean_r",
+        "mean_g",
+        "mean_b",
+        "std_r",
+        "std_g",
+        "std_b",
+        "grad_mean"
+      ],
+      "boxes": [
+        "n_boxes",
+        "mean_rel_side",
+        "min_rel_side",
+        "max_rel_side",
+        "mean_cx",
+        "mean_cy",
+        "std_cx",
+        "std_cy"
+      ],
+      "boxes+pixels": [
+        "n_boxes",
+        "mean_rel_side",
+        "min_rel_side",
+        "max_rel_side",
+        "mean_cx",
+        "mean_cy",
+        "std_cx",
+        "std_cy",
+        "mean_r",
+        "mean_g",
+        "mean_b",
+        "std_r",
+        "std_g",
+        "std_b",
+        "grad_mean"
+      ],
+      "metadata": [
+        "width",
+        "height",
+        "aspect",
+        "log_pixels",
+        "is_png"
+      ],
+      "pixels": [
+        "mean_r",
+        "mean_g",
+        "mean_b",
+        "std_r",
+        "std_g",
+        "std_b",
+        "grad_mean"
+      ]
+    },
+    "items": 4420,
+    "majority_baseline": 0.4,
+    "reading": "The best simple model reaches 100.0% balanced accuracy (logistic regression, metadata features); without file metadata (boxes and pixels only) 89.9%. The majority baseline is 40.0%.",
+    "scores": [
+      {
+        "accuracy": 1.0,
+        "balanced_accuracy": 1.0,
+        "confusion": {
+          "dspcbsd-plus": {
+            "dspcbsd-plus": 1768,
+            "pcb-defect": 0,
+            "pcb-ind": 0
+          },
+          "pcb-defect": {
+            "dspcbsd-plus": 0,
+            "pcb-defect": 939,
+            "pcb-ind": 0
+          },
+          "pcb-ind": {
+            "dspcbsd-plus": 0,
+            "pcb-defect": 0,
+            "pcb-ind": 1713
+          }
+        },
+        "features": "metadata",
+        "folds": "stratified",
+        "model": "logistic regression",
+        "recall": {
+          "dspcbsd-plus": 1.0,
+          "pcb-defect": 1.0,
+          "pcb-ind": 1.0
+        }
+      },
+      {
+        "accuracy": 1.0,
+        "balanced_accuracy": 1.0,
+        "confusion": {
+          "dspcbsd-plus": {
+            "dspcbsd-plus": 1768,
+            "pcb-defect": 0,
+            "pcb-ind": 0
+          },
+          "pcb-defect": {
+            "dspcbsd-plus": 0,
+            "pcb-defect": 939,
+            "pcb-ind": 0
+          },
+          "pcb-ind": {
+            "dspcbsd-plus": 0,
+            "pcb-defect": 0,
+            "pcb-ind": 1713
+          }
+        },
+        "features": "metadata",
+        "folds": "stratified",
+        "model": "decision tree (depth 3)",
+        "recall": {
+          "dspcbsd-plus": 1.0,
+          "pcb-defect": 1.0,
+          "pcb-ind": 1.0
+        }
+      },
+      {
+        "accuracy": 0.995928,
+        "balanced_accuracy": 0.99361,
+        "confusion": {
+          "dspcbsd-plus": {
+            "dspcbsd-plus": 1768,
+            "pcb-defect": 0,
+            "pcb-ind": 0
+          },
+          "pcb-defect": {
+            "dspcbsd-plus": 0,
+            "pcb-defect": 921,
+            "pcb-ind": 18
+          },
+          "pcb-ind": {
+            "dspcbsd-plus": 0,
+            "pcb-defect": 0,
+            "pcb-ind": 1713
+          }
+        },
+        "features": "metadata",
+        "folds": "group-aware",
+        "model": "logistic regression",
+        "recall": {
+          "dspcbsd-plus": 1.0,
+          "pcb-defect": 0.980831,
+          "pcb-ind": 1.0
+        }
+      },
+      {
+        "accuracy": 1.0,
+        "balanced_accuracy": 1.0,
+        "confusion": {
+          "dspcbsd-plus": {
+            "dspcbsd-plus": 1768,
+            "pcb-defect": 0,
+            "pcb-ind": 0
+          },
+          "pcb-defect": {
+            "dspcbsd-plus": 0,
+            "pcb-defect": 939,
+            "pcb-ind": 0
+          },
+          "pcb-ind": {
+            "dspcbsd-plus": 0,
+            "pcb-defect": 0,
+            "pcb-ind": 1713
+          }
+        },
+        "features": "metadata",
+        "folds": "group-aware",
+        "model": "decision tree (depth 3)",
+        "recall": {
+          "dspcbsd-plus": 1.0,
+          "pcb-defect": 1.0,
+          "pcb-ind": 1.0
+        }
+      },
+      {
+        "accuracy": 0.620362,
+        "balanced_accuracy": 0.619354,
+        "confusion": {
+          "dspcbsd-plus": {
+            "dspcbsd-plus": 1382,
+            "pcb-defect": 50,
+            "pcb-ind": 336
+          },
+          "pcb-defect": {
+            "dspcbsd-plus": 15,
+            "pcb-defect": 587,
+            "pcb-ind": 337
+          },
+          "pcb-ind": {
+            "dspcbsd-plus": 754,
+            "pcb-defect": 186,
+            "pcb-ind": 773
+          }
+        },
+        "features": "boxes",
+        "folds": "stratified",
+        "model": "logistic regression",
+        "recall": {
+          "dspcbsd-plus": 0.781674,
+          "pcb-defect": 0.625133,
+          "pcb-ind": 0.451255
+        }
+      },
+      {
+        "accuracy": 0.725792,
+        "balanced_accuracy": 0.746997,
+        "confusion": {
+          "dspcbsd-plus": {
+            "dspcbsd-plus": 1105,
+            "pcb-defect": 1,
+            "pcb-ind": 662
+          },
+          "pcb-defect": {
+            "dspcbsd-plus": 9,
+            "pcb-defect": 807,
+            "pcb-ind": 123
+          },
+          "pcb-ind": {
+            "dspcbsd-plus": 391,
+            "pcb-defect": 26,
+            "pcb-ind": 1296
+          }
+        },
+        "features": "boxes",
+        "folds": "stratified",
+        "model": "decision tree (depth 3)",
+        "recall": {
+          "dspcbsd-plus": 0.625,
+          "pcb-defect": 0.859425,
+          "pcb-ind": 0.756567
+        }
+      },
+      {
+        "accuracy": 0.478507,
+        "balanced_accuracy": 0.415102,
+        "confusion": {
+          "dspcbsd-plus": {
+            "dspcbsd-plus": 1349,
+            "pcb-defect": 50,
+            "pcb-ind": 369
+          },
+          "pcb-defect": {
+            "dspcbsd-plus": 16,
+            "pcb-defect": 73,
+            "pcb-ind": 850
+          },
+          "pcb-ind": {
+            "dspcbsd-plus": 839,
+            "pcb-defect": 181,
+            "pcb-ind": 693
+          }
+        },
+        "features": "boxes",
+        "folds": "group-aware",
+        "model": "logistic regression",
+        "recall": {
+          "dspcbsd-plus": 0.763009,
+          "pcb-defect": 0.077742,
+          "pcb-ind": 0.404553
+        }
+      },
+      {
+        "accuracy": 0.684389,
+        "balanced_accuracy": 0.717032,
+        "confusion": {
+          "dspcbsd-plus": {
+            "dspcbsd-plus": 1100,
+            "pcb-defect": 4,
+            "pcb-ind": 664
+          },
+          "pcb-defect": {
+            "dspcbsd-plus": 12,
+            "pcb-defect": 842,
+            "pcb-ind": 85
+          },
+          "pcb-ind": {
+            "dspcbsd-plus": 601,
+            "pcb-defect": 29,
+            "pcb-ind": 1083
+          }
+        },
+        "features": "boxes",
+        "folds": "group-aware",
+        "model": "decision tree (depth 3)",
+        "recall": {
+          "dspcbsd-plus": 0.622172,
+          "pcb-defect": 0.896699,
+          "pcb-ind": 0.632224
+        }
+      },
+      {
+        "accuracy": 0.877149,
+        "balanced_accuracy": 0.896529,
+        "confusion": {
+          "dspcbsd-plus": {
+            "dspcbsd-plus": 1406,
+            "pcb-defect": 17,
+            "pcb-ind": 345
+          },
+          "pcb-defect": {
+            "dspcbsd-plus": 0,
+            "pcb-defect": 939,
+            "pcb-ind": 0
+          },
+          "pcb-ind": {
+            "dspcbsd-plus": 179,
+            "pcb-defect": 2,
+            "pcb-ind": 1532
+          }
+        },
+        "features": "pixels",
+        "folds": "stratified",
+        "model": "logistic regression",
+        "recall": {
+          "dspcbsd-plus": 0.795249,
+          "pcb-defect": 1.0,
+          "pcb-ind": 0.894337
+        }
+      },
+      {
+        "accuracy": 0.809276,
+        "balanced_accuracy": 0.834039,
+        "confusion": {
+          "dspcbsd-plus": {
+            "dspcbsd-plus": 1211,
+            "pcb-defect": 4,
+            "pcb-ind": 553
+          },
+          "pcb-defect": {
+            "dspcbsd-plus": 29,
+            "pcb-defect": 906,
+            "pcb-ind": 4
+          },
+          "pcb-ind": {
+            "dspcbsd-plus": 251,
+            "pcb-defect": 2,
+            "pcb-ind": 1460
+          }
+        },
+        "features": "pixels",
+        "folds": "stratified",
+        "model": "decision tree (depth 3)",
+        "recall": {
+          "dspcbsd-plus": 0.684955,
+          "pcb-defect": 0.964856,
+          "pcb-ind": 0.852306
+        }
+      },
+      {
+        "accuracy": 0.832353,
+        "balanced_accuracy": 0.846106,
+        "confusion": {
+          "dspcbsd-plus": {
+            "dspcbsd-plus": 1410,
+            "pcb-defect": 11,
+            "pcb-ind": 347
+          },
+          "pcb-defect": {
+            "dspcbsd-plus": 0,
+            "pcb-defect": 865,
+            "pcb-ind": 74
+          },
+          "pcb-ind": {
+            "dspcbsd-plus": 308,
+            "pcb-defect": 1,
+            "pcb-ind": 1404
+          }
+        },
+        "features": "pixels",
+        "folds": "group-aware",
+        "model": "logistic regression",
+        "recall": {
+          "dspcbsd-plus": 0.797511,
+          "pcb-defect": 0.921193,
+          "pcb-ind": 0.819615
+        }
+      },
+      {
+        "accuracy": 0.801584,
+        "balanced_accuracy": 0.821497,
+        "confusion": {
+          "dspcbsd-plus": {
+            "dspcbsd-plus": 1236,
+            "pcb-defect": 13,
+            "pcb-ind": 519
+          },
+          "pcb-defect": {
+            "dspcbsd-plus": 69,
+            "pcb-defect": 870,
+            "pcb-ind": 0
+          },
+          "pcb-ind": {
+            "dspcbsd-plus": 265,
+            "pcb-defect": 11,
+            "pcb-ind": 1437
+          }
+        },
+        "features": "pixels",
+        "folds": "group-aware",
+        "model": "decision tree (depth 3)",
+        "recall": {
+          "dspcbsd-plus": 0.699095,
+          "pcb-defect": 0.926518,
+          "pcb-ind": 0.838879
+        }
+      },
+      {
+        "accuracy": 0.880317,
+        "balanced_accuracy": 0.899047,
+        "confusion": {
+          "dspcbsd-plus": {
+            "dspcbsd-plus": 1440,
+            "pcb-defect": 12,
+            "pcb-ind": 316
+          },
+          "pcb-defect": {
+            "dspcbsd-plus": 0,
+            "pcb-defect": 939,
+            "pcb-ind": 0
+          },
+          "pcb-ind": {
+            "dspcbsd-plus": 195,
+            "pcb-defect": 6,
+            "pcb-ind": 1512
+          }
+        },
+        "features": "boxes+pixels",
+        "folds": "stratified",
+        "model": "logistic regression",
+        "recall": {
+          "dspcbsd-plus": 0.81448,
+          "pcb-defect": 1.0,
+          "pcb-ind": 0.882662
+        }
+      },
+      {
+        "accuracy": 0.80905,
+        "balanced_accuracy": 0.83382,
+        "confusion": {
+          "dspcbsd-plus": {
+            "dspcbsd-plus": 1215,
+            "pcb-defect": 4,
+            "pcb-ind": 549
+          },
+          "pcb-defect": {
+            "dspcbsd-plus": 29,
+            "pcb-defect": 906,
+            "pcb-ind": 4
+          },
+          "pcb-ind": {
+            "dspcbsd-plus": 256,
+            "pcb-defect": 2,
+            "pcb-ind": 1455
+          }
+        },
+        "features": "boxes+pixels",
+        "folds": "stratified",
+        "model": "decision tree (depth 3)",
+        "recall": {
+          "dspcbsd-plus": 0.687217,
+          "pcb-defect": 0.964856,
+          "pcb-ind": 0.849387
+        }
+      },
+      {
+        "accuracy": 0.831674,
+        "balanced_accuracy": 0.846191,
+        "confusion": {
+          "dspcbsd-plus": {
+            "dspcbsd-plus": 1432,
+            "pcb-defect": 10,
+            "pcb-ind": 326
+          },
+          "pcb-defect": {
+            "dspcbsd-plus": 0,
+            "pcb-defect": 870,
+            "pcb-ind": 69
+          },
+          "pcb-ind": {
+            "dspcbsd-plus": 333,
+            "pcb-defect": 6,
+            "pcb-ind": 1374
+          }
+        },
+        "features": "boxes+pixels",
+        "folds": "group-aware",
+        "model": "logistic regression",
+        "recall": {
+          "dspcbsd-plus": 0.809955,
+          "pcb-defect": 0.926518,
+          "pcb-ind": 0.802102
+        }
+      },
+      {
+        "accuracy": 0.801357,
+        "balanced_accuracy": 0.821291,
+        "confusion": {
+          "dspcbsd-plus": {
+            "dspcbsd-plus": 1238,
+            "pcb-defect": 13,
+            "pcb-ind": 517
+          },
+          "pcb-defect": {
+            "dspcbsd-plus": 69,
+            "pcb-defect": 870,
+            "pcb-ind": 0
+          },
+          "pcb-ind": {
+            "dspcbsd-plus": 268,
+            "pcb-defect": 11,
+            "pcb-ind": 1434
+          }
+        },
+        "features": "boxes+pixels",
+        "folds": "group-aware",
+        "model": "decision tree (depth 3)",
+        "recall": {
+          "dspcbsd-plus": 0.700226,
+          "pcb-defect": 0.926518,
+          "pcb-ind": 0.837128
+        }
+      },
+      {
+        "accuracy": 1.0,
+        "balanced_accuracy": 1.0,
+        "confusion": {
+          "dspcbsd-plus": {
+            "dspcbsd-plus": 1768,
+            "pcb-defect": 0,
+            "pcb-ind": 0
+          },
+          "pcb-defect": {
+            "dspcbsd-plus": 0,
+            "pcb-defect": 939,
+            "pcb-ind": 0
+          },
+          "pcb-ind": {
+            "dspcbsd-plus": 0,
+            "pcb-defect": 0,
+            "pcb-ind": 1713
+          }
+        },
+        "features": "all",
+        "folds": "stratified",
+        "model": "logistic regression",
+        "recall": {
+          "dspcbsd-plus": 1.0,
+          "pcb-defect": 1.0,
+          "pcb-ind": 1.0
+        }
+      },
+      {
+        "accuracy": 1.0,
+        "balanced_accuracy": 1.0,
+        "confusion": {
+          "dspcbsd-plus": {
+            "dspcbsd-plus": 1768,
+            "pcb-defect": 0,
+            "pcb-ind": 0
+          },
+          "pcb-defect": {
+            "dspcbsd-plus": 0,
+            "pcb-defect": 939,
+            "pcb-ind": 0
+          },
+          "pcb-ind": {
+            "dspcbsd-plus": 0,
+            "pcb-defect": 0,
+            "pcb-ind": 1713
+          }
+        },
+        "features": "all",
+        "folds": "stratified",
+        "model": "decision tree (depth 3)",
+        "recall": {
+          "dspcbsd-plus": 1.0,
+          "pcb-defect": 1.0,
+          "pcb-ind": 1.0
+        }
+      },
+      {
+        "accuracy": 0.996606,
+        "balanced_accuracy": 0.994675,
+        "confusion": {
+          "dspcbsd-plus": {
+            "dspcbsd-plus": 1768,
+            "pcb-defect": 0,
+            "pcb-ind": 0
+          },
+          "pcb-defect": {
+            "dspcbsd-plus": 0,
+            "pcb-defect": 924,
+            "pcb-ind": 15
+          },
+          "pcb-ind": {
+            "dspcbsd-plus": 0,
+            "pcb-defect": 0,
+            "pcb-ind": 1713
+          }
+        },
+        "features": "all",
+        "folds": "group-aware",
+        "model": "logistic regression",
+        "recall": {
+          "dspcbsd-plus": 1.0,
+          "pcb-defect": 0.984026,
+          "pcb-ind": 1.0
+        }
+      },
+      {
+        "accuracy": 1.0,
+        "balanced_accuracy": 1.0,
+        "confusion": {
+          "dspcbsd-plus": {
+            "dspcbsd-plus": 1768,
+            "pcb-defect": 0,
+            "pcb-ind": 0
+          },
+          "pcb-defect": {
+            "dspcbsd-plus": 0,
+            "pcb-defect": 939,
+            "pcb-ind": 0
+          },
+          "pcb-ind": {
+            "dspcbsd-plus": 0,
+            "pcb-defect": 0,
+            "pcb-ind": 1713
+          }
+        },
+        "features": "all",
+        "folds": "group-aware",
+        "model": "decision tree (depth 3)",
+        "recall": {
+          "dspcbsd-plus": 1.0,
+          "pcb-defect": 1.0,
+          "pcb-ind": 1.0
+        }
+      }
+    ],
+    "sources": {
+      "dspcbsd-plus": 1768,
+      "pcb-defect": 939,
+      "pcb-ind": 1713
+    },
+    "trees": {
+      "all": [
+        "if width <= 263:",
+        "  -> dspcbsd-plus",
+        "else:",
+        "  if is_png <= 0.5:",
+        "    -> pcb-ind",
+        "  else:",
+        "    -> pcb-defect"
+      ],
+      "boxes": [
+        "if min_rel_side <= 0.1732:",
+        "  if mean_cx <= 0.5:",
+        "    if min_rel_side <= 0.1017:",
+        "      -> dspcbsd-plus",
+        "    else:",
+        "      -> pcb-ind",
+        "  else:",
+        "    if n_boxes <= 1.5:",
+        "      -> pcb-ind",
+        "    else:",
+        "      -> dspcbsd-plus",
+        "else:",
+        "  if mean_cy <= 0.5017:",
+        "    if mean_cy <= 0.4981:",
+        "      -> pcb-ind",
+        "    else:",
+        "      -> pcb-defect",
+        "  else:",
+        "    if mean_cy <= 0.5137:",
+        "      -> pcb-ind",
+        "    else:",
+        "      -> pcb-ind"
+      ],
+      "boxes+pixels": [
+        "if std_r <= 0.086:",
+        "  if mean_r <= 0.4529:",
+        "    if mean_b <= 0.09006:",
+        "      -> pcb-ind",
+        "    else:",
+        "      -> dspcbsd-plus",
+        "  else:",
+        "    if mean_b <= 0.3432:",
+        "      -> pcb-defect",
+        "    else:",
+        "      -> pcb-ind",
+        "else:",
+        "  if mean_b <= 0.127:",
+        "    if min_rel_side <= 0.04871:",
+        "      -> dspcbsd-plus",
+        "    else:",
+        "      -> pcb-ind",
+        "  else:",
+        "    if std_b <= 0.1471:",
+        "      -> dspcbsd-plus",
+        "    else:",
+        "      -> pcb-ind"
+      ],
+      "metadata": [
+        "if width <= 263:",
+        "  -> dspcbsd-plus",
+        "else:",
+        "  if is_png <= 0.5:",
+        "    -> pcb-ind",
+        "  else:",
+        "    -> pcb-defect"
+      ],
+      "pixels": [
+        "if std_r <= 0.086:",
+        "  if mean_r <= 0.4529:",
+        "    if mean_b <= 0.09006:",
+        "      -> pcb-ind",
+        "    else:",
+        "      -> dspcbsd-plus",
+        "  else:",
+        "    if mean_b <= 0.3432:",
+        "      -> pcb-defect",
+        "    else:",
+        "      -> pcb-ind",
+        "else:",
+        "  if mean_b <= 0.127:",
+        "    if mean_b <= 0.1094:",
+        "      -> pcb-ind",
+        "    else:",
+        "      -> pcb-ind",
+        "  else:",
+        "    if std_b <= 0.1471:",
+        "      -> dspcbsd-plus",
+        "    else:",
+        "      -> pcb-ind"
+      ]
+    }
+  },
+  "probe_features_file": "artifacts/m5_5/source-probe-features.parquet",
+  "probe_features_sha256": "fa506aa6a97e59bd5a700f3c97a624779293c5e720cc7b48330bd11134e0ddb4",
+  "provenance": {
+    "code_commit": "07a10c501cb489e1580cec494b03015157598b5d",
+    "code_dirty": false,
+    "command": "openinspect readiness compute",
+    "design_seeds": [
+      0,
+      1,
+      2
+    ],
+    "inputs": {
+      "artifacts/m3/audit.json": "f40dc79506afc5d39b9cf64df86eb2a178cf466c9cc83ff7304ffbe11be0ebd6",
+      "artifacts/m3/duplicate-pairs.parquet": "18b8cf68e3c47ea6ee77f987986c74a805350c870d2dd2a6b374c948d80ff4de",
+      "artifacts/m3/leakage-groups.parquet": "c20dd9c297952ed02a740c0fc3ed1ba0f17d5ec2336c6ccb27ce864ebad7f73a",
+      "artifacts/m3/review-candidates.csv": "872e64b9137976be3d36c667e9ee199c7ba28ddf56ea436a1b8ac2e7b46c1948",
+      "artifacts/m4/review-required.csv": "d8fe87c29fa0e549739fec7855ec2756326800d6b100840371b454189777d769",
+      "artifacts/m6/evren-smoke-test.json": "84f0a49cdbf8a604dfa00cca070ea4ad03d210911a9dd138aff46fdfa93c0917",
+      "configs/dedup.yaml": "d75372bc03168026e7f3d3bb1aaf8f7acff18aeaa5d1c030fe287236980af5da",
+      "configs/release.yaml": "71ed47fe84bcb3987ae44e634d502ffaf6cf6b7a7bcfc7c3682fe298ad96cc0f",
+      "configs/taxonomy.yaml": "b8a8357314d49995c2aec7908d4abb25119160a2da6bf8211556e0fe09dce782",
+      "manifests/releases/v0.1/annotations.parquet": "279052b2351277fadac19d2497264ae556507bc77188e5cf597e7b414b5c93ff",
+      "manifests/releases/v0.1/excluded.parquet": "77de6ea6c79538ac0bbd288266fb75c7adbfe96b7966a6f419316a1555c9b36f",
+      "manifests/releases/v0.1/items.parquet": "aefa4792ff2cb86b7c219bc638e3d35eaed26fd40ee6cdd806f1f02df9e9dd9f",
+      "manifests/releases/v0.1/release.json": "346587967a068e0db85b21bb5648527b496403a39e9408316fa500e3548087d5",
+      "manifests/splits/v0.1/A0__seed0.csv": "f0937f79fc67ad00e2494e51a5f965944c845535d2dcb19e4f0db6b74701d69b",
+      "manifests/splits/v0.1/A1__seed0.csv": "7e94fd36db38ce9072c9e3a653d92809b9f2286f1a31e4f2583c8c9c1a00d02c",
+      "manifests/splits/v0.1/B-dspcbsd-plus__seed0.csv": "1fef083084adf56335dba4c55665b6658002f67a393ef682bd660a4fd0ba4cc4",
+      "manifests/splits/v0.1/B-pcb-defect__seed0.csv": "d75ed433cd095c09e602844eee18db4e6b736e0ecbe949b825550dae9cf39c6c",
+      "manifests/splits/v0.1/B-pcb-ind__seed0.csv": "c748dcab805386636229bf3df4146c1a99b8df2a25f7b77afa9996a3a56b0a63"
+    },
+    "models": [
+      {
+        "model_id": "facebook/dinov2-small",
+        "name": "dinov2-small",
+        "revision": "ed25f3a31f01632728cabb09d1542f84ab7b0056",
+        "weights_sha256": "ae1e99fcefd534ed978cdeb8326f08030c96e28b7a81ffcbc98a857c84d14be1"
+      },
+      {
+        "model_id": "facebook/dinov2-base",
+        "name": "dinov2-base",
+        "revision": "f9e44c814b77203eaa57a6bdbbd535f21ede1415",
+        "weights_sha256": "d73036b56966966d07975d696bde331762f37297e2f095de8cea0040c3aa0841"
+      }
+    ],
+    "outputs": {
+      "artifacts/m5_5/base-similar-pairs.csv": "702ee41424b90ecf1262bb8df88e52573a212b3032254189f5368f6de751c961",
+      "artifacts/m5_5/phash-only-pairs.csv": "bd27b1288fd74a4f8056387aacd7a3fe77f35a85a3621ce007e5c1e73dda975e",
+      "artifacts/m5_5/release-label-findings.csv": "3eccba9e692ae4919a99b5eaf7218f5707af16ae49a8c9b95f2e0720c413db58",
+      "artifacts/m5_5/representation-membership.parquet": "9919d83a1b41462bf88ee500456dbd6a5f348a3bef67fab25b246a3f82b39678",
+      "artifacts/m5_5/source-probe-features.parquet": "fa506aa6a97e59bd5a700f3c97a624779293c5e720cc7b48330bd11134e0ddb4",
+      "manifests/experiments/v0.1/B-natural-dspcbsd-plus__seed0.csv": "718294cf6bc4181b85f81b3f3f0d585c393705eae580074b6e562796fda8dd04",
+      "manifests/experiments/v0.1/B-natural-pcb-defect__seed0.csv": "d75ed433cd095c09e602844eee18db4e6b736e0ecbe949b825550dae9cf39c6c",
+      "manifests/experiments/v0.1/B-natural-pcb-ind__seed0.csv": "0933e368f865fb80f241e6b43723ce85d228b001526954be74e777d98654b0ce",
+      "manifests/experiments/v0.1/C-design0-roles.csv": "a39a5841df34e3e04755984e86c142722435536e368944d1b7994a297b1bbbe6",
+      "manifests/experiments/v0.1/C-design1-roles.csv": "b2d14030f1123d819cb09db610eb0ca225da6c1b677a98c5c041c99c18c8759d",
+      "manifests/experiments/v0.1/C-design2-roles.csv": "b12a74d80906d64c4ba2962af036617572a1f736800606c79af2ba2fe5686036",
+      "manifests/experiments/v0.1/C0__design0.csv": "eee6f785a7a6e73953c703feda77dcc04f69b63cbdecce5b6833448e4f816ee0",
+      "manifests/experiments/v0.1/C0__design1.csv": "397f661472888d012ceb73ffc0b10b91bfe8749d0a61210a7bcf71a0fc20a47b",
+      "manifests/experiments/v0.1/C0__design2.csv": "305c8a77f1c16f467809ca543a7e755911632a02c4446a54dbade8d5c3388939",
+      "manifests/experiments/v0.1/C1__design0.csv": "7b25fb3576b49d27d630fc53d72edc7fa0d6bbc3fd1e2aa3af5edfe02ac49222",
+      "manifests/experiments/v0.1/C1__design1.csv": "38f26388511816a0c85da448d2c3a31b822349d947563373715fc79dd4cae6c5",
+      "manifests/experiments/v0.1/C1__design2.csv": "7f46026a84d4a3f3f47b1d29bf49409764ce44fcecce576e72924199f7862b35"
+    },
+    "probe_seed": 0,
+    "release": "v0.1",
+    "release_manifest_sha256": "346587967a068e0db85b21bb5648527b496403a39e9408316fa500e3548087d5",
+    "split_seed": 0,
+    "thresholds": {
+      "dinov2-base": {
+        "family": 0.958,
+        "near": 0.958
+      },
+      "dinov2-small": {
+        "family": 0.918,
+        "near": 0.933905
+      }
+    }
+  },
+  "representation": {
+    "a1_base_cuts_small": {
+      "crop_parent": 0,
+      "exact_duplicate": 0,
+      "metadata_group": 0,
+      "similarity_component": 57
+    },
+    "a1_base_pairs_crossing_base": 0,
+    "a1_base_pairs_train_test": {
+      "NEAR_DUPLICATE": 30,
+      "REVIEW_REQUIRED": 72,
+      "SAME_FAMILY_OR_SCENE": 48
+    },
+    "a1_base_primary_pairs_crossing": 266,
+    "a1_cuts_base": {
+      "crop_parent": 0,
+      "exact_duplicate": 0,
+      "metadata_group": 0,
+      "similarity_component": 3
+    },
+    "a1_pairs_crossing_base": 36,
+    "admissibility_changed_items": 1137,
+    "base_model": "facebook--dinov2-base@f9e44c814b77",
+    "base_primary": {
+      "dspcbsd-plus": "family",
+      "pcb-defect": "near",
+      "pcb-ind": "family"
+    },
+    "base_thresholds": {
+      "family": 0.958,
+      "near": 0.958
+    },
+    "changed_items": 1212,
+    "changed_share": 0.274208,
+    "designs_base_pairs_train_test": {
+      "C0-d0": {
+        "dspcbsd-plus": 6,
+        "pcb-defect": 39,
+        "pcb-ind": 1
+      },
+      "C0-d1": {
+        "dspcbsd-plus": 3,
+        "pcb-defect": 33,
+        "pcb-ind": 3
+      },
+      "C0-d2": {
+        "dspcbsd-plus": 7,
+        "pcb-defect": 41,
+        "pcb-ind": 1
+      },
+      "C1-d0": {
+        "dspcbsd-plus": 1,
+        "pcb-defect": 33,
+        "pcb-ind": 1
+      },
+      "C1-d1": {
+        "dspcbsd-plus": 0,
+        "pcb-defect": 22,
+        "pcb-ind": 0
+      },
+      "C1-d2": {
+        "dspcbsd-plus": 1,
+        "pcb-defect": 35,
+        "pcb-ind": 1
+      }
+    },
+    "held_out": [
+      {
+        "excluded_base": 0,
+        "excluded_small": 85,
+        "fold": "B-dspcbsd-plus"
+      },
+      {
+        "excluded_base": 0,
+        "excluded_small": 0,
+        "fold": "B-pcb-defect"
+      },
+      {
+        "excluded_base": 0,
+        "excluded_small": 181,
+        "fold": "B-pcb-ind"
+      }
+    ],
+    "material": true,
+    "material_reasons": [
+      "27.4% of the items change split (threshold 10%)",
+      "`pcb-defect` is in train/val under A1 and in train under A1-base"
+    ],
+    "membership": [
+      {
+        "agreement": {
+          "adjusted_rand": 0.007463115309938106,
+          "completeness": 0.6290374603905989,
+          "homogeneity": 0.9981354003310275,
+          "multi_member_purity": 0.9393939393939394,
+          "n_images": 462,
+          "pair_precision": 0.8888888888888888,
+          "pair_recall": 0.004,
+          "v_measure": 0.7717244707138674
+        },
+        "components_base": 14,
+        "components_small": 54,
+        "in_component_base": 33,
+        "in_component_small": 366,
+        "items": 1768,
+        "largest_base": 5,
+        "largest_group_base": 5,
+        "largest_group_small": 181,
+        "largest_small": 65,
+        "sizes_base": {
+          "maximum": 5.0,
+          "mean": 2.357142857142857,
+          "median": 2.0,
+          "minimum": 2.0,
+          "n": 14,
+          "p05": 2.0,
+          "p25": 2.0,
+          "p75": 2.0,
+          "p95": 3.6999999999999993,
+          "p99": 4.739999999999998
+        },
+        "sizes_small": {
+          "maximum": 65.0,
+          "mean": 6.777777777777778,
+          "median": 2.0,
+          "minimum": 2.0,
+          "n": 54,
+          "p05": 2.0,
+          "p25": 2.0,
+          "p75": 3.0,
+          "p95": 38.799999999999955,
+          "p99": 60.75999999999999
+        },
+        "source": "dspcbsd-plus"
+      },
+      {
+        "agreement": {
+          "adjusted_rand": 0.28718073411682826,
+          "completeness": 0.645998287042003,
+          "homogeneity": 0.42555538812322163,
+          "multi_member_purity": 0.687248322147651,
+          "n_images": 836,
+          "pair_precision": 0.4017211403781277,
+          "pair_recall": 0.8066383593425114,
+          "v_measure": 0.5131017850817551
+        },
+        "components_base": 14,
+        "components_small": 24,
+        "in_component_base": 745,
+        "in_component_small": 753,
+        "items": 939,
+        "largest_base": 605,
+        "largest_group_base": 939,
+        "largest_group_small": 859,
+        "largest_small": 420,
+        "sizes_base": {
+          "maximum": 605.0,
+          "mean": 53.214285714285715,
+          "median": 11.0,
+          "minimum": 5.0,
+          "n": 14,
+          "p05": 5.65,
+          "p25": 8.25,
+          "p75": 14.25,
+          "p95": 222.79999999999978,
+          "p99": 528.5599999999995
+        },
+        "sizes_small": {
+          "maximum": 420.0,
+          "mean": 31.375,
+          "median": 11.0,
+          "minimum": 6.0,
+          "n": 24,
+          "p05": 7.0,
+          "p25": 9.0,
+          "p75": 17.0,
+          "p95": 48.549999999999955,
+          "p99": 335.35999999999984
+        },
+        "source": "pcb-defect"
+      },
+      {
+        "agreement": {
+          "adjusted_rand": 0.009506801578906104,
+          "completeness": 0.6669529783361297,
+          "homogeneity": 0.9983067466521793,
+          "multi_member_purity": 0.9354838709677419,
+          "n_images": 411,
+          "pair_precision": 0.8823529411764706,
+          "pair_recall": 0.0049800796812749,
+          "v_measure": 0.7996634374585592
+        },
+        "components_base": 15,
+        "components_small": 84,
+        "in_component_base": 31,
+        "in_component_small": 387,
+        "items": 1713,
+        "largest_base": 3,
+        "largest_group_base": 90,
+        "largest_group_small": 620,
+        "largest_small": 48,
+        "sizes_base": {
+          "maximum": 3.0,
+          "mean": 2.066666666666667,
+          "median": 2.0,
+          "minimum": 2.0,
+          "n": 15,
+          "p05": 2.0,
+          "p25": 2.0,
+          "p75": 2.0,
+          "p95": 2.299999999999999,
+          "p99": 2.8599999999999994
+        },
+        "sizes_small": {
+          "maximum": 48.0,
+          "mean": 4.607142857142857,
+          "median": 2.0,
+          "minimum": 2.0,
+          "n": 84,
+          "p05": 2.0,
+          "p25": 2.0,
+          "p75": 3.0,
+          "p95": 18.0,
+          "p99": 34.72000000000003
+        },
+        "source": "pcb-ind"
+      }
+    ],
+    "small_model": "facebook--dinov2-small@ed25f3a31f01",
+    "small_primary": {
+      "dspcbsd-plus": "family",
+      "pcb-defect": "near",
+      "pcb-ind": "family"
+    },
+    "small_thresholds": {
+      "family": 0.918,
+      "near": 0.933905
+    },
+    "split_changes": [
+      {
+        "a1": {
+          "test": 191,
+          "train": 1210,
+          "val": 367
+        },
+        "a1_base": {
+          "test": 198,
+          "train": 1194,
+          "val": 376
+        },
+        "changed": 614,
+        "items": 1768,
+        "source": "dspcbsd-plus"
+      },
+      {
+        "a1": {
+          "test": 0,
+          "train": 859,
+          "val": 80
+        },
+        "a1_base": {
+          "test": 0,
+          "train": 939,
+          "val": 0
+        },
+        "changed": 80,
+        "items": 939,
+        "source": "pcb-defect"
+      },
+      {
+        "a1": {
+          "test": 178,
+          "train": 1187,
+          "val": 348
+        },
+        "a1_base": {
+          "test": 171,
+          "train": 1200,
+          "val": 342
+        },
+        "changed": 518,
+        "items": 1713,
+        "source": "pcb-ind"
+      }
+    ],
+    "split_presence": {
+      "A1": {
+        "dspcbsd-plus": [
+          "train",
+          "val",
+          "test"
+        ],
+        "pcb-defect": [
+          "train",
+          "val"
+        ],
+        "pcb-ind": [
+          "train",
+          "val",
+          "test"
+        ]
+      },
+      "A1-base": {
+        "dspcbsd-plus": [
+          "train",
+          "val",
+          "test"
+        ],
+        "pcb-defect": [
+          "train"
+        ],
+        "pcb-ind": [
+          "train",
+          "val",
+          "test"
+        ]
+      }
+    },
+    "test_share_shift": {
+      "dspcbsd-plus": 0.01897,
+      "pcb-defect": 0.0,
+      "pcb-ind": -0.01897
+    }
+  },
+  "reproduction": {
+    "group_keys_match": true,
+    "schemes_match": {
+      "A0": true,
+      "A1": true,
+      "B-dspcbsd-plus": true,
+      "B-pcb-defect": true,
+      "B-pcb-ind": true
+    },
+    "small_components_match_m3": true,
+    "split_files_match": {
+      "A0": true,
+      "A1": true,
+      "B-dspcbsd-plus": true,
+      "B-pcb-defect": true,
+      "B-pcb-ind": true
+    }
+  },
+  "schema_version": 1,
+  "verdict": "TRAINING READY WITH EXPLICIT LIMITATIONS",
+  "verdict_rule": "NOT TRAINING READY if any blocker holds: M6 did not pass; the committed M5 splits do not reproduce from their inputs; a package fails the independent export check; a released box is FATAL; a controlled design leaves a test item exposed in C1 or none exposed in C0; a held-out split mixes sources. Otherwise TRAINING READY WITH EXPLICIT LIMITATIONS if any limitation is recorded, else TRAINING READY."
+}

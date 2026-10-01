@@ -72,11 +72,13 @@ def compute_command(
         fail(str(exc))
     for path, blob in outputs.files.items():
         replace_bytes(root / path, blob)
-    replace_bytes(root / READINESS, json_bytes(outputs.readiness.model_dump(mode="json")))
-    for written in write_reports(root, outputs.readiness):
+    blob = json_bytes(outputs.readiness.model_dump(mode="json"))
+    replace_bytes(root / READINESS, blob)
+    readiness = Readiness.model_validate_json(blob)  # render what is committed, as `report` does
+    for written in write_reports(root, readiness):
         typer.echo(f"report: {written.relative_to(root).as_posix()}")
-    typer.echo(f"verdict: {outputs.readiness.verdict}")
-    for blocker in outputs.readiness.blockers:
+    typer.echo(f"verdict: {readiness.verdict}")
+    for blocker in readiness.blockers:
         typer.echo(f"BLOCKER {blocker}", err=True)
 
 
