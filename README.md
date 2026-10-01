@@ -2,7 +2,7 @@
 
 A reproducible dataset and benchmark assurance preflight for industrial vision.
 
-**Status: early development.** Milestones 1 (source registry), 2 (ingest), 3 (similarity and leakage audit) and 4 (taxonomy and label audit) are implemented and have been run on three public PCB defect datasets. No model has been trained yet.
+**Status: early development.** Milestones 1 (source registry), 2 (ingest), 3 (similarity and leakage audit), 4 (taxonomy and label audit) and 5 (release assembly and canonical splits) are implemented and have been run on three public PCB defect datasets. No model has been trained yet; the next step is the EVREN import smoke test (Milestone 6).
 
 ## What it is
 
@@ -33,7 +33,8 @@ Defect-detection benchmarks are usually scored on a random train/test split of o
 2. Ingest with SHA-256 manifests and per-image provenance (implemented).
 3. Audit the pool before training (implemented): exact and perceptual hashes, DINOv2 similarity with thresholds from a rule frozen before any result, visual similarity components, split leakage against random splits, the sources' own keys across splits, a dimensional assurance report and a review queue (not yet reviewed by a person).
 4. Map source labels to a normalized taxonomy with a status and evidence per label, and flag suspicious annotations for review (implemented; original labels are never changed).
-5. Build three splits and train YOLO11n (later RT-DETR) on EVREN or locally; evaluate every model with one local evaluator.
+5. Assemble a release with stable ids, provenance per item and three split regimes, A0, A1 and B, whose leakage invariants are measured and checked in CI (implemented).
+6. Train YOLO11n (later RT-DETR) on EVREN or locally with identical settings per regime; evaluate every model with one local evaluator.
 
 Details, data contracts, invariants and risks: [docs/SPEC.md](docs/SPEC.md). Decisions and their evidence: [docs/DECISIONS.md](docs/DECISIONS.md).
 
@@ -95,9 +96,23 @@ The taxonomy is [configs/taxonomy.yaml](configs/taxonomy.yaml), explained in [do
 - An image with a box of any other class is excluded whole, so a cross-source release keeps 3,292 DsPCBSD+ and 1,713 PCB-IND images (plus 127 PCB-IND hard negatives) and no whole PCB-Defect scan: every scan also holds a spur or missing pad, so its 1,132 benchmark boxes need crops (M5).
 - The label audit flags 437 cases for review and changes nothing: 8 geometry problems (one zero-height box, tiny and extremely thin boxes), 4 boxes drawn twice with different labels, 332 boxes of atypical size for their class, 2 format disagreements, 89 near-identical image pairs (both representations agree) with different label sets, and the 2 ambiguous mappings. Nobody has reviewed the queue yet.
 
+## The release and its splits (Milestone 5)
+
+The manifest is [manifests/releases/v0.1/release.json](manifests/releases/v0.1/release.json) (sources, versions, licences, taxonomy, crop policy, sample, every split with its method and measurements, invariants, M3 limitations, hashes, generating commit); the summary is [reports/m5/release.md](reports/m5/release.md). `items.parquet` carries per image the source, original file id, source version, licence, original and normalized labels, original and canonical split, `group_id`, `subgroup_id` and the visual similarity group; `excluded.parquet` lists every image that was left out and why.
+
+- **4,420 images and 5,297 boxes** of the four benchmark classes: DsPCBSD+ 1,768 (40.0%, a class-stratified sample of 3,292 eligible images), PCB-IND 1,713 (38.8%, all eligible) and PCB-Defect 939 (21.2%): square crops of at least 300 native pixels around the defects of its scans (decision D7, frozen in T32). Global ids are `OI_<source>_<12 hex>` from the file's content, stable across rebuilds.
+- **A0** (random, stratified by source and classes): 3,091 / 891 / 438. It cuts 248 metadata groups, 100 visual similarity components and 167 crop parents, and 727 similar pairs at the primary level lie across its splits: the naive benchmark, measured.
+- **A1** (group-aware): whole groups of metadata keys, M3 visual similarity components, identical files and crop parents; 3,256 / 795 / 369, **0 supplied groups crossing (measured)**, and 0 similar pairs at the primary level across splits. DsPCBSD+ and PCB-IND are split 68/21/11 and 69/20/10; PCB-Defect forms one connected group of 859 of its 939 crops (design families chained by similarity components) and therefore sits in train and val only, so A0 and A1 are compared per source.
+- **B** (source held out, 15% group-aware validation): one fold per source; training items that share a visual similarity component with the held-out source are excluded (85 PCB-IND items when DsPCBSD+ is held out, 181 DsPCBSD+ items when PCB-IND is held out); 0 constraints cross.
+- Invariants I1 to I9 pass at build time and are re-checked from the committed files by `openinspect release check` in CI.
+
+A0 − A1 approximates the leakage and split-structure effect; A1 − B approximates a residual source or domain shift; A0 − B is not leakage. The visual-similarity audit behind A1 is machine-generated and has not been independently human-validated.
+
+**EVREN smoke package.** `openinspect release smoke` wrote `openinspect-trust-v0.1-evren-smoke-yolo.zip` (YOLO Detection, 20 known items of A1: 10 train, 5 val, 5 test, all four classes in every split; file names are global ids) to `<OPENINSPECT_DATA_DIR>/exports/v0.1/`. Its SHA-256 and the expected split of every item were committed before any upload: [manifests/releases/v0.1/evren-smoke/](manifests/releases/v0.1/evren-smoke/). Whether EVREN keeps the imported split is the open question of Milestone 6 ([docs/EVREN.md](docs/EVREN.md)).
+
 ## Results
 
-The dataset-structure results of Milestones 3 and 4 are above. There are no model results yet; the roadmap is in [docs/SPEC.md](docs/SPEC.md) §13.
+The dataset-structure results of Milestones 3 to 5 are above. There are no model results yet; the roadmap is in [docs/SPEC.md](docs/SPEC.md) §13.
 
 ## Reproduction
 
@@ -123,6 +138,9 @@ uv run openinspect dedup synthetic --all --model dinov2-base
 uv run openinspect dedup run --all --robustness-model dinov2-base     # analysis, artifacts, reports, review pack
 uv run openinspect taxonomy check                                    # no data needed
 uv run openinspect taxonomy audit --all                              # map, review queue, reports/m4
+uv run openinspect release build                                     # release v0.1: images, splits, manifest, reports/m5
+uv run openinspect release check                                     # no data needed: hashes and invariants
+uv run openinspect release smoke                                     # the EVREN smoke-test ZIP and its expected splits
 ```
 
 `dedup analyze` needs no model: it reads the caches. `dedup report` re-renders [reports/m3/](reports/m3/) from `artifacts/m3/audit.json` without any data. `dedup review` writes a local HTML contact sheet of the review queue into the data directory (it embeds dataset thumbnails, so it is never committed); decisions go into `artifacts/m3/review-candidates.csv`.

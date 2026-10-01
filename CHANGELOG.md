@@ -4,6 +4,15 @@ All notable changes are recorded here. Format: [Keep a Changelog](https://keepac
 
 ## [Unreleased]
 
+### Added — M5: release assembly, canonical splits, EVREN smoke package
+
+- `openinspect release build | check | report | smoke | export`.
+  - `build` assembles release v0.1 from the ingest records, the taxonomy and the M3 artifacts: content-defined global ids, the crop policy D7 for PCB-Defect, quotas (no source above 40%), a seeded class-stratified sample, the splits A0, A1 and B per source, their measurements and the invariants I1 to I9; it writes the images to `<data>/release/v0.1/images/`, and to the repository `manifests/releases/v0.1/{release.json, items.parquet, annotations.parquet, excluded.parquet}`, `manifests/splits/v0.1/*.csv` with `.meta.json`, and `reports/m5/release.md`.
+  - `check` re-verifies the committed release from its files (hashes, I1 to I5, I7 to I9) and runs in CI; `report` re-renders the report; `smoke` writes the EVREN smoke-test ZIP (YOLO Detection, 10/5/5 known A1 items) to `<data>/exports/v0.1/` and commits its SHA-256 and the expected split of every item; `export` writes the full package of one scheme.
+- `configs/release.yaml`: version, seed, size range, share limit, negatives, crop policy per source, split ratios, smoke counts.
+- Release v0.1: 4,420 images, 5,297 boxes (DsPCBSD+ 1,768, PCB-IND 1,713, PCB-Defect 939 crops); A1 crosses 0 supplied groups; A1 holds PCB-Defect in train and val only (one constraint group of 859 of 939 crops).
+- Decisions T32–T36.
+
 ### Added — M4: taxonomy and label quality
 
 - `configs/taxonomy.yaml`: every source label mapped once to a normalized class with a status (EXACT, COMPATIBLE, AMBIGUOUS, SOURCE_SPECIFIC, REJECTED) and quoted evidence; a two-level hierarchy; the candidate merges that were examined and not made; the label-quality rules. Explained in [docs/TAXONOMY.md](docs/TAXONOMY.md).

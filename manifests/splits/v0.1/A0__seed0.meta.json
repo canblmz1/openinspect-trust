@@ -1,0 +1,71 @@
+{
+  "code_commit": "53f503d179d48e25c619f0a7e13c859780478829",
+  "csv_sha256": "f0937f79fc67ad00e2494e51a5f965944c845535d2dcb19e4f0db6b74701d69b",
+  "items_file": "manifests/releases/v0.1/items.parquet",
+  "items_sha256": "aefa4792ff2cb86b7c219bc638e3d35eaed26fd40ee6cdd806f1f02df9e9dd9f",
+  "measure": {
+    "boxes": {
+      "test": {
+        "mouse_bite": 200,
+        "open": 110,
+        "short": 69,
+        "spurious_copper": 141
+      },
+      "train": {
+        "mouse_bite": 1392,
+        "open": 786,
+        "short": 511,
+        "spurious_copper": 1014
+      },
+      "val": {
+        "mouse_bite": 408,
+        "open": 224,
+        "short": 151,
+        "spurious_copper": 291
+      }
+    },
+    "constraints_crossing": {
+      "crop_parent": 167,
+      "exact_duplicate": 0,
+      "metadata_group": 248,
+      "similarity_component": 100
+    },
+    "images": {
+      "test": {
+        "dspcbsd-plus": 175,
+        "pcb-defect": 93,
+        "pcb-ind": 170
+      },
+      "train": {
+        "dspcbsd-plus": 1237,
+        "pcb-defect": 656,
+        "pcb-ind": 1198
+      },
+      "val": {
+        "dspcbsd-plus": 356,
+        "pcb-defect": 190,
+        "pcb-ind": 345
+      }
+    },
+    "pairs_crossing": {
+      "NEAR_DUPLICATE": 538,
+      "REVIEW_REQUIRED": 282,
+      "SAME_FAMILY_OR_SCENE": 1045
+    },
+    "pairs_train_test": {
+      "NEAR_DUPLICATE": 290,
+      "REVIEW_REQUIRED": 89,
+      "SAME_FAMILY_OR_SCENE": 590
+    },
+    "primary_pairs_crossing": 727,
+    "sha256_crossing": 0,
+    "shares": {
+      "test": 0.09909502262443438,
+      "train": 0.6993212669683257,
+      "val": 0.20158371040723982
+    }
+  },
+  "release": "v0.1",
+  "scheme": "A0",
+  "seed": 0
+}

@@ -1,0 +1,761 @@
+{
+  "schema_version": 1,
+  "name": "OpenInspect-Trust",
+  "version": "v0.1",
+  "seed": 0,
+  "generated_by": {
+    "command": "openinspect release build",
+    "code_commit": "53f503d179d48e25c619f0a7e13c859780478829",
+    "code_dirty": false,
+    "pillow": "12.3.0",
+    "libjpeg": "8.0"
+  },
+  "config_sha256": "71ed47fe84bcb3987ae44e634d502ffaf6cf6b7a7bcfc7c3682fe298ad96cc0f",
+  "images_dir": "release/v0.1/images",
+  "sources": [
+    {
+      "source": "dspcbsd-plus",
+      "dataset_name": "DsPCBSD+ (Dataset of PCB Surface Defects)",
+      "version": "v1",
+      "doi": "10.6084/m9.figshare.24970329.v1",
+      "official_url": "https://figshare.com/articles/dataset/DsPCBSD_/24970329",
+      "licence": "CC-BY-4.0",
+      "licence_url": "https://creativecommons.org/licenses/by/4.0/",
+      "attribution": "Lv, S. et al. (2024). DsPCBSD+ [dataset]. figshare. https://doi.org/10.6084/m9.figshare.24970329.v1. Licensed CC BY 4.0. Described in Lv et al., Sci Data 11, 811 (2024), https://doi.org/10.1038/s41597-024-03656-8",
+      "changes_must_be_indicated": true,
+      "archive_sha256": {
+        "DsPCBSD+.zip": "b256846a1f2cf17e6e88be49c551ebf2c7551601e08691f50c70dc367a218817"
+      },
+      "acquisition_id": "factory-aoi",
+      "primary_similarity_level": "family",
+      "crop_policy": null,
+      "images_ingested": 10259,
+      "candidates": 3292,
+      "released_images": 1768,
+      "released_boxes": 2472,
+      "share": 0.4,
+      "exclusions": {
+        "non_benchmark_class": 6967,
+        "not_sampled": 1524
+      }
+    },
+    {
+      "source": "pcb-defect",
+      "dataset_name": "PCB-Defect: An Annotated Dataset for Surface Defect Detection in Printed Circuit Boards",
+      "version": "v1",
+      "doi": "10.17632/vdj74sngvn.1",
+      "official_url": "https://data.mendeley.com/datasets/vdj74sngvn/1",
+      "licence": "CC-BY-4.0",
+      "licence_url": "https://creativecommons.org/licenses/by/4.0/",
+      "attribution": "Rashid, A. J., Ullah, M. A., Isfara, A., Ahmed, N., Mian, M., Shalehin, Md. M. (2025). PCB-Defect: An Annotated Dataset for Surface Defect Detection in Printed Circuit Boards [dataset], Version 1. Mendeley Data. https://doi.org/10.17632/vdj74sngvn.1. Licensed CC BY 4.0.",
+      "changes_must_be_indicated": true,
+      "archive_sha256": {
+        "PCB_Defect.zip": "a5fb17e7009f96ffdb833cd9309b36da775545c8cc36a6dca3a8e9b4fbcb5f2a"
+      },
+      "acquisition_id": "lab-flatbed-scan",
+      "primary_similarity_level": "near",
+      "crop_policy": {
+        "min_side_px": 300,
+        "margin": 0.1,
+        "format": "png"
+      },
+      "images_ingested": 230,
+      "candidates": 939,
+      "released_images": 939,
+      "released_boxes": 971,
+      "share": 0.21244343891402714,
+      "exclusions": {
+        "crop_cuts_box": 82,
+        "crop_other_class_inside": 18,
+        "crop_overlaps_crop": 65,
+        "replaced_by_crops": 230
+      }
+    },
+    {
+      "source": "pcb-ind",
+      "dataset_name": "PCB-IND: Industrial Printed Circuit Board Surface Defect Dataset for Object Detection",
+      "version": "v4 (PCB-IND_v4.zip)",
+      "doi": "10.5281/zenodo.19723114",
+      "official_url": "https://zenodo.org/records/19723114",
+      "licence": "CC-BY-4.0",
+      "licence_url": "https://creativecommons.org/licenses/by/4.0/",
+      "attribution": "Yan, H. et al. (2026). PCB-IND: Industrial Printed Circuit Board Surface Defect Dataset for Object Detection, v4 [dataset]. Zenodo. https://doi.org/10.5281/zenodo.19723114. Licensed CC BY 4.0. Described in Sci Data 13, 1356 (2026), https://doi.org/10.1038/s41597-026-07684-4",
+      "changes_must_be_indicated": true,
+      "archive_sha256": {
+        "PCB-IND_v4.zip": "29cf919c64cab7e60e90e16bf3f42cce674688f99295d66a8e10d0066836e3c9"
+      },
+      "acquisition_id": "factory-aoi",
+      "primary_similarity_level": "family",
+      "crop_policy": null,
+      "images_ingested": 4789,
+      "candidates": 1713,
+      "released_images": 1713,
+      "released_boxes": 1854,
+      "share": 0.38755656108597286,
+      "exclusions": {
+        "no_boxes": 127,
+        "non_benchmark_class": 2949
+      }
+    }
+  ],
+  "taxonomy": {
+    "path": "configs/taxonomy.yaml",
+    "sha256": "b8a8357314d49995c2aec7908d4abb25119160a2da6bf8211556e0fe09dce782",
+    "benchmark_classes": [
+      "short",
+      "open",
+      "mouse_bite",
+      "spurious_copper"
+    ],
+    "classes": [
+      {
+        "class_id": 0,
+        "name": "short",
+        "family": "copper_residue",
+        "original_labels": {
+          "dspcbsd-plus": [
+            "SH"
+          ],
+          "pcb-defect": [
+            "short"
+          ],
+          "pcb-ind": [
+            "short"
+          ]
+        },
+        "statuses": {
+          "dspcbsd-plus": [
+            "EXACT"
+          ],
+          "pcb-defect": [
+            "EXACT"
+          ],
+          "pcb-ind": [
+            "EXACT"
+          ]
+        },
+        "released_boxes": 731,
+        "released_images": 649
+      },
+      {
+        "class_id": 1,
+        "name": "open",
+        "family": "copper_deficiency",
+        "original_labels": {
+          "dspcbsd-plus": [
+            "OP"
+          ],
+          "pcb-defect": [
+            "open_circuit"
+          ],
+          "pcb-ind": [
+            "open"
+          ]
+        },
+        "statuses": {
+          "dspcbsd-plus": [
+            "EXACT"
+          ],
+          "pcb-defect": [
+            "EXACT"
+          ],
+          "pcb-ind": [
+            "EXACT"
+          ]
+        },
+        "released_boxes": 1120,
+        "released_images": 952
+      },
+      {
+        "class_id": 2,
+        "name": "mouse_bite",
+        "family": "copper_deficiency",
+        "original_labels": {
+          "dspcbsd-plus": [
+            "MB"
+          ],
+          "pcb-defect": [
+            "mouse_bite"
+          ],
+          "pcb-ind": [
+            "mouse_bite"
+          ]
+        },
+        "statuses": {
+          "dspcbsd-plus": [
+            "EXACT"
+          ],
+          "pcb-defect": [
+            "COMPATIBLE"
+          ],
+          "pcb-ind": [
+            "EXACT"
+          ]
+        },
+        "released_boxes": 2000,
+        "released_images": 1779
+      },
+      {
+        "class_id": 3,
+        "name": "spurious_copper",
+        "family": "copper_residue",
+        "original_labels": {
+          "dspcbsd-plus": [
+            "SC"
+          ],
+          "pcb-defect": [
+            "spurious_copper"
+          ],
+          "pcb-ind": [
+            "spurious_copper"
+          ]
+        },
+        "statuses": {
+          "dspcbsd-plus": [
+            "COMPATIBLE"
+          ],
+          "pcb-defect": [
+            "EXACT"
+          ],
+          "pcb-ind": [
+            "EXACT"
+          ]
+        },
+        "released_boxes": 1446,
+        "released_images": 1324
+      }
+    ]
+  },
+  "sampling": {
+    "method": "seeded sample per source, stratified by the set of normalized classes of each item (largest remainder); quotas keep every source at or below the share limit",
+    "max_source_share": 0.4,
+    "size": {
+      "min": 2000,
+      "max": 5000
+    },
+    "negatives": "exclude",
+    "available": {
+      "dspcbsd-plus": 3292,
+      "pcb-defect": 939,
+      "pcb-ind": 1713
+    },
+    "quotas": {
+      "dspcbsd-plus": 1768,
+      "pcb-defect": 939,
+      "pcb-ind": 1713
+    }
+  },
+  "counts": {
+    "images": 4420,
+    "boxes": 5297,
+    "by_source": {
+      "dspcbsd-plus": 1768,
+      "pcb-defect": 939,
+      "pcb-ind": 1713
+    },
+    "by_class": {
+      "short": 731,
+      "open": 1120,
+      "mouse_bite": 2000,
+      "spurious_copper": 1446
+    }
+  },
+  "canonical_split": "A1",
+  "splits": [
+    {
+      "name": "A0",
+      "kind": "random",
+      "held_out": null,
+      "method": "random within strata of (source, classes of the item); groups ignored on purpose",
+      "ratios": {
+        "train": 0.7,
+        "val": 0.2,
+        "test": 0.1
+      },
+      "file": "manifests/splits/v0.1/A0__seed0.csv",
+      "sha256": "f0937f79fc67ad00e2494e51a5f965944c845535d2dcb19e4f0db6b74701d69b",
+      "meta_file": "manifests/splits/v0.1/A0__seed0.meta.json",
+      "counts": {
+        "test": 438,
+        "train": 3091,
+        "val": 891
+      },
+      "measure": {
+        "images": {
+          "test": {
+            "dspcbsd-plus": 175,
+            "pcb-defect": 93,
+            "pcb-ind": 170
+          },
+          "train": {
+            "dspcbsd-plus": 1237,
+            "pcb-defect": 656,
+            "pcb-ind": 1198
+          },
+          "val": {
+            "dspcbsd-plus": 356,
+            "pcb-defect": 190,
+            "pcb-ind": 345
+          }
+        },
+        "boxes": {
+          "test": {
+            "mouse_bite": 200,
+            "open": 110,
+            "short": 69,
+            "spurious_copper": 141
+          },
+          "train": {
+            "mouse_bite": 1392,
+            "open": 786,
+            "short": 511,
+            "spurious_copper": 1014
+          },
+          "val": {
+            "mouse_bite": 408,
+            "open": 224,
+            "short": 151,
+            "spurious_copper": 291
+          }
+        },
+        "shares": {
+          "test": 0.09909502262443438,
+          "train": 0.6993212669683257,
+          "val": 0.20158371040723982
+        },
+        "constraints_crossing": {
+          "metadata_group": 248,
+          "similarity_component": 100,
+          "exact_duplicate": 0,
+          "crop_parent": 167
+        },
+        "pairs_crossing": {
+          "NEAR_DUPLICATE": 538,
+          "REVIEW_REQUIRED": 282,
+          "SAME_FAMILY_OR_SCENE": 1045
+        },
+        "pairs_train_test": {
+          "NEAR_DUPLICATE": 290,
+          "REVIEW_REQUIRED": 89,
+          "SAME_FAMILY_OR_SCENE": 590
+        },
+        "primary_pairs_crossing": 727,
+        "sha256_crossing": 0
+      }
+    },
+    {
+      "name": "A1",
+      "kind": "group_aware",
+      "held_out": null,
+      "method": "whole groups (metadata group_id + M3 visual similarity components at each source's primary level + exact duplicates + crop parents), balanced per source and class",
+      "ratios": {
+        "train": 0.7,
+        "val": 0.2,
+        "test": 0.1
+      },
+      "file": "manifests/splits/v0.1/A1__seed0.csv",
+      "sha256": "7e94fd36db38ce9072c9e3a653d92809b9f2286f1a31e4f2583c8c9c1a00d02c",
+      "meta_file": "manifests/splits/v0.1/A1__seed0.meta.json",
+      "counts": {
+        "test": 369,
+        "train": 3256,
+        "val": 795
+      },
+      "measure": {
+        "images": {
+          "test": {
+            "dspcbsd-plus": 191,
+            "pcb-ind": 178
+          },
+          "train": {
+            "dspcbsd-plus": 1210,
+            "pcb-defect": 859,
+            "pcb-ind": 1187
+          },
+          "val": {
+            "dspcbsd-plus": 367,
+            "pcb-defect": 80,
+            "pcb-ind": 348
+          }
+        },
+        "boxes": {
+          "test": {
+            "mouse_bite": 178,
+            "open": 109,
+            "short": 63,
+            "spurious_copper": 129
+          },
+          "train": {
+            "mouse_bite": 1458,
+            "open": 796,
+            "short": 501,
+            "spurious_copper": 1051
+          },
+          "val": {
+            "mouse_bite": 364,
+            "open": 215,
+            "short": 167,
+            "spurious_copper": 266
+          }
+        },
+        "shares": {
+          "test": 0.0834841628959276,
+          "train": 0.7366515837104073,
+          "val": 0.17986425339366516
+        },
+        "constraints_crossing": {
+          "metadata_group": 0,
+          "similarity_component": 0,
+          "exact_duplicate": 0,
+          "crop_parent": 0
+        },
+        "pairs_crossing": {
+          "REVIEW_REQUIRED": 168,
+          "SAME_FAMILY_OR_SCENE": 24
+        },
+        "pairs_train_test": {
+          "REVIEW_REQUIRED": 65
+        },
+        "primary_pairs_crossing": 0,
+        "sha256_crossing": 0
+      }
+    },
+    {
+      "name": "B-dspcbsd-plus",
+      "kind": "source_held_out",
+      "held_out": "dspcbsd-plus",
+      "method": "the held-out source is the test set; the other sources are split group-aware into train and val; training-source items that share a constraint with a held-out item (a visual similarity component across sources) are excluded",
+      "ratios": {
+        "train": 0.85,
+        "val": 0.15
+      },
+      "file": "manifests/splits/v0.1/B-dspcbsd-plus__seed0.csv",
+      "sha256": "1fef083084adf56335dba4c55665b6658002f67a393ef682bd660a4fd0ba4cc4",
+      "meta_file": "manifests/splits/v0.1/B-dspcbsd-plus__seed0.meta.json",
+      "counts": {
+        "excluded": 85,
+        "test": 1768,
+        "train": 2223,
+        "val": 344
+      },
+      "measure": {
+        "images": {
+          "excluded": {
+            "pcb-ind": 85
+          },
+          "test": {
+            "dspcbsd-plus": 1768
+          },
+          "train": {
+            "pcb-defect": 859,
+            "pcb-ind": 1364
+          },
+          "val": {
+            "pcb-defect": 80,
+            "pcb-ind": 264
+          }
+        },
+        "boxes": {
+          "excluded": {
+            "mouse_bite": 39,
+            "open": 5,
+            "short": 35,
+            "spurious_copper": 6
+          },
+          "test": {
+            "mouse_bite": 950,
+            "open": 755,
+            "short": 164,
+            "spurious_copper": 603
+          },
+          "train": {
+            "mouse_bite": 876,
+            "open": 309,
+            "short": 457,
+            "spurious_copper": 721
+          },
+          "val": {
+            "mouse_bite": 135,
+            "open": 51,
+            "short": 75,
+            "spurious_copper": 116
+          }
+        },
+        "shares": {
+          "test": 0.40784313725490196,
+          "train": 0.5128027681660899,
+          "val": 0.07935409457900808
+        },
+        "constraints_crossing": {
+          "metadata_group": 0,
+          "similarity_component": 0,
+          "exact_duplicate": 0,
+          "crop_parent": 0
+        },
+        "pairs_crossing": {
+          "REVIEW_REQUIRED": 88,
+          "SAME_FAMILY_OR_SCENE": 24
+        },
+        "pairs_train_test": {
+          "REVIEW_REQUIRED": 53
+        },
+        "primary_pairs_crossing": 0,
+        "sha256_crossing": 0
+      }
+    },
+    {
+      "name": "B-pcb-defect",
+      "kind": "source_held_out",
+      "held_out": "pcb-defect",
+      "method": "the held-out source is the test set; the other sources are split group-aware into train and val; training-source items that share a constraint with a held-out item (a visual similarity component across sources) are excluded",
+      "ratios": {
+        "train": 0.85,
+        "val": 0.15
+      },
+      "file": "manifests/splits/v0.1/B-pcb-defect__seed0.csv",
+      "sha256": "d75ed433cd095c09e602844eee18db4e6b736e0ecbe949b825550dae9cf39c6c",
+      "meta_file": "manifests/splits/v0.1/B-pcb-defect__seed0.meta.json",
+      "counts": {
+        "test": 939,
+        "train": 2987,
+        "val": 494
+      },
+      "measure": {
+        "images": {
+          "test": {
+            "pcb-defect": 939
+          },
+          "train": {
+            "dspcbsd-plus": 1504,
+            "pcb-ind": 1483
+          },
+          "val": {
+            "dspcbsd-plus": 264,
+            "pcb-ind": 230
+          }
+        },
+        "boxes": {
+          "test": {
+            "mouse_bite": 304,
+            "open": 241,
+            "short": 222,
+            "spurious_copper": 204
+          },
+          "train": {
+            "mouse_bite": 1445,
+            "open": 742,
+            "short": 440,
+            "spurious_copper": 1053
+          },
+          "val": {
+            "mouse_bite": 251,
+            "open": 137,
+            "short": 69,
+            "spurious_copper": 189
+          }
+        },
+        "shares": {
+          "test": 0.21244343891402714,
+          "train": 0.67579185520362,
+          "val": 0.11176470588235295
+        },
+        "constraints_crossing": {
+          "metadata_group": 0,
+          "similarity_component": 0,
+          "exact_duplicate": 0,
+          "crop_parent": 0
+        },
+        "pairs_crossing": {
+          "REVIEW_REQUIRED": 119
+        },
+        "pairs_train_test": {},
+        "primary_pairs_crossing": 0,
+        "sha256_crossing": 0
+      }
+    },
+    {
+      "name": "B-pcb-ind",
+      "kind": "source_held_out",
+      "held_out": "pcb-ind",
+      "method": "the held-out source is the test set; the other sources are split group-aware into train and val; training-source items that share a constraint with a held-out item (a visual similarity component across sources) are excluded",
+      "ratios": {
+        "train": 0.85,
+        "val": 0.15
+      },
+      "file": "manifests/splits/v0.1/B-pcb-ind__seed0.csv",
+      "sha256": "c748dcab805386636229bf3df4146c1a99b8df2a25f7b77afa9996a3a56b0a63",
+      "meta_file": "manifests/splits/v0.1/B-pcb-ind__seed0.meta.json",
+      "counts": {
+        "excluded": 181,
+        "test": 1713,
+        "train": 2226,
+        "val": 300
+      },
+      "measure": {
+        "images": {
+          "excluded": {
+            "dspcbsd-plus": 181
+          },
+          "test": {
+            "pcb-ind": 1713
+          },
+          "train": {
+            "dspcbsd-plus": 1326,
+            "pcb-defect": 900
+          },
+          "val": {
+            "dspcbsd-plus": 261,
+            "pcb-defect": 39
+          }
+        },
+        "boxes": {
+          "excluded": {
+            "mouse_bite": 118,
+            "open": 139,
+            "short": 10,
+            "spurious_copper": 26
+          },
+          "test": {
+            "mouse_bite": 746,
+            "open": 124,
+            "short": 345,
+            "spurious_copper": 639
+          },
+          "train": {
+            "mouse_bite": 977,
+            "open": 728,
+            "short": 310,
+            "spurious_copper": 665
+          },
+          "val": {
+            "mouse_bite": 159,
+            "open": 129,
+            "short": 66,
+            "spurious_copper": 116
+          }
+        },
+        "shares": {
+          "test": 0.4041047416843595,
+          "train": 0.5251238499646143,
+          "val": 0.07077140835102619
+        },
+        "constraints_crossing": {
+          "metadata_group": 0,
+          "similarity_component": 0,
+          "exact_duplicate": 0,
+          "crop_parent": 0
+        },
+        "pairs_crossing": {
+          "REVIEW_REQUIRED": 79,
+          "SAME_FAMILY_OR_SCENE": 17
+        },
+        "pairs_train_test": {
+          "REVIEW_REQUIRED": 47
+        },
+        "primary_pairs_crossing": 0,
+        "sha256_crossing": 0
+      }
+    }
+  ],
+  "interpretation": [
+    "A0 - A1 approximates the effect of leakage and split structure: the same items, split at random and split group-aware.",
+    "A1 - B approximates a residual source or domain shift, not a single cause.",
+    "A0 - B is not a leakage measure: between sources the acquisition hardware, the production environment, the lighting, the resolution, the annotation conventions, the source-specific taxonomy and the label distribution all change.",
+    "Training-set sizes differ between schemes (a B fold trains on fewer items than A0 or A1)."
+  ],
+  "notes": [
+    "A1: `pcb-defect` has no test items: its largest constraint group holds 859 of its 939 items (91.5%), and a group is never cut. Compare A0 and A1 per source.",
+    "B-dspcbsd-plus: 85 `pcb-ind` items share a constraint with `dspcbsd-plus` (a visual similarity component across sources) and are excluded from training in this fold.",
+    "B-pcb-ind: 181 `dspcbsd-plus` items share a constraint with `pcb-ind` (a visual similarity component across sources) and are excluded from training in this fold.",
+    "A1: 65 M3 pHash-only candidate pairs (REVIEW_REQUIRED, below the family cosine) lie across train and test; the M3 protocol does not make them a similarity level, so they are measured, not used as constraints."
+  ],
+  "invariants": [
+    {
+      "id": "I1",
+      "rule": "for every B fold, test holds only the held-out source and no train or val item comes from it",
+      "status": "PASS",
+      "detail": "3 folds; sources out of place: none"
+    },
+    {
+      "id": "I2",
+      "rule": "no file SHA-256 occurs in two splits of any scheme",
+      "status": "PASS",
+      "detail": "A0 0, A1 0, B-dspcbsd-plus 0, B-pcb-defect 0, B-pcb-ind 0"
+    },
+    {
+      "id": "I3",
+      "rule": "every item is in exactly one split of every scheme; global ids are unique",
+      "status": "PASS",
+      "detail": "4,420 items, 5 schemes"
+    },
+    {
+      "id": "I4",
+      "rule": "in A1 and B no metadata group (group_id) crosses a split (A0: measured)",
+      "status": "PASS",
+      "detail": "A0 248, A1 0, B-dspcbsd-plus 0, B-pcb-defect 0, B-pcb-ind 0"
+    },
+    {
+      "id": "I5",
+      "rule": "in A1 and B no visual similarity component and no M3 pair at the primary level crosses a split (A0: measured)",
+      "status": "PASS",
+      "detail": "A0 100 components / 727 pairs, A1 0 components / 0 pairs, B-dspcbsd-plus 0 components / 0 pairs, B-pcb-defect 0 components / 0 pairs, B-pcb-ind 0 components / 0 pairs"
+    },
+    {
+      "id": "I6",
+      "rule": "the same items and seed give the same split, whatever the order of the items",
+      "status": "PASS",
+      "detail": "re-derived from the items in reverse order"
+    },
+    {
+      "id": "I7",
+      "rule": "every item has its source, original file id, source URL, licence and original SHA-256",
+      "status": "PASS",
+      "detail": "0 items with a missing field"
+    },
+    {
+      "id": "I8",
+      "rule": "every licence is on the allowlist",
+      "status": "PASS",
+      "detail": "licences: CC-BY-4.0"
+    },
+    {
+      "id": "I9",
+      "rule": "every released box has an EXACT or COMPATIBLE mapping onto a benchmark class",
+      "status": "PASS",
+      "detail": "5,297 boxes, 0 outside the benchmark classes"
+    }
+  ],
+  "m3_limitations": {
+    "human_validation": {
+      "status": "NOT PERFORMED",
+      "queue": "artifacts/m3/review-candidates.csv",
+      "reviewed": 0,
+      "queued": 300,
+      "limitation": "The similarity findings have not yet been independently human-validated. Thresholds are based on proxy metadata, synthetic transforms and representation-based similarity."
+    },
+    "statements": [
+      "A visual similarity component is a machine-detected potential leakage group (embedding-based similarity finding), not proof that two images show the same object.",
+      "The M3 thresholds rest on proxy metadata (the sources' own keys), synthetic transforms and DINOv2-small whole-image similarity; neither labelled pool reached precision 0.90, so the rule's F1 fallback fixed the family level.",
+      "The robustness model (DINOv2-base) keeps the direction of the M3 findings but finds far fewer crossing components; A1 uses the primary model's components.",
+      "Crops inherit the visual similarity component of their parent image; the components were computed on whole images resized to 224x224."
+    ]
+  },
+  "files": {
+    "annotations.parquet": "279052b2351277fadac19d2497264ae556507bc77188e5cf597e7b414b5c93ff",
+    "excluded.parquet": "77de6ea6c79538ac0bbd288266fb75c7adbfe96b7966a6f419316a1555c9b36f",
+    "items.parquet": "aefa4792ff2cb86b7c219bc638e3d35eaed26fd40ee6cdd806f1f02df9e9dd9f"
+  },
+  "inputs": {
+    "artifacts/m3/audit.json": "f40dc79506afc5d39b9cf64df86eb2a178cf466c9cc83ff7304ffbe11be0ebd6",
+    "artifacts/m3/duplicate-pairs.parquet": "18b8cf68e3c47ea6ee77f987986c74a805350c870d2dd2a6b374c948d80ff4de",
+    "artifacts/m3/leakage-groups.parquet": "c20dd9c297952ed02a740c0fc3ed1ba0f17d5ec2336c6ccb27ce864ebad7f73a",
+    "artifacts/m3/thresholds.json": "a168f1182dd3eb739ee3f587f1c741d38be7bd7d0f0ad121a0c51fd814e28c1f",
+    "configs/licences.yaml": "fba32ef0be5e430be6199c0d611a93c1dce2550bf64f8c30a4afb64c8adf39a8",
+    "records/dspcbsd-plus/annotations.jsonl": "82c7a9e3131358ac5abf0570437b4839787eb6f68c936b42f92c6b5956ae61ab",
+    "records/dspcbsd-plus/images.jsonl": "ea456188902b7d31167b359f22d01369850434b1fb493955df10fc2808798e62",
+    "records/pcb-defect/annotations.jsonl": "4832155f09fb9b25f78544c7e344a6a0d2247f59b1afbcb78c189d9b069709da",
+    "records/pcb-defect/images.jsonl": "1abd46e2a6dbe422b63d348f7b2772e3a8d5bf3a8b5cbccd7f0e0ab3866ae48e",
+    "records/pcb-ind/annotations.jsonl": "c28a667b432c1a8dee38604765c2ed840b914fdd06376b36d73ee1f4a5fb78ff",
+    "records/pcb-ind/images.jsonl": "6ab623dd7aff4f3e6dabce554ba246d2012c98a3b5d0bb04f74a278718c0e1ce"
+  }
+}

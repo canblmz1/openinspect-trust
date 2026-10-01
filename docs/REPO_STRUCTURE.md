@@ -1,6 +1,6 @@
 # Repository structure
 
-Target layout (brief §34) with additions marked **+**. The last column says which milestone creates the item. M0 to M4 files exist today; the rest appears with its milestone.
+Target layout (brief §34) with additions marked **+**. The last column says which milestone creates the item. M0 to M5 files exist today; the rest appears with its milestone.
 
 ```
 openinspect-trust/
@@ -19,12 +19,15 @@ openinspect-trust/
 │   ├── files.py                           + atomic writes, digests, deterministic Parquet               M4
 │   ├── taxonomy/                            taxonomy config, mapping, label-quality checks, audit and   M4
 │   │                                        reports (the planned audit/ package lives here, T31)
-│   ├── split/                               A0, A1, B (LOSO), invariants                                M5
+│   ├── release/                           + global ids, crops (D7), pool and sample, constraints,       M5
+│   │                                        splits A0/A1/B, measurements, invariants, manifest, report,
+│   │                                        verification, YOLO packages (the planned split/ lives here)
 │   ├── benchmark/                           InferenceProvider, evaluator, metrics, runner, reports      M7–M9
-│   └── evren/                               client.py (HTTP), export.py (YOLO/COCO ZIP), EvrenProvider  M6–M8
-├── configs/                                 licences.yaml (allowlist), dedup.yaml (pinned models, and   M1, M3, M4
+│   └── evren/                               client.py (HTTP), EvrenProvider (ZIP export is release/)    M7–M8
+├── configs/                                 licences.yaml (allowlist), dedup.yaml (pinned models, and   M1, M3–M5
 │                                            what each source's keys mean: the adapter mapping, T24),
-│                                            taxonomy.yaml (label mapping with statuses, T30)
+│                                            taxonomy.yaml (label mapping with statuses, T30),
+│                                            release.yaml (version, seed, share limit, crops, splits)
 ├── artifacts/m3/                          + audit.json (every M3 number), leakage groups, candidate    M3
 │                                            pairs, review queue; the neighbour table is ignored (T20)
 ├── artifacts/m4/                          + audit.json, taxonomy-map.parquet (per box), review-required  M4
@@ -32,13 +35,14 @@ openinspect-trust/
 │   ├── sources/                             one YAML per source + _template.yaml                        M0
 │   ├── evidence/<slug>/                     + archived records, hashed in SHA256SUMS.txt                M0
 │   ├── ingest/<slug>/                       + download.json, report.json; cross_source.json             M2
-│   ├── images/                              + provenance JSONL per release (release assembly)           M5
-│   └── splits/                              + split files and meta                                      M5
+│   ├── releases/<version>/                + release.json, items/annotations/excluded Parquet,          M5
+│   │                                        evren-smoke/ (expected splits, package SHA-256)
+│   └── splits/<version>/                  + <scheme>__seed0.csv and .meta.json for A0, A1, B-<source>   M5
 ├── experiments/                             frozen experiment configs, DEVIATIONS.md, EVREN run notes   M7
 ├── benchmarks/                              run records, metrics, dedup_calibration/                    M3, M7
 ├── reports/                                 ingest (M2), m3/ similarity and leakage reports with SVG     M2+
-│                                            figures, m4/ taxonomy and label-quality reports, later gap
-│                                            reports (all generated)
+│                                            figures, m4/ taxonomy and label-quality reports, m5/ release
+│                                            report, later gap reports (all generated)
 ├── scripts/                                 thin helpers only; logic lives in the package               as needed
 ├── tests/
 │   ├── unit/, integration/
@@ -82,6 +86,6 @@ Heavy data lives outside git and outside OneDrive, under `OPENINSPECT_DATA_DIR`:
 
 - `src/` layout; package `openinspect`; Python 3.12.
 - Slugs: lowercase letters, digits, hyphens; immutable once used in an image record.
-- IDs: `OI_%06d` for images (assigned at release assembly, T8; ingest records are keyed by source and item path), `DUP-%03d` for duplicate groups.
+- IDs: `OI_<source>_<12 hex>` for released images, from the file's content (T33; ingest records are keyed by source and item path), `VSG-<level>-%05d` for visual similarity components.
 - Text files use LF line endings (`.gitattributes`) so hashes of manifests do not depend on the operating system.
 - Paths inside manifests are POSIX-style and relative.

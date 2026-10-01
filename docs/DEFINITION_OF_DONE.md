@@ -81,15 +81,27 @@ A milestone is done only when every item on its list is true and the milestone r
 - [x] `openinspect taxonomy check` runs in CI without data; integration tests check the committed reports against `artifacts/m4/audit.json`, the digests, the taxonomy hash, the original-label counts against the ingest reports and the eligibility rule.
 - [ ] An independent review of the mapping statuses and of the label-quality queue.
 
+## M5: release assembly and canonical splits
+
+- [x] Stable, content-defined global ids `OI_<source>_<12 hex>`, unique by check (T33).
+- [x] The crop policy D7 frozen and applied: 939 PCB-Defect crops in native pixels, every rejected anchor recorded with its reason (T32).
+- [x] Release v0.1: 4,420 images and 5,297 boxes of 4 classes from 3 sources, no source above 40%, a seeded class-stratified sample; every exclusion recorded in `excluded.parquet` (T34).
+- [x] Provenance per item: source, original file id, source version, licence, original and normalized labels, original and canonical split, `group_id`, `subgroup_id`, visual similarity group (`items.parquet`, `annotations.parquet`).
+- [x] A0, A1 and one B fold per source in `manifests/splits/v0.1/`; A1 has 0 supplied groups crossing, measured after the split; B excludes training items linked to the held-out source (T35).
+- [x] Invariants I1 to I9 pass at build time and in CI from the committed files (`openinspect release check`); I10 holds for the smoke package.
+- [x] A machine-readable manifest (`release.json`): sources, versions, licences, counts, taxonomy, split methods and measurements, M3 limitations, the unresolved human validation, hashes, generating commit; `reports/m5/release.md` rendered from it.
+- [x] The EVREN smoke package: a deterministic YOLO Detection ZIP of 10/5/5 known A1 items in the data directory, its SHA-256 and the expected split of every item committed before upload (T36).
+- [ ] The import into EVREN and the split-preservation check (M6).
+
 ## v0.1 release
 
 - [x] 3 sources `accepted` with archived evidence; ingest gates G7 and G8 passed (M2, 2026-09-30).
 - [ ] `ATTRIBUTION.md` complete.
 - [ ] Release has 2,000–5,000 images and 3–5 normalized classes derived from real labels; the mapping is approved and tagged.
-- [ ] 100% of image and annotation rows pass the provenance validator (SPEC §6.2, I7, I8).
+- [x] 100% of image and annotation rows pass the provenance validator (SPEC §6.2, I7, I8): `openinspect release check` (M5).
 - [ ] 0 repeated SHA-256 in `v0.1-clean`; near-duplicate report published with the calibration evidence (thresholds not arbitrary).
 - [ ] Label audit report with reviewed items, reviewer decisions and the unflagged-sample recall estimate.
-- [ ] Split files for A0, A1 and every leave-one-source-out fold; invariants I1–I10 green in CI.
+- [x] Split files for A0, A1 and every leave-one-source-out fold; invariants I1–I9 green in CI, I10 checked when a package is written (M5).
 - [ ] `v0.1-raw` and `v0.1-clean` exist and are frozen in EVREN; dataset ids, versions and the SHA-256 of the uploaded ZIPs are recorded; the split-preservation experiment (EVREN.md) passed.
 - [ ] E1–E3 done with frozen configs and run records; E4 (RT-DETR) done or explicitly deferred with a reason.
 - [ ] Generalization-gap report with confidence intervals, the gap decomposition and per-source rows; every hypothesis reported as supported or not supported.

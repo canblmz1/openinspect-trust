@@ -131,7 +131,7 @@ Deviations from the brief are marked **[dev]** and listed in D5.
 
 | field | notes |
 |---|---|
-| `id` | `OI_%06d`, assigned once; order = sort by (`source_dataset`, `source_item_id`) so it is reproducible |
+| `id` | `OI_%06d`, assigned once; order = sort by (`source_dataset`, `source_item_id`) so it is reproducible. **As implemented (T33):** `OI_<source>_<12 hex>` from the source id and the file's SHA-256 (plus the crop rectangle), stable across rebuilds |
 | `source_dataset` | slug of a registry entry |
 | `source_item_id` | POSIX path inside the source archive |
 | `source_url` | record or archive URL (per-item URL when one exists) |
@@ -165,6 +165,8 @@ At ingest an annotation is keyed by (`source_dataset`, `source_item_id`, `ann_in
 
 ### 6.6 Split files
 `manifests/splits/<scheme>__seed<N>.csv` (`id,split`) plus `.meta.json` (scheme, seed, hash of the image-record file, generator version, counts, SHA-256 of the CSV).
+
+**As implemented in M5 (T35):** `manifests/splits/v0.1/<scheme>__seed0.csv` for A0, A1 and `B-<source>`; a B fold marks items it leaves out as `excluded`. The item records are `manifests/releases/v0.1/items.parquet` (with every split as a column), the boxes `annotations.parquet`, the exclusions `excluded.parquet`, all hashed in `release.json`.
 
 ### 6.7 Run record
 `benchmarks/runs/<run_id>/run.json`: experiment id, model, provider, EVREN dataset version id and the SHA-256 of the exact local ZIP that was uploaded, split scheme, seed, hyper-parameters, git commit, software versions, hardware, metric summary, SHA-256 of `predictions.jsonl`.
@@ -226,6 +228,8 @@ No hyper-parameter tuning or checkpoint selection on a held-out source; checkpoi
 | I9 | every released `normalized_label` comes from an `approved` mapping row |
 | I10 | the exported ZIP's file hashes equal the manifest hashes |
 
+**As implemented in M5 (T35):** A0 is stratified by (source, classes of the item); A1 assigns whole groups, the union of metadata `group_id`, M3 visual similarity components at each source's primary level, identical files and crop parents, balanced per source; B holds out one source, validates on 15% of the others group-aware, and excludes training items that share a constraint with the held-out source. I1 to I9 are measured at build time and re-checked in CI from the committed files (`openinspect release check`); I10 is checked when a package is written. Release v0.1: A1 has 0 crossing constraints and 0 crossing similar pairs at the primary level (A0: 515 crossing constraints, 727 pairs); PCB-Defect's crops form one group of 859 of 939, so A1 has no PCB-Defect test items and A0 and A1 are compared per source ([reports/m5/release.md](../reports/m5/release.md)). "Approved" in I9 means an EXACT or COMPATIBLE mapping onto a benchmark class (T30).
+
 ### 7.7 Metrics and evaluator (brief §29)
 Precision, recall and F1 at the confidence that maximises F1 on the validation split (frozen before the test set is touched); mAP50, mAP50-95, per-class AP with COCO-style 101-point interpolation over all detections down to conf 0.001 (max_det 300, NMS IoU 0.7, the usual Ultralytics validation settings, for `LocalProvider`; the EVREN API's `max_det` is unknown); GG as defined in §2. Uncertainty: bootstrap with 1,000 resamples of images (cluster bootstrap by `source_group_id` where groups exist); paired differences use the same resamples. The evaluator is cross-checked against a reference implementation on a fixture within a small tolerance.
 
@@ -236,6 +240,8 @@ The EVREN dataset is named `OpenInspect-Trust v0.1` (VISION modality) and frozen
 - **`v0.1-clean`**: `v0.1-raw` minus excluded items (exact duplicates, near-duplicates chosen by review, unmappable images), with audited label corrections applied to training data. Every clean id is also a raw id (clean ⊂ raw), so the two versions differ only by the cleaning.
 
 The release count ranges (§3) apply to both. A public release additionally needs the release checklist in [LICENCE_CHECKLIST](LICENCE_CHECKLIST.md).
+
+**As implemented in M5 (T34):** no image is removed for `v0.1-clean`, because no review decided any duplicate or label correction (T15, T29); raw and clean therefore hold the same 4,420 items, and the cleaning is the group-aware split A1.
 
 ## 8. Experiments (brief §25–28)
 
@@ -298,7 +304,7 @@ Logged with evidence, reason, risk and revisit condition in [DECISIONS](DECISION
 | D4 | dataset release licence: CC BY 4.0, provisional; no public release before the release checklist | decided |
 | D5 | schema deviations from brief §11 | decided (accepted) |
 | D6 | locations: repository stays; data and virtual environment outside OneDrive | decided |
-| D7 | scale and crop policy: native resolution, about 300×300 ROI crops for `pcb-defect` | decided in principle, frozen at the start of M5 |
+| D7 | scale and crop policy: native resolution, about 300×300 ROI crops for `pcb-defect` | frozen at the start of M5 (T32): square crops of at least 300 native pixels, no overlap, no cut box, no other class inside |
 | D8 | EVREN facts | recorded in [EVREN](EVREN.md); two items UNKNOWN |
 | D9 | human review budget: about 300 label items and 300 calibration pairs | a seeded queue of 300 pairs exists (M3) and a label-quality queue (M4); both unreviewed, skipped for now (T29) |
 | D10 | analysis defaults: δ = 0.02 mAP50, 1,000 resamples, 3 seeds | default, revisited after the pilot |
@@ -312,7 +318,7 @@ Logged with evidence, reason, risk and revisit condition in [DECISIONS](DECISION
 | M2 | ingest: reproducible downloader, SHA-256 manifests, integrity, metadata, image and annotation records, per-source report (done 2026-09-30) | L |
 | M3 | exact and near-duplicate audit, embeddings, calibration, split leakage, assurance report, review files (done 2026-10-01) | L |
 | M4 | taxonomy mapping and label-quality audit with review queue | M |
-| M5 | release assembly (global ids, normalisation and crop policy D7), splits A0/A1/B, leakage tests in CI | M |
+| M5 | release assembly (global ids, normalisation and crop policy D7), splits A0/A1/B, leakage tests in CI (done 2026-10-01) | M |
 | M6 | YOLO/COCO export; maintainer uploads `v0.1-raw` and `v0.1-clean` in the EVREN UI and freezes them | S |
 | M7 | local smoke test, then EVREN runs E1–E3 | L |
 | M8 | `InferenceProvider`, `EvrenProvider`, `LocalProvider`, evaluator, benchmark runner | M |
@@ -321,7 +327,7 @@ Logged with evidence, reason, risk and revisit condition in [DECISIONS](DECISION
 | M11 | research poster and SAYZEK project brief | M |
 | optional | FastAPI backend (brief §33), after M9 | M |
 
-Status on 2026-10-01: M0 to M4 are done; the human review of the M3 queue is skipped for now (T29); M5 (release assembly and splits) is next.
+Status on 2026-10-01: M0 to M5 are done; the human review of the M3 queue is skipped for now (T29); M6 (the EVREN import smoke test with the prepared package) is next.
 
 ## 14. Related work and positioning
 
