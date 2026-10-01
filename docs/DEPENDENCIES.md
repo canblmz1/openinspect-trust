@@ -43,5 +43,5 @@ Free and open-source only; no paid cloud service is required (brief §3). Add a 
 
 - PyTorch is a **CPU build** (`2.14.1+cpu` in the project environment, `uv sync --extra embeddings`); `torch.cuda.is_available()` is `False`. GPU smoke tests need a CUDA build from the selector on pytorch.org.
 - CI installs the core and dev dependencies only; the M3 tests use a stub embedder, so neither torch nor the model weights are needed there.
-- `ultralytics` is not installed; it is installed only for M7.
+- `ultralytics` is not installed in the project environment. M5.5 ran its dataset checks (`check_det_dataset`, `verify_image_label`, version 8.4.171) on the export packages from a separate, throw-away environment through `scripts/validate_export_ultralytics.py`; nothing of it is imported by `openinspect`, and mypy only ignores the missing import of that script. Training (M7) happens on EVREN.
 - The GPU has 4 GB VRAM: fine for YOLO11n smoke tests with a small batch, not for real training.

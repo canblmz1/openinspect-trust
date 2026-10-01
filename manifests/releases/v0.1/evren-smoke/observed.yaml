@@ -1,0 +1,73 @@
+# EVREN import smoke test (Milestone 6): what the maintainer saw in the EVREN web UI.
+#
+# Transcribed on 2026-10-01 from the maintainer's own inspection of the real platform, in their
+# authenticated session. No screenshot is committed (private account). Every value below is an
+# observation, not a measurement by this repository; `openinspect release smoke-verify` compares it
+# with the package's committed expectation (expected-splits.csv, smoke.json) and with the ZIP.
+# UI strings are kept in the language the UI showed (Turkish).
+schema_version: 1
+observed_on: 2026-10-01
+observer: project-maintainer
+platform: EVREN web UI
+
+dataset:
+  name: OpenInspect-Trust v0.1 EVREN Smoke Test
+  visibility: private
+  licence: CC BY 4.0
+  tags: [openinspect, pcb, object-detection, smoke-test]
+
+upload:
+  package: openinspect-trust-v0.1-evren-smoke-yolo.zip
+  format_detected: YOLO Detection
+  import_completed: true
+  auto_split_used: false
+
+import_summary: {images: 20, annotations: 37, classes: 4, unlabelled_images: 0}
+
+# Split panel after the import (no Auto Split): "Eğitim 10 / 50%", "Doğrulama 5 / 25%", "Test 5 / 25%".
+splits_shown: {train: 10, val: 5, test: 5}
+split_labels_ui: {train: "Eğitim", val: "Doğrulama", test: "Test"}
+
+classes_shown: {short: 8, open: 8, mouse_bite: 11, spurious_copper: 10}
+
+# Items opened one by one ("Küme" is the UI's split field). Box alignment is the maintainer's
+# visual judgement on these items only.
+items_checked:
+  - file_name: OI_dspcbsd-plus_75ced0a777aa.jpg
+    split_ui: "Test"
+    split: test
+    labels_shown: [mouse_bite, short]
+    boxes_visually_aligned: true
+  - file_name: OI_dspcbsd-plus_5bc38d492c6c.jpg
+    split_ui: "Doğrulama"
+    split: val
+    labels_shown: [open, spurious_copper, mouse_bite]
+    boxes_visually_aligned: true
+  - file_name: OI_dspcbsd-plus_28e688ce162e.jpg
+    split_ui: "Eğitim"
+    split: train
+    labels_shown: [spurious_copper]
+    boxes_visually_aligned: true
+
+version:
+  name: v0.1-smoke
+  description: OpenInspect-Trust EVREN import smoke test
+  options_left_off: ["Alt Küme ile Versiyonla", "Split Dağılımını Yeniden Ata"]
+  message_ui: "Versiyon oluşturuldu ve donduruldu"
+  frozen: true
+  summary: {items: 20, labelled: 20, annotations: 37, classes: 4}
+  splits: {train: 10, val: 5, test: 5}
+
+# EVREN's own dataset health panel: a platform score, not an OpenInspect assurance result.
+dataset_health:
+  grade: A
+  score: 81
+  label_ui: "Mükemmel"
+  subscores:
+    labelling_completion: 100   # "Etiketleme Tamamlama"
+    split_distribution: 100     # "Küme Dağılımı"
+    class_balance: 73           # "Sınıf Dengesi"
+    data_volume: 12             # "Veri Hacmi"
+  warning: fewer than 50 images can reduce training quality
+
+training_started: false

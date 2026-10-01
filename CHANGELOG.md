@@ -4,6 +4,25 @@ All notable changes are recorded here. Format: [Keep a Changelog](https://keepac
 
 ## [Unreleased]
 
+### Added — M5.5: training readiness
+
+- `openinspect readiness compute | report | check`.
+  - `compute` (needs the data directory) rebuilds the committed release from its files and checks that A0, A1 and B re-derive exactly, builds the controlled designs and the B-natural folds, recomputes the release's components under DINOv2-small and DINOv2-base from the M3 caches, diagnoses the PCB-Defect giant component (scan and crop graphs; the 939 crops are embedded once and cached), places the 437 M4 findings against the release, runs the source identity probe, writes every package of the M7 plan to `<data>/exports/v0.1/` and validates it twice (with `--ultralytics-python`, the Ultralytics dataset checks in a separate environment; and `openinspect.exportcheck`), then decides the verdict by its rule. It writes `artifacts/m5_5/` (`readiness.json` and its tables), `manifests/experiments/v0.1/` and `reports/m5_5/`.
+  - `check` (in CI, no data) re-derives the designs, the held-out folds, the label intersection, the probe and the base-built A1 from committed files, checks the purity of every held-out split and the identity of the common test and validation sets, that no input of M3 to M6 changed, and that the reports are what `readiness.json` renders; `report` re-renders the reports.
+- Controlled designs C0/C1 (seeds 0, 1, 2): one common test set (probes exposed to their group-mates in C0, controls exposed in neither) and one validation set; training sets of equal size, source mix and (as far as replacements allow) boxes per class; roles of every item in `C-design<seed>-roles.csv`.
+- B-natural folds next to the M5 split B, renamed B-strict in the documentation (its files are unchanged).
+- `openinspect.exportcheck`: a YOLO package parser that imports nothing from `openinspect`; `scripts/validate_export_ultralytics.py` for the Ultralytics checks in a separate environment (Ultralytics stays outside the project).
+- Reports: `TRAINING_READINESS.md` (verdict, blockers, limitations, the twelve questions), `controlled-design.md`, `representation-sensitivity.md`, `pcb-defect-component.md`, `release-label-quality.md`, `source-probe.md`, `export-validation.md`, `m7-plan.md` (not executed).
+- CI runs `openinspect readiness check`.
+- Decisions T39–T48.
+
+### Added — M6: EVREN import smoke test
+
+- `manifests/releases/v0.1/evren-smoke/observed.yaml`: the maintainer's observations in the EVREN UI, as text.
+- `openinspect release smoke-verify`: compares every observation with the expectation committed before the upload and, with the data directory, with the ZIP; writes `artifacts/m6/evren-smoke-test.json` and `reports/m6/evren-smoke-test.md`. Verdict: PASS (13 of 13 comparisons match).
+- `docs/EVREN.md`: YOLO Detection import, class import, split preservation for the tested package, version creation and freezing, and the Dataset Health panel are now OBSERVED; everything else keeps its status.
+- Decisions T37–T38.
+
 ### Added — M5: release assembly, canonical splits, EVREN smoke package
 
 - `openinspect release build | check | report | smoke | export`.

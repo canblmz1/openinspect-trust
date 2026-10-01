@@ -64,7 +64,18 @@ from openinspect.release.manifest import (
 )
 from openinspect.release.pool import ReleaseError
 from openinspect.release.report import write_report
+from openinspect.release.smoke_record import (
+    OBSERVED,
+    SmokeRecordError,
+    check_zip,
+    load_expected,
+    load_observation,
+    make_record,
+)
+from openinspect.release.smoke_record import Generator as SmokeGenerator
+from openinspect.release.smoke_record import render as render_smoke
 from openinspect.release.verify import release_dir, verify_release
+from openinspect.settings import DataDirError, resolve_data_dir
 from openinspect.taxonomy.config import TAXONOMY_PATH, TaxonomyError, load_taxonomy
 from openinspect.taxonomy.mapping import load_annotated, map_images
 from openinspect.validation import QueueError, read_validation
@@ -365,6 +376,63 @@ def smoke_command(data_dir: DataDirOption = None, repo_root: RepoRootOption = No
     typer.echo(f"package: <data>/{zip_rel.as_posix()} ({len(archive):,} bytes)")
     typer.echo(f"sha256: {record['zip_sha256']}")
     typer.echo(f"expected splits: {(target / 'expected-splits.csv').relative_to(root).as_posix()}")
+
+
+M6_ARTIFACT = Path("artifacts") / "m6" / "evren-smoke-test.json"
+M6_REPORT = Path("reports") / "m6" / "evren-smoke-test.md"
+
+
+@release_app.command("smoke-verify")
+def smoke_verify_command(data_dir: DataDirOption = None, repo_root: RepoRootOption = None) -> None:
+    """M6: compare the recorded EVREN observations with the committed expectation and the ZIP."""
+    root = repo_root.resolve() if repo_root is not None else find_repo_root()
+    commit, dirty = code_version(root)
+    config = _config(root)
+    folder = release_dir(root, config.version)
+    smoke = folder / SMOKE_DIR
+    try:
+        observed = load_observation(smoke / OBSERVED)
+        expected = load_expected(smoke, folder / ANNOTATIONS)
+    except SmokeRecordError as exc:
+        fail(str(exc))
+    found = None
+    try:
+        data = resolve_data_dir(data_dir, repo_root=root)
+    except DataDirError:
+        log("no data directory: the ZIP itself is not re-checked")
+    else:
+        package = data / "exports" / config.version / expected.package
+        if package.is_file():
+            found = check_zip(package, expected)
+        else:
+            log(f"{expected.package} is not in the data directory: the ZIP is not re-checked")
+    inputs = {
+        path.relative_to(root).as_posix(): sha256_file(path)
+        for path in (
+            smoke / OBSERVED,
+            smoke / "expected-splits.csv",
+            smoke / "smoke.json",
+            folder / ANNOTATIONS,
+        )
+    }
+    record = make_record(
+        observed,
+        expected,
+        found,
+        inputs=inputs,
+        generator=SmokeGenerator(
+            command="openinspect release smoke-verify", code_commit=commit, code_dirty=dirty
+        ),
+    )
+    replace_bytes(root / M6_ARTIFACT, json_bytes(record.model_dump(mode="json")))
+    replace_bytes(
+        root / M6_REPORT, render_smoke(record, smoke.relative_to(root).as_posix()).encode("utf-8")
+    )
+    for c in record.checks:
+        typer.echo(f"{c.result:9} {c.status:18} {c.capability}")
+    typer.echo(f"M6 verdict: {record.verdict}")
+    if record.verdict != "PASS":
+        fail("an observation disagrees with the committed expectation")
 
 
 @release_app.command("export")

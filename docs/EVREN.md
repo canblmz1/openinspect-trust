@@ -2,7 +2,7 @@
 
 Source of the facts below: the maintainer's statement of 2026-09-30, taken from the EVREN user guide. They could not be verified independently: EVREN's public explore page is a JavaScript application that returned no documentation to an automated fetch. Where a fact decides a result, the plan says how it gets verified.
 
-Status codes: **GUIDE** = stated in the EVREN user guide (per the maintainer) · **UNKNOWN** = not verified · **EXPERIMENT** = will be verified by a small test.
+Status codes: **GUIDE** = stated in the EVREN user guide (per the maintainer) · **OBSERVED** = seen by the maintainer in the EVREN web UI during the M6 smoke test on 2026-10-01, for the tested package only · **UNKNOWN** = not verified · **EXPERIMENT** = will be verified by a small test.
 
 ## Datasets
 
@@ -12,12 +12,19 @@ Status codes: **GUIDE** = stated in the EVREN user guide (per the maintainer) ·
 | Import formats include YOLO Detection, YOLO Segmentation, YOLO OBB, COCO JSON, Pascal VOC, CreateML, Label Studio, CSV, classification folders | GUIDE | export YOLO Detection first, COCO JSON second |
 | ZIP import limit: 30 GB | GUIDE | every v0.1 archive is far smaller |
 | Each item can be assigned to train, val or test manually | GUIDE | the local split file can be applied item by item if folders are not kept |
-| Auto Split is a separate, optional feature | GUIDE | never use it on a source-held-out dataset |
-| Does an imported ZIP keep its own train/val/test folders? | **UNKNOWN → EXPERIMENT** | first small import in M6: compare EVREN's per-split item names and counts with the local split file |
+| Auto Split is a separate, optional feature | GUIDE | never use it on a source-held-out dataset; not used in M6 |
+| A YOLO Detection ZIP imports (format detected as "YOLO Detection") | **OBSERVED** (M6) | 20 images, 37 annotations, 4 classes, 0 unlabelled images, as packaged |
+| Class names and box counts of the package become EVREN's classes | **OBSERVED** (M6) | `short` 8, `open` 8, `mouse_bite` 11, `spurious_copper` 10, as packaged |
+| Does an imported ZIP keep its own train/val/test folders? | **OBSERVED: yes, for the M6 smoke package** | after import, without Auto Split: 10 / 5 / 5 as supplied, and one known item per split showed its expected split and labels; the other 17 items were not checked one by one, and other layouts or larger imports were not tested |
+| Boxes are drawn where the defects are | **OBSERVED** on the 3 items opened | the maintainer's visual judgement, not a measurement |
+| Dataset versions can be created and frozen | **OBSERVED** (M6) | version `v0.1-smoke`, "Versiyon oluşturuldu ve donduruldu", with "Alt Küme ile Versiyonla" and "Split Dağılımını Yeniden Ata" off |
+| A frozen version keeps the supplied split | **OBSERVED** (M6) | the frozen version shows 20 items, 37 annotations, 4 classes and 10 / 5 / 5 |
+| Dataset Health panel | **OBSERVED** (M6) | grade A, 81 (labelling 100%, split distribution 100%, class balance 73%, data volume 12%); an EVREN platform score, not an OpenInspect assurance result |
+| File names, pixels and label files are kept byte for byte | UNKNOWN | the 3 opened items showed their global-id names; no EVREN export was downloaded and hashed |
 
-**Rule.** The local manifest (`manifests/splits/*`) is the canonical split. The source-held-out guarantee is not entrusted to EVREN until the experiment passes, and it is re-checked after every import.
+**Rule.** The local manifest (`manifests/splits/*`, `manifests/experiments/*`) is the canonical split. M6 observed that EVREN kept the supplied split of one 20-item package; every later import is still re-checked against its split file (counts per split and known items) before a model is trained on it, with Auto Split off.
 
-## M6: the import smoke test (prepared in M5)
+## M6: the import smoke test (result: PASS)
 
 The package and its expected result exist before anything is uploaded (decision T36):
 
@@ -29,11 +36,14 @@ The package and its expected result exist before anything is uploaded (decision 
 | content | 20 items of split A1: 10 train, 5 val, 5 test; JPEG patches and PNG crops; file names are global ids |
 | expected result | [manifests/releases/v0.1/evren-smoke/expected-splits.csv](../manifests/releases/v0.1/evren-smoke/expected-splits.csv) and `smoke.json` (every member's SHA-256) |
 
-Steps, all in the EVREN UI with the maintainer's authenticated session: (1) create a test dataset (VISION) and import the ZIP as YOLO Detection with Auto Split off; (2) check the four class names and ids; (3) check the box counts of a few items against `expected-splits.csv`; (4) list the item names per split and compare them with `expected-splits.csv`; (5) look at the dataset health and version pages; (6) freeze or version the dataset if the UI offers it; (7) record what was seen (screenshots in a local note, decisions here). The UNKNOWN on split preservation above changes only on that direct evidence.
+**Result (2026-10-01): PASS.** Every observation matched the expectation committed before the upload, and the ZIP in the data directory still has the recorded SHA-256 ([reports/m6/evren-smoke-test.md](../reports/m6/evren-smoke-test.md), `artifacts/m6/evren-smoke-test.json`, observations in `manifests/releases/v0.1/evren-smoke/observed.yaml`). No screenshot is committed, and no training was started.
+
+Steps that were followed, all in the EVREN UI with the maintainer's authenticated session: (1) create a test dataset (VISION) and import the ZIP as YOLO Detection with Auto Split off; (2) check the four class names and ids; (3) check the box counts of a few items against `expected-splits.csv`; (4) list the item names per split and compare them with `expected-splits.csv`; (5) look at the dataset health and version pages; (6) freeze or version the dataset if the UI offers it; (7) record what was seen (screenshots in a local note, decisions here). The UNKNOWN on split preservation above changes only on that direct evidence.
 
 ## Training
 
 - Architectures: YOLO26, YOLO11, YOLOv10, YOLOv9, YOLOv8, RT-DETR. Tasks: detection, segmentation, OBB, pose, classification (GUIDE).
+- No training job has been started on EVREN (M6 stopped before training on purpose). M7 runs only after the maintainer approves the compute; the run matrix is [reports/m5_5/m7-plan.md](../reports/m5_5/m7-plan.md).
 - This project: first benchmark **YOLO11n**; second model family **RT-DETR** (experiment E4).
 - Price of the lowest tier: 1 GPU = 15 CR/hour. The largest described configuration: 48 GPU = 1,680 CR/hour, so the per-GPU price is not constant across tiers (35 vs 15 CR/hour) and must not be extrapolated. Priority queue: +50% cost (GUIDE).
 - Smoke tests use a small dataset and a nano model, **never priority**.

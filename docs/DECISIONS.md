@@ -1,6 +1,6 @@
 # Decision log
 
-Decisions D1–D10 come from [SPEC §12](SPEC.md); T1–T7 are technical choices made while building M1, T8–T14 while building M2, T15–T28 while building M3 (T24–T28 after an independent red-team review). Each has the same five fields. All were taken on 2026-09-30 under the maintainer's autonomous-execution directive. **D3, the code licence, is the exception: the maintainer chose it (Apache-2.0).**
+Decisions D1–D10 come from [SPEC §12](SPEC.md); T1–T7 are technical choices made while building M1, T8–T14 while building M2, T15–T28 while building M3 (T24–T28 after an independent red-team review), T29–T31 in M4, T32–T36 in M5, T37–T38 in M6 (the EVREN import smoke test) and T39–T48 in M5.5 (training readiness). Each has the same five fields. All were taken between 2026-09-30 and 2026-10-01 under the maintainer's autonomous-execution directive. **D3, the code licence, is the exception: the maintainer chose it (Apache-2.0).**
 
 ## D1 — Domain
 - **Decision:** PCB surface-defect detection with bounding boxes.

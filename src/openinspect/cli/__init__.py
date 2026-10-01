@@ -10,6 +10,7 @@ import typer
 from openinspect import __version__
 from openinspect.cli.dedup import dedup_app
 from openinspect.cli.ingest import ingest_app
+from openinspect.cli.readiness import readiness_app
 from openinspect.cli.release import release_app
 from openinspect.cli.source import source_app
 from openinspect.cli.taxonomy import taxonomy_app
@@ -23,6 +24,7 @@ app = typer.Typer(
 app.add_typer(source_app, name="source")
 app.add_typer(ingest_app, name="ingest")
 app.add_typer(dedup_app, name="dedup")
+app.add_typer(readiness_app, name="readiness")
 app.add_typer(taxonomy_app, name="taxonomy")
 app.add_typer(release_app, name="release")
 

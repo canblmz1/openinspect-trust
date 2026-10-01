@@ -21,7 +21,12 @@ openinspect-trust/
 │   │                                        reports (the planned audit/ package lives here, T31)
 │   ├── release/                           + global ids, crops (D7), pool and sample, constraints,       M5
 │   │                                        splits A0/A1/B, measurements, invariants, manifest, report,
-│   │                                        verification, YOLO packages (the planned split/ lives here)
+│   │                                        verification, YOLO packages (the planned split/ lives here),
+│   │                                        smoke_record.py: the M6 observations against the expectation
+│   ├── readiness/                         + training readiness: release view, C0/C1 designs, B-natural, M5.5
+│   │                                        representation sensitivity, PCB-Defect component, label
+│   │                                        findings, source probe, verdict, reports
+│   ├── exportcheck.py                     + YOLO package parser that imports nothing from openinspect   M5.5
 │   ├── benchmark/                           InferenceProvider, evaluator, metrics, runner, reports      M7–M9
 │   └── evren/                               client.py (HTTP), EvrenProvider (ZIP export is release/)    M7–M8
 ├── configs/                                 licences.yaml (allowlist), dedup.yaml (pinned models, and   M1, M3–M5
@@ -31,18 +36,23 @@ openinspect-trust/
 ├── artifacts/m3/                          + audit.json (every M3 number), leakage groups, candidate    M3
 │                                            pairs, review queue; the neighbour table is ignored (T20)
 ├── artifacts/m4/                          + audit.json, taxonomy-map.parquet (per box), review-required  M4
+├── artifacts/m6/                          + evren-smoke-test.json (observed / verified / not tested)     M6
+├── artifacts/m5_5/                        + readiness.json and its tables (label findings, pHash-only  M5.5
+│                                            pairs, base membership, base pairs, probe features)
 ├── manifests/
 │   ├── sources/                             one YAML per source + _template.yaml                        M0
 │   ├── evidence/<slug>/                     + archived records, hashed in SHA256SUMS.txt                M0
 │   ├── ingest/<slug>/                       + download.json, report.json; cross_source.json             M2
 │   ├── releases/<version>/                + release.json, items/annotations/excluded Parquet,          M5
 │   │                                        evren-smoke/ (expected splits, package SHA-256)
-│   └── splits/<version>/                  + <scheme>__seed0.csv and .meta.json for A0, A1, B-<source>   M5
+│   ├── splits/<version>/                  + <scheme>__seed0.csv and .meta.json for A0, A1, B-<source>   M5
+│   └── experiments/<version>/             + C0/C1 designs (split files and roles), B-natural folds     M5.5
 ├── experiments/                             frozen experiment configs, DEVIATIONS.md, EVREN run notes   M7
 ├── benchmarks/                              run records, metrics, dedup_calibration/                    M3, M7
 ├── reports/                                 ingest (M2), m3/ similarity and leakage reports with SVG     M2+
 │                                            figures, m4/ taxonomy and label-quality reports, m5/ release
-│                                            report, later gap reports (all generated)
+│                                            report, m6/ EVREN smoke test, m5_5/ training readiness and
+│                                            the M7 plan, later gap reports (all generated)
 ├── scripts/                                 thin helpers only; logic lives in the package               as needed
 ├── tests/
 │   ├── unit/, integration/

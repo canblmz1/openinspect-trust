@@ -32,8 +32,8 @@ Non-goals for v0.1:
 |---|---|---|---|
 | RQ1 | Do random splits overestimate defect-detection performance versus source-held-out evaluation? | | |
 | H1 | The random-split score is substantially higher than the external-source score. | Generalization gap GG = score(random) − score(source-held-out) for mAP50, mAP50-95 and F1, per held-out source and pooled, with 95% CI (§7.7) | lower CI bound of GG > 0 for at least 2 of the 3 held-out sources and pooled |
-| RQ2 | How much do exact duplicates, near-duplicates and source leakage distort scores? | gap decomposition (§7.6): leakage effect = A0 − A1, residual source shift = A1 − B | |
-| H2 | Cleaning lowers the random-split score but makes it a more reliable predictor of external performance. | A0 − A1 > 0 with CI excluding 0, and abs(A1 − B) < abs(A0 − B) | both hold |
+| RQ2 | How much do exact duplicates, near-duplicates and source leakage distort scores? | gap decomposition (§7.6): controlled leakage effect = C0 − C1 on one common test set (T39); A0 − A1 is descriptive only (its two test sets differ); residual source shift = A1 − B | |
+| H2 | Cleaning lowers the random-split score but makes it a more reliable predictor of external performance. | C0 − C1 on the probes of the common test set, with the controls as the check that the training swap alone changes nothing (§7.6, T39); and abs(A1 − B) < abs(A0 − B) | the CI of C0 − C1 on the probes excludes 0 and is above the controls' difference, and abs(A1 − B) < abs(A0 − B) |
 | RQ3 | Does data-centric cleaning help cross-source generalization more than a bigger model? | | |
 | H3 | Clean + YOLO11n approaches or beats raw + YOLO11m on the held-out source. | Δ = mAP50(n, clean) − mAP50(m, raw), paired bootstrap | "approaches": lower CI bound > −δ (default δ = 0.02, D10); "beats": lower CI bound > 0 |
 | H4 | The label-quality audit reduces cross-domain false positives and false negatives. | FP and FN counts at the validation-chosen F1-optimal confidence, audited vs original labels, on external sources | both drop with paired-bootstrap CI excluding 0, or F1 improves |
@@ -207,8 +207,10 @@ Signals: S1 nearest-neighbour label disagreement on box-crop embeddings; S2 out-
 | **A0** random | 70/20/10, stratified by class presence, on the *raw* pool | the conventional benchmark |
 | **A1** group-aware random | same ratios on the *clean* pool; duplicate groups and `source_group_id` never straddle splits | removes leakage but keeps sources mixed |
 | **B** source-held-out | train on K−1 sources, test on the held-out source; validation is 10–15% of the training sources, group-aware; run for every source (leave-one-source-out) | the real generalization test |
+| **C0 / C1** controlled pair (M5.5, T39) | one common test set and one validation set; C0 trains on a core set plus the group-mates of half of the test items (*probes*), C1 on the same core plus replacements of the same source and, where possible, the same boxes per class; the other test items (*controls*) have no group-mate in either training set; seeds 0, 1, 2 (`manifests/experiments/v0.1/`) | the controlled leakage estimand |
+| **B-strict / B-natural** (M5.5, T41) | B-strict is B above (training items that share a constraint with the held-out source are excluded); B-natural keeps them | generalization with and without the machine-similar cross-source items |
 
-Gap decomposition: total = A0 − B, leakage effect = A0 − A1, residual source shift = A1 − B. **A0 − B is not a leakage measure:** between sources the acquisition hardware, the factory, the lighting, the resolution, the annotation style, the taxonomy and the label distribution change, and each moves the score; A1 − B carries all of them, so it is called a residual source or domain shift, not a single cause.
+Gap decomposition: total = A0 − B, controlled leakage effect = C0 − C1 (probes, with controls), residual source shift = A1 − B. A0 − A1 is reported descriptively: A0 and A1 evaluate different test sets (A1 has no PCB-Defect test item), so their difference mixes leakage with test composition (amended in M5.5 before any model result; the analysis plan was not yet tagged). **A0 − B is not a leakage measure:** between sources the acquisition hardware, the factory, the lighting, the resolution, the annotation style, the taxonomy and the label distribution change, and each moves the score; A1 − B carries all of them, so it is called a residual source or domain shift, not a single cause.
 Confounds to report: training-set sizes differ (A0 is larger than a B fold; the clean pool is smaller than raw). Optional ablation: subsample A0 training to the B fold size.
 **Paired comparison for H1:** evaluate the A0 model on the part of the A0 test set that belongs to source s, and evaluate the B fold that held out s on *the same images*.
 No hyper-parameter tuning or checkpoint selection on a held-out source; checkpoints are chosen on the validation split of the training sources.
@@ -305,7 +307,7 @@ Logged with evidence, reason, risk and revisit condition in [DECISIONS](DECISION
 | D5 | schema deviations from brief §11 | decided (accepted) |
 | D6 | locations: repository stays; data and virtual environment outside OneDrive | decided |
 | D7 | scale and crop policy: native resolution, about 300×300 ROI crops for `pcb-defect` | frozen at the start of M5 (T32): square crops of at least 300 native pixels, no overlap, no cut box, no other class inside |
-| D8 | EVREN facts | recorded in [EVREN](EVREN.md); two items UNKNOWN |
+| D8 | EVREN facts | recorded in [EVREN](EVREN.md); split preservation OBSERVED for the M6 smoke package (T37); `max_det` and the API endpoints UNKNOWN |
 | D9 | human review budget: about 300 label items and 300 calibration pairs | a seeded queue of 300 pairs exists (M3) and a label-quality queue (M4); both unreviewed, skipped for now (T29) |
 | D10 | analysis defaults: δ = 0.02 mAP50, 1,000 resamples, 3 seeds | default, revisited after the pilot |
 
@@ -319,8 +321,9 @@ Logged with evidence, reason, risk and revisit condition in [DECISIONS](DECISION
 | M3 | exact and near-duplicate audit, embeddings, calibration, split leakage, assurance report, review files (done 2026-10-01) | L |
 | M4 | taxonomy mapping and label-quality audit with review queue | M |
 | M5 | release assembly (global ids, normalisation and crop policy D7), splits A0/A1/B, leakage tests in CI (done 2026-10-01) | M |
-| M6 | YOLO/COCO export; maintainer uploads `v0.1-raw` and `v0.1-clean` in the EVREN UI and freezes them | S |
-| M7 | local smoke test, then EVREN runs E1–E3 | L |
+| M6 | EVREN import smoke test: the 20-item YOLO package imported and frozen in the EVREN UI, observations compared with the committed expectation (done 2026-10-01, PASS) | S |
+| M5.5 | training readiness: a controlled common-evaluation design (C0/C1), B-strict and B-natural, representation sensitivity, the PCB-Defect component, release label findings, source probe, independent export validation, the M7 plan (done 2026-10-01) | M |
+| M7 | EVREN runs of the M7 plan (`reports/m5_5/m7-plan.md`): C0/C1 with three seeds, design replicates, A0/A1 descriptive, B-strict and B-natural; needs the maintainer's approval of the compute | L |
 | M8 | `InferenceProvider`, `EvrenProvider`, `LocalProvider`, evaluator, benchmark runner | M |
 | M9 | RT-DETR replicate, generalization-gap report | M |
 | M10 | README, DATA_CARD, METHODOLOGY, BENCHMARK, SECURITY, CONTRIBUTING; public repository | M |

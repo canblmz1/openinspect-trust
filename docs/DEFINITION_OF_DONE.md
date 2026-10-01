@@ -93,7 +93,15 @@ A milestone is done only when every item on its list is true and the milestone r
 - [x] A machine-readable manifest (`release.json`): sources, versions, licences, counts, taxonomy, split methods and measurements, M3 limitations, the unresolved human validation, hashes, generating commit; `reports/m5/release.md` rendered from it.
 - [x] The EVREN smoke package: a deterministic YOLO Detection ZIP of 10/5/5 known A1 items in the data directory, its SHA-256 and the expected split of every item committed before upload (T36).
 - [x] GitHub Actions re-checked the committed release with `openinspect release check` on Ubuntu and Windows, without data (run 36860398174 on commit ee7ce82: all six jobs green).
-- [ ] The import into EVREN and the split-preservation check (M6).
+- [x] The import into EVREN and the split-preservation check (M6, below).
+
+## M6: EVREN import smoke test
+
+- [x] The maintainer imported the 20-item YOLO Detection package in the EVREN UI with Auto Split off; the observations are recorded as text in `manifests/releases/v0.1/evren-smoke/observed.yaml` (no screenshot committed).
+- [x] `openinspect release smoke-verify` compares every observation with the expectation committed before the upload and, with the data directory, with the ZIP itself: 13 of 13 comparisons MATCH, verdict PASS (`artifacts/m6/evren-smoke-test.json`, `reports/m6/evren-smoke-test.md`).
+- [x] The report keeps four kinds of statement apart: observed in EVREN, verified locally, not tested, unknown; EVREN's Dataset Health score is reported as a platform score, not an assurance result.
+- [x] `docs/EVREN.md` changes only the facts that were observed (import, classes, split preservation for this package, version creation and freezing, Dataset Health); everything else keeps its status.
+- [x] No EVREN training job was started.
 
 ## v0.1 release
 

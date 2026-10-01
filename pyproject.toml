@@ -76,6 +76,8 @@ files = ["src", "tests", "scripts"]
 
 # The optional 'embeddings' extra is not installed in CI: its imports are only used lazily.
 # pyarrow ships no type information; it is only used to write the M3 tables.
+# Ultralytics (AGPL-3.0) is never installed in the project: scripts/validate_export_ultralytics.py
+# runs in a separate environment.
 [[tool.mypy.overrides]]
 module = [
     "pyarrow",
@@ -86,6 +88,8 @@ module = [
     "transformers.*",
     "huggingface_hub",
     "huggingface_hub.*",
+    "ultralytics",
+    "ultralytics.*",
 ]
 ignore_missing_imports = true
 
