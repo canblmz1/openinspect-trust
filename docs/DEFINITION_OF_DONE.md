@@ -68,6 +68,7 @@ A milestone is done only when every item on its list is true and the milestone r
 - [x] The core is domain- and platform-agnostic (generic keys; source mapping in `configs/dedup.yaml`).
 - [x] Reports in `reports/m3/` rendered from `artifacts/m3/audit.json`; integration tests check reports, digests, thresholds and the frozen protocol without the data.
 - [x] Performance recorded: time per stage, images per second, cache size, peak RAM, processor.
+- [x] GitHub Actions ran ruff, mypy, pytest and manifest validation without downloading any dataset or model (run 36784716650 on commit 254f79f: all six jobs green, tests and manifest validation on Ubuntu and Windows).
 - [ ] The human review of the queue (maintainer, D9); until then the thresholds rest on proxy labels.
 
 ## v0.1 release
