@@ -26,6 +26,7 @@ from openinspect.dedup.leakage import KeyOverlap, PermutationBaseline, SourceLea
 from openinspect.dedup.metrics import PartitionAgreement, Quantiles
 from openinspect.dedup.svg import Bars, Marker, Series, bar_chart, line_chart
 from openinspect.dedup.thresholds import CATEGORIES
+from openinspect.validation import HumanValidation
 
 DASH = "n/a"
 PROTOCOL = "[docs/M3_PROTOCOL.md](../../docs/M3_PROTOCOL.md)"
@@ -101,7 +102,7 @@ def slug(text: str) -> str:
     return re.sub(r"[^a-z0-9]+", "-", text.lower()).strip("-") or "x"
 
 
-def _header(title: str, audit: Audit) -> list[str]:
+def _header(title: str, audit: Audit, validation: HumanValidation) -> list[str]:
     commit = audit.run.code_commit
     code = (
         DASH
@@ -115,6 +116,8 @@ def _header(title: str, audit: Audit) -> list[str]:
         f"{AMENDMENT}. Code: {code}; seed {audit.run.seed}.",
         "",
         VOCABULARY,
+        "",
+        validation.statement,
         "",
     ]
 
@@ -265,9 +268,9 @@ def _percolation_chart(audit: Audit, marks: list[Marker]) -> str | None:
 # -------------------------------------------------------------------- similarity summary
 
 
-def similarity_summary(audit: Audit) -> str:
+def similarity_summary(audit: Audit, validation: HumanValidation) -> str:
     run, t = audit.run, audit.thresholds
-    lines = _header("M3 similarity summary", audit)
+    lines = _header("M3 similarity summary", audit, validation)
     lines += ["## Run", ""]
     lines += _table(
         ["item", "value"],
@@ -489,9 +492,9 @@ def _cross_source_section(audit: Audit) -> list[str]:
 # --------------------------------------------------------------------- calibration
 
 
-def threshold_calibration(audit: Audit) -> str:
+def threshold_calibration(audit: Audit, validation: HumanValidation) -> str:
     t = audit.thresholds
-    lines = _header("M3 threshold calibration", audit)
+    lines = _header("M3 threshold calibration", audit, validation)
     lines += [
         "The rule of protocol section 6 is applied by `openinspect.dedup.thresholds.select_thresholds`; "
         "nothing below was tuned by hand.",
@@ -868,8 +871,8 @@ def _metadata_section(audit: Audit) -> list[str]:
     return [*lines, ""]
 
 
-def split_leakage(audit: Audit) -> str:
-    lines = _header("M3 split leakage", audit)
+def split_leakage(audit: Audit, validation: HumanValidation) -> str:
+    lines = _header("M3 split leakage", audit, validation)
     lines += [
         "> How common is it, in the official splits, for visually very similar images to sit on "
         "both sides of a split boundary? (protocol section 1)",
@@ -1156,8 +1159,8 @@ def _overlap_section(audit: Audit, source: str, title: str) -> list[str]:
     return lines
 
 
-def source_comparison(audit: Audit) -> str:
-    lines = _header("M3 source comparison", audit)
+def source_comparison(audit: Audit, validation: HumanValidation) -> str:
+    lines = _header("M3 source comparison", audit, validation)
     lines += [
         "A source's own keys are proxy metadata (what its files say about a production batch, a "
         "design family and the like), mapped by its adapter onto the generic `group_id` and "
@@ -1327,8 +1330,8 @@ def _gb(value: int | None) -> str:
     return DASH if value is None else f"{value / 1e9:.2f} GB"
 
 
-def performance(audit: Audit) -> str:
-    lines = _header("M3 performance", audit)
+def performance(audit: Audit, validation: HumanValidation) -> str:
+    lines = _header("M3 performance", audit, validation)
     p = audit.performance
     if p is None:
         lines += ["No performance record."]
@@ -1389,8 +1392,8 @@ def performance(audit: Audit) -> str:
 # ------------------------------------------------------------------- robustness
 
 
-def representation_robustness(audit: Audit) -> str:
-    lines = _header("M3 representation robustness", audit)
+def representation_robustness(audit: Audit, validation: HumanValidation) -> str:
+    lines = _header("M3 representation robustness", audit, validation)
     lines += [
         "> Are the major leakage conclusions stable to a reasonable change of representation? "
         "The question is not which embedding is best.",
@@ -1540,9 +1543,9 @@ def _magnitudes(r: Robustness) -> str:
 # ---------------------------------------------------------------------- assurance
 
 
-def dataset_assurance(audit: Audit) -> str:
+def dataset_assurance(audit: Audit, validation: HumanValidation) -> str:
     report = assess(audit)
-    lines = _header("Dataset assurance report", audit)
+    lines = _header("Dataset assurance report", audit, validation)
     lines += [
         "No scalar score is given: nothing calibrates a number such as 83/100. Each dimension has "
         "a status by the rule listed at the end, and every status comes with the measurements it "
@@ -1585,8 +1588,8 @@ def dataset_assurance(audit: Audit) -> str:
 # --------------------------------------------------------------------- limitations
 
 
-def limitations(audit: Audit) -> str:
-    lines = _header("M3 limitations", audit)
+def limitations(audit: Audit, validation: HumanValidation) -> str:
+    lines = _header("M3 limitations", audit, validation)
     t = audit.thresholds
     fallbacks = [f"`{p.source}` {p.pool}" for p in t.from_pools if p.fallback]
     lines += [
@@ -1601,7 +1604,9 @@ def limitations(audit: Audit) -> str:
             if fallbacks
             else ""
         )
-        + ". The human review queue (`artifacts/m3/review-candidates.csv`) has no decision yet.",
+        + f". Human validation: {validation.status}; {validation.reviewed} of the "
+        f"{validation.queued} pairs of the review queue (`{validation.queue}`) have a human "
+        "decision (decision T29).",
     ]
     family = _level(audit, "family")
     near = _level(audit, "near")
@@ -1722,7 +1727,7 @@ def limitations(audit: Audit) -> str:
 
 # ------------------------------------------------------------------------------ write
 
-RENDERERS: dict[str, Callable[[Audit], str]] = {
+RENDERERS: dict[str, Callable[[Audit, HumanValidation], str]] = {
     "similarity-summary.md": similarity_summary,
     "threshold-calibration.md": threshold_calibration,
     "split-leakage.md": split_leakage,
@@ -1734,16 +1739,16 @@ RENDERERS: dict[str, Callable[[Audit], str]] = {
 }
 
 
-def render_reports(audit: Audit) -> dict[str, str]:
+def render_reports(audit: Audit, validation: HumanValidation) -> dict[str, str]:
     """Relative path -> text of every report file (Markdown and SVG)."""
-    files = {name: render(audit) for name, render in RENDERERS.items()}
+    files = {name: render(audit, validation) for name, render in RENDERERS.items()}
     files.update({f"figures/{name}": text for name, text in figures(audit).items()})
     return files
 
 
-def write_reports(folder: Path, audit: Audit) -> list[Path]:
+def write_reports(folder: Path, audit: Audit, validation: HumanValidation) -> list[Path]:
     """Write the reports; figures that are no longer produced are removed from ``figures/``."""
-    files = render_reports(audit)
+    files = render_reports(audit, validation)
     written: list[Path] = []
     for name, text in sorted(files.items()):
         path = folder / name

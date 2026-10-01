@@ -30,6 +30,7 @@ from openinspect.dedup.tables import (
 )
 from openinspect.dedup.thresholds import PHASH_CAP, Thresholds
 from openinspect.provenance.registry import load_registry
+from openinspect.validation import read_validation
 
 REPO = Path(__file__).resolve().parents[2]
 ARTIFACTS = REPO / "artifacts" / "m3"
@@ -54,7 +55,7 @@ def test_the_frozen_protocol_is_unchanged() -> None:
 
 
 def test_the_reports_are_exactly_what_the_audit_renders(audit: Audit) -> None:
-    expected = render_reports(audit)
+    expected = render_reports(audit, read_validation(REPO))
     committed = {
         path.relative_to(REPORTS).as_posix(): path.read_text(encoding="utf-8")
         for path in REPORTS.rglob("*")

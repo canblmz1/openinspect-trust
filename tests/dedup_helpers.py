@@ -25,9 +25,11 @@ from openinspect.dedup.inventory import ImageItem
 from openinspect.dedup.synthetic import SyntheticPair
 from openinspect.ingest.imaging import dhash64
 from openinspect.provenance.records import ImageRecord
+from openinspect.validation import HumanValidation
 
 DIM = 24
 REPO_ROOT = Path(__file__).resolve().parents[1]
+NOT_REVIEWED = HumanValidation(queue="artifacts/m3/review-candidates.csv", queued=300, reviewed=0)
 
 
 def repository_settings(*, permutations: int = 1000, resamples: int = 1000) -> Settings:

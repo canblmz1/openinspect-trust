@@ -267,3 +267,24 @@ Decisions D1–D10 come from [SPEC §12](SPEC.md); T1–T7 are technical choices
 - **Reason:** to learn whether the primary intervals understate the uncertainty, without building more statistical machinery than the result needs.
 - **Risk:** the check resamples one key; nested or crossed dependence beyond it is not modelled.
 - **Revisit when:** the check shows a material difference that matters for a conclusion.
+
+## T29 — Human validation of the M3 queue is skipped for now
+- **Decision:** the 300-pair review queue (`artifacts/m3/review-candidates.csv`) stays in the repository unreviewed; no reviewer UI is built and no labels are made up or produced by another model. Every report and manifest that depends on the similarity findings states the status read from the queue itself ("Human validation: NOT PERFORMED; reviewed pairs: 0 / 300") and the limitation: the findings have not been independently human-validated, and the thresholds rest on proxy metadata, synthetic transforms and representation-based similarity (`openinspect/validation.py`). The M3 thresholds and results are not re-tuned.
+- **Evidence:** the maintainer's instruction of 2026-10-01 (skip human review, continue with M4, M5 and the EVREN smoke test).
+- **Reason:** engineering work can proceed on machine-generated findings as long as their strength is stated; the queue keeps the option of a later validation.
+- **Risk:** claims about semantic duplicate identity stay weak: a visual similarity component is a machine-detected potential leakage group, not a confirmed duplicate.
+- **Revisit when:** someone reviews the queue; the status then changes in every report on the next render.
+
+## T30 — The taxonomy is a configuration with five statuses
+- **Decision:** the mapping lives in `configs/taxonomy.yaml`: each source label maps once to a normalized class with a status (EXACT, COMPATIBLE, AMBIGUOUS, SOURCE_SPECIFIC, REJECTED) and quoted evidence; AMBIGUOUS labels keep their own class and name a candidate. A benchmark class is one every source reaches with EXACT or COMPATIBLE; only benchmark classes enter a cross-source release, and an image with a box of any other class is excluded whole (SPEC 7.4). This replaces `taxonomy/mapping.csv` with `confidence` and `review_status` (SPEC 6.5): "approved" in invariant I9 means an EXACT or COMPATIBLE mapping onto a benchmark class. Result: `short`, `open`, `mouse_bite`, `spurious_copper` ([docs/TAXONOMY.md](TAXONOMY.md)).
+- **Evidence:** the three papers' definitions (DsPCBSD+ Methods, PCB-IND Table 3, PCB-Defect type descriptions) and seeded contact sheets of box crops; `openinspect taxonomy check` verifies the mapping against the manifests and ingest reports.
+- **Reason:** the maintainer's M4 brief asks for exactly these statuses and for keeping a label source-specific rather than creating a false common class; a status says more than a confidence level.
+- **Risk:** the mapping was drafted and checked by the assistant, not reviewed by an independent person; COMPATIBLE mappings carry a scope difference.
+- **Revisit when:** a reviewer disagrees with a status, or a new source arrives.
+
+## T31 — Label quality: rule-based findings, review only
+- **Decision:** M4 flags boxes and images by declared rules (`label_quality` in `configs/taxonomy.yaml`): malformed, zero-area, out-of-bounds, tiny and extremely elongated boxes; the same box drawn twice with the same or different labels; boxes whose relative size is an outlier for their label in their source (modified z-score above 3.5); ingest format disagreements; strict near-duplicate pairs from M3 with different label sets; AMBIGUOUS mappings. Every finding is a `REVIEW_REQUIRED` row of `artifacts/m4/review-required.csv`; nothing is relabelled or dropped. The model-based signals of SPEC 7.5 (box-crop neighbours, classifier and detector disagreement, embedding outliers) wait for trained models.
+- **Evidence:** a look at the real data before fixing the rules showed that boxes covering more than 90% of the image are almost all linear scratches spanning the patch (legitimate), so no such rule was adopted; PCB-IND's images without boxes are hard negatives by its README, so `no_annotations` is informational.
+- **Reason:** cheap, explainable signals now; signals that need models later.
+- **Risk:** rules find only what they describe; the queue is not reviewed, so its precision is unknown.
+- **Revisit when:** the first trained models exist (M7), or a reviewer works through the queue.

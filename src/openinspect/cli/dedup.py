@@ -80,6 +80,7 @@ from openinspect.dedup.tables import (
 )
 from openinspect.dedup.thresholds import CalibrationError
 from openinspect.dedup.transforms import TRANSFORMS
+from openinspect.validation import QueueError, queue_label, read_queue
 
 dedup_app = typer.Typer(
     help="Duplicate and leakage audit: hashes, embeddings, similarity groups, review packs.",
@@ -467,7 +468,11 @@ def run_analyze(
         }
     )
     write_audit(out / AUDIT, audit)
-    written = write_reports(reports, audit)
+    try:
+        validation = read_queue(out / REVIEW, queue_label(out / REVIEW, ctx.root))
+    except QueueError as exc:
+        fail(str(exc))
+    written = write_reports(reports, audit, validation)
     thresholds = audit.thresholds
     typer.echo(
         f"thresholds: review {thresholds.review}, family {thresholds.family}, near {thresholds.near}, "
@@ -594,12 +599,17 @@ def report_command(
     from openinspect.provenance.registry import find_repo_root
 
     root = repo_root.resolve() if repo_root is not None else find_repo_root()
-    source = (out or root / ARTIFACTS) / AUDIT
+    folder = out or root / ARTIFACTS
+    source = folder / AUDIT
     try:
         audit = read_audit(source)
     except (OSError, ValueError) as exc:
         fail(f"cannot read {source.name}: {exc}")
-    written = write_reports(reports or root / REPORTS, audit)
+    try:
+        validation = read_queue(folder / REVIEW, queue_label(folder / REVIEW, root))
+    except QueueError as exc:
+        fail(str(exc))
+    written = write_reports(reports or root / REPORTS, audit, validation)
     typer.echo(f"reports: {len(written)} files")
 
 

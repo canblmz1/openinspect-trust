@@ -25,6 +25,7 @@ from openinspect.dedup.report import render_reports
 from openinspect.dedup.synthetic import SyntheticPair
 from openinspect.dedup.thresholds import CalibrationError
 from tests.dedup_helpers import (
+    NOT_REVIEWED,
     REPO_ROOT,
     Clustered,
     clustered_features,
@@ -94,7 +95,7 @@ def test_a_changed_representation_is_measured(
     assert ind.reading_primary is not None
     defect = next(r for r in check.rows if r.source == "pcb-defect")
     assert defect.crossing_primary is None  # no split
-    files = render_reports(primary.audit.model_copy(update={"robustness": check}))
+    files = render_reports(primary.audit.model_copy(update={"robustness": check}), NOT_REVIEWED)
     assert "## Agreement of the two groupings" in files["representation-robustness.md"]
     assert "source and level pairs" in files["representation-robustness.md"]
     assert "other/model@000000000000" in files["limitations.md"]
@@ -223,7 +224,7 @@ def test_the_core_runs_on_generic_keys_from_any_domain() -> None:
         "production lot",
         "lot and camera",
     )
-    text = "".join(render_reports(audit).values()).lower()
+    text = "".join(render_reports(audit, NOT_REVIEWED).values()).lower()
     assert "pcb" not in text
     assert "`line-a`: its own keys (production lot; lot and camera)" in text
 

@@ -38,7 +38,13 @@ from openinspect.dedup.tables import (
     write_audit,
 )
 from openinspect.dedup.thresholds import CATEGORIES, Thresholds
-from tests.dedup_helpers import Clustered, clustered_features, make_spec, repository_settings
+from tests.dedup_helpers import (
+    NOT_REVIEWED,
+    Clustered,
+    clustered_features,
+    make_spec,
+    repository_settings,
+)
 
 
 @pytest.fixture(scope="module")
@@ -160,7 +166,7 @@ def test_a_review_file_with_other_columns_is_refused(tmp_path: Path) -> None:
 
 
 def test_every_report_and_figure_is_rendered_and_linked(result: AnalysisResult) -> None:
-    files = render_reports(full_audit(result))
+    files = render_reports(full_audit(result), NOT_REVIEWED)
     assert set(REPORTS) <= set(files)
     figures = {name for name in files if name.startswith("figures/")}
     assert {"figures/roc.svg", "figures/pr.svg", "figures/cross-split.svg"} <= figures
@@ -179,7 +185,7 @@ def test_every_report_and_figure_is_rendered_and_linked(result: AnalysisResult) 
 
 def test_the_reports_state_the_numbers_of_the_audit(result: AnalysisResult) -> None:
     audit = full_audit(result)
-    files = render_reports(audit)
+    files = render_reports(audit, NOT_REVIEWED)
     t = audit.thresholds
     summary = files["similarity-summary.md"]
     assert f"{t.near:.4f}" in summary
@@ -209,7 +215,7 @@ def test_the_reports_state_the_numbers_of_the_audit(result: AnalysisResult) -> N
 
 def test_reports_render_without_the_optional_parts(result: AnalysisResult) -> None:
     bare = result.audit.model_copy(update={"synthetic": None, "performance": None, "pools": []})
-    files = render_reports(bare)
+    files = render_reports(bare, NOT_REVIEWED)
     assert "Not computed." in files["threshold-calibration.md"]
     assert "No performance record." in files["performance.md"]
     assert "figures/roc.svg" not in files
@@ -223,8 +229,8 @@ def test_write_reports_is_idempotent_and_drops_stale_figures(
     stale = tmp_path / "figures" / "old-figure.svg"
     stale.parent.mkdir(parents=True)
     stale.write_text("<svg/>", encoding="utf-8")
-    first = {p.name: p.read_bytes() for p in write_reports(tmp_path, audit)}
-    second = {p.name: p.read_bytes() for p in write_reports(tmp_path, audit)}
+    first = {p.name: p.read_bytes() for p in write_reports(tmp_path, audit, NOT_REVIEWED)}
+    second = {p.name: p.read_bytes() for p in write_reports(tmp_path, audit, NOT_REVIEWED)}
     assert first == second
     assert not stale.exists()
     assert all(b"\r\n" not in data for data in first.values())
@@ -241,7 +247,7 @@ def test_the_chaining_rule_picks_the_primary_level(result: AnalysisResult) -> No
     chained = audit.model_copy(update={"levels": levels})
     assert primary_level(chained, "pcb-ind") == "near"
     assert primary_level(chained, "dspcbsd-plus") == "family"
-    assert "Flagged: `pcb-ind`" in render_reports(chained)["split-leakage.md"]
+    assert "Flagged: `pcb-ind`" in render_reports(chained, NOT_REVIEWED)["split-leakage.md"]
 
 
 @pytest.mark.parametrize(
@@ -269,6 +275,6 @@ def test_slug() -> None:
 def test_coinciding_review_and_family_thresholds_are_said_out_loud(result: AnalysisResult) -> None:
     t = result.audit.thresholds
     same = t.model_copy(update={"review": t.family})
-    files = render_reports(result.audit.model_copy(update={"thresholds": same}))
+    files = render_reports(result.audit.model_copy(update={"thresholds": same}), NOT_REVIEWED)
     assert "The review and family thresholds coincide" in files["similarity-summary.md"]
     assert "review = family" in files["figures/percolation.svg"]

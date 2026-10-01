@@ -79,3 +79,5 @@ jobs:
       - run: uv sync --locked
       # Schema, licence allowlist, evidence hashes (SHA256SUMS.txt), slug/file consistency.
       - run: uv run openinspect source validate --strict
+      # Every source label mapped once, with evidence (configs/taxonomy.yaml, docs/TAXONOMY.md).
+      - run: uv run openinspect taxonomy check

@@ -36,6 +36,7 @@ class ImageItem:
     width: int | None
     height: int | None
     acquisition_id: str | None = None
+    flags: tuple[str, ...] = ()  # ingest flags of the image record
 
     @property
     def key(self) -> tuple[str, str]:
@@ -93,6 +94,7 @@ def load_items(
                     width=record.width,
                     height=record.height,
                     acquisition_id=acquisition.get(slug),
+                    flags=tuple(record.flags),
                 )
             )
     items.sort(key=lambda item: item.key)

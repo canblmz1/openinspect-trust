@@ -1,0 +1,196 @@
+# Normalized defect taxonomy (Milestone 4). Read by openinspect.taxonomy.config; documented in docs/TAXONOMY.md.
+#
+# Original labels are never changed: every annotation keeps its original_label, and normalized_label
+# is added next to it through the mapping below. Each source label is mapped exactly once.
+#
+# mapping_status:
+#   EXACT            the source definition says the same thing as the normalized class
+#   COMPATIBLE       same concept, with a documented difference in scope or wording
+#   AMBIGUOUS        a candidate relation exists but the evidence does not settle it: not merged
+#   SOURCE_SPECIFIC  no counterpart in another source: kept as its own normalized class
+#   REJECTED         not a defect class (for example a placeholder category): never used
+#
+# A normalized class is a benchmark class when every source maps a label to it with EXACT or
+# COMPATIBLE status: only those can be compared across independent sources without silently
+# changing their meaning. Images that contain a box of any other class are excluded from the
+# cross-source release (SPEC 7.4): dropping only the box would turn a real defect into background.
+schema_version: 1
+
+hierarchy:   # level_1 families follow the grouping of the DsPCBSD+ paper (copper residue, copper
+             # deficiency, conductor scratch, foreign object), the only source that publishes one
+  level_0: defect
+  families:
+    copper_residue: unwanted copper left by the etching process
+    copper_deficiency: copper missing where the design has it
+    surface_damage: mechanical damage of the surface
+    contamination: foreign matter or residue on the surface
+
+classes:     # normalized_label -> family and a definition written from the source definitions
+  short:
+    family: copper_residue
+    definition: an unintended connection between two or more distinct conductors
+  open:
+    family: copper_deficiency
+    definition: a break that interrupts a conductor path
+  mouse_bite:
+    family: copper_deficiency
+    definition: a small, local notch or depression at a conductor edge that narrows it without breaking it
+  spurious_copper:
+    family: copper_residue
+    definition: unwanted residual copper, not part of the designed pattern
+  spur:
+    family: copper_residue
+    definition: an unintended protrusion from the edge of a trace or pad
+  scratch:
+    family: surface_damage
+    definition: linear mechanical damage of the surface
+  missing_copper:
+    family: copper_deficiency
+    definition: absence of copper foil in a local region of the pattern (PCB-IND)
+  missing_pad:
+    family: copper_deficiency
+    definition: part or all of a pad is absent (PCB-Defect)
+  hole_breakout:
+    family: copper_deficiency
+    definition: a hole off-centre in its pad, so copper is missing along the hole edge (DsPCBSD+)
+  copper_burr:
+    family: copper_residue
+    definition: tiny copper protrusions along trace edges, in practice mostly at hole and pad edges (PCB-IND)
+  stain:
+    family: contamination
+    definition: low-contrast surface contamination such as oxidation, oil or fingerprints (PCB-IND)
+  conductor_foreign_object:
+    family: contamination
+    definition: impurities, bubbles, dirt, deposits or contamination on conductors (DsPCBSD+)
+  base_material_foreign_object:
+    family: contamination
+    definition: foreign matter on the base material or in holes (DsPCBSD+)
+
+citations:
+  dspcbsd-plus: "Lv et al., Sci Data 11, 811 (2024), doi:10.1038/s41597-024-03656-8, section Methods, defect categories"
+  pcb-ind: "Sci Data (2026), doi:10.1038/s41597-026-07684-4, Table 3 (data dictionary) and Fig. 3 caption"
+  pcb-defect: "Data in Brief (2025), doi:10.1016/j.dib.2025.112296, defect type descriptions"
+
+mappings:
+  dspcbsd-plus:
+    SH:
+      normalized_label: short
+      status: EXACT
+      evidence: "'unintended connection between two or more distinct conductors resulting from residual copper'"
+    OP:
+      normalized_label: open
+      status: EXACT
+      evidence: "'connection path within the conductor is interrupted, hindering electric current flow'"
+    MB:
+      normalized_label: mouse_bite
+      status: EXACT
+      evidence: "'small, localized depression or crack at conductor edges'; examples are notches on conductor edges"
+    SC:
+      normalized_label: spurious_copper
+      status: COMPATIBLE
+      evidence: "'irregular or unwanted copper residue found on base material, within holes, or on copper surfaces': broader than the isolated fragments of the other two sources (also residue in holes and on copper)"
+    SP:
+      normalized_label: spur
+      status: EXACT
+      evidence: "'irregular protrusions along the edges of conductors, often manifesting as sharp, pointed shapes'"
+    HB:
+      normalized_label: hole_breakout
+      status: SOURCE_SPECIFIC
+      evidence: "'hole center significantly deviates from hole bounding pad': a registration defect no other source labels"
+    CS:
+      normalized_label: scratch
+      status: COMPATIBLE
+      evidence: "'linear or multiple linear defects' on conductors; PCB-IND's scratch also covers the substrate"
+    CFO:
+      normalized_label: conductor_foreign_object
+      status: SOURCE_SPECIFIC
+      evidence: "'impurities, bubbles, dirt, deposits on conductors' plus oils, oxidation, fingerprints: overlaps PCB-IND's stain only in part"
+    BMFO:
+      normalized_label: base_material_foreign_object
+      status: SOURCE_SPECIFIC
+      evidence: "'bubbles, chips, particles on base material' and foreign objects in holes"
+  pcb-ind:
+    short:
+      normalized_label: short
+      status: EXACT
+      evidence: "'Unintended electrical connection between conductors' (Table 3)"
+    open:
+      normalized_label: open
+      status: EXACT
+      evidence: "'Broken or interrupted conductive line' (Table 3); 'complete breaks in conductive traces'"
+    mouse_bite:
+      normalized_label: mouse_bite
+      status: EXACT
+      evidence: "'Edge irregular gap caused by partial copper loss'; 'irregular notches along trace edges ... locally narrow line widths'"
+    spurious_copper:
+      normalized_label: spurious_copper
+      status: EXACT
+      evidence: "'Isolated unwanted copper fragments' (Table 3); 'undesigned residual copper'"
+    scratch:
+      normalized_label: scratch
+      status: COMPATIBLE
+      evidence: "'Surface-level physical damage on copper' (Table 3); the text adds damage 'on substrate or trace surfaces'"
+    missing_copper:
+      normalized_label: missing_copper
+      status: SOURCE_SPECIFIC
+      evidence: "'Complete absence of copper foil in a local region': an area defect, not the edge notch (mouse bite) or the break (open)"
+    copper_burr:
+      normalized_label: copper_burr
+      status: AMBIGUOUS
+      candidate: spur
+      evidence: "'Tiny protruding copper burrs along trace edges ... difficult to distinguish from normal roughness'; sampled boxes sit mostly at hole and pad edges, unlike the trace-edge spurs of DsPCBSD+ and PCB-Defect, and the authors report confusion with short: not merged"
+    stain:
+      normalized_label: stain
+      status: AMBIGUOUS
+      candidate: conductor_foreign_object
+      evidence: "'oxidation, oil contamination, or fingerprints on copper surfaces ... low-contrast': only part of DsPCBSD+'s conductor foreign object (which adds particles, bubbles, deposits): not merged"
+  pcb-defect:
+    short:
+      normalized_label: short
+      status: EXACT
+      evidence: "'An unintended electrical connection between distinct conductors caused by excess copper or solder bridging' (bare boards: copper)"
+    open_circuit:
+      normalized_label: open
+      status: EXACT
+      evidence: "'A discontinuity in a circuit trace or pad, interrupting current flow'"
+    mouse_bite:
+      normalized_label: mouse_bite
+      status: COMPATIBLE
+      evidence: "'small, irregular notches ... usually at the board's edges or within conductor paths': the wording also evokes depaneling perforations, but the defects were designed on conductors and sampled boxes are notches on trace edges"
+    spurious_copper:
+      normalized_label: spurious_copper
+      status: EXACT
+      evidence: "'random, unwanted pieces of copper that remain after the etching process'"
+    spur:
+      normalized_label: spur
+      status: EXACT
+      evidence: "'A thin, unintended extension or protrusion from a trace or pad'"
+    missing_pad:
+      normalized_label: missing_pad
+      status: SOURCE_SPECIFIC
+      evidence: "'portions or the entirety of a pad are absent': a specific element; whether PCB-IND's missing copper includes missing pads is not stated"
+    detecting-pcb-defects:
+      normalized_label: null
+      status: REJECTED
+      evidence: "Roboflow placeholder category 0 of the COCO file: no annotation uses it (M2 anomaly unused_category)"
+
+considered_merges:   # candidate merges that were examined and not made, with the reason
+  - labels: ["pcb-ind:missing_copper", "pcb-defect:missing_pad"]
+    decision: not merged
+    reason: an area of absent copper and an absent pad are different defects; a pad can be part of missing copper but the sources do not say so
+  - labels: ["dspcbsd-plus:HB", "dspcbsd-plus:MB"]
+    decision: not merged
+    reason: hole breakout is a hole-to-pad registration defect; a mouse bite is an edge notch
+  - labels: ["pcb-ind:copper_burr", "dspcbsd-plus:SP", "pcb-defect:spur"]
+    decision: not merged
+    reason: see the AMBIGUOUS mapping of copper_burr
+  - labels: ["pcb-ind:stain", "dspcbsd-plus:CFO"]
+    decision: not merged
+    reason: see the AMBIGUOUS mapping of stain
+
+label_quality:   # review rules of openinspect.taxonomy.quality: a rule flags a box for review, it never changes a label
+  min_box_side_px: 2        # a box thinner than this is almost certainly a drawing error
+  max_aspect_ratio: 20
+  same_box_iou: 0.9         # two boxes this alike are one box drawn twice
+  size_outlier_z: 3.5       # modified z-score (Iglewicz and Hoaglin) of the log relative box area within (source, label)
+  informational_flags: [no_annotations]   # ingest flags that are not a format disagreement (PCB-IND ships hard negatives)
