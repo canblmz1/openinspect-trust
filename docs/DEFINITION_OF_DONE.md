@@ -69,7 +69,17 @@ A milestone is done only when every item on its list is true and the milestone r
 - [x] Reports in `reports/m3/` rendered from `artifacts/m3/audit.json`; integration tests check reports, digests, thresholds and the frozen protocol without the data.
 - [x] Performance recorded: time per stage, images per second, cache size, peak RAM, processor.
 - [x] GitHub Actions ran ruff, mypy, pytest and manifest validation without downloading any dataset or model (run 36784716650 on commit 254f79f: all six jobs green, tests and manifest validation on Ubuntu and Windows).
-- [ ] The human review of the queue (maintainer, D9); until then the thresholds rest on proxy labels.
+- [ ] The human review of the queue (maintainer, D9): skipped for now by the maintainer's decision (T29); every report states "Human validation: NOT PERFORMED, 0 / 300" and the limitation.
+
+## M4: taxonomy and label quality
+
+- [x] Every source label is mapped exactly once in `configs/taxonomy.yaml` with a status (EXACT, COMPATIBLE, AMBIGUOUS, SOURCE_SPECIFIC, REJECTED) and quoted evidence from the source's paper; the reasoning per class is in [TAXONOMY](TAXONOMY.md) (T30).
+- [x] Original labels are immutable: `artifacts/m4/taxonomy-map.parquet` keeps `original_label` next to `normalized_label`, `mapping_status` and `evidence` for all 27,912 boxes, with the generic fields `source_id`, `group_id`, `subgroup_id`, `acquisition_id`, `split`; the mapping is reversible (report table).
+- [x] The success question is answered with evidence: four classes (`short`, `open`, `mouse_bite`, `spurious_copper`) are comparable across all three sources; the overlap was not maximised (`copper_burr` stays AMBIGUOUS).
+- [x] The cost of the whole-image rule (SPEC 7.4) is measured per source.
+- [x] Label-quality checks flag 437 findings as `REVIEW_REQUIRED` (`artifacts/m4/review-required.csv`); nothing is relabelled or dropped (T31).
+- [x] `openinspect taxonomy check` runs in CI without data; integration tests check the committed reports against `artifacts/m4/audit.json`, the digests, the taxonomy hash, the original-label counts against the ingest reports and the eligibility rule.
+- [ ] An independent review of the mapping statuses and of the label-quality queue.
 
 ## v0.1 release
 

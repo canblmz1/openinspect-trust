@@ -1,0 +1,1237 @@
+{
+  "schema_version": 1,
+  "run": {
+    "code_commit": "6ba0c9e075f1c90e771b6aa7e3668f3209005eec",
+    "code_dirty": false,
+    "taxonomy_sha256": "b8a8357314d49995c2aec7908d4abb25119160a2da6bf8211556e0fe09dce782",
+    "phash_max": 4,
+    "near_threshold": 0.933905
+  },
+  "inputs": {
+    "artifacts/m3/duplicate-pairs.parquet": "18b8cf68e3c47ea6ee77f987986c74a805350c870d2dd2a6b374c948d80ff4de",
+    "artifacts/m3/thresholds.json": "a168f1182dd3eb739ee3f587f1c741d38be7bd7d0f0ad121a0c51fd814e28c1f",
+    "records/dspcbsd-plus/annotations.jsonl": "82c7a9e3131358ac5abf0570437b4839787eb6f68c936b42f92c6b5956ae61ab",
+    "records/dspcbsd-plus/images.jsonl": "ea456188902b7d31167b359f22d01369850434b1fb493955df10fc2808798e62",
+    "records/pcb-defect/annotations.jsonl": "4832155f09fb9b25f78544c7e344a6a0d2247f59b1afbcb78c189d9b069709da",
+    "records/pcb-defect/images.jsonl": "1abd46e2a6dbe422b63d348f7b2772e3a8d5bf3a8b5cbccd7f0e0ab3866ae48e",
+    "records/pcb-ind/annotations.jsonl": "c28a667b432c1a8dee38604765c2ed840b914fdd06376b36d73ee1f4a5fb78ff",
+    "records/pcb-ind/images.jsonl": "6ab623dd7aff4f3e6dabce554ba246d2012c98a3b5d0bb04f74a278718c0e1ce"
+  },
+  "benchmark_classes": [
+    "short",
+    "open",
+    "mouse_bite",
+    "spurious_copper"
+  ],
+  "labels": [
+    {
+      "source": "dspcbsd-plus",
+      "original_label": "SH",
+      "declared": true,
+      "boxes": 915,
+      "images": 604,
+      "normalized_label": "short",
+      "status": "EXACT",
+      "family": "copper_residue",
+      "benchmark": true
+    },
+    {
+      "source": "dspcbsd-plus",
+      "original_label": "OP",
+      "declared": true,
+      "boxes": 1770,
+      "images": 1420,
+      "normalized_label": "open",
+      "status": "EXACT",
+      "family": "copper_deficiency",
+      "benchmark": true
+    },
+    {
+      "source": "dspcbsd-plus",
+      "original_label": "MB",
+      "declared": true,
+      "boxes": 2529,
+      "images": 1873,
+      "normalized_label": "mouse_bite",
+      "status": "EXACT",
+      "family": "copper_deficiency",
+      "benchmark": true
+    },
+    {
+      "source": "dspcbsd-plus",
+      "original_label": "SC",
+      "declared": true,
+      "boxes": 1593,
+      "images": 1317,
+      "normalized_label": "spurious_copper",
+      "status": "COMPATIBLE",
+      "family": "copper_residue",
+      "benchmark": true
+    },
+    {
+      "source": "dspcbsd-plus",
+      "original_label": "SP",
+      "declared": true,
+      "boxes": 4584,
+      "images": 2186,
+      "normalized_label": "spur",
+      "status": "EXACT",
+      "family": "copper_residue",
+      "benchmark": false
+    },
+    {
+      "source": "dspcbsd-plus",
+      "original_label": "HB",
+      "declared": true,
+      "boxes": 2883,
+      "images": 1290,
+      "normalized_label": "hole_breakout",
+      "status": "SOURCE_SPECIFIC",
+      "family": "copper_deficiency",
+      "benchmark": false
+    },
+    {
+      "source": "dspcbsd-plus",
+      "original_label": "CS",
+      "declared": true,
+      "boxes": 2490,
+      "images": 1487,
+      "normalized_label": "scratch",
+      "status": "COMPATIBLE",
+      "family": "surface_damage",
+      "benchmark": false
+    },
+    {
+      "source": "dspcbsd-plus",
+      "original_label": "CFO",
+      "declared": true,
+      "boxes": 1832,
+      "images": 1352,
+      "normalized_label": "conductor_foreign_object",
+      "status": "SOURCE_SPECIFIC",
+      "family": "contamination",
+      "benchmark": false
+    },
+    {
+      "source": "dspcbsd-plus",
+      "original_label": "BMFO",
+      "declared": true,
+      "boxes": 1680,
+      "images": 1484,
+      "normalized_label": "base_material_foreign_object",
+      "status": "SOURCE_SPECIFIC",
+      "family": "contamination",
+      "benchmark": false
+    },
+    {
+      "source": "pcb-defect",
+      "original_label": "short",
+      "declared": true,
+      "boxes": 254,
+      "images": 229,
+      "normalized_label": "short",
+      "status": "EXACT",
+      "family": "copper_residue",
+      "benchmark": true
+    },
+    {
+      "source": "pcb-defect",
+      "original_label": "open_circuit",
+      "declared": true,
+      "boxes": 276,
+      "images": 228,
+      "normalized_label": "open",
+      "status": "EXACT",
+      "family": "copper_deficiency",
+      "benchmark": true
+    },
+    {
+      "source": "pcb-defect",
+      "original_label": "mouse_bite",
+      "declared": true,
+      "boxes": 356,
+      "images": 224,
+      "normalized_label": "mouse_bite",
+      "status": "COMPATIBLE",
+      "family": "copper_deficiency",
+      "benchmark": true
+    },
+    {
+      "source": "pcb-defect",
+      "original_label": "spurious_copper",
+      "declared": true,
+      "boxes": 246,
+      "images": 229,
+      "normalized_label": "spurious_copper",
+      "status": "EXACT",
+      "family": "copper_residue",
+      "benchmark": true
+    },
+    {
+      "source": "pcb-defect",
+      "original_label": "spur",
+      "declared": true,
+      "boxes": 296,
+      "images": 228,
+      "normalized_label": "spur",
+      "status": "EXACT",
+      "family": "copper_residue",
+      "benchmark": false
+    },
+    {
+      "source": "pcb-defect",
+      "original_label": "missing_pad",
+      "declared": true,
+      "boxes": 276,
+      "images": 203,
+      "normalized_label": "missing_pad",
+      "status": "SOURCE_SPECIFIC",
+      "family": "copper_deficiency",
+      "benchmark": false
+    },
+    {
+      "source": "pcb-defect",
+      "original_label": "detecting-pcb-defects",
+      "declared": false,
+      "boxes": 0,
+      "images": 0,
+      "normalized_label": null,
+      "status": "REJECTED",
+      "family": null,
+      "benchmark": false
+    },
+    {
+      "source": "pcb-ind",
+      "original_label": "short",
+      "declared": true,
+      "boxes": 360,
+      "images": 321,
+      "normalized_label": "short",
+      "status": "EXACT",
+      "family": "copper_residue",
+      "benchmark": true
+    },
+    {
+      "source": "pcb-ind",
+      "original_label": "open",
+      "declared": true,
+      "boxes": 132,
+      "images": 112,
+      "normalized_label": "open",
+      "status": "EXACT",
+      "family": "copper_deficiency",
+      "benchmark": true
+    },
+    {
+      "source": "pcb-ind",
+      "original_label": "mouse_bite",
+      "declared": true,
+      "boxes": 844,
+      "images": 815,
+      "normalized_label": "mouse_bite",
+      "status": "EXACT",
+      "family": "copper_deficiency",
+      "benchmark": true
+    },
+    {
+      "source": "pcb-ind",
+      "original_label": "spurious_copper",
+      "declared": true,
+      "boxes": 660,
+      "images": 615,
+      "normalized_label": "spurious_copper",
+      "status": "EXACT",
+      "family": "copper_residue",
+      "benchmark": true
+    },
+    {
+      "source": "pcb-ind",
+      "original_label": "scratch",
+      "declared": true,
+      "boxes": 463,
+      "images": 449,
+      "normalized_label": "scratch",
+      "status": "COMPATIBLE",
+      "family": "surface_damage",
+      "benchmark": false
+    },
+    {
+      "source": "pcb-ind",
+      "original_label": "missing_copper",
+      "declared": true,
+      "boxes": 1715,
+      "images": 1035,
+      "normalized_label": "missing_copper",
+      "status": "SOURCE_SPECIFIC",
+      "family": "copper_deficiency",
+      "benchmark": false
+    },
+    {
+      "source": "pcb-ind",
+      "original_label": "copper_burr",
+      "declared": true,
+      "boxes": 1174,
+      "images": 1057,
+      "normalized_label": "copper_burr",
+      "status": "AMBIGUOUS",
+      "family": "copper_residue",
+      "benchmark": false
+    },
+    {
+      "source": "pcb-ind",
+      "original_label": "stain",
+      "declared": true,
+      "boxes": 584,
+      "images": 521,
+      "normalized_label": "stain",
+      "status": "AMBIGUOUS",
+      "family": "contamination",
+      "benchmark": false
+    }
+  ],
+  "sources": [
+    {
+      "source": "dspcbsd-plus",
+      "acquisition_id": "factory-aoi",
+      "images": 10259,
+      "boxes": 20276,
+      "negatives": 0,
+      "eligible_images": 3292,
+      "excluded_images": 6967,
+      "eligible_boxes": 4642,
+      "excluded_boxes": 15634,
+      "benchmark_boxes_in_excluded": 2165,
+      "excluded_by": {
+        "BMFO": 1484,
+        "CFO": 1352,
+        "CS": 1487,
+        "HB": 1290,
+        "SP": 2186
+      },
+      "eligible_by_split": {
+        "train": 2661,
+        "val": 631
+      }
+    },
+    {
+      "source": "pcb-defect",
+      "acquisition_id": "lab-flatbed-scan",
+      "images": 230,
+      "boxes": 1704,
+      "negatives": 0,
+      "eligible_images": 0,
+      "excluded_images": 230,
+      "eligible_boxes": 0,
+      "excluded_boxes": 1704,
+      "benchmark_boxes_in_excluded": 1132,
+      "excluded_by": {
+        "missing_pad": 203,
+        "spur": 228
+      },
+      "eligible_by_split": {}
+    },
+    {
+      "source": "pcb-ind",
+      "acquisition_id": "factory-aoi",
+      "images": 4789,
+      "boxes": 5932,
+      "negatives": 127,
+      "eligible_images": 1713,
+      "excluded_images": 2949,
+      "eligible_boxes": 1854,
+      "excluded_boxes": 4078,
+      "benchmark_boxes_in_excluded": 142,
+      "excluded_by": {
+        "copper_burr": 1057,
+        "missing_copper": 1035,
+        "scratch": 449,
+        "stain": 521
+      },
+      "eligible_by_split": {
+        "test": 169,
+        "train": 1375,
+        "val": 169
+      }
+    }
+  ],
+  "classes": [
+    {
+      "normalized_label": "short",
+      "family": "copper_residue",
+      "benchmark": true,
+      "reached_by": [
+        {
+          "source": "dspcbsd-plus",
+          "original_label": "SH",
+          "status": "EXACT"
+        },
+        {
+          "source": "pcb-defect",
+          "original_label": "short",
+          "status": "EXACT"
+        },
+        {
+          "source": "pcb-ind",
+          "original_label": "short",
+          "status": "EXACT"
+        }
+      ],
+      "candidate_of": []
+    },
+    {
+      "normalized_label": "open",
+      "family": "copper_deficiency",
+      "benchmark": true,
+      "reached_by": [
+        {
+          "source": "dspcbsd-plus",
+          "original_label": "OP",
+          "status": "EXACT"
+        },
+        {
+          "source": "pcb-defect",
+          "original_label": "open_circuit",
+          "status": "EXACT"
+        },
+        {
+          "source": "pcb-ind",
+          "original_label": "open",
+          "status": "EXACT"
+        }
+      ],
+      "candidate_of": []
+    },
+    {
+      "normalized_label": "mouse_bite",
+      "family": "copper_deficiency",
+      "benchmark": true,
+      "reached_by": [
+        {
+          "source": "dspcbsd-plus",
+          "original_label": "MB",
+          "status": "EXACT"
+        },
+        {
+          "source": "pcb-defect",
+          "original_label": "mouse_bite",
+          "status": "COMPATIBLE"
+        },
+        {
+          "source": "pcb-ind",
+          "original_label": "mouse_bite",
+          "status": "EXACT"
+        }
+      ],
+      "candidate_of": []
+    },
+    {
+      "normalized_label": "spurious_copper",
+      "family": "copper_residue",
+      "benchmark": true,
+      "reached_by": [
+        {
+          "source": "dspcbsd-plus",
+          "original_label": "SC",
+          "status": "COMPATIBLE"
+        },
+        {
+          "source": "pcb-defect",
+          "original_label": "spurious_copper",
+          "status": "EXACT"
+        },
+        {
+          "source": "pcb-ind",
+          "original_label": "spurious_copper",
+          "status": "EXACT"
+        }
+      ],
+      "candidate_of": []
+    },
+    {
+      "normalized_label": "spur",
+      "family": "copper_residue",
+      "benchmark": false,
+      "reached_by": [
+        {
+          "source": "dspcbsd-plus",
+          "original_label": "SP",
+          "status": "EXACT"
+        },
+        {
+          "source": "pcb-defect",
+          "original_label": "spur",
+          "status": "EXACT"
+        }
+      ],
+      "candidate_of": [
+        {
+          "source": "pcb-ind",
+          "original_label": "copper_burr",
+          "status": "AMBIGUOUS"
+        }
+      ]
+    },
+    {
+      "normalized_label": "scratch",
+      "family": "surface_damage",
+      "benchmark": false,
+      "reached_by": [
+        {
+          "source": "dspcbsd-plus",
+          "original_label": "CS",
+          "status": "COMPATIBLE"
+        },
+        {
+          "source": "pcb-ind",
+          "original_label": "scratch",
+          "status": "COMPATIBLE"
+        }
+      ],
+      "candidate_of": []
+    },
+    {
+      "normalized_label": "missing_copper",
+      "family": "copper_deficiency",
+      "benchmark": false,
+      "reached_by": [
+        {
+          "source": "pcb-ind",
+          "original_label": "missing_copper",
+          "status": "SOURCE_SPECIFIC"
+        }
+      ],
+      "candidate_of": []
+    },
+    {
+      "normalized_label": "missing_pad",
+      "family": "copper_deficiency",
+      "benchmark": false,
+      "reached_by": [
+        {
+          "source": "pcb-defect",
+          "original_label": "missing_pad",
+          "status": "SOURCE_SPECIFIC"
+        }
+      ],
+      "candidate_of": []
+    },
+    {
+      "normalized_label": "hole_breakout",
+      "family": "copper_deficiency",
+      "benchmark": false,
+      "reached_by": [
+        {
+          "source": "dspcbsd-plus",
+          "original_label": "HB",
+          "status": "SOURCE_SPECIFIC"
+        }
+      ],
+      "candidate_of": []
+    },
+    {
+      "normalized_label": "copper_burr",
+      "family": "copper_residue",
+      "benchmark": false,
+      "reached_by": [
+        {
+          "source": "pcb-ind",
+          "original_label": "copper_burr",
+          "status": "AMBIGUOUS"
+        }
+      ],
+      "candidate_of": []
+    },
+    {
+      "normalized_label": "stain",
+      "family": "contamination",
+      "benchmark": false,
+      "reached_by": [
+        {
+          "source": "pcb-ind",
+          "original_label": "stain",
+          "status": "AMBIGUOUS"
+        }
+      ],
+      "candidate_of": []
+    },
+    {
+      "normalized_label": "conductor_foreign_object",
+      "family": "contamination",
+      "benchmark": false,
+      "reached_by": [
+        {
+          "source": "dspcbsd-plus",
+          "original_label": "CFO",
+          "status": "SOURCE_SPECIFIC"
+        }
+      ],
+      "candidate_of": [
+        {
+          "source": "pcb-ind",
+          "original_label": "stain",
+          "status": "AMBIGUOUS"
+        }
+      ]
+    },
+    {
+      "normalized_label": "base_material_foreign_object",
+      "family": "contamination",
+      "benchmark": false,
+      "reached_by": [
+        {
+          "source": "dspcbsd-plus",
+          "original_label": "BMFO",
+          "status": "SOURCE_SPECIFIC"
+        }
+      ],
+      "candidate_of": []
+    }
+  ],
+  "geometry": [
+    {
+      "normalized_label": "short",
+      "source": "dspcbsd-plus",
+      "boxes": 317,
+      "images": 226,
+      "relative_area": {
+        "n": 317,
+        "p10": 0.006345428000000001,
+        "median": 0.014806050000000005,
+        "p90": 0.08252531
+      },
+      "long_side_px": {
+        "n": 317,
+        "p10": 16.995199999999997,
+        "median": 27.000000000000007,
+        "p90": 89.39656000000004
+      },
+      "image_long_side_px": {
+        "n": 226,
+        "p10": 108.0,
+        "median": 226.0,
+        "p90": 226.0
+      }
+    },
+    {
+      "normalized_label": "short",
+      "source": "pcb-defect",
+      "boxes": 0,
+      "images": 0,
+      "relative_area": null,
+      "long_side_px": null,
+      "image_long_side_px": null
+    },
+    {
+      "normalized_label": "short",
+      "source": "pcb-ind",
+      "boxes": 345,
+      "images": 306,
+      "relative_area": {
+        "n": 345,
+        "p10": 0.007224437423399993,
+        "median": 0.011792726735999992,
+        "p90": 0.03594473199740002
+      },
+      "long_side_px": {
+        "n": 345,
+        "p10": 29.823359999999994,
+        "median": 40.26060000000001,
+        "p90": 63.42960000000001
+      },
+      "image_long_side_px": {
+        "n": 306,
+        "p10": 300.0,
+        "median": 300.0,
+        "p90": 300.0
+      }
+    },
+    {
+      "normalized_label": "open",
+      "source": "dspcbsd-plus",
+      "boxes": 1416,
+      "images": 1135,
+      "relative_area": {
+        "n": 1416,
+        "p10": 0.0030532500000000026,
+        "median": 0.009083639999999999,
+        "p90": 0.030550199999999993
+      },
+      "long_side_px": {
+        "n": 1416,
+        "p10": 13.989400000000003,
+        "median": 24.99560000000001,
+        "p90": 60.003
+      },
+      "image_long_side_px": {
+        "n": 1135,
+        "p10": 226.0,
+        "median": 226.0,
+        "p90": 226.0
+      }
+    },
+    {
+      "normalized_label": "open",
+      "source": "pcb-defect",
+      "boxes": 0,
+      "images": 0,
+      "relative_area": null,
+      "long_side_px": null,
+      "image_long_side_px": null
+    },
+    {
+      "normalized_label": "open",
+      "source": "pcb-ind",
+      "boxes": 124,
+      "images": 105,
+      "relative_area": {
+        "n": 124,
+        "p10": 0.005915060519199996,
+        "median": 0.011924256578999995,
+        "p90": 0.033273090525999985
+      },
+      "long_side_px": {
+        "n": 124,
+        "p10": 25.69793999999999,
+        "median": 40.790549999999996,
+        "p90": 82.34784
+      },
+      "image_long_side_px": {
+        "n": 105,
+        "p10": 300.0,
+        "median": 300.0,
+        "p90": 300.0
+      }
+    },
+    {
+      "normalized_label": "mouse_bite",
+      "source": "dspcbsd-plus",
+      "boxes": 1760,
+      "images": 1405,
+      "relative_area": {
+        "n": 1760,
+        "p10": 0.001564680000000002,
+        "median": 0.0033062500000000023,
+        "p90": 0.010187224000000014
+      },
+      "long_side_px": {
+        "n": 1760,
+        "p10": 9.989199999999997,
+        "median": 16.000799999999998,
+        "p90": 31.007199999999997
+      },
+      "image_long_side_px": {
+        "n": 1405,
+        "p10": 226.0,
+        "median": 226.0,
+        "p90": 226.0
+      }
+    },
+    {
+      "normalized_label": "mouse_bite",
+      "source": "pcb-defect",
+      "boxes": 0,
+      "images": 0,
+      "relative_area": null,
+      "long_side_px": null,
+      "image_long_side_px": null
+    },
+    {
+      "normalized_label": "mouse_bite",
+      "source": "pcb-ind",
+      "boxes": 746,
+      "images": 728,
+      "relative_area": {
+        "n": 746,
+        "p10": 0.0023796226839999986,
+        "median": 0.005410697724000002,
+        "p90": 0.02466645259599999
+      },
+      "long_side_px": {
+        "n": 746,
+        "p10": 15.634649999999993,
+        "median": 24.721799999999973,
+        "p90": 69.98925000000001
+      },
+      "image_long_side_px": {
+        "n": 728,
+        "p10": 300.0,
+        "median": 300.0,
+        "p90": 300.0
+      }
+    },
+    {
+      "normalized_label": "spurious_copper",
+      "source": "dspcbsd-plus",
+      "boxes": 1149,
+      "images": 982,
+      "relative_area": {
+        "n": 1149,
+        "p10": 0.0028143219999999997,
+        "median": 0.006612500000000005,
+        "p90": 0.03174778200000001
+      },
+      "long_side_px": {
+        "n": 1149,
+        "p10": 12.995000000000005,
+        "median": 20.995400000000004,
+        "p90": 52.99699999999999
+      },
+      "image_long_side_px": {
+        "n": 982,
+        "p10": 226.0,
+        "median": 226.0,
+        "p90": 226.0
+      }
+    },
+    {
+      "normalized_label": "spurious_copper",
+      "source": "pcb-defect",
+      "boxes": 0,
+      "images": 0,
+      "relative_area": null,
+      "long_side_px": null,
+      "image_long_side_px": null
+    },
+    {
+      "normalized_label": "spurious_copper",
+      "source": "pcb-ind",
+      "boxes": 639,
+      "images": 594,
+      "relative_area": {
+        "n": 639,
+        "p10": 0.009544722349799997,
+        "median": 0.029973700400000008,
+        "p90": 0.11416536339840003
+      },
+      "long_side_px": {
+        "n": 639,
+        "p10": 36.40596000000001,
+        "median": 63.82679999999999,
+        "p90": 128.61432000000002
+      },
+      "image_long_side_px": {
+        "n": 594,
+        "p10": 300.0,
+        "median": 300.0,
+        "p90": 300.0
+      }
+    }
+  ],
+  "rules": {
+    "min_box_side_px": 2.0,
+    "max_aspect_ratio": 20.0,
+    "same_box_iou": 0.9,
+    "size_outlier_z": 3.5,
+    "informational_flags": [
+      "no_annotations"
+    ]
+  },
+  "signals": [
+    {
+      "signal": "zero_area_box",
+      "check": "geometry",
+      "source": "pcb-ind",
+      "findings": 1,
+      "images": 1,
+      "boxes": 1
+    },
+    {
+      "signal": "tiny_box",
+      "check": "geometry",
+      "source": "dspcbsd-plus",
+      "findings": 3,
+      "images": 3,
+      "boxes": 3
+    },
+    {
+      "signal": "tiny_box",
+      "check": "geometry",
+      "source": "pcb-ind",
+      "findings": 1,
+      "images": 1,
+      "boxes": 1
+    },
+    {
+      "signal": "extreme_aspect_ratio",
+      "check": "geometry",
+      "source": "dspcbsd-plus",
+      "findings": 2,
+      "images": 2,
+      "boxes": 2
+    },
+    {
+      "signal": "extreme_aspect_ratio",
+      "check": "geometry",
+      "source": "pcb-ind",
+      "findings": 1,
+      "images": 1,
+      "boxes": 1
+    },
+    {
+      "signal": "conflicting_box",
+      "check": "class_consistency",
+      "source": "dspcbsd-plus",
+      "findings": 4,
+      "images": 4,
+      "boxes": 4
+    },
+    {
+      "signal": "class_size_outlier",
+      "check": "class_consistency",
+      "source": "dspcbsd-plus",
+      "findings": 202,
+      "images": 184,
+      "boxes": 202
+    },
+    {
+      "signal": "class_size_outlier",
+      "check": "class_consistency",
+      "source": "pcb-defect",
+      "findings": 13,
+      "images": 7,
+      "boxes": 13
+    },
+    {
+      "signal": "class_size_outlier",
+      "check": "class_consistency",
+      "source": "pcb-ind",
+      "findings": 117,
+      "images": 112,
+      "boxes": 117
+    },
+    {
+      "signal": "source_format_disagreement",
+      "check": "source_format",
+      "source": "pcb-ind",
+      "findings": 2,
+      "images": 2,
+      "boxes": 0
+    },
+    {
+      "signal": "near_duplicate_label_conflict",
+      "check": "neighbour_label",
+      "source": "dspcbsd-plus",
+      "findings": 85,
+      "images": 61,
+      "boxes": 0
+    },
+    {
+      "signal": "near_duplicate_label_conflict",
+      "check": "neighbour_label",
+      "source": "pcb-ind",
+      "findings": 4,
+      "images": 4,
+      "boxes": 0
+    },
+    {
+      "signal": "mapping_ambiguity",
+      "check": "mapping",
+      "source": "pcb-ind",
+      "findings": 2,
+      "images": 0,
+      "boxes": 0
+    }
+  ],
+  "examples": [
+    {
+      "signal": "zero_area_box",
+      "source_id": "pcb-ind",
+      "image_id": "YOLO/images/val/5799_t_038.jpg",
+      "ann_index": 4,
+      "original_label": "missing_copper",
+      "related_image_id": "",
+      "measure": 0.0,
+      "detail": "bbox [222.7, 0, 300, 0]"
+    },
+    {
+      "signal": "tiny_box",
+      "source_id": "dspcbsd-plus",
+      "image_id": "Data_COCO/train2017/2200_data.jpg",
+      "ann_index": 0,
+      "original_label": "SH",
+      "related_image_id": "",
+      "measure": 1.998,
+      "detail": "shorter side 1.998 px"
+    },
+    {
+      "signal": "tiny_box",
+      "source_id": "dspcbsd-plus",
+      "image_id": "Data_COCO/train2017/E_003632.jpg",
+      "ann_index": 2,
+      "original_label": "CFO",
+      "related_image_id": "",
+      "measure": 1.989,
+      "detail": "shorter side 1.9888 px"
+    },
+    {
+      "signal": "tiny_box",
+      "source_id": "dspcbsd-plus",
+      "image_id": "Data_COCO/train2017/S_11065881.jpg",
+      "ann_index": 6,
+      "original_label": "SP",
+      "related_image_id": "",
+      "measure": 1.989,
+      "detail": "shorter side 1.9888 px"
+    },
+    {
+      "signal": "tiny_box",
+      "source_id": "pcb-ind",
+      "image_id": "YOLO/images/train/6090_t_003.jpg",
+      "ann_index": 1,
+      "original_label": "missing_copper",
+      "related_image_id": "",
+      "measure": 0.491,
+      "detail": "shorter side 0.4905 px"
+    },
+    {
+      "signal": "extreme_aspect_ratio",
+      "source_id": "dspcbsd-plus",
+      "image_id": "Data_COCO/train2017/S_11153597.jpg",
+      "ann_index": 2,
+      "original_label": "CS",
+      "related_image_id": "",
+      "measure": 22.22,
+      "detail": "9.9892 x 222 px"
+    },
+    {
+      "signal": "extreme_aspect_ratio",
+      "source_id": "dspcbsd-plus",
+      "image_id": "Data_COCO/train2017/S_12128912.jpg",
+      "ann_index": 3,
+      "original_label": "CS",
+      "related_image_id": "",
+      "measure": 69.86,
+      "detail": "3.0058 x 209.999 px"
+    },
+    {
+      "signal": "extreme_aspect_ratio",
+      "source_id": "pcb-ind",
+      "image_id": "YOLO/images/train/6090_t_003.jpg",
+      "ann_index": 1,
+      "original_label": "missing_copper",
+      "related_image_id": "",
+      "measure": 71.7,
+      "detail": "0.4905 x 35.1669 px"
+    },
+    {
+      "signal": "conflicting_box",
+      "source_id": "dspcbsd-plus",
+      "image_id": "Data_COCO/train2017/S_10030996.jpg",
+      "ann_index": 0,
+      "original_label": "MB",
+      "related_image_id": "Data_COCO/train2017/S_10030996.jpg",
+      "measure": 1.0,
+      "detail": "IoU 1.000 with box 1 (CFO)"
+    },
+    {
+      "signal": "conflicting_box",
+      "source_id": "dspcbsd-plus",
+      "image_id": "Data_COCO/train2017/S_10310848.jpg",
+      "ann_index": 1,
+      "original_label": "SP",
+      "related_image_id": "Data_COCO/train2017/S_10310848.jpg",
+      "measure": 1.0,
+      "detail": "IoU 1.000 with box 2 (SC)"
+    },
+    {
+      "signal": "conflicting_box",
+      "source_id": "dspcbsd-plus",
+      "image_id": "Data_COCO/train2017/S_12160115.jpg",
+      "ann_index": 0,
+      "original_label": "SC",
+      "related_image_id": "Data_COCO/train2017/S_12160115.jpg",
+      "measure": 0.9651,
+      "detail": "IoU 0.965 with box 1 (CFO)"
+    },
+    {
+      "signal": "conflicting_box",
+      "source_id": "dspcbsd-plus",
+      "image_id": "Data_COCO/train2017/S_12617158.jpg",
+      "ann_index": 2,
+      "original_label": "HB",
+      "related_image_id": "Data_COCO/train2017/S_12617158.jpg",
+      "measure": 1.0,
+      "detail": "IoU 1.000 with box 5 (CFO)"
+    },
+    {
+      "signal": "class_size_outlier",
+      "source_id": "dspcbsd-plus",
+      "image_id": "Data_COCO/train2017/0004990.jpg",
+      "ann_index": 0,
+      "original_label": "SP",
+      "related_image_id": "",
+      "measure": 3.67,
+      "detail": "box area 4.39% of the image; the median SP box covers 0.31%"
+    },
+    {
+      "signal": "class_size_outlier",
+      "source_id": "dspcbsd-plus",
+      "image_id": "Data_COCO/train2017/0035494.jpg",
+      "ann_index": 0,
+      "original_label": "SP",
+      "related_image_id": "",
+      "measure": 4.0,
+      "detail": "box area 5.57% of the image; the median SP box covers 0.31%"
+    },
+    {
+      "signal": "class_size_outlier",
+      "source_id": "dspcbsd-plus",
+      "image_id": "Data_COCO/train2017/0058262.jpg",
+      "ann_index": 4,
+      "original_label": "SP",
+      "related_image_id": "",
+      "measure": 4.04,
+      "detail": "box area 5.73% of the image; the median SP box covers 0.31%"
+    },
+    {
+      "signal": "class_size_outlier",
+      "source_id": "dspcbsd-plus",
+      "image_id": "Data_COCO/train2017/0058408.jpg",
+      "ann_index": 0,
+      "original_label": "SP",
+      "related_image_id": "",
+      "measure": 3.86,
+      "detail": "box area 5.06% of the image; the median SP box covers 0.31%"
+    },
+    {
+      "signal": "class_size_outlier",
+      "source_id": "dspcbsd-plus",
+      "image_id": "Data_COCO/train2017/0058474.jpg",
+      "ann_index": 0,
+      "original_label": "BMFO",
+      "related_image_id": "",
+      "measure": 3.85,
+      "detail": "box area 28.62% of the image; the median BMFO box covers 0.51%"
+    },
+    {
+      "signal": "source_format_disagreement",
+      "source_id": "pcb-ind",
+      "image_id": "YOLO/images/train/6194_b_017.jpg",
+      "ann_index": null,
+      "original_label": "copper_burr",
+      "related_image_id": "",
+      "measure": null,
+      "detail": "ingest flag voc_unreadable"
+    },
+    {
+      "signal": "source_format_disagreement",
+      "source_id": "pcb-ind",
+      "image_id": "YOLO/images/val/5799_t_038.jpg",
+      "ann_index": null,
+      "original_label": "missing_copper;spurious_copper",
+      "related_image_id": "",
+      "measure": null,
+      "detail": "ingest flag coco_missing_box"
+    },
+    {
+      "signal": "near_duplicate_label_conflict",
+      "source_id": "dspcbsd-plus",
+      "image_id": "Data_COCO/train2017/E_001868.jpg",
+      "ann_index": null,
+      "original_label": "HB",
+      "related_image_id": "Data_COCO/train2017/E_002011.jpg",
+      "measure": 0.9766,
+      "detail": "normalized labels [hole_breakout] vs [hole_breakout;scratch]; cosine 0.977, pHash distance 0"
+    },
+    {
+      "signal": "near_duplicate_label_conflict",
+      "source_id": "dspcbsd-plus",
+      "image_id": "Data_COCO/train2017/S_10105470.jpg",
+      "ann_index": null,
+      "original_label": "SC;SP",
+      "related_image_id": "Data_COCO/train2017/S_10105910.jpg",
+      "measure": 0.9572,
+      "detail": "normalized labels [spur;spurious_copper] vs [spur]; cosine 0.957, pHash distance 4"
+    },
+    {
+      "signal": "near_duplicate_label_conflict",
+      "source_id": "dspcbsd-plus",
+      "image_id": "Data_COCO/train2017/S_10310142.jpg",
+      "ann_index": null,
+      "original_label": "CFO;MB",
+      "related_image_id": "Data_COCO/val2017/Y_003663.jpg",
+      "measure": 0.9392,
+      "detail": "normalized labels [conductor_foreign_object;mouse_bite] vs [mouse_bite]; cosine 0.939, pHash distance 0"
+    },
+    {
+      "signal": "near_duplicate_label_conflict",
+      "source_id": "dspcbsd-plus",
+      "image_id": "Data_COCO/train2017/S_11033398.jpg",
+      "ann_index": null,
+      "original_label": "SC",
+      "related_image_id": "Data_COCO/train2017/S_11033473.jpg",
+      "measure": 0.9991,
+      "detail": "normalized labels [spurious_copper] vs [base_material_foreign_object;spurious_copper]; cosine 0.999, pHash distance 0"
+    },
+    {
+      "signal": "near_duplicate_label_conflict",
+      "source_id": "dspcbsd-plus",
+      "image_id": "Data_COCO/train2017/S_11047161.jpg",
+      "ann_index": null,
+      "original_label": "MB",
+      "related_image_id": "Data_COCO/train2017/S_11047188.jpg",
+      "measure": 0.9587,
+      "detail": "normalized labels [mouse_bite] vs [open]; cosine 0.959, pHash distance 2"
+    },
+    {
+      "signal": "mapping_ambiguity",
+      "source_id": "pcb-ind",
+      "image_id": "",
+      "ann_index": null,
+      "original_label": "copper_burr",
+      "related_image_id": "",
+      "measure": 1174.0,
+      "detail": "candidate class spur; 1174 boxes in 1057 images keep their own class (not merged)"
+    },
+    {
+      "signal": "mapping_ambiguity",
+      "source_id": "pcb-ind",
+      "image_id": "",
+      "ann_index": null,
+      "original_label": "stain",
+      "related_image_id": "",
+      "measure": 584.0,
+      "detail": "candidate class conductor_foreign_object; 584 boxes in 521 images keep their own class (not merged)"
+    }
+  ],
+  "agreement": [
+    {
+      "scope": "dspcbsd-plus",
+      "near_pairs": 3211,
+      "near_pairs_differing": 1313,
+      "strict_pairs": 392,
+      "strict_pairs_differing": 85
+    },
+    {
+      "scope": "dspcbsd-plus / pcb-ind",
+      "near_pairs": 30,
+      "near_pairs_differing": 30,
+      "strict_pairs": 0,
+      "strict_pairs_differing": 0
+    },
+    {
+      "scope": "pcb-defect",
+      "near_pairs": 410,
+      "near_pairs_differing": 92,
+      "strict_pairs": 2,
+      "strict_pairs_differing": 0
+    },
+    {
+      "scope": "pcb-ind",
+      "near_pairs": 1466,
+      "near_pairs_differing": 504,
+      "strict_pairs": 60,
+      "strict_pairs_differing": 4
+    }
+  ],
+  "review_rows": 437,
+  "human_validation": {
+    "queue": "artifacts/m3/review-candidates.csv",
+    "queued": 300,
+    "reviewed": 0
+  },
+  "artifacts": {
+    "taxonomy-map.parquet": "94c83673ec0d3096381ea05cf029164a0d6263bd67b13b7480f5249c39303dba",
+    "review-required.csv": "d8fe87c29fa0e549739fec7855ec2756326800d6b100840371b454189777d769"
+  }
+}

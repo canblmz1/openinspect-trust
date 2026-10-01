@@ -4,6 +4,14 @@ All notable changes are recorded here. Format: [Keep a Changelog](https://keepac
 
 ## [Unreleased]
 
+### Added — M4: taxonomy and label quality
+
+- `configs/taxonomy.yaml`: every source label mapped once to a normalized class with a status (EXACT, COMPATIBLE, AMBIGUOUS, SOURCE_SPECIFIC, REJECTED) and quoted evidence; a two-level hierarchy; the candidate merges that were examined and not made; the label-quality rules. Explained in [docs/TAXONOMY.md](docs/TAXONOMY.md).
+- `openinspect taxonomy check | audit | report`: `check` verifies the mapping against the source manifests and the ingest reports (in CI, no data); `audit` writes `artifacts/m4/taxonomy-map.parquet` (one row per box, original and normalized label side by side), `artifacts/m4/review-required.csv` (status `REVIEW_REQUIRED`, decision columns empty), `artifacts/m4/audit.json` and `reports/m4/` (taxonomy mapping, class overlap, label quality); `report` re-renders them.
+- Benchmark classes (reached by every source with EXACT or COMPATIBLE): `short`, `open`, `mouse_bite`, `spurious_copper`.
+- `openinspect.validation`: the human-validation status is read from the M3 review queue; every M3 report now states "Human validation: NOT PERFORMED, reviewed pairs 0 / 300" and the limitation of the similarity findings (T29). No M3 number changed.
+- Decisions T29–T31.
+
 ### Added — M3: similarity and leakage audit, dataset assurance report
 
 - `openinspect dedup features | synthetic | analyze | review | report | run`.

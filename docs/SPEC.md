@@ -161,6 +161,8 @@ At ingest an annotation is keyed by (`source_dataset`, `source_item_id`, `ann_in
 ### 6.5 Taxonomy mapping (brief §17)
 `taxonomy/mapping.csv` with columns `source_dataset, original_label, normalized_label, confidence, reason, review_status`. `confidence` is `high` / `medium` / `low`. Only `review_status = approved` rows apply to a release.
 
+**As implemented in M4 (T30):** the mapping is `configs/taxonomy.yaml`: per source label a `normalized_label`, a `status` (EXACT, COMPATIBLE, AMBIGUOUS, SOURCE_SPECIFIC, REJECTED) and quoted `evidence`; the per-box result is `artifacts/m4/taxonomy-map.parquet`. A release uses only benchmark classes, those every source reaches with EXACT or COMPATIBLE; that is what "approved" means in I9. See [TAXONOMY](TAXONOMY.md).
+
 ### 6.6 Split files
 `manifests/splits/<scheme>__seed<N>.csv` (`id,split`) plus `.meta.json` (scheme, seed, hash of the image-record file, generator version, counts, SHA-256 of the CSV).
 
@@ -298,7 +300,7 @@ Logged with evidence, reason, risk and revisit condition in [DECISIONS](DECISION
 | D6 | locations: repository stays; data and virtual environment outside OneDrive | decided |
 | D7 | scale and crop policy: native resolution, about 300×300 ROI crops for `pcb-defect` | decided in principle, frozen at the start of M5 |
 | D8 | EVREN facts | recorded in [EVREN](EVREN.md); two items UNKNOWN |
-| D9 | human review budget: about 300 label items and 300 calibration pairs | confirmed at M3: a seeded queue of 300 pairs exists; the review is pending |
+| D9 | human review budget: about 300 label items and 300 calibration pairs | a seeded queue of 300 pairs exists (M3) and a label-quality queue (M4); both unreviewed, skipped for now (T29) |
 | D10 | analysis defaults: δ = 0.02 mAP50, 1,000 resamples, 3 seeds | default, revisited after the pilot |
 
 ## 13. Roadmap (proposed after M0; effort S/M/L)
@@ -319,7 +321,7 @@ Logged with evidence, reason, risk and revisit condition in [DECISIONS](DECISION
 | M11 | research poster and SAYZEK project brief | M |
 | optional | FastAPI backend (brief §33), after M9 | M |
 
-Status on 2026-10-01: M0 to M3 are done; the human review of the M3 queue and M4 (taxonomy and label audit) are next.
+Status on 2026-10-01: M0 to M4 are done; the human review of the M3 queue is skipped for now (T29); M5 (release assembly and splits) is next.
 
 ## 14. Related work and positioning
 

@@ -1,6 +1,6 @@
 # Repository structure
 
-Target layout (brief §34) with additions marked **+**. The last column says which milestone creates the item. M0 to M3 files exist today; the rest appears with its milestone.
+Target layout (brief §34) with additions marked **+**. The last column says which milestone creates the item. M0 to M4 files exist today; the rest appears with its milestone.
 
 ```
 openinspect-trust/
@@ -15,26 +15,30 @@ openinspect-trust/
 │   │                                        reports, review pack (embeddings/ was merged in here, T19);
 │   │                                        generic keys only: group_id, subgroup_id, acquisition_id (T24)
 │   ├── assurance.py                       + dimensional dataset assurance report, no scalar score (T26)    M3
-│   ├── taxonomy/                            mapping load, validate, apply                               M4
-│   ├── audit/                               label-quality signals, review queue                         M4
+│   ├── validation.py                      + human-validation status read from a review queue (T29)     M4
+│   ├── files.py                           + atomic writes, digests, deterministic Parquet               M4
+│   ├── taxonomy/                            taxonomy config, mapping, label-quality checks, audit and   M4
+│   │                                        reports (the planned audit/ package lives here, T31)
 │   ├── split/                               A0, A1, B (LOSO), invariants                                M5
 │   ├── benchmark/                           InferenceProvider, evaluator, metrics, runner, reports      M7–M9
 │   └── evren/                               client.py (HTTP), export.py (YOLO/COCO ZIP), EvrenProvider  M6–M8
-├── configs/                                 licences.yaml (allowlist), dedup.yaml (pinned models, and   M1, M3
-│                                            what each source's keys mean: the adapter mapping, T24)
+├── configs/                                 licences.yaml (allowlist), dedup.yaml (pinned models, and   M1, M3, M4
+│                                            what each source's keys mean: the adapter mapping, T24),
+│                                            taxonomy.yaml (label mapping with statuses, T30)
 ├── artifacts/m3/                          + audit.json (every M3 number), leakage groups, candidate    M3
 │                                            pairs, review queue; the neighbour table is ignored (T20)
+├── artifacts/m4/                          + audit.json, taxonomy-map.parquet (per box), review-required  M4
 ├── manifests/
 │   ├── sources/                             one YAML per source + _template.yaml                        M0
 │   ├── evidence/<slug>/                     + archived records, hashed in SHA256SUMS.txt                M0
 │   ├── ingest/<slug>/                       + download.json, report.json; cross_source.json             M2
 │   ├── images/                              + provenance JSONL per release (release assembly)           M5
 │   └── splits/                              + split files and meta                                      M5
-├── taxonomy/                                mapping.csv                                                 M4
 ├── experiments/                             frozen experiment configs, DEVIATIONS.md, EVREN run notes   M7
 ├── benchmarks/                              run records, metrics, dedup_calibration/                    M3, M7
 ├── reports/                                 ingest (M2), m3/ similarity and leakage reports with SVG     M2+
-│                                            figures, later audit and gap reports (all generated)
+│                                            figures, m4/ taxonomy and label-quality reports, later gap
+│                                            reports (all generated)
 ├── scripts/                                 thin helpers only; logic lives in the package               as needed
 ├── tests/
 │   ├── unit/, integration/
@@ -72,7 +76,7 @@ Heavy data lives outside git and outside OneDrive, under `OPENINSPECT_DATA_DIR`:
 
 | tracked | ignored |
 |---|---|
-| manifests (YAML), evidence (small JSON/PDF), ingest reports, the M3 audit JSON and small tables, release provenance JSONL, taxonomy CSV, split files, run records, reports, docs, code, synthetic fixtures | images, archives, embeddings, weights, the M3 neighbour table and review pack, `.env`, caches, virtual environments |
+| manifests (YAML), evidence (small JSON/PDF), ingest reports, the M3 and M4 audit JSON and small tables, the taxonomy config, release provenance, split files, run records, reports, docs, code, synthetic fixtures | images, archives, embeddings, weights, the M3 neighbour table and review pack, `.env`, caches, virtual environments |
 
 ## Conventions
 
