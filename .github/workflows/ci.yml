@@ -81,3 +81,5 @@ jobs:
       - run: uv run openinspect source validate --strict
       # Every source label mapped once, with evidence (configs/taxonomy.yaml, docs/TAXONOMY.md).
       - run: uv run openinspect taxonomy check
+      # Release v0.1 from its committed files: hashes and the leakage invariants (SPEC 7.6).
+      - run: uv run openinspect release check

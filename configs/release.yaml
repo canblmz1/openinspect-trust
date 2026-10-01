@@ -1,0 +1,23 @@
+# Release assembly (Milestone 5). Read by openinspect.release.config; decisions T32 to T35 in docs/DECISIONS.md.
+schema_version: 1
+version: v0.1
+seed: 0
+
+size: {min: 2000, max: 5000}     # images in the release (SPEC 3)
+max_source_share: 0.4            # no source above 40% of the release (SPEC 3)
+negatives: exclude               # images without boxes: only one source ships them (T34)
+
+crops:                           # decision D7, frozen at the start of M5 (T32)
+  pcb-defect:                    # large lab scans: every scan also holds a non-benchmark box (M4)
+    min_side_px: 300             # square ROI crop in native pixels, never resized (about a PCB-IND patch)
+    margin: 0.1                  # the anchor box fills at most 80% of the crop side; larger boxes get larger crops
+    format: png                  # lossless, because the parent is a JPEG (SPEC 7.1)
+
+splits:
+  ratios: {train: 0.7, val: 0.2, test: 0.1}   # A0 and A1 (SPEC 7.6)
+  held_out_val: 0.15                          # B: validation share of the training sources, group-aware
+  canonical: A1                               # the split stored with every item
+
+smoke:                           # EVREN import smoke test (M6): a few known items per split
+  scheme: A1
+  counts: {train: 10, val: 5, test: 5}
