@@ -36,7 +36,7 @@
 |---|---|
 | `reports/m7_final/scripts/final_analysis.py` | `4a3f3808e7114957f10ddaed8e25f2c1282c1becbfd9f3c52421985fae48213d` |
 | `reports/m7_final/scripts/lib.py` | `fc2bb46b4a2c9a9c093ca3c5fc2fffc3dd2a9def8da621dec246914429303e88` |
-| `reports/m7_final/scripts/make_freeze_manifest.py` | `d1cfed355511c3b846a620b3bd5bbc243d6eb05a8417ef0f83a4fc27f4730ae3` |
+| `reports/m7_final/scripts/make_freeze_manifest.py` | `dfc3c60c20fa73e92922bfdba0488160a322659d9cad453ee6ca86a8f9e1920e` |
 | `scripts/m7_evaluate.py` | `b710082286acf2765949e8969d689b771ae4059cfcaeebcee9febb0ac9694ce1` |
 | `paper/scripts/audit_numbers.py` | `b61d90c261f9a73e11facafcea29ee80bdebca49fdf71e167d64d876b2a27846` |
 | `paper/scripts/check_latex.py` | `95ed36a33e72177b76119573cc00e59cbcc34ab0b89659cc2cf3d7ccc14da745` |
@@ -107,7 +107,6 @@
 |---|---|
 | `reports/m7_final/FINAL_D1_DIAGNOSIS.md` | `5e47ee7172e2acdf4dc0d6dcd5f8c25d9df014f335874289cc293ce5baf62709` |
 | `reports/m7_final/FINAL_EXECUTIVE_SUMMARY_TR.md` | `afaf3f70acf96451667f4acce984132189312db8aee9af10eb36d04d20500ccd` |
-| `reports/m7_final/FINAL_FREEZE_MANIFEST.md` | `80f9240cbe2ee1d44c07c8f1bbadf7688862074fb6c37944e97756b937eb555a` |
 | `reports/m7_final/FINAL_GROUP_EXPOSURE_RESULT.md` | `35b17c3820ca4b010b559d5defa65d15fe23de42cf9cd9a5b121a0b8e7531053` |
 | `reports/m7_final/FINAL_SAFE_CLAIMS.md` | `20fb50a26cc919312e249ba846401682ae60d70fc2e1375f4582d31f262e1f5d` |
 | `reports/m7_final/FINAL_SCIENTIFIC_VERDICT.md` | `c0de0aad26b428ff170edf6e2dad97178400b67f17b929806794c9462ba3ce5c` |

@@ -20,7 +20,7 @@ groups = {
     "Figures": sorted((ROOT / "paper/figures").glob("*.png")),
     "Paper files": [ROOT / "paper/manuscript.md", ROOT / "paper/arxiv/main.tex", ROOT / "paper/arxiv/main_anonymous.tex", ROOT / "paper/arxiv/references.bib", ROOT / "paper/arxiv/main.pdf", ROOT / "paper/arxiv/main_anonymous.pdf", ROOT / "paper/arxiv/ARXIV_UPLOAD_MANIFEST.txt",
         *sorted((ROOT / "paper/tables").glob("*.md")), *sorted((ROOT / "paper/submission").glob("*"))],
-    "Final reports": [*sorted(F.glob("FINAL_*.md")), F / "PUBLICATION_CONSISTENCY_AUDIT.md", F / "PUBLICATION_RELEASE_CHECKLIST.md",
+    "Final reports": [*(p for p in sorted(F.glob("FINAL_*.md")) if p.name != "FINAL_FREEZE_MANIFEST.md"), F / "PUBLICATION_CONSISTENCY_AUDIT.md", F / "PUBLICATION_RELEASE_CHECKLIST.md",
         ROOT / "paper/CITATION_AUDIT.md", ROOT / "paper/FINAL_REVIEWER_2_AUDIT.md"],
 }
 L = ["# Final freeze manifest: OpenInspect-Trust M7", "",
