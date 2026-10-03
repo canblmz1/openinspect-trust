@@ -1,0 +1,16 @@
+OpenInspect-Trust M7 - arXiv upload manifest (3 October 2026)
+Upload these files (source + figures). arXiv compiles main.tex with pdfLaTeX; the source uses only standard packages (inputenc, fontenc, geometry, graphicx, booktabs, amsmath, amssymb, adjustbox, hyperref) and plain BibTeX.
+Primary category suggestion: cs.CV. No arXiv ID assigned yet.
+
+SHA-256 (as committed; LF line endings per .gitattributes)  file
+8450f57dfb13546b0fa25f5d24fe1a5ddb77626a48a7ec2148141ed55916b453 *main.tex
+b00daaae893a122acdc79fd86bca3f7ec8c2adca6e4d992ca5836b3bf113eda7 *references.bib
+e634aa9663fb538d9fd5ffab0eec3e6bb0689a2f69b3a00994dbd0f50faed037 *figures/fig1_exposure_gain.png
+992eb9167e035998bd4e903e913aa864cef303f84e34200324bc7941e17db6ab *figures/fig2_source_shift.png
+34d8772a996bbda6e3991cc8406fe53f8bab753a07b5d9af6e0bd115da664685 *figures/fig3_replication.png
+
+Reference build (not uploaded): main.pdf
+7678a9a6d97359ab375986baaeeb325c908a1e1a0bf7fb51f28f03a59fac93f7 *main.pdf
+
+Abstract for the arXiv form: paper/submission/ABSTRACT.txt (239 words, 1,677 characters; limit 1,920).
+Title: Train–Test Group Exposure and Source Shift in PCB Defect Detection: A Controlled Benchmark Assurance Study

@@ -1,0 +1,1 @@
+Train–Test Group Exposure and Source Shift in PCB Defect Detection: A Controlled Benchmark Assurance Study

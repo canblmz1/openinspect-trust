@@ -1,0 +1,1 @@
+benchmark assurance; train-test group exposure; data leakage; group-aware splitting; industrial visual inspection; PCB defect detection; object detection; domain shift; source-held-out evaluation; reproducibility
