@@ -1,0 +1,463 @@
+{
+ "design0": {
+  "train_C0": 3102,
+  "train_C1": 3102,
+  "train_only_C0": 213,
+  "train_only_C1": 213,
+  "val_C0": 698,
+  "val_C1": 698,
+  "val_only_C0": 0,
+  "val_only_C1": 0,
+  "test_C0": 407,
+  "test_C1": 407,
+  "test_only_C0": 0,
+  "test_only_C1": 0,
+  "C0_minus_C1_train_equals_mates": true,
+  "C1_minus_C0_train_equals_replacements": true,
+  "test_equals_probes_plus_controls": true,
+  "pkg_test_files_identical_sha256": true,
+  "pkg_test_n_files": 814,
+  "pkg_val_files_identical_sha256": true,
+  "pkg_val_n_files": 1396,
+  "pkg_train_diff_C0_is_mates": true,
+  "pkg_train_diff_C1_is_replacements": true,
+  "pkg_train_common_identical": true,
+  "pkg_test_images_match_release_sha256_mismatches": 0,
+  "probes_with_constraint_group_in_C0_train": 194,
+  "probes_with_constraint_group_in_C1_train": 0,
+  "controls_with_constraint_group_in_C0_train": 0,
+  "controls_with_constraint_group_in_C1_train": 0,
+  "probes_whose_exposure_group_has_C0_train_mate": 194,
+  "control_group_sizes": {
+   "1": 141,
+   "2": 4,
+   "3": 6,
+   "8": 8,
+   "15": 15,
+   "39": 39
+  },
+  "probe_group_sizes": {
+   "count": 194.0,
+   "mean": 18.2,
+   "std": 17.26,
+   "min": 2.0,
+   "25%": 2.0,
+   "50%": 7.0,
+   "75%": 38.0,
+   "max": 44.0
+  },
+  "profile_mates": {
+   "n": 213,
+   "source": {
+    "pcb-ind": 97,
+    "dspcbsd-plus": 95,
+    "pcb-defect": 21
+   },
+   "boxes": 278,
+   "boxes_per_img": 1.305,
+   "class_boxes": {
+    "spurious_copper": 90,
+    "mouse_bite": 85,
+    "open": 64,
+    "short": 39
+   },
+   "median_wh": [
+    300.0,
+    300.0
+   ],
+   "ext": {
+    "jpg": 192,
+    "png": 21
+   },
+   "median_rel_box_area": 0.00993333753,
+   "mean_rel_box_area": 0.026038596912524116
+  },
+  "profile_replacements": {
+   "n": 213,
+   "source": {
+    "pcb-ind": 97,
+    "dspcbsd-plus": 95,
+    "pcb-defect": 21
+   },
+   "boxes": 263,
+   "boxes_per_img": 1.235,
+   "class_boxes": {
+    "spurious_copper": 86,
+    "mouse_bite": 85,
+    "open": 59,
+    "short": 33
+   },
+   "median_wh": [
+    300.0,
+    300.0
+   ],
+   "ext": {
+    "jpg": 192,
+    "png": 21
+   },
+   "median_rel_box_area": 0.009478859161,
+   "mean_rel_box_area": 0.026365223216462695
+  },
+  "profile_probes": {
+   "n": 194,
+   "source": {
+    "dspcbsd-plus": 88,
+    "pcb-ind": 86,
+    "pcb-defect": 20
+   },
+   "boxes": 240,
+   "boxes_per_img": 1.237,
+   "class_boxes": {
+    "mouse_bite": 90,
+    "spurious_copper": 68,
+    "open": 47,
+    "short": 35
+   },
+   "median_wh": [
+    300.0,
+    300.0
+   ],
+   "ext": {
+    "jpg": 174,
+    "png": 20
+   },
+   "median_rel_box_area": 0.009145105969999996,
+   "mean_rel_box_area": 0.031725606251152186
+  },
+  "profile_controls": {
+   "n": 213,
+   "source": {
+    "dspcbsd-plus": 89,
+    "pcb-ind": 85,
+    "pcb-defect": 39
+   },
+   "boxes": 260,
+   "boxes_per_img": 1.221,
+   "class_boxes": {
+    "mouse_bite": 104,
+    "spurious_copper": 95,
+    "open": 38,
+    "short": 23
+   },
+   "median_wh": [
+    300.0,
+    300.0
+   ],
+   "ext": {
+    "jpg": 174,
+    "png": 39
+   },
+   "median_rel_box_area": 0.011080681666666661,
+   "mean_rel_box_area": 0.03628564849962102
+  },
+  "replacements_whose_group_touches_test_or_val": 0
+ },
+ "design1": {
+  "train_C0": 3099,
+  "train_C1": 3099,
+  "train_only_C0": 214,
+  "train_only_C1": 214,
+  "val_C0": 699,
+  "val_C1": 699,
+  "val_only_C0": 0,
+  "val_only_C1": 0,
+  "test_C0": 408,
+  "test_C1": 408,
+  "test_only_C0": 0,
+  "test_only_C1": 0,
+  "C0_minus_C1_train_equals_mates": true,
+  "C1_minus_C0_train_equals_replacements": true,
+  "test_equals_probes_plus_controls": true,
+  "pkg_test_files_identical_sha256": true,
+  "pkg_test_n_files": 816,
+  "pkg_val_files_identical_sha256": true,
+  "pkg_val_n_files": 1398,
+  "pkg_train_diff_C0_is_mates": true,
+  "pkg_train_diff_C1_is_replacements": true,
+  "pkg_train_common_identical": true,
+  "pkg_test_images_match_release_sha256_mismatches": 0,
+  "probes_with_constraint_group_in_C0_train": 193,
+  "probes_with_constraint_group_in_C1_train": 0,
+  "controls_with_constraint_group_in_C0_train": 0,
+  "controls_with_constraint_group_in_C1_train": 0,
+  "probes_whose_exposure_group_has_C0_train_mate": 193,
+  "control_group_sizes": {
+   "1": 129,
+   "2": 12,
+   "3": 12,
+   "4": 4,
+   "5": 5,
+   "12": 12,
+   "41": 41
+  },
+  "probe_group_sizes": {
+   "count": 193.0,
+   "mean": 16.79,
+   "std": 15.64,
+   "min": 2.0,
+   "25%": 2.0,
+   "50%": 8.0,
+   "75%": 29.0,
+   "max": 44.0
+  },
+  "profile_mates": {
+   "n": 214,
+   "source": {
+    "pcb-ind": 99,
+    "dspcbsd-plus": 95,
+    "pcb-defect": 20
+   },
+   "boxes": 268,
+   "boxes_per_img": 1.252,
+   "class_boxes": {
+    "mouse_bite": 88,
+    "spurious_copper": 83,
+    "open": 59,
+    "short": 38
+   },
+   "median_wh": [
+    300.0,
+    300.0
+   ],
+   "ext": {
+    "jpg": 194,
+    "png": 20
+   },
+   "median_rel_box_area": 0.010110213325500005,
+   "mean_rel_box_area": 0.025196379409607984
+  },
+  "profile_replacements": {
+   "n": 214,
+   "source": {
+    "pcb-ind": 99,
+    "dspcbsd-plus": 95,
+    "pcb-defect": 20
+   },
+   "boxes": 258,
+   "boxes_per_img": 1.206,
+   "class_boxes": {
+    "mouse_bite": 89,
+    "spurious_copper": 80,
+    "open": 53,
+    "short": 36
+   },
+   "median_wh": [
+    300.0,
+    300.0
+   ],
+   "ext": {
+    "jpg": 194,
+    "png": 20
+   },
+   "median_rel_box_area": 0.012690899999999996,
+   "mean_rel_box_area": 0.03563682470095168
+  },
+  "profile_probes": {
+   "n": 193,
+   "source": {
+    "dspcbsd-plus": 88,
+    "pcb-ind": 86,
+    "pcb-defect": 19
+   },
+   "boxes": 247,
+   "boxes_per_img": 1.28,
+   "class_boxes": {
+    "mouse_bite": 90,
+    "spurious_copper": 76,
+    "open": 51,
+    "short": 30
+   },
+   "median_wh": [
+    300.0,
+    300.0
+   ],
+   "ext": {
+    "jpg": 174,
+    "png": 19
+   },
+   "median_rel_box_area": 0.009776373666000017,
+   "mean_rel_box_area": 0.02898591297618836
+  },
+  "profile_controls": {
+   "n": 215,
+   "source": {
+    "dspcbsd-plus": 89,
+    "pcb-ind": 85,
+    "pcb-defect": 41
+   },
+   "boxes": 241,
+   "boxes_per_img": 1.121,
+   "class_boxes": {
+    "mouse_bite": 103,
+    "spurious_copper": 63,
+    "open": 46,
+    "short": 29
+   },
+   "median_wh": [
+    300.0,
+    300.0
+   ],
+   "ext": {
+    "jpg": 174,
+    "png": 41
+   },
+   "median_rel_box_area": 0.009746633528000002,
+   "mean_rel_box_area": 0.033330230419083944
+  },
+  "replacements_whose_group_touches_test_or_val": 0
+ },
+ "design2": {
+  "train_C0": 3103,
+  "train_C1": 3103,
+  "train_only_C0": 210,
+  "train_only_C1": 210,
+  "val_C0": 698,
+  "val_C1": 698,
+  "val_only_C0": 0,
+  "val_only_C1": 0,
+  "test_C0": 409,
+  "test_C1": 409,
+  "test_only_C0": 0,
+  "test_only_C1": 0,
+  "C0_minus_C1_train_equals_mates": true,
+  "C1_minus_C0_train_equals_replacements": true,
+  "test_equals_probes_plus_controls": true,
+  "pkg_test_files_identical_sha256": true,
+  "pkg_test_n_files": 818,
+  "pkg_val_files_identical_sha256": true,
+  "pkg_val_n_files": 1396,
+  "pkg_train_diff_C0_is_mates": true,
+  "pkg_train_diff_C1_is_replacements": true,
+  "pkg_train_common_identical": true,
+  "pkg_test_images_match_release_sha256_mismatches": 0,
+  "probes_with_constraint_group_in_C0_train": 194,
+  "probes_with_constraint_group_in_C1_train": 0,
+  "controls_with_constraint_group_in_C0_train": 0,
+  "controls_with_constraint_group_in_C1_train": 0,
+  "probes_whose_exposure_group_has_C0_train_mate": 194,
+  "control_group_sizes": {
+   "1": 135,
+   "2": 16,
+   "3": 6,
+   "4": 8,
+   "5": 5,
+   "6": 6,
+   "39": 39
+  },
+  "probe_group_sizes": {
+   "count": 194.0,
+   "mean": 16.46,
+   "std": 15.78,
+   "min": 2.0,
+   "25%": 2.0,
+   "50%": 9.0,
+   "75%": 29.0,
+   "max": 44.0
+  },
+  "profile_mates": {
+   "n": 210,
+   "source": {
+    "dspcbsd-plus": 95,
+    "pcb-ind": 94,
+    "pcb-defect": 21
+   },
+   "boxes": 265,
+   "boxes_per_img": 1.262,
+   "class_boxes": {
+    "spurious_copper": 93,
+    "mouse_bite": 73,
+    "open": 59,
+    "short": 40
+   },
+   "median_wh": [
+    300.0,
+    300.0
+   ],
+   "ext": {
+    "jpg": 189,
+    "png": 21
+   },
+   "median_rel_box_area": 0.010210014359999995,
+   "mean_rel_box_area": 0.034595885024744505
+  },
+  "profile_replacements": {
+   "n": 210,
+   "source": {
+    "dspcbsd-plus": 95,
+    "pcb-ind": 94,
+    "pcb-defect": 21
+   },
+   "boxes": 255,
+   "boxes_per_img": 1.214,
+   "class_boxes": {
+    "spurious_copper": 92,
+    "mouse_bite": 72,
+    "open": 55,
+    "short": 36
+   },
+   "median_wh": [
+    300.0,
+    300.0
+   ],
+   "ext": {
+    "jpg": 189,
+    "png": 21
+   },
+   "median_rel_box_area": 0.010847345527000006,
+   "mean_rel_box_area": 0.027174918996631055
+  },
+  "profile_probes": {
+   "n": 194,
+   "source": {
+    "dspcbsd-plus": 88,
+    "pcb-ind": 86,
+    "pcb-defect": 20
+   },
+   "boxes": 243,
+   "boxes_per_img": 1.253,
+   "class_boxes": {
+    "spurious_copper": 81,
+    "mouse_bite": 79,
+    "open": 53,
+    "short": 30
+   },
+   "median_wh": [
+    300.0,
+    300.0
+   ],
+   "ext": {
+    "jpg": 174,
+    "png": 20
+   },
+   "median_rel_box_area": 0.0101775,
+   "mean_rel_box_area": 0.02286813500477751
+  },
+  "profile_controls": {
+   "n": 215,
+   "source": {
+    "dspcbsd-plus": 89,
+    "pcb-ind": 87,
+    "pcb-defect": 39
+   },
+   "boxes": 256,
+   "boxes_per_img": 1.191,
+   "class_boxes": {
+    "mouse_bite": 95,
+    "spurious_copper": 90,
+    "open": 49,
+    "short": 22
+   },
+   "median_wh": [
+    300.0,
+    300.0
+   ],
+   "ext": {
+    "jpg": 176,
+    "png": 39
+   },
+   "median_rel_box_area": 0.011763140420000005,
+   "mean_rel_box_area": 0.040104511734525256
+  },
+  "replacements_whose_group_touches_test_or_val": 0
+ }
+}

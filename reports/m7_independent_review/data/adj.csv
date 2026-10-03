@@ -1,0 +1,43 @@
+code,label,confidence,rationale
+J00,C,LOW,layout plausibly rotated 180 degrees (pin rows and diagonal trace group correspond); not verified
+J01,A,MEDIUM,same ring pad with identical trace texture; zoomed/cropped copy
+J02,A,MEDIUM,same damaged spur and gap pattern; near-identical
+J03,F,LOW,textured dark board with holes; correspondence cannot be established
+J04,C,LOW,trace pair spacing matches with defect at same x; other traces differ
+J05,F,LOW,possible 90-degree rotation of one layout; cannot confirm
+J06,C,LOW,diagonal thin trace pairs with opens; plausibly same layout region; defects differ
+J07,A,HIGH,identical board image; small crop/brightness differences only
+J08,A,MEDIUM,same dim notched corner with identical notch
+J09,A,MEDIUM,whole board horizontally mirrored (pin columns and routing mirror); Pass A missed it
+J10,A,MEDIUM,same rings, bumped traces and pour edge; brightness and small shift
+J11,C,MEDIUM,same layout rotated 180 degrees (central spiral and pin rows correspond); could be a rotated copy
+J12,C,LOW,same stripe pitch and colour with pinhole at similar place; defect size differs
+J13,E,MEDIUM,ring pads on different backgrounds with different defects
+J14,C,LOW,trace pair spacing matches with defect at same x; other traces differ
+J15,B,LOW,same stripe arrangement around wide band with pinhole; brightness differs
+J16,D,MEDIUM,debris on copper pad; pad geometry and debris differ
+J17,D,LOW,stained copper; stain shapes differ
+J18,A,MEDIUM,same pad and pinhole; near-identical with small shift
+J19,D,LOW,hole grid with stains; hole spacing similar but stains differ completely
+J20,C,LOW,trace pair spacing matches with defect at same x; other traces differ
+J21,C,LOW,bent trace bundle with similar geometry; defects differ
+J22,A,MEDIUM,whole board horizontally mirrored incl. marker glyph and pad rows
+J23,C,LOW,hole edge with defect at similar spot; tone and framing differ
+J24,D,MEDIUM,copper blobs on dark; shapes differ
+J25,D,MEDIUM,small copper particle on dark; shapes differ
+J26,D,MEDIUM,small copper particle on dark; shapes differ
+J27,E,MEDIUM,different pad/trace layouts and defects
+J28,D,MEDIUM,small copper particle on dark; shapes differ
+J29,C,LOW,same thermal pad type; in-hole defects at mirror-consistent positions but symmetric pad prevents confirming a mirrored copy
+J30,C,LOW,similar pad and trace fan; partial correspondence under shift
+J31,A,LOW,thin trace pair with edge irregularities that mirror each other; plausible flipped copy
+J32,E,MEDIUM,different hole/ring layouts
+J33,D,MEDIUM,different trace/pad layouts
+J34,F,LOW,possible 90-degree rotation of one layout; cannot confirm
+J35,D,LOW,generic hole with small burr on same copper tone
+J36,F,LOW,hole with similar burr at same position; texture differs; generic feature, cannot decide
+J37,C,LOW,trace pair spacing matches with nick at same x; outer traces differ
+J38,F,LOW,irregular copper patches on dark; possible shifted correspondence not verifiable
+J39,D,HIGH,different board layouts
+J40,C,LOW,same thermal pad type; rim defects only partly correspond
+J41,A,MEDIUM,copper edge with bump: mirrored, cropped, darkened copy (missed by both blinded passes)

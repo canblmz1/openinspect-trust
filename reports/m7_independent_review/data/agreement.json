@@ -1,0 +1,24 @@
+{
+ "all_342": {
+  "n": 342,
+  "exact_agreement": 0.8801169590643275,
+  "cohen_kappa_6": 0.8244485063975762,
+  "linear_weighted_kappa_AtoE": 0.8765467960262593,
+  "related_vs_not_agreement": 0.9444444444444444,
+  "related_vs_not_kappa": 0.8754743014832701,
+  "AB_vs_rest_kappa": 0.9102079395085066
+ },
+ "candidates_300": {
+  "n": 300,
+  "exact_agreement": 0.8866666666666667,
+  "cohen_kappa_6": 0.8227720535853909,
+  "linear_weighted_kappa_AtoE": 0.8805384420626213,
+  "related_vs_not_agreement": 0.9433333333333334,
+  "related_vs_not_kappa": 0.8710427834530191,
+  "AB_vs_rest_kappa": 0.92152466367713,
+  "cohen_kappa_6_ci95": [
+   0.7628708840586864,
+   0.8774421201647319
+  ]
+ }
+}

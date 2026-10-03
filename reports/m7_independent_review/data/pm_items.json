@@ -1,0 +1,542 @@
+[
+ {
+  "item": "PM-000",
+  "kind": "probe_nearest_mate:crop sibling",
+  "a": "OI_pcb-defect_d2d57596e2dc",
+  "b": "OI_pcb-defect_f43d04d586d2"
+ },
+ {
+  "item": "PM-001",
+  "kind": "probe_nearest_mate:crop sibling",
+  "a": "OI_pcb-defect_4b98cea2c1df",
+  "b": "OI_pcb-defect_cee167eb9b50"
+ },
+ {
+  "item": "PM-002",
+  "kind": "probe_nearest_mate:crop sibling",
+  "a": "OI_pcb-defect_0ab8220b2561",
+  "b": "OI_pcb-defect_7acfa3a9d349"
+ },
+ {
+  "item": "PM-003",
+  "kind": "probe_nearest_mate:crop sibling",
+  "a": "OI_pcb-defect_a330a8e53fbf",
+  "b": "OI_pcb-defect_131a637c140e"
+ },
+ {
+  "item": "PM-004",
+  "kind": "probe_nearest_mate:crop sibling",
+  "a": "OI_pcb-defect_9a780eb8fce5",
+  "b": "OI_pcb-defect_a9934270897e"
+ },
+ {
+  "item": "PM-005",
+  "kind": "probe_nearest_mate:crop sibling",
+  "a": "OI_pcb-defect_ce5b2d80283f",
+  "b": "OI_pcb-defect_a9934270897e"
+ },
+ {
+  "item": "PM-006",
+  "kind": "probe_nearest_mate:crop sibling",
+  "a": "OI_pcb-defect_7339d2a40d51",
+  "b": "OI_pcb-defect_60f112c4adea"
+ },
+ {
+  "item": "PM-007",
+  "kind": "probe_nearest_mate:crop sibling",
+  "a": "OI_pcb-defect_dca7df2e9f35",
+  "b": "OI_pcb-defect_037a6c5a88c0"
+ },
+ {
+  "item": "PM-008",
+  "kind": "probe_nearest_mate:crop sibling",
+  "a": "OI_pcb-defect_36db30c1bbeb",
+  "b": "OI_pcb-defect_cee167eb9b50"
+ },
+ {
+  "item": "PM-009",
+  "kind": "probe_nearest_mate:crop sibling",
+  "a": "OI_pcb-defect_9bf650087988",
+  "b": "OI_pcb-defect_661504452187"
+ },
+ {
+  "item": "PM-010",
+  "kind": "probe_nearest_mate:crop sibling",
+  "a": "OI_pcb-defect_d7b76b5ab431",
+  "b": "OI_pcb-defect_037a6c5a88c0"
+ },
+ {
+  "item": "PM-011",
+  "kind": "probe_nearest_mate:crop sibling",
+  "a": "OI_pcb-defect_3f2c1d6626b3",
+  "b": "OI_pcb-defect_6c2287d5af28"
+ },
+ {
+  "item": "PM-012",
+  "kind": "probe_nearest_mate:similar pair",
+  "a": "OI_dspcbsd-plus_4c90c9d061aa",
+  "b": "OI_dspcbsd-plus_001368584365"
+ },
+ {
+  "item": "PM-013",
+  "kind": "probe_nearest_mate:similar pair",
+  "a": "OI_dspcbsd-plus_4bfa310b7d17",
+  "b": "OI_dspcbsd-plus_7a70f7d5f018"
+ },
+ {
+  "item": "PM-014",
+  "kind": "probe_nearest_mate:similar pair",
+  "a": "OI_dspcbsd-plus_fe4d5298873b",
+  "b": "OI_dspcbsd-plus_001368584365"
+ },
+ {
+  "item": "PM-015",
+  "kind": "probe_nearest_mate:similar pair",
+  "a": "OI_dspcbsd-plus_42f2e2ccb3b1",
+  "b": "OI_dspcbsd-plus_a4d97e1bb28d"
+ },
+ {
+  "item": "PM-016",
+  "kind": "probe_nearest_mate:similar pair",
+  "a": "OI_dspcbsd-plus_0940574db3dd",
+  "b": "OI_dspcbsd-plus_f45929834e71"
+ },
+ {
+  "item": "PM-017",
+  "kind": "probe_nearest_mate:similar pair",
+  "a": "OI_dspcbsd-plus_26f8cde0048f",
+  "b": "OI_dspcbsd-plus_ca520caede4d"
+ },
+ {
+  "item": "PM-018",
+  "kind": "probe_nearest_mate:similar pair",
+  "a": "OI_dspcbsd-plus_794731f2493f",
+  "b": "OI_dspcbsd-plus_400aa198068c"
+ },
+ {
+  "item": "PM-019",
+  "kind": "probe_nearest_mate:similar pair",
+  "a": "OI_dspcbsd-plus_36a61eb52066",
+  "b": "OI_dspcbsd-plus_a4d97e1bb28d"
+ },
+ {
+  "item": "PM-020",
+  "kind": "probe_nearest_mate:similar pair",
+  "a": "OI_dspcbsd-plus_390f3bc9b929",
+  "b": "OI_dspcbsd-plus_215b40390cc7"
+ },
+ {
+  "item": "PM-021",
+  "kind": "probe_nearest_mate:similar pair",
+  "a": "OI_dspcbsd-plus_4cb795ae146b",
+  "b": "OI_dspcbsd-plus_4b28fac5f3b9"
+ },
+ {
+  "item": "PM-022",
+  "kind": "probe_nearest_mate:similar pair",
+  "a": "OI_dspcbsd-plus_25a62020f985",
+  "b": "OI_dspcbsd-plus_cc18a59105fb"
+ },
+ {
+  "item": "PM-023",
+  "kind": "probe_nearest_mate:similar pair",
+  "a": "OI_dspcbsd-plus_387eb11e88bb",
+  "b": "OI_dspcbsd-plus_7ef8c1b54634"
+ },
+ {
+  "item": "PM-024",
+  "kind": "probe_nearest_mate:similar pair",
+  "a": "OI_dspcbsd-plus_aab8b8266436",
+  "b": "OI_dspcbsd-plus_af42cb7e1bcf"
+ },
+ {
+  "item": "PM-025",
+  "kind": "probe_nearest_mate:similar pair",
+  "a": "OI_pcb-defect_890e41c13fcb",
+  "b": "OI_pcb-defect_60f112c4adea"
+ },
+ {
+  "item": "PM-026",
+  "kind": "probe_nearest_mate:similar pair",
+  "a": "OI_dspcbsd-plus_a2f9dc8bf3c4",
+  "b": "OI_dspcbsd-plus_cdb66e719d3a"
+ },
+ {
+  "item": "PM-027",
+  "kind": "probe_nearest_mate:similar pair",
+  "a": "OI_dspcbsd-plus_86d6904064a2",
+  "b": "OI_dspcbsd-plus_09cc73bb3092"
+ },
+ {
+  "item": "PM-028",
+  "kind": "probe_nearest_mate:same component",
+  "a": "OI_dspcbsd-plus_de38b28bfccc",
+  "b": "OI_dspcbsd-plus_c6f5b5eb7a09"
+ },
+ {
+  "item": "PM-029",
+  "kind": "probe_nearest_mate:same component",
+  "a": "OI_dspcbsd-plus_c5c737f691f6",
+  "b": "OI_dspcbsd-plus_be2c9a110964"
+ },
+ {
+  "item": "PM-030",
+  "kind": "probe_nearest_mate:same component",
+  "a": "OI_dspcbsd-plus_5f8e748f24e4",
+  "b": "OI_dspcbsd-plus_1e5c3f1a8fb5"
+ },
+ {
+  "item": "PM-031",
+  "kind": "probe_nearest_mate:same component",
+  "a": "OI_dspcbsd-plus_a6f493e08d9c",
+  "b": "OI_dspcbsd-plus_a447cf91b72f"
+ },
+ {
+  "item": "PM-032",
+  "kind": "probe_nearest_mate:same component",
+  "a": "OI_dspcbsd-plus_12abe0924d24",
+  "b": "OI_dspcbsd-plus_ec7d48a3c36d"
+ },
+ {
+  "item": "PM-033",
+  "kind": "probe_nearest_mate:same component",
+  "a": "OI_dspcbsd-plus_6156805e6cd7",
+  "b": "OI_dspcbsd-plus_402e360b0497"
+ },
+ {
+  "item": "PM-034",
+  "kind": "probe_nearest_mate:same component",
+  "a": "OI_dspcbsd-plus_66c759c1989f",
+  "b": "OI_dspcbsd-plus_ec7d48a3c36d"
+ },
+ {
+  "item": "PM-035",
+  "kind": "probe_nearest_mate:same component",
+  "a": "OI_dspcbsd-plus_010f6b274095",
+  "b": "OI_dspcbsd-plus_bb3e349132f6"
+ },
+ {
+  "item": "PM-036",
+  "kind": "probe_nearest_mate:same component",
+  "a": "OI_dspcbsd-plus_ed3013de37bc",
+  "b": "OI_dspcbsd-plus_402e360b0497"
+ },
+ {
+  "item": "PM-037",
+  "kind": "probe_nearest_mate:same component",
+  "a": "OI_dspcbsd-plus_52e2a4e2a44e",
+  "b": "OI_dspcbsd-plus_880fd323c90d"
+ },
+ {
+  "item": "PM-038",
+  "kind": "probe_nearest_mate:same component",
+  "a": "OI_dspcbsd-plus_b85b5e071b18",
+  "b": "OI_dspcbsd-plus_1e5c3f1a8fb5"
+ },
+ {
+  "item": "PM-039",
+  "kind": "probe_nearest_mate:same component",
+  "a": "OI_dspcbsd-plus_c038d894bbe6",
+  "b": "OI_dspcbsd-plus_9ba529913caf"
+ },
+ {
+  "item": "PM-040",
+  "kind": "probe_nearest_mate:same metadata group",
+  "a": "OI_pcb-ind_86ae5af772a3",
+  "b": "OI_pcb-ind_89a92041ecbc"
+ },
+ {
+  "item": "PM-041",
+  "kind": "probe_nearest_mate:same metadata group",
+  "a": "OI_pcb-ind_f6eb9255bef7",
+  "b": "OI_pcb-ind_1d6b0588a249"
+ },
+ {
+  "item": "PM-042",
+  "kind": "probe_nearest_mate:same metadata group",
+  "a": "OI_pcb-ind_9a749bb738c5",
+  "b": "OI_pcb-ind_bb6d5320537d"
+ },
+ {
+  "item": "PM-043",
+  "kind": "probe_nearest_mate:same metadata group",
+  "a": "OI_pcb-ind_9d7e69a622e9",
+  "b": "OI_dspcbsd-plus_ec7d48a3c36d"
+ },
+ {
+  "item": "PM-044",
+  "kind": "probe_nearest_mate:same metadata group",
+  "a": "OI_pcb-ind_749dffbd3b46",
+  "b": "OI_pcb-ind_6c8b72f85fa6"
+ },
+ {
+  "item": "PM-045",
+  "kind": "probe_nearest_mate:same metadata group",
+  "a": "OI_pcb-ind_72dc02a94096",
+  "b": "OI_pcb-ind_e03ed9080d9a"
+ },
+ {
+  "item": "PM-046",
+  "kind": "probe_nearest_mate:same metadata group",
+  "a": "OI_pcb-ind_36a2d9f76942",
+  "b": "OI_dspcbsd-plus_85474c3f47d4"
+ },
+ {
+  "item": "PM-047",
+  "kind": "probe_nearest_mate:same metadata group",
+  "a": "OI_pcb-ind_80b7c38e9298",
+  "b": "OI_pcb-ind_a79b9085c1ac"
+ },
+ {
+  "item": "PM-048",
+  "kind": "probe_nearest_mate:same metadata group",
+  "a": "OI_pcb-ind_de55fdc55c6f",
+  "b": "OI_pcb-ind_cfa2bd2a413c"
+ },
+ {
+  "item": "PM-049",
+  "kind": "probe_nearest_mate:same metadata group",
+  "a": "OI_pcb-ind_c4ec377ec89f",
+  "b": "OI_pcb-ind_489ded0ffa57"
+ },
+ {
+  "item": "PM-050",
+  "kind": "probe_nearest_mate:same metadata group",
+  "a": "OI_pcb-ind_669c77ab449a",
+  "b": "OI_pcb-ind_9cca0808fdc4"
+ },
+ {
+  "item": "PM-051",
+  "kind": "probe_nearest_mate:same metadata group",
+  "a": "OI_pcb-ind_a9e785bddae9",
+  "b": "OI_pcb-ind_e8f50eef7e5d"
+ },
+ {
+  "item": "PM-052",
+  "kind": "probe_nearest_mate:same metadata group",
+  "a": "OI_pcb-ind_1f7ae6db263a",
+  "b": "OI_pcb-ind_22d67529de97"
+ },
+ {
+  "item": "PM-053",
+  "kind": "probe_nearest_mate:same metadata group",
+  "a": "OI_pcb-ind_b5cec1e181e7",
+  "b": "OI_pcb-ind_ba73e8de24ae"
+ },
+ {
+  "item": "PM-054",
+  "kind": "probe_nearest_mate:same metadata group",
+  "a": "OI_pcb-ind_61164e6ebb9a",
+  "b": "OI_dspcbsd-plus_2a66eea6036d"
+ },
+ {
+  "item": "PM-055",
+  "kind": "probe_nearest_mate:same metadata group",
+  "a": "OI_pcb-ind_f1edfe22bada",
+  "b": "OI_pcb-ind_ef65623a36a4"
+ },
+ {
+  "item": "PM-056",
+  "kind": "probe_nearest_mate:same metadata group",
+  "a": "OI_pcb-ind_d280e970584b",
+  "b": "OI_pcb-ind_c1569843f29f"
+ },
+ {
+  "item": "PM-057",
+  "kind": "probe_nearest_mate:same metadata group",
+  "a": "OI_pcb-ind_6ada68a07442",
+  "b": "OI_pcb-ind_d7371c34b1aa"
+ },
+ {
+  "item": "PM-058",
+  "kind": "probe_nearest_mate:same metadata group",
+  "a": "OI_pcb-ind_d897e78ee311",
+  "b": "OI_pcb-ind_6c8b72f85fa6"
+ },
+ {
+  "item": "PM-059",
+  "kind": "probe_nearest_mate:same metadata group",
+  "a": "OI_pcb-ind_69c41b6a4bc4",
+  "b": "OI_pcb-ind_82c2d347dd58"
+ },
+ {
+  "item": "CN-060",
+  "kind": "control_nearest_C0_train",
+  "a": "OI_dspcbsd-plus_40408cca793c",
+  "b": "OI_dspcbsd-plus_f98511422fde"
+ },
+ {
+  "item": "CN-061",
+  "kind": "control_nearest_C0_train",
+  "a": "OI_dspcbsd-plus_4d8634a1312d",
+  "b": "OI_pcb-ind_8c9c5f111e1b"
+ },
+ {
+  "item": "CN-062",
+  "kind": "control_nearest_C0_train",
+  "a": "OI_pcb-ind_b6e9d493bcba",
+  "b": "OI_pcb-ind_5add620a7f33"
+ },
+ {
+  "item": "CN-063",
+  "kind": "control_nearest_C0_train",
+  "a": "OI_pcb-defect_1e97e020edd9",
+  "b": "OI_pcb-defect_209be83fc398"
+ },
+ {
+  "item": "CN-064",
+  "kind": "control_nearest_C0_train",
+  "a": "OI_pcb-defect_8420432f007a",
+  "b": "OI_pcb-defect_1cb90d5aee16"
+ },
+ {
+  "item": "CN-065",
+  "kind": "control_nearest_C0_train",
+  "a": "OI_pcb-ind_86c6ee2bd9b4",
+  "b": "OI_pcb-ind_a6c448e4ce31"
+ },
+ {
+  "item": "CN-066",
+  "kind": "control_nearest_C0_train",
+  "a": "OI_pcb-defect_b7eff2a20d83",
+  "b": "OI_pcb-defect_1cb90d5aee16"
+ },
+ {
+  "item": "CN-067",
+  "kind": "control_nearest_C0_train",
+  "a": "OI_pcb-defect_bce51c116712",
+  "b": "OI_pcb-defect_be7ff166bc20"
+ },
+ {
+  "item": "CN-068",
+  "kind": "control_nearest_C0_train",
+  "a": "OI_dspcbsd-plus_9f8272043024",
+  "b": "OI_dspcbsd-plus_9662587f89da"
+ },
+ {
+  "item": "CN-069",
+  "kind": "control_nearest_C0_train",
+  "a": "OI_pcb-defect_e2dcd6c87f7f",
+  "b": "OI_pcb-defect_1cb90d5aee16"
+ },
+ {
+  "item": "CN-070",
+  "kind": "control_nearest_C0_train",
+  "a": "OI_dspcbsd-plus_9ede34aace44",
+  "b": "OI_dspcbsd-plus_551a5b7aef9b"
+ },
+ {
+  "item": "CN-071",
+  "kind": "control_nearest_C0_train",
+  "a": "OI_dspcbsd-plus_4dcb879b4f26",
+  "b": "OI_pcb-ind_9dc19ec3c9dd"
+ },
+ {
+  "item": "CN-072",
+  "kind": "control_nearest_C0_train",
+  "a": "OI_pcb-ind_609b1b64cc9e",
+  "b": "OI_pcb-ind_fbee6f37dfb8"
+ },
+ {
+  "item": "CN-073",
+  "kind": "control_nearest_C0_train",
+  "a": "OI_pcb-defect_9a495444d514",
+  "b": "OI_pcb-defect_51a740d7e7ac"
+ },
+ {
+  "item": "CN-074",
+  "kind": "control_nearest_C0_train",
+  "a": "OI_pcb-defect_56ab66e6743f",
+  "b": "OI_pcb-defect_51a740d7e7ac"
+ },
+ {
+  "item": "CN-075",
+  "kind": "control_nearest_C0_train",
+  "a": "OI_pcb-ind_2b737a4631b7",
+  "b": "OI_pcb-ind_e8f50eef7e5d"
+ },
+ {
+  "item": "CN-076",
+  "kind": "control_nearest_C0_train",
+  "a": "OI_pcb-defect_6f1dcb3615a0",
+  "b": "OI_pcb-defect_6aa0ec85a9e9"
+ },
+ {
+  "item": "CN-077",
+  "kind": "control_nearest_C0_train",
+  "a": "OI_dspcbsd-plus_9b1d4a40fe5b",
+  "b": "OI_dspcbsd-plus_4733f99a33f7"
+ },
+ {
+  "item": "CN-078",
+  "kind": "control_nearest_C0_train",
+  "a": "OI_dspcbsd-plus_ad9f0c3d9ae9",
+  "b": "OI_dspcbsd-plus_0e327acb9057"
+ },
+ {
+  "item": "CN-079",
+  "kind": "control_nearest_C0_train",
+  "a": "OI_pcb-defect_157fb4b54395",
+  "b": "OI_pcb-defect_1cb90d5aee16"
+ },
+ {
+  "item": "CN-080",
+  "kind": "control_nearest_C0_train",
+  "a": "OI_pcb-ind_b29a09abc632",
+  "b": "OI_dspcbsd-plus_3d8d5f0c1663"
+ },
+ {
+  "item": "CN-081",
+  "kind": "control_nearest_C0_train",
+  "a": "OI_dspcbsd-plus_9ad7cdfaa6d7",
+  "b": "OI_pcb-ind_b5bb34e01ca1"
+ },
+ {
+  "item": "CN-082",
+  "kind": "control_nearest_C0_train",
+  "a": "OI_pcb-ind_1de1b231957e",
+  "b": "OI_pcb-ind_29c424bf7ca6"
+ },
+ {
+  "item": "CN-083",
+  "kind": "control_nearest_C0_train",
+  "a": "OI_pcb-defect_29e7eaf5b889",
+  "b": "OI_pcb-defect_51a740d7e7ac"
+ },
+ {
+  "item": "CN-084",
+  "kind": "control_nearest_C0_train",
+  "a": "OI_pcb-ind_ffdc100fbc99",
+  "b": "OI_pcb-ind_198d98ac55c7"
+ },
+ {
+  "item": "CN-085",
+  "kind": "control_nearest_C0_train",
+  "a": "OI_dspcbsd-plus_cb1d7e5227ff",
+  "b": "OI_dspcbsd-plus_537d500613ab"
+ },
+ {
+  "item": "CN-086",
+  "kind": "control_nearest_C0_train",
+  "a": "OI_dspcbsd-plus_2cbcab4d1768",
+  "b": "OI_dspcbsd-plus_8ba235fef3ff"
+ },
+ {
+  "item": "CN-087",
+  "kind": "control_nearest_C0_train",
+  "a": "OI_pcb-ind_21ecfe0fa13a",
+  "b": "OI_pcb-ind_4a8a95bea6a2"
+ },
+ {
+  "item": "CN-088",
+  "kind": "control_nearest_C0_train",
+  "a": "OI_pcb-ind_c7f192d3f710",
+  "b": "OI_pcb-ind_5799f9e435bd"
+ },
+ {
+  "item": "CN-089",
+  "kind": "control_nearest_C0_train",
+  "a": "OI_pcb-ind_fb37baaa751b",
+  "b": "OI_pcb-ind_3e242fb729b7"
+ }
+]

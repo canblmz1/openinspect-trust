@@ -1,0 +1,68 @@
+pair_id,code,final_category,confidence,adjudication_reason,same_board_relation
+PM-035,J00,D,LOW,ring-in-copper pads of the same kind but ring/hole proportions differ; not shown to be the same design,
+CN-079,J01,D,MEDIUM,"same hand-etched green-FR4 board style and scratch texture; different regions, no shared geometry",
+CN-065,J02,D,LOW,45-degree bend bundles; trace widths and spacing differ,
+PM-015,J03,E,LOW,generic diagonal thin traces; trace count and spacing differ,
+PM-017,J04,C,LOW,same jogging trace geometry (mirrored) with copper speck in the gap; spacing consistent,
+PM-002,J05,D,MEDIUM,"same board style; ladder/pad region vs broken horizontal traces, no shared geometry",
+CN-073,J06,D,MEDIUM,"same green-FR4 board style; Y-junction/pad region vs mouse-bite trace, no shared geometry",
+CN-071,J07,E,MEDIUM,different pad/trace topologies; only the dark-mask style is shared,
+PM-051,J08,E,LOW,trace pair with nick vs copper edge with nick; content too sparse for a specific relation,visually unrelated (sparse content)
+PM-037,J09,D,LOW,"square-pad array pattern in both; pad size and pitch not shown to match, defects differ",
+PM-043,J10,E,LOW,diagonal trace pairs with different width and pitch,visually unrelated (generic diagonal traces)
+PM-009,J11,D,MEDIUM,"same green-FR4 board style; H-link traces vs horizontal traces, no shared geometry",
+CN-081,J12,E,MEDIUM,different clearance geometry and surface finish; style only,
+PM-004,J13,D,LOW,same green-FR4 style with loop pads at right edge; overlap of regions not verifiable,
+CN-088,J14,C,LOW,horizontal clearance lines with a bridge defect at the same x and a hole at left; line count differs (different crop),
+PM-034,J15,C,MEDIUM,same diagonal two-trace geometry with a nick at the same relative position; right crop wider,
+CN-085,J16,D,LOW,copper specks in a vertical line next to a round pad in both; shapes differ,
+PM-010,J17,D,MEDIUM,"same green-FR4 style; ladder trace vs ring-pad trace, no shared geometry",
+PM-038,J18,D,LOW,square-pad array pattern; zoom and pad pitch differ; defects differ,
+PM-044,J19,E,MEDIUM,agreed E: edge blob vs hole with insert; no shared structure,visually unrelated
+PM-022,J20,D,LOW,parallel diagonal trace bus with similar pitch; no specific matching feature,
+PM-049,J21,D,LOW,"two vertical clearance channels with a hole to the right; spacing similar, no unique feature matches",same batch/layout only (similar layout elements)
+CN-083,J22,D,MEDIUM,"same green-FR4 style; diagonal traces vs mouse-bite trace, no shared geometry",
+PM-053,J23,G,MEDIUM,"agreed G: dark, blurry, low-content images",ambiguous
+PM-003,J24,D,MEDIUM,"same green-FR4 style; diagonal traces vs ring-pad trace, no shared geometry",
+CN-063,J25,D,MEDIUM,"same green-FR4 style; diagonal H-link vs broken vertical trace, no shared geometry",
+PM-052,J26,E,MEDIUM,agreed E: copper corner vs copper fingers; style only,visually unrelated
+PM-008,J27,D,MEDIUM,"same green-FR4 style; ladder vs broken vertical traces, no shared geometry",
+PM-006,J28,D,MEDIUM,"same green-FR4 style; ring-pad traces vs H-link traces, no shared geometry",
+PM-005,J29,D,MEDIUM,"same green-FR4 style; Y-junction pad vs H-link traces, no shared geometry",
+PM-041,J30,E,LOW,agreed E: blurry damaged pad regions; no matching structure,visually unrelated
+PM-007,J31,D,MEDIUM,"same green-FR4 style; mouse-bite trace vs ring-pad trace, no shared geometry",
+CN-076,J32,D,MEDIUM,"same green-FR4 style; H-link vs broken diagonal trace, no shared geometry",
+PM-039,J33,D,LOW,"diagonal thin trace pairs; spacing similar, defects at different places",
+PM-059,J34,G,MEDIUM,agreed G: near-empty dark image,ambiguous
+CN-066,J35,D,MEDIUM,"same green-FR4 style; H-link vs trace group, no shared geometry",
+CN-064,J36,D,MEDIUM,"same green-FR4 style; broken trace with ring pads vs trace group, no shared geometry",
+CN-086,J37,E,LOW,trace-to-square-pad vs straight trace under pad; nick defects in both but layouts differ,
+PM-050,J38,E,LOW,agreed E: generic copper/dark corner,visually unrelated
+PM-029,J39,D,LOW,square-pad array with edge nick; mask colour and pitch differ,
+CN-072,J40,D,LOW,similar wide land with hole style; the regions do not overlap,
+PM-000,J41,D,MEDIUM,"same green-FR4 style; H-link traces vs broken horizontal trace, no shared geometry",
+PM-025,J42,D,MEDIUM,"same green-FR4 style; bar traces vs H-link traces with loop pads, no shared geometry",
+PM-056,J43,E,LOW,agreed E: generic copper/dark L-corner,visually unrelated
+PM-055,J44,E,LOW,agreed E: pad edge vs hole in damaged copper,visually unrelated
+PM-028,J45,D,LOW,parallel diagonal trace bus with similar pitch; defects differ (spur vs bridge),
+PM-031,J46,D,LOW,"square-pad array with edge nick in both; mask tone differs, nothing specific matches",
+PM-001,J47,D,MEDIUM,"same green-FR4 style; mouse-bite trace vs broken vertical trace, no shared geometry",
+PM-011,J48,D,MEDIUM,"same green-FR4 style; H-link vs three horizontal traces, no shared geometry",
+PM-033,J49,D,LOW,diagonal thin trace pairs with similar spacing; extra trace and defect positions differ,
+CN-067,J50,D,MEDIUM,"same green-FR4 style; trace pair with H-bridge vs broken pair, no specific geometry match",
+CN-074,J51,D,MEDIUM,"same green-FR4 style; diagonal traces with pads vs mouse-bite trace, no shared geometry",
+CN-069,J52,D,MEDIUM,"same green-FR4 style; blurry trace close-up vs trace group, no shared geometry",
+PM-040,J53,B,MEDIUM,"same rounded pad with an identical bright damage streak along its lower edge, seen in two overlapping crops (trace on right in one, neighbouring land on left in the other)",same physical board region from another crop (visually likely)
+PM-054,J54,E,LOW,"bent trace bundles with opposite polarity, scale and direction; nothing specific matches",visually unrelated
+PM-026,J55,E,MEDIUM,same dark-mask copper style; different trace and pad regions with no overlap,visually unrelated (style only)
+PM-024,J56,B,HIGH,identical three-trace spacing and the same bubble defect on the second trace at the same position; slight shift and appearance change,
+PM-047,J57,B,MEDIUM,matching dark blob outline and lobed copper edge contour; overlapping crops of one dark capture,same physical board region from another crop (visually likely)
+PM-058,J58,E,MEDIUM,"agreed E: holes in copper, one with an edge blob; no shared layout",visually unrelated
+PM-048,J59,E,MEDIUM,agreed E: different clearance layouts on copper,visually unrelated
+CN-080,J60,E,MEDIUM,different clearance geometry and copper finish; style only,visually unrelated
+PM-045,J61,E,MEDIUM,agreed E: diagonal vs vertical copper edges with different contamination,visually unrelated
+PM-032,J62,D,LOW,diagonal thin-trace pairs in opposite orientation; spacing and trace count differ,
+PM-057,J63,E,MEDIUM,"same beige-copper/black style; vertical traces vs ring pads, no overlapping region",visually unrelated (style only)
+PM-018,J64,B,HIGH,"the two halves fit as one oval ring with stubs and dark circles: adjacent crops of one capture, or a 180-degree rotated copy (symmetric content cannot separate A from B)",
+PM-046,J65,D,LOW,agreed D: bent trace bundles with a hole; the regions do not overlap,same batch/layout only (similar layout elements)
+PM-042,J66,E,MEDIUM,agreed E: copper specks of different shape on dark; ring pads only in one image,visually unrelated

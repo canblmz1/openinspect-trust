@@ -1,0 +1,343 @@
+code,label,confidence,rationale
+B2486,A,HIGH,whole board horizontally mirrored
+B1693,D,HIGH,different board layouts
+B9062,D,MEDIUM,ring pads with different defects and backgrounds
+B4483,D,MEDIUM,pad with trace; bend shapes differ
+B1472,B,MEDIUM,same pit with one scratch at matching relative position
+B5284,C,LOW,same thermal-relief pad type; rim defects differ
+B4877,D,MEDIUM,edge protrusion at different positions; bands differ
+B1363,D,MEDIUM,horizontal traces of different spacing and defect types
+B5069,E,MEDIUM,stain on copper vs copper protrusion above hole
+B6637,E,MEDIUM,pad with hole vs copper blob
+B2571,D,LOW,copper patches on dark; no clear correspondence
+B3158,C,LOW,matching trace-pair spacing with defect at same x; other traces differ
+B2924,B,HIGH,same three-trace group, holes and defect; shifted crop
+B2671,E,HIGH,stain on copper vs hole on dark board
+B6742,E,MEDIUM,copper flake vs bluish particle
+B5283,B,MEDIUM,same two-pin-row board layout; same capture look; framing differs
+B7266,C,LOW,same stripe colour with edge defect; possibly different scale of same area
+B8271,D,HIGH,different board layouts
+B4312,C,LOW,textured dark board with hole grid and smudge; possible shifted correspondence
+B9074,D,MEDIUM,tiny particle on dark; generic
+B2723,B,HIGH,same trace bend with matching bump and hatch texture; shifted
+B5884,C,LOW,similar trace-gap-hole arrangement with defect on gap; colour and spacing differ
+B2199,D,HIGH,different board layouts
+B8444,D,LOW,pink/cream stripe style; bands and defects do not correspond
+B8426,E,HIGH,bright short bridge vs dark hole edge
+B5246,D,HIGH,different board layouts
+B3932,B,LOW,same pad/trace arrangement with bright in-hole defect at same spot; zoom differs
+B2943,C,LOW,same corner geometry; notch shapes differ
+B1275,D,MEDIUM,copper-pour boards with different routing
+B7188,E,MEDIUM,small hole in trace field vs large hole with sliver
+B3283,B,HIGH,same pad with hole and identical bluish residue; shifted crop
+B8875,D,MEDIUM,horizontal stripes; spacing and defect type differ
+B9408,D,MEDIUM,different trace/pad layouts
+B7081,E,MEDIUM,different trace/hole layouts and brightness
+B2102,C,LOW,same copper corner type; framing and edge differ
+B8915,D,MEDIUM,diagonal traces with hole; defects and geometry differ
+B5620,D,MEDIUM,horizontal stripe fields; spacing and defects differ
+B8105,D,MEDIUM,diagonal traces with breaks; geometry differs
+B6514,D,HIGH,different board layouts
+B6306,C,MEDIUM,same dog-bone pad-array design with in-hole defect; framing and highlights differ
+B1853,B,MEDIUM,same trace bend and holes; scratch fields broadly similar in place and angle
+B4745,D,MEDIUM,diagonal traces with small defects; spacing differs
+B3853,D,MEDIUM,horizontal traces with opens; spacing and gap sizes differ
+B1724,B,HIGH,same textured surface with matching hole and streaks; shifted
+B3092,D,LOW,similar trace fan with pads; arrangement correspondence unclear
+B2317,A,MEDIUM,same dim copper corner and edge profile; near-identical framing
+B2532,E,MEDIUM,stain vs drilled hole
+B2078,C,LOW,two-pin-row layout possibly rotated 90 degrees; uncertain
+B7629,D,MEDIUM,different board layouts with similar marker glyphs
+B4528,E,MEDIUM,bluish particle on green vs copper particle on dark
+B5243,D,MEDIUM,board layouts share pad-row corner but routing differs
+B5322,B,HIGH,same trace bend, holes and trace nick; shifted crop
+B5612,D,MEDIUM,different trace layouts and colours
+B9017,B,MEDIUM,same thin trace pair with bright marks at matching spacing and nick
+B9266,A,MEDIUM,same dim notched corner with identical notch; near-identical framing
+B2203,E,HIGH,dark pads vs ring pad on bright copper
+B1750,D,MEDIUM,square pad grid; colour and defect differ
+B3992,D,MEDIUM,pad-ended traces; layouts and colours differ
+B7864,E,MEDIUM,dark speck on green vs drilled hole
+B1531,E,MEDIUM,pad with hole vs copper blob
+B8864,D,MEDIUM,horizontal pads with defects; geometry differs
+B9451,D,MEDIUM,dense parallel traces; defect types differ
+B1516,B,HIGH,same ring pad and trace with same ring irregularity; shifted
+B6456,D,MEDIUM,vertical traces and pads; layouts differ
+B3264,D,MEDIUM,small copper particle on dark; shapes differ slightly
+B6654,D,MEDIUM,pin-row boards with different routing
+B7088,D,HIGH,different board layouts
+B1709,D,MEDIUM,parallel traces of different pitch and colour
+B4310,D,MEDIUM,isolated pad among traces; pad type and spacing differ
+B1937,C,MEDIUM,same three-trace bend geometry; spur defects differ
+B7407,C,LOW,same pad/ring-pad arrangement shifted; defect present in one only
+B7257,D,MEDIUM,different board layouts
+B5657,E,HIGH,isolated particle vs trace pair with residue
+B3539,B,HIGH,same board layout trace for trace; same capture look
+B8232,C,LOW,possibly the same layout rotated 90 degrees; uncertain
+B5671,C,LOW,same thermal pad type with rim defect; framing differs
+B1362,D,MEDIUM,generic hole with burr on similar copper tone
+B3135,E,HIGH,copper edge with line vs ring pad on dark with diagonal traces
+B8942,D,MEDIUM,parallel traces of different pitch and colour
+B1075,B,LOW,same thin trace pair spacing with nick at same x
+B4966,D,MEDIUM,parallel traces of different pitch and colour
+B8605,D,MEDIUM,ring pad on black; defects differ
+B2143,C,LOW,hole edge with defect at similar spot; framing and tone differ
+B3747,D,MEDIUM,parallel traces of different pitch and colour
+B2141,D,MEDIUM,bent wide trace with defect; orientation and defect differ
+B4556,E,MEDIUM,torn copper vs drilled hole on dark
+B4691,A,HIGH,same diagonal traces with debris at identical positions
+B9804,E,MEDIUM,slot with nick vs ring pad with in-hole defect
+B2742,B,MEDIUM,same hole edge with rim nick at matching spot; brightness differs
+B1505,E,MEDIUM,bluish particle on green vs large blob on black
+B4941,A,MEDIUM,same hole and gap with rim defects at identical positions
+B2854,D,MEDIUM,single trace with particle; textures differ
+B3422,C,LOW,diagonal trace pair with defect at similar place; spacing differs slightly
+B7182,D,MEDIUM,horizontal stripes with pinhole; band arrangement differs
+B2181,D,MEDIUM,hole grid with stain; stain shapes differ
+B5180,D,MEDIUM,different trace layouts
+B5734,E,MEDIUM,copper edge bump vs pad corner with hair
+B9516,A,MEDIUM,same notched copper corner and edge profile; near-identical framing
+B2379,C,LOW,same stripe pitch with pinhole at similar place; defect size differs
+B2280,B,HIGH,same board layout trace for trace; same capture look
+B5223,D,MEDIUM,copper particles on dark; shapes differ
+B4615,D,MEDIUM,bent trace fan; geometry differs
+B5623,D,MEDIUM,generic hole with burr on different tones
+B3983,D,MEDIUM,different trace/pad layouts and colours
+B7754,D,MEDIUM,horizontal traces with defects; count differs
+B2773,A,LOW,stained area with hole appears horizontally mirrored; partly verifiable
+B5426,D,MEDIUM,parallel traces of different pitch and colour
+B8042,E,MEDIUM,different pad/trace layouts and defects
+B3026,B,HIGH,same ring pad, rim defect and trace bundle; near-identical framing
+B7706,D,MEDIUM,straight copper edge with nick; generic
+B9839,A,MEDIUM,same dim notched corner with same edge profile
+B1418,D,HIGH,different board layouts
+B2246,E,MEDIUM,dark speck on green vs drilled hole on dark
+B7912,C,LOW,same thermal pad type; in-hole defects differ
+B7084,E,MEDIUM,pad with hole vs copper blob
+B6299,C,MEDIUM,same bent trace bundle; defects differ
+B7429,D,HIGH,different board layouts
+B2819,C,MEDIUM,same pad-array design; defect location differs
+B2278,D,MEDIUM,bent trace bundles; geometry differs
+B5132,D,MEDIUM,generic hole with burr on similar tone
+B4670,D,HIGH,different board layouts
+B4518,E,MEDIUM,copper particles vs ring pad
+B3913,D,MEDIUM,parallel traces of different pitch and colour
+B3015,D,MEDIUM,generic hole defect on different tones
+B5973,D,HIGH,different board layouts
+B3359,B,HIGH,same board layout trace for trace; same capture look
+B2449,D,MEDIUM,small copper particle on dark; shapes differ
+B8861,D,MEDIUM,ring pads and traces; layouts differ
+B9665,D,LOW,dark stains next to traces; shapes and trace orientation differ
+B5074,C,LOW,similar pad and trace fan arrangement; correspondence uncertain
+B1006,C,LOW,possibly the same layout rotated 90 degrees; uncertain
+B5101,D,MEDIUM,parallel traces of different pitch and colour
+B9381,D,MEDIUM,parallel traces of different pitch and colour
+B5705,D,MEDIUM,parallel traces of different pitch and colour
+B7239,D,MEDIUM,horizontal traces with defects; spacing and defect types differ
+B9116,B,MEDIUM,same slotted ring with hair-like defect at same place; defect shape differs slightly
+B2886,C,LOW,bent trace fan possibly mirrored with defect at similar place; uncertain
+B2766,A,MEDIUM,whole board appears horizontally mirrored (pin columns and routing mirror)
+B1799,A,HIGH,horizontally mirrored copy incl. slot, L-trace, dots and curved mark
+B7611,E,HIGH,trace end with hair vs blob on black
+B7972,C,LOW,ring pad on trace with joint defect; framing and damage differ
+B1618,D,MEDIUM,diagonal traces with holes; arrangement and defects differ
+B1120,A,LOW,thin trace pair with edge irregularities appears mirrored; uncertain
+B7782,A,MEDIUM,same wavy copper corner with identical rim highlight
+B8650,D,MEDIUM,ring pads in dark band; arrangements differ
+B7009,F,LOW,possibly the same layout at a different aspect ratio; cannot confirm
+B5652,D,MEDIUM,different board layouts (orientation differs)
+B8775,D,LOW,pit on scratched copper; scratch fields do not correspond
+B7925,D,MEDIUM,square pad grid; spacing and defect differ
+B7014,E,MEDIUM,pad/hole layout vs diagonal trace edge
+B5181,D,MEDIUM,parallel traces of different pitch and colour
+B3696,D,MEDIUM,generic hole defect on different tones
+B3829,B,MEDIUM,same pad array with dash defect at matching offset from a ring; shifted
+B6300,D,MEDIUM,board layouts differ (some shared motifs only)
+B2596,D,MEDIUM,copper blobs on dark; shapes differ
+B9871,C,LOW,trace pair spacing matches with defect at same x; other traces differ
+B1829,D,MEDIUM,large hole with copper sliver; texture and geometry differ
+B6854,C,LOW,same thermal pad type; in-hole marks differ
+B5333,D,MEDIUM,bent trace fans; geometry differs
+B3371,C,LOW,same thermal pad type; defects differ; possibly mirrored
+B6464,D,MEDIUM,pad-ended traces; layouts differ
+B8408,C,LOW,same thermal pad type; defects differ
+B9919,E,MEDIUM,dark trace pair vs large hole edge on copper
+B5778,B,MEDIUM,same diagonal stain chain with matching blob shapes; shifted
+B3279,D,MEDIUM,generic hole with burr on different tones
+B8387,D,MEDIUM,different trace/pad layouts
+B6853,C,LOW,diagonal thin trace pairs with opens; spacing similar; correspondence unclear
+B4292,D,MEDIUM,horizontal stripes with pinhole; band arrangement differs
+B3672,D,MEDIUM,ring pad on black; in-hole defects differ
+B8401,E,MEDIUM,slotted ring vs thin parallel traces
+B1069,B,MEDIUM,same trace/pad/pour layout; shifted crop
+B7208,D,HIGH,different board layouts
+B3864,A,MEDIUM,dark rounded opening with rim nick appears horizontally mirrored
+B6645,A,MEDIUM,same diagonal traces with defect and edge mark at same positions
+B9230,D,HIGH,different board layouts
+B5929,C,MEDIUM,same pad/trace arrangement shifted; damage present in one only
+B5332,D,MEDIUM,copper particles on dark; shapes differ
+B8825,B,MEDIUM,same board layout incl. pad groups; same capture look; slight zoom difference
+B9257,D,LOW,heavy damage textures; no correspondence
+B1929,D,MEDIUM,small copper particle on different dark backgrounds
+B8155,D,MEDIUM,diagonal traces; edge quality and defects differ
+B9168,A,HIGH,horizontally mirrored copy incl. trace crack and glare
+B7948,D,MEDIUM,generic hole with burr on similar tone
+B1785,D,HIGH,different board layouts
+B8357,D,MEDIUM,parallel traces of different pitch and colour
+B5409,D,LOW,dark damage blobs; shapes differ
+B6272,D,HIGH,different board layouts
+B5572,D,MEDIUM,parallel traces with defects; pitch and defects differ
+B9464,D,MEDIUM,small copper particle on dark; shapes differ
+B7364,D,MEDIUM,parallel traces of different pitch and colour
+B3822,A,HIGH,same hole grid with identical in-hole defect; brightness/crop change only
+B1038,A,MEDIUM,same ring pad with identical trace texture; zoomed/cropped copy
+B9275,D,HIGH,different board layouts
+B7396,D,MEDIUM,horizontal traces with defects; spacing differs
+B8815,B,HIGH,same traces with identical bridge defects at matching positions; shifted crop
+B5377,D,MEDIUM,parallel traces of different pitch and colour
+B5369,D,LOW,dark stains on copper; shapes do not correspond
+B1627,D,MEDIUM,parallel traces of different pitch and colour
+B8819,A,LOW,textured strip plus via/trace pattern appear horizontally mirrored; uncertain
+B4702,B,MEDIUM,same bent trace group with stain field of similar shape; shifted
+B2620,D,LOW,diagonal trace with stains; trace geometry and stains differ
+B9925,B,LOW,same thermal pad with rim mark at similar position; shifted crop
+B5486,B,LOW,same board layout; one image zoomed/cropped
+B6599,D,MEDIUM,different trace layouts and colours
+B6987,B,MEDIUM,same stripe arrangement around wide band with pinhole at same spot; brightness differs
+B5889,D,MEDIUM,copper particles on dark; shapes differ
+B2122,D,MEDIUM,parallel traces of different pitch and colour
+B5376,A,HIGH,identical board image; crop/brightness change only
+B3208,D,MEDIUM,traces with edge defects; geometry differs
+B3141,D,MEDIUM,hole grids with burr; arrangement differs
+B3813,D,HIGH,different board layouts
+B4415,B,MEDIUM,same board layout incl. pad groups; slight zoom difference
+B8099,D,MEDIUM,bent trace bundles with defect; geometry differs
+B6137,A,MEDIUM,same pad array with matching in-hole marks; near-identical framing
+B4628,D,MEDIUM,different trace layouts and colours
+B6840,A,MEDIUM,same notched copper corner and edge profile; near-identical framing
+B1831,A,MEDIUM,whole board appears horizontally mirrored incl. marker glyph and pad rows
+B9880,D,MEDIUM,parallel traces of different colour and width
+B4064,B,HIGH,same ring pad and trace with same ring irregularity; shifted
+B9338,B,MEDIUM,same chevron copper and via grid; brightness and framing differ
+B2462,E,MEDIUM,different trace layouts and brightness
+B3168,C,MEDIUM,same trace arrangement with pinhole at similar spot; defect size differs
+B5591,D,MEDIUM,generic hole with burr; framing and tone differ
+B9117,E,MEDIUM,pad with hole vs copper blob
+B3850,C,LOW,same horizontal trace spacing and texture; short defects differ
+B4402,D,HIGH,different board layouts
+B2833,D,MEDIUM,parallel traces of different pitch and colour
+B2016,D,MEDIUM,parallel traces of different pitch and colour
+B3514,E,HIGH,AOI close-up vs whole bare board
+B1752,E,MEDIUM,blurred bright trace short vs dark spur
+B8870,E,MEDIUM,pads on dark vs copper edge with defect
+B5198,D,MEDIUM,generic hole with burr on different tones
+B3756,D,MEDIUM,diagonal traces; geometry and defects differ
+B2084,A,MEDIUM,same damaged spur and gap pattern; near-identical with small shift
+B4159,E,MEDIUM,copper particle on dark vs bright particle on green
+B3662,B,HIGH,same trace with identical bump next to ring pad; shifted crop
+B2576,D,HIGH,different board layouts
+B1198,C,MEDIUM,same trace bend and three holes; scratch fields differ
+B1915,E,MEDIUM,pad with hole vs copper blob
+B4345,D,MEDIUM,different trace/pad layouts and colours
+B9837,A,HIGH,same chevron copper and via grid; near-identical framing
+B8287,E,MEDIUM,different hole/ring layouts
+B7866,C,LOW,same thermal pad type; framing and in-hole marks differ
+B6540,E,MEDIUM,small split particle on green vs blob on black
+B5093,E,HIGH,trace end with hair vs isolated particle
+B4603,D,HIGH,different board layouts
+B7689,D,HIGH,different board layouts
+B1572,E,MEDIUM,stain on green vs drilled hole on copper
+B8372,D,HIGH,different board layouts
+B4454,E,MEDIUM,stain vs drilled hole
+B4749,C,LOW,similar pad-and-trace fan arrangement; correspondence uncertain
+B2236,E,HIGH,single wide trace edge vs pads and traces
+B7649,A,MEDIUM,same dog-bone pad array with identical in-hole defect; brightness change only
+B6371,E,HIGH,ring pad close-up vs whole board
+B3751,E,HIGH,AOI close-up vs whole board
+B1470,C,LOW,possibly same layout rotated 180 degrees; correspondence partial
+B4990,D,MEDIUM,generic hole with burr on different tones
+B1209,B,HIGH,same trace with matching diagonal scratch pattern; shifted
+B4820,C,MEDIUM,same trace bend and holes; scratches/stains differ
+B8438,B,MEDIUM,same board layout incl. copper pour; same capture look
+B5897,D,MEDIUM,parallel traces of different pitch and colour
+B4040,B,HIGH,same board layout incl. copper pour; small differences only
+B8619,D,LOW,heavy damage textures; no correspondence
+B7878,B,MEDIUM,same large hole edge with rim damage at matching spot
+B7777,D,MEDIUM,generic hole defect on different tones
+B3988,D,MEDIUM,debris on copper pad; pad geometry and debris differ
+B5887,E,HIGH,AOI close-up vs whole board
+B3177,C,LOW,same thermal pad type; framing differs
+B6763,D,MEDIUM,parallel traces of different pitch and colour
+B8707,D,HIGH,different board layouts
+B2365,D,LOW,large hole edge with rough rim; irregularities do not clearly correspond
+B9255,C,LOW,trace pair with defect at same x; other traces differ
+B2362,D,MEDIUM,different trace/pad layouts
+B2923,E,MEDIUM,parallel traces with stains vs ring pad
+B2282,D,MEDIUM,generic hole with burr; tone and framing differ
+B2399,D,HIGH,different board layouts
+B2537,C,LOW,same copper corner type; edge and lighting differ (one mirrored-looking)
+B5435,D,LOW,large damage blobs; shapes differ
+B3555,D,MEDIUM,debris on copper pad; geometry differs
+B7850,C,MEDIUM,same repeating pad-array design; defect location differs
+B3502,D,MEDIUM,parallel traces of different pitch and colour
+B9048,D,HIGH,different board layouts
+B2842,C,LOW,same ring-pad grid spacing; defects differ
+B6200,B,LOW,hole with similar small burr on same tone; generic feature
+B7001,D,HIGH,different board layouts
+B3454,D,MEDIUM,different board layouts (orientation differs)
+B3254,D,MEDIUM,board layouts differ (shared motifs only)
+B1165,E,HIGH,AOI close-up vs whole board
+B5974,D,HIGH,different board layouts
+B7770,D,MEDIUM,different board layouts (orientation differs)
+B2397,E,HIGH,whole board vs large-hole close-up
+B2666,A,LOW,trace bend with sliver appears rotated 180 degrees; plausible but uncertain
+B2381,E,HIGH,different board layouts
+B8525,D,MEDIUM,tiny particle on dark; generic
+B7704,B,HIGH,same textured dark region with matching contour and spots; shifted
+B1395,D,HIGH,different board layouts
+B9101,D,MEDIUM,parallel traces of different pitch and colour
+B3976,E,HIGH,copper close-up with holes vs whole board
+B4789,E,MEDIUM,elongated translucent particle vs bluish particle on dark
+B1299,A,MEDIUM,same pad and pinhole; near-identical with small shift
+B3689,D,LOW,stained copper; stain shapes differ
+B8944,C,LOW,trace pair spacing matches with defect at same x; other traces differ
+B2071,D,MEDIUM,different trace/pad layouts and defects
+B2960,D,MEDIUM,parallel traces of different pitch and colour
+B9903,D,MEDIUM,parallel traces of different pitch and colour
+B1650,C,MEDIUM,same repeating pad-array design; in-hole marks differ
+B9334,D,MEDIUM,parallel traces of different pitch and colour
+B6638,C,LOW,possibly the same layout rotated 90 degrees; uncertain
+B6591,D,MEDIUM,generic hole with burr on similar tone
+B1791,A,MEDIUM,same notched copper corner and edge profile; near-identical framing
+B7023,D,MEDIUM,hole grids with burr; arrangement differs
+B5179,B,LOW,same thin trace pair spacing with nick on upper trace at same x
+B6171,C,LOW,same dog-bone pad-array design; pad orientations differ
+B9564,E,HIGH,whole board vs AOI close-up
+B9402,D,HIGH,different board layouts
+B4819,D,MEDIUM,generic hole defect on different tones
+B6457,D,LOW,stained copper; shapes do not correspond
+B8623,D,MEDIUM,horizontal traces of different colour and width
+B4664,B,HIGH,same ring pad and trace with same ring irregularity; shifted
+B6201,D,HIGH,different board layouts
+B3917,D,LOW,dark stains next to diagonal trace; stain shapes differ
+B4923,C,LOW,same ring-pad grid style; offset and defects differ
+B1135,D,MEDIUM,copper blobs on dark; shapes differ
+B8045,A,MEDIUM,same rings, traces with bumps and pour edge; near-identical, brightness and small shift
+B1349,E,HIGH,whole board vs AOI close-up
+B2183,D,MEDIUM,generic hole with burr on similar tone
+B5168,D,MEDIUM,horizontal traces with small defect; spacing differs
+B1988,D,MEDIUM,small copper particle on different dark backgrounds
+B1835,C,LOW,possibly same layout rotated 90 degrees; uncertain
+B3134,A,MEDIUM,same notched copper corner and edge profile; near-identical framing
+B7743,D,MEDIUM,parallel traces of different pitch and colour
+B2406,C,LOW,same stripe pitch and colour with pinhole at similar place; size differs
+B8024,D,MEDIUM,generic hole with burr on different tones
+B7517,D,MEDIUM,dim diagonal traces; geometry differs
+B8137,D,MEDIUM,parallel traces of different pitch and colour
+B2778,D,LOW,heavy damage patterns; structures do not correspond
+B8921,D,LOW,two dark dots on scratched copper; geometry does not match under shift
+B6068,A,MEDIUM,single trace with nick appears horizontally mirrored
+B8879,B,LOW,same stripe arrangement around wide band with pinhole; brightness and framing differ
+B3601,C,MEDIUM,bent trace bundle geometry; defects differ
+B7950,E,MEDIUM,stain on plain copper vs ring pads
+B8971,A,MEDIUM,same slot horizontally mirrored incl. reflection

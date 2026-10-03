@@ -1,0 +1,91 @@
+code,label,confidence,rationale
+P3386,E,MEDIUM,different pad/trace layouts and defects
+P8528,C,LOW,similar diagonal trace bundle with bend; defects differ
+P8453,D,MEDIUM,bent trace bundles with hole; geometry differs
+P3863,C,LOW,diagonal trace pair with defect at similar place; spacing similar
+P7439,A,HIGH,same three traces with identical bubble defect; near-identical (slight shift)
+P6730,D,MEDIUM,different trace/pad layouts
+P8102,E,MEDIUM,edge blob vs hole with hatched insert; different features
+P9304,C,MEDIUM,same DIY board style and trace texture; different regions of a board
+P2801,E,MEDIUM,edge blob with hole vs hole with hatched insert
+P9731,D,MEDIUM,different trace/pad layouts
+P2987,C,LOW,same X-cross trace design; defects differ
+P2313,B,HIGH,adjacent crops of one ring-and-trace feature (left and right halves); same capture
+P8470,D,MEDIUM,diagonal copper edges with defects; tone and defect differ
+P5315,C,LOW,parallel diagonal thin traces with defect on a trace; spacing similar
+P1784,E,MEDIUM,diagonal edge with residue vs vertical edge with fibre
+P4350,C,MEDIUM,same DIY board style and trace texture; different regions
+P6494,C,MEDIUM,same square pad grid design; small particle defect at same place relative to grid; colour differs slightly
+P4763,C,MEDIUM,same DIY board style and trace texture; different regions
+P6069,C,LOW,same square pad grid design; defect type differs
+P4340,B,HIGH,same trace set with identical bridge defect; shifted crop
+P3923,D,MEDIUM,copper corner with edge defects; geometry differs
+P3307,E,MEDIUM,different ring pad/trace layouts and colours
+P4089,C,MEDIUM,same DIY board style and trace texture; different regions
+P6685,B,MEDIUM,overlapping regions of one DIY board (pill pad, traces and loop pad correspond under shift)
+P7063,E,MEDIUM,pad edge vs hole in damaged copper
+P7712,D,MEDIUM,bent trace bundles with pinhole; geometry differs
+P4454,B,HIGH,same pad with identical rim damage and surface marks; different crop
+P7603,D,MEDIUM,different trace/ring layouts
+P8554,D,MEDIUM,copper particles on dark; shapes differ
+P5518,D,MEDIUM,different trace/pad layouts
+P7145,C,MEDIUM,same trace arrangement with gap-and-debris defect at same location; trace count/spacing slightly differ
+P3628,E,MEDIUM,particle on dark vs copper edge nick
+P3033,D,LOW,damaged pad/trace areas; structures do not clearly correspond
+P3959,C,MEDIUM,same DIY board style and trace texture; different regions
+P1092,C,MEDIUM,same DIY board style; different regions/defects
+P7480,C,LOW,same ring-pad and trace arrangement type; framing and defect differ
+P3418,C,LOW,diagonal thin trace pair with defects; spacing similar; defects differ
+P3663,D,MEDIUM,different trace layouts and tones
+P4156,C,MEDIUM,same DIY board style and trace texture; different regions
+P3736,E,MEDIUM,different pad/trace layouts
+P1428,C,LOW,parallel diagonal trace set with defect on a trace; spacing similar
+P4886,C,MEDIUM,same DIY board style; different regions
+P8343,D,MEDIUM,bent trace bundles; colour and geometry differ
+P7351,C,MEDIUM,same DIY board style and trace texture; different regions
+P3074,C,MEDIUM,same DIY board style; different regions
+P1859,C,MEDIUM,same DIY board style; different regions
+P5048,D,MEDIUM,copper corner edges; geometry and tone differ
+P9308,C,LOW,same square pad grid design; defect differs
+P5748,C,LOW,same X-cross trace design; defects differ
+P6549,C,LOW,diagonal thin trace pair with small defect; spacing similar
+P9653,D,MEDIUM,copper blob over trace; tone and blob shape differ
+P6624,C,MEDIUM,same DIY board style; different regions
+P9887,C,LOW,diagonal thin trace pair with nick at similar place; framing differs
+P6947,C,LOW,parallel diagonal trace set with small defect at similar place
+P8922,D,MEDIUM,tiny copper particle on dark; generic
+P7582,C,MEDIUM,same DIY board style; different regions (one blurred)
+P2014,C,MEDIUM,same DIY board style; different regions
+P2660,C,LOW,same ring-in-copper design; defects differ
+P5913,D,LOW,damaged copper areas; structures do not correspond
+P8118,C,MEDIUM,same DIY board style; different regions
+P5137,C,MEDIUM,same DIY board style; different regions
+P4928,C,LOW,same parallel diagonal trace set with an open at a similar place; gap form differs
+P8166,C,LOW,same square pad grid design; defects differ
+P9414,D,MEDIUM,pad and trace layouts differ
+P9085,C,MEDIUM,same DIY board style; different regions
+P5164,C,LOW,diagonal trace pair; scale and defects differ
+P3411,C,LOW,copper flakes near round pad on same dark board type; flake shapes differ
+P1953,E,MEDIUM,ring edge with particle vs nearly empty dark field
+P6353,C,LOW,parallel diagonal trace set with small defect at similar place
+P3698,D,MEDIUM,pad with hole vs trace with edge defect
+P1894,C,MEDIUM,same DIY board style; different regions
+P5508,B,MEDIUM,same dark scene with matching edge contour and blob; slight shift/brightness
+P2982,D,MEDIUM,different pad/trace layouts
+P1831,D,LOW,damaged copper patches on dark; no correspondence
+P4590,B,MEDIUM,same trace bundle and hole at matching offsets; shifted crop; defects differ in place
+P6076,C,LOW,diagonal trace pair with hole; arrangement similar; defects differ
+P9593,E,MEDIUM,different trace layouts and textures
+P4546,D,MEDIUM,copper corner vs small holes; different features
+P6852,C,MEDIUM,same DIY board style; H-junction vs broken trace; different regions
+P6468,C,LOW,same trace pair with holes; defects differ (scan line vs bridge)
+P8466,C,LOW,diagonal thin trace pair; orientation mirrored; defects at different places
+P1205,C,MEDIUM,same DIY board style; different regions
+P2868,C,LOW,same bent trace pair design with copper particle in gap; positions differ
+P8790,C,LOW,same square pad grid design; defects differ
+P4159,C,LOW,same square pad grid design; small defect at similar place; background tone differs
+P9606,C,LOW,parallel diagonal trace set with tiny defect at similar place
+P2951,C,MEDIUM,same DIY board style; different regions
+P4426,C,MEDIUM,same DIY board style; different regions
+P1719,D,MEDIUM,different pad/trace layouts
+P7387,D,MEDIUM,traces with nick vs copper edge with nick; different features

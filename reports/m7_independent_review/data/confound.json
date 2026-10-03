@@ -1,0 +1,1349 @@
+{
+ "probe_control_predictability": {
+  "design0": {
+   "metadata_without_group_size": {
+    "cv_auc": 0.5706887372344029
+   },
+   "metadata_with_group_size": {
+    "cv_auc": 0.9774212284013358
+   }
+  },
+  "design1": {
+   "metadata_without_group_size": {
+    "cv_auc": 0.6010362694300518
+   },
+   "metadata_with_group_size": {
+    "cv_auc": 0.9738040727798529
+   }
+  },
+  "design2": {
+   "metadata_without_group_size": {
+    "cv_auc": 0.6131143610644929
+   },
+   "metadata_with_group_size": {
+    "cv_auc": 0.9789259170462719
+   }
+  }
+ },
+ "per_image_gain_models": {
+  "probe_only": {
+   "r2": 0.020621551664102955,
+   "params": {
+    "Intercept": [
+     -0.010785080855503403,
+     0.007760560497248293,
+     0.16461099427678738
+    ],
+    "probe": [
+     0.0437633168234301,
+     0.01558352135759638,
+     0.004980267774335104
+    ]
+   }
+  },
+  "probe_plus_covariates": {
+   "r2": 0.06196523442262836,
+   "params": {
+    "Intercept": [
+     0.19375438174282966,
+     0.08302139761838798,
+     0.019606800073125492
+    ],
+    "C(source)[T.pcb-defect]": [
+     0.044572372105479166,
+     0.028549484469616918,
+     0.11846899345773293
+    ],
+    "C(source)[T.pcb-ind]": [
+     0.015325604195371621,
+     0.018611803652777082,
+     0.4102608602858032
+    ],
+    "probe": [
+     0.04267458577083538,
+     0.013864090602742156,
+     0.0020834877217870756
+    ],
+    "boxes": [
+     0.003461590303644293,
+     0.010069351104327832,
+     0.7310155678740068
+    ],
+    "log_area": [
+     -0.012030314874130147,
+     0.007676362121530171,
+     0.11707038090959541
+    ],
+    "n_short": [
+     0.035496730659128964,
+     0.015686194838904974,
+     0.023640123533070257
+    ],
+    "n_open": [
+     0.004058753496566598,
+     0.016775818665654963,
+     0.8088261041676342
+    ],
+    "n_mouse_bite": [
+     -0.018905776855947423,
+     0.01238550387188121,
+     0.1268993512582548
+    ],
+    "max_sim_C1": [
+     -0.3295919857708396,
+     0.11867395121981392,
+     0.005481423708529389
+    ]
+   }
+  },
+  "covariates_only": {
+   "r2": 0.04309098652591603,
+   "params": {
+    "Intercept": [
+     0.19794014345411984,
+     0.09083388255253153,
+     0.02932094526654513
+    ],
+    "C(source)[T.pcb-defect]": [
+     0.03221269853396964,
+     0.029928202648800795,
+     0.2817785583286677
+    ],
+    "C(source)[T.pcb-ind]": [
+     0.016876271119423195,
+     0.01937046344239606,
+     0.38362457355467816
+    ],
+    "boxes": [
+     0.0009063702575948231,
+     0.011122113675642146,
+     0.9350501884389154
+    ],
+    "log_area": [
+     -0.011009561696436685,
+     0.007559303554159136,
+     0.14527505842371355
+    ],
+    "n_short": [
+     0.04096220932455218,
+     0.01680663071820554,
+     0.014798838238093599
+    ],
+    "n_open": [
+     0.008508115254215017,
+     0.017814968745989947,
+     0.6329474710761582
+    ],
+    "n_mouse_bite": [
+     -0.017149457584658766,
+     0.013567955368532924,
+     0.2062416140448885
+    ],
+    "max_sim_C1": [
+     -0.30237590455172125,
+     0.1260603647521021,
+     0.016455203593310687
+    ]
+   }
+  },
+  "exposure_delta": {
+   "r2": 0.049632584945359826,
+   "params": {
+    "Intercept": [
+     0.07664388693857771,
+     0.08769504112315848,
+     0.38212805941160366
+    ],
+    "C(source)[T.pcb-defect]": [
+     0.018007407337727706,
+     0.0264568749575164,
+     0.49610409545707623
+    ],
+    "C(source)[T.pcb-ind]": [
+     0.03131031108011421,
+     0.019322900420386705,
+     0.10515212110550319
+    ],
+    "exp_delta_small": [
+     0.5267624531458343,
+     0.1522537416152781,
+     0.0005406432179841267
+    ],
+    "boxes": [
+     0.004773951764267219,
+     0.0076721677115386055,
+     0.5337821714448476
+    ],
+    "log_area": [
+     -0.005188680819287074,
+     0.007271220708746881,
+     0.47547985535948933
+    ],
+    "max_sim_C1": [
+     -0.1536099622194948,
+     0.11211952192060895,
+     0.17066959261557302
+    ]
+   }
+  },
+  "probe_x_source": {
+   "r2": 0.0362586377903813,
+   "params": {
+    "Intercept": [
+     -0.026617045269135463,
+     0.040147190494246095,
+     0.507339200925004
+    ],
+    "C(source)[T.pcb-defect]": [
+     -0.016391477885584007,
+     0.02080399849107569,
+     0.4307549910032695
+    ],
+    "C(source)[T.pcb-ind]": [
+     -0.005321817500422674,
+     0.017444933279201758,
+     0.7603175672158168
+    ],
+    "probe": [
+     0.011875532732955732,
+     0.014142253427467166,
+     0.40106541001442597
+    ],
+    "probe:C(source)[T.pcb-defect]": [
+     0.03126346731153596,
+     0.014008560230221578,
+     0.025632137262240628
+    ],
+    "probe:C(source)[T.pcb-ind]": [
+     0.061260962370360994,
+     0.03466784527002949,
+     0.07721431776316055
+    ],
+    "boxes": [
+     0.008406482044143255,
+     0.007593448715332904,
+     0.2682635069012821
+    ],
+    "log_area": [
+     -0.0025216902957775626,
+     0.00719927103322142,
+     0.7261359074349987
+    ]
+   }
+  }
+ },
+ "dose_response_d0": [
+  {
+   "bin": "control",
+   "n": 213,
+   "per_seed": [
+    -0.56,
+    -1.4,
+    1.46
+   ],
+   "mean": -0.1667036306587192
+  },
+  {
+   "bin": "probe delta<0.02",
+   "n": 69,
+   "per_seed": [
+    2.33,
+    2.62,
+    -0.84
+   ],
+   "mean": 1.3692042587241027
+  },
+  {
+   "bin": "probe 0.02-0.08",
+   "n": 61,
+   "per_seed": [
+    0.7,
+    5.58,
+    -1.54
+   ],
+   "mean": 1.5790543412809275
+  },
+  {
+   "bin": "probe >0.08",
+   "n": 64,
+   "per_seed": [
+    6.21,
+    7.91,
+    6.28
+   ],
+   "mean": 6.800734435240829
+  }
+ ],
+ "d1": {
+  "design0": {
+   "controls_by_source": {
+    "dspcbsd-plus": 89,
+    "pcb-ind": 85,
+    "pcb-defect": 39
+   },
+   "control_group_size_dist": {
+    "1": 141,
+    "2": 4,
+    "3": 6,
+    "8": 8,
+    "15": 15,
+    "39": 39
+   },
+   "mates_by_source": {
+    "pcb-ind": 97,
+    "dspcbsd-plus": 95,
+    "pcb-defect": 21
+   },
+   "control_boxes_by_class": {
+    "mouse_bite": 104,
+    "spurious_copper": 95,
+    "open": 38,
+    "short": 23
+   },
+   "exposure_delta_controls_mean_small": 0.002160213922670748,
+   "controls_delta_gt_0.02": 14
+  },
+  "design1": {
+   "controls_by_source": {
+    "dspcbsd-plus": 89,
+    "pcb-ind": 85,
+    "pcb-defect": 41
+   },
+   "control_group_size_dist": {
+    "1": 129,
+    "2": 12,
+    "3": 12,
+    "4": 4,
+    "5": 5,
+    "12": 12,
+    "41": 41
+   },
+   "mates_by_source": {
+    "pcb-ind": 99,
+    "dspcbsd-plus": 95,
+    "pcb-defect": 20
+   },
+   "control_boxes_by_class": {
+    "mouse_bite": 103,
+    "spurious_copper": 63,
+    "open": 46,
+    "short": 29
+   },
+   "exposure_delta_controls_mean_small": 0.002324585027472916,
+   "controls_delta_gt_0.02": 5
+  },
+  "design2": {
+   "controls_by_source": {
+    "dspcbsd-plus": 89,
+    "pcb-ind": 87,
+    "pcb-defect": 39
+   },
+   "control_group_size_dist": {
+    "1": 135,
+    "2": 16,
+    "3": 6,
+    "4": 8,
+    "5": 5,
+    "6": 6,
+    "39": 39
+   },
+   "mates_by_source": {
+    "dspcbsd-plus": 95,
+    "pcb-ind": 94,
+    "pcb-defect": 21
+   },
+   "control_boxes_by_class": {
+    "mouse_bite": 95,
+    "spurious_copper": 90,
+    "open": 49,
+    "short": 22
+   },
+   "exposure_delta_controls_mean_small": 0.0035410562226938632,
+   "controls_delta_gt_0.02": 13
+  },
+  "test_overlap": {
+   "0-1": 118,
+   "0-2": 128,
+   "1-2": 112
+  }
+ },
+ "source_probe": {
+  "width+height+format": 1.0,
+  "+boxes": 1.0,
+  "+file_bytes": 1.0,
+  "boxes_only": 0.3083810784181651,
+  "bytes_only": 0.6776757719118902,
+  "size_table": [
+   {
+    "source": "dspcbsd-plus",
+    "width": 108,
+    "height": 108,
+    "is_png": 0,
+    "n": 39
+   },
+   {
+    "source": "dspcbsd-plus",
+    "width": 226,
+    "height": 226,
+    "is_png": 0,
+    "n": 1729
+   },
+   {
+    "source": "pcb-defect",
+    "width": 300,
+    "height": 300,
+    "is_png": 1,
+    "n": 776
+   },
+   {
+    "source": "pcb-defect",
+    "width": 302,
+    "height": 302,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 304,
+    "height": 304,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 306,
+    "height": 306,
+    "is_png": 1,
+    "n": 2
+   },
+   {
+    "source": "pcb-defect",
+    "width": 307,
+    "height": 307,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 314,
+    "height": 314,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 319,
+    "height": 319,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 320,
+    "height": 320,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 321,
+    "height": 321,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 322,
+    "height": 322,
+    "is_png": 1,
+    "n": 3
+   },
+   {
+    "source": "pcb-defect",
+    "width": 324,
+    "height": 324,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 329,
+    "height": 329,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 331,
+    "height": 331,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 332,
+    "height": 332,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 333,
+    "height": 333,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 334,
+    "height": 334,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 335,
+    "height": 335,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 337,
+    "height": 337,
+    "is_png": 1,
+    "n": 2
+   },
+   {
+    "source": "pcb-defect",
+    "width": 340,
+    "height": 340,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 342,
+    "height": 342,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 343,
+    "height": 343,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 355,
+    "height": 355,
+    "is_png": 1,
+    "n": 2
+   },
+   {
+    "source": "pcb-defect",
+    "width": 356,
+    "height": 356,
+    "is_png": 1,
+    "n": 2
+   },
+   {
+    "source": "pcb-defect",
+    "width": 358,
+    "height": 358,
+    "is_png": 1,
+    "n": 2
+   },
+   {
+    "source": "pcb-defect",
+    "width": 359,
+    "height": 359,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 362,
+    "height": 362,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 368,
+    "height": 368,
+    "is_png": 1,
+    "n": 2
+   },
+   {
+    "source": "pcb-defect",
+    "width": 369,
+    "height": 369,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 378,
+    "height": 378,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 381,
+    "height": 381,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 384,
+    "height": 384,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 387,
+    "height": 387,
+    "is_png": 1,
+    "n": 2
+   },
+   {
+    "source": "pcb-defect",
+    "width": 388,
+    "height": 388,
+    "is_png": 1,
+    "n": 2
+   },
+   {
+    "source": "pcb-defect",
+    "width": 390,
+    "height": 390,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 391,
+    "height": 391,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 393,
+    "height": 393,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 395,
+    "height": 395,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 398,
+    "height": 398,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 400,
+    "height": 400,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 401,
+    "height": 401,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 404,
+    "height": 404,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 410,
+    "height": 410,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 413,
+    "height": 413,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 414,
+    "height": 414,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 416,
+    "height": 416,
+    "is_png": 1,
+    "n": 2
+   },
+   {
+    "source": "pcb-defect",
+    "width": 425,
+    "height": 425,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 428,
+    "height": 428,
+    "is_png": 1,
+    "n": 2
+   },
+   {
+    "source": "pcb-defect",
+    "width": 431,
+    "height": 431,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 433,
+    "height": 433,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 440,
+    "height": 440,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 441,
+    "height": 441,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 450,
+    "height": 450,
+    "is_png": 1,
+    "n": 3
+   },
+   {
+    "source": "pcb-defect",
+    "width": 452,
+    "height": 452,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 454,
+    "height": 454,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 455,
+    "height": 455,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 460,
+    "height": 460,
+    "is_png": 1,
+    "n": 2
+   },
+   {
+    "source": "pcb-defect",
+    "width": 461,
+    "height": 461,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 464,
+    "height": 464,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 465,
+    "height": 465,
+    "is_png": 1,
+    "n": 2
+   },
+   {
+    "source": "pcb-defect",
+    "width": 466,
+    "height": 466,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 470,
+    "height": 470,
+    "is_png": 1,
+    "n": 2
+   },
+   {
+    "source": "pcb-defect",
+    "width": 489,
+    "height": 489,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 490,
+    "height": 490,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 491,
+    "height": 491,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 494,
+    "height": 494,
+    "is_png": 1,
+    "n": 2
+   },
+   {
+    "source": "pcb-defect",
+    "width": 497,
+    "height": 497,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 506,
+    "height": 506,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 510,
+    "height": 510,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 513,
+    "height": 513,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 515,
+    "height": 515,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 516,
+    "height": 516,
+    "is_png": 1,
+    "n": 2
+   },
+   {
+    "source": "pcb-defect",
+    "width": 518,
+    "height": 518,
+    "is_png": 1,
+    "n": 2
+   },
+   {
+    "source": "pcb-defect",
+    "width": 524,
+    "height": 524,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 525,
+    "height": 525,
+    "is_png": 1,
+    "n": 2
+   },
+   {
+    "source": "pcb-defect",
+    "width": 530,
+    "height": 530,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 533,
+    "height": 533,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 535,
+    "height": 535,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 538,
+    "height": 538,
+    "is_png": 1,
+    "n": 2
+   },
+   {
+    "source": "pcb-defect",
+    "width": 539,
+    "height": 539,
+    "is_png": 1,
+    "n": 2
+   },
+   {
+    "source": "pcb-defect",
+    "width": 542,
+    "height": 542,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 545,
+    "height": 545,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 550,
+    "height": 550,
+    "is_png": 1,
+    "n": 3
+   },
+   {
+    "source": "pcb-defect",
+    "width": 559,
+    "height": 559,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 563,
+    "height": 563,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 565,
+    "height": 565,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 569,
+    "height": 569,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 571,
+    "height": 571,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 572,
+    "height": 572,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 573,
+    "height": 573,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 580,
+    "height": 580,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 583,
+    "height": 583,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 588,
+    "height": 588,
+    "is_png": 1,
+    "n": 3
+   },
+   {
+    "source": "pcb-defect",
+    "width": 591,
+    "height": 591,
+    "is_png": 1,
+    "n": 2
+   },
+   {
+    "source": "pcb-defect",
+    "width": 597,
+    "height": 597,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 609,
+    "height": 609,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 613,
+    "height": 613,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 625,
+    "height": 625,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 628,
+    "height": 628,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 635,
+    "height": 635,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 638,
+    "height": 638,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 642,
+    "height": 642,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 643,
+    "height": 643,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 661,
+    "height": 661,
+    "is_png": 1,
+    "n": 2
+   },
+   {
+    "source": "pcb-defect",
+    "width": 664,
+    "height": 664,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 666,
+    "height": 666,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 687,
+    "height": 687,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 702,
+    "height": 702,
+    "is_png": 1,
+    "n": 2
+   },
+   {
+    "source": "pcb-defect",
+    "width": 714,
+    "height": 714,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 724,
+    "height": 724,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 734,
+    "height": 734,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 737,
+    "height": 737,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 743,
+    "height": 743,
+    "is_png": 1,
+    "n": 2
+   },
+   {
+    "source": "pcb-defect",
+    "width": 744,
+    "height": 744,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 753,
+    "height": 753,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 758,
+    "height": 758,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 759,
+    "height": 759,
+    "is_png": 1,
+    "n": 2
+   },
+   {
+    "source": "pcb-defect",
+    "width": 766,
+    "height": 766,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 770,
+    "height": 770,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 782,
+    "height": 782,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 783,
+    "height": 783,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 784,
+    "height": 784,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 788,
+    "height": 788,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 796,
+    "height": 796,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 812,
+    "height": 812,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 832,
+    "height": 832,
+    "is_png": 1,
+    "n": 2
+   },
+   {
+    "source": "pcb-defect",
+    "width": 935,
+    "height": 935,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 945,
+    "height": 945,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 1009,
+    "height": 1009,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 1066,
+    "height": 1066,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 1128,
+    "height": 1128,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-defect",
+    "width": 1203,
+    "height": 1203,
+    "is_png": 1,
+    "n": 1
+   },
+   {
+    "source": "pcb-ind",
+    "width": 300,
+    "height": 300,
+    "is_png": 0,
+    "n": 1713
+   }
+  ]
+ },
+ "source_shift": {
+  "A0_on_its_pcbdefect_test": 47.61814748563111,
+  "Bstrict_pcbdefect_on_same_items": 0.267989776339888,
+  "Bstrict_pcbdefect_overall": 0.3314449099499178,
+  "Bstrict_pcbdefect_per_class": {
+   "0": 0.0,
+   "1": 0.0,
+   "2": 0.08090876835379157,
+   "3": 1.2448708714458798
+  },
+  "gt_class_counts": {
+   "0": 222,
+   "1": 241,
+   "2": 304,
+   "3": 204
+  },
+  "pred_class_counts_conf>=0.25": {
+   "0": 2,
+   "1": 1,
+   "2": 2,
+   "3": 2373
+  },
+  "n_images": 939,
+  "preds_conf>=0.25_per_image": 2.5324813631522898,
+  "max_conf_quantiles": {
+   "0.1": 0.22,
+   "0.5": 0.699,
+   "0.9": 0.862
+  },
+  "recall_conf>=0.25_classaware_iou50": 1.0,
+  "tp50_any_class": null
+ }
+}

@@ -1,0 +1,65 @@
+comparison,model_a,model_b,population,subset,metric,delta,ci_low,ci_high,bootstrap_sd,resamples,rng_seed,resampled_unit,groups,images
+D0 seed 0: C0 - C1,C0-d0-s0,C1-d0-s0,D0,overall,mAP50_95,0.017533,-0.001968,0.042781,0.01146,1000,0,A1 constraint group,235,407
+D0 seed 0: C0 - C1,C0-d0-s0,C1-d0-s0,D0,overall,mAP50,0.006337,-0.017289,0.034881,0.013463,1000,0,A1 constraint group,235,407
+D0 seed 0: C0 - C1,C0-d0-s0,C1-d0-s0,D0,probe,mAP50_95,0.036527,0.008531,0.067719,0.015616,1000,0,A1 constraint group,87,194
+D0 seed 0: C0 - C1,C0-d0-s0,C1-d0-s0,D0,probe,mAP50,0.024612,-0.011378,0.066253,0.019715,1000,0,A1 constraint group,87,194
+D0 seed 0: C0 - C1,C0-d0-s0,C1-d0-s0,D0,control,mAP50_95,-0.005635,-0.028071,0.024867,0.013338,1000,0,A1 constraint group,148,213
+D0 seed 0: C0 - C1,C0-d0-s0,C1-d0-s0,D0,control,mAP50,-0.011536,-0.039549,0.028702,0.017112,1000,0,A1 constraint group,148,213
+D0 seed 1: C0 - C1,C0-d0-s1,C1-d0-s1,D0,overall,mAP50_95,0.023552,-0.000681,0.050726,0.01337,1000,0,A1 constraint group,235,407
+D0 seed 1: C0 - C1,C0-d0-s1,C1-d0-s1,D0,overall,mAP50,0.009697,-0.012405,0.041461,0.013677,1000,0,A1 constraint group,235,407
+D0 seed 1: C0 - C1,C0-d0-s1,C1-d0-s1,D0,probe,mAP50_95,0.063361,0.024011,0.097789,0.018371,1000,0,A1 constraint group,87,194
+D0 seed 1: C0 - C1,C0-d0-s1,C1-d0-s1,D0,probe,mAP50,0.030667,-0.010933,0.080934,0.024383,1000,0,A1 constraint group,87,194
+D0 seed 1: C0 - C1,C0-d0-s1,C1-d0-s1,D0,control,mAP50_95,-0.013986,-0.040028,0.01217,0.01322,1000,0,A1 constraint group,148,213
+D0 seed 1: C0 - C1,C0-d0-s1,C1-d0-s1,D0,control,mAP50,-0.004423,-0.028665,0.018608,0.012137,1000,0,A1 constraint group,148,213
+D0 seed 2: C0 - C1,C0-d0-s2,C1-d0-s2,D0,overall,mAP50_95,0.011595,-0.006,0.035826,0.010932,1000,0,A1 constraint group,235,407
+D0 seed 2: C0 - C1,C0-d0-s2,C1-d0-s2,D0,overall,mAP50,0.018039,-0.002252,0.044138,0.012003,1000,0,A1 constraint group,235,407
+D0 seed 2: C0 - C1,C0-d0-s2,C1-d0-s2,D0,probe,mAP50_95,0.017425,-0.010446,0.052898,0.016472,1000,0,A1 constraint group,87,194
+D0 seed 2: C0 - C1,C0-d0-s2,C1-d0-s2,D0,probe,mAP50,0.023008,-0.010812,0.062931,0.018733,1000,0,A1 constraint group,87,194
+D0 seed 2: C0 - C1,C0-d0-s2,C1-d0-s2,D0,control,mAP50_95,0.01462,-0.007682,0.045573,0.013546,1000,0,A1 constraint group,148,213
+D0 seed 2: C0 - C1,C0-d0-s2,C1-d0-s2,D0,control,mAP50,0.01966,-0.010621,0.047148,0.01514,1000,0,A1 constraint group,148,213
+D1 seed 0: C0 - C1,C0-d1-s0,C1-d1-s0,D1,overall,mAP50_95,0.03702,0.016145,0.061431,0.011635,1000,0,A1 constraint group,228,408
+D1 seed 0: C0 - C1,C0-d1-s0,C1-d1-s0,D1,overall,mAP50,0.026,-0.00215,0.053776,0.014335,1000,0,A1 constraint group,228,408
+D1 seed 0: C0 - C1,C0-d1-s0,C1-d1-s0,D1,probe,mAP50_95,0.039358,0.008701,0.079038,0.018278,1000,0,A1 constraint group,85,193
+D1 seed 0: C0 - C1,C0-d1-s0,C1-d1-s0,D1,probe,mAP50,0.030619,-0.008006,0.069833,0.019852,1000,0,A1 constraint group,85,193
+D1 seed 0: C0 - C1,C0-d1-s0,C1-d1-s0,D1,control,mAP50_95,0.030933,0.003728,0.06669,0.015587,1000,0,A1 constraint group,143,215
+D1 seed 0: C0 - C1,C0-d1-s0,C1-d1-s0,D1,control,mAP50,0.016509,-0.013991,0.056096,0.018183,1000,0,A1 constraint group,143,215
+D2 seed 0: C0 - C1,C0-d2-s0,C1-d2-s0,D2,overall,mAP50_95,0.02686,0.006594,0.047224,0.010524,1000,0,A1 constraint group,233,409
+D2 seed 0: C0 - C1,C0-d2-s0,C1-d2-s0,D2,overall,mAP50,0.014474,-0.011916,0.043199,0.013589,1000,0,A1 constraint group,233,409
+D2 seed 0: C0 - C1,C0-d2-s0,C1-d2-s0,D2,probe,mAP50_95,0.046008,0.0167,0.072863,0.014288,1000,0,A1 constraint group,83,194
+D2 seed 0: C0 - C1,C0-d2-s0,C1-d2-s0,D2,probe,mAP50,0.0259,0.002158,0.051579,0.012452,1000,0,A1 constraint group,83,194
+D2 seed 0: C0 - C1,C0-d2-s0,C1-d2-s0,D2,control,mAP50_95,0.000185,-0.022985,0.028711,0.013058,1000,0,A1 constraint group,150,215
+D2 seed 0: C0 - C1,C0-d2-s0,C1-d2-s0,D2,control,mAP50,-0.00513,-0.047014,0.041681,0.022155,1000,0,A1 constraint group,150,215
+B dspcbsd-plus: natural - strict,B-natural-dspcbsd-plus-s0,B-strict-dspcbsd-plus-s0,B-dspcbsd-plus,overall,mAP50_95,-0.01155,-0.020724,-0.003842,0.004269,1000,0,A1 constraint group,1453,1768
+B dspcbsd-plus: natural - strict,B-natural-dspcbsd-plus-s0,B-strict-dspcbsd-plus-s0,B-dspcbsd-plus,overall,mAP50,-0.037356,-0.056152,-0.022464,0.008368,1000,0,A1 constraint group,1453,1768
+B pcb-ind: natural - strict,B-natural-pcb-ind-s0,B-strict-pcb-ind-s0,B-pcb-ind,overall,mAP50_95,0.005484,-0.007418,0.023527,0.008322,1000,0,A1 constraint group,352,1713
+B pcb-ind: natural - strict,B-natural-pcb-ind-s0,B-strict-pcb-ind-s0,B-pcb-ind,overall,mAP50,0.008663,-0.015345,0.050863,0.017569,1000,0,A1 constraint group,352,1713
+noise C1-d0-s0: planned - replicate,C1-d0-s0,noise/C1-d0-s0__r1,D0,overall,mAP50_95,-0.006295,-0.022703,0.013567,0.009158,1000,0,A1 constraint group,235,407
+noise C1-d0-s0: planned - replicate,C1-d0-s0,noise/C1-d0-s0__r1,D0,overall,mAP50,0.014253,-0.009701,0.042736,0.013013,1000,0,A1 constraint group,235,407
+noise C1-d0-s0: planned - replicate,C1-d0-s0,noise/C1-d0-s0__r1,D0,probe,mAP50_95,-0.000654,-0.020137,0.020756,0.009763,1000,0,A1 constraint group,87,194
+noise C1-d0-s0: planned - replicate,C1-d0-s0,noise/C1-d0-s0__r1,D0,probe,mAP50,0.012228,-0.018083,0.040022,0.014594,1000,0,A1 constraint group,87,194
+noise C1-d0-s0: planned - replicate,C1-d0-s0,noise/C1-d0-s0__r1,D0,control,mAP50_95,-0.012078,-0.039763,0.022053,0.015629,1000,0,A1 constraint group,148,213
+noise C1-d0-s0: planned - replicate,C1-d0-s0,noise/C1-d0-s0__r1,D0,control,mAP50,0.011272,-0.026234,0.058224,0.021499,1000,0,A1 constraint group,148,213
+noise C0-d1-s1: replicate - replicate,noise/C0-d1-s1__r2,noise/C0-d1-s1__r1,D1,overall,mAP50_95,0.011258,-0.001725,0.027328,0.007558,1000,0,A1 constraint group,228,408
+noise C0-d1-s1: replicate - replicate,noise/C0-d1-s1__r2,noise/C0-d1-s1__r1,D1,overall,mAP50,-0.004509,-0.022901,0.015838,0.010176,1000,0,A1 constraint group,228,408
+noise C0-d1-s1: replicate - replicate,noise/C0-d1-s1__r2,noise/C0-d1-s1__r1,D1,probe,mAP50_95,0.002481,-0.013156,0.017446,0.007909,1000,0,A1 constraint group,85,193
+noise C0-d1-s1: replicate - replicate,noise/C0-d1-s1__r2,noise/C0-d1-s1__r1,D1,probe,mAP50,-0.019889,-0.036619,0.000628,0.009547,1000,0,A1 constraint group,85,193
+noise C0-d1-s1: replicate - replicate,noise/C0-d1-s1__r2,noise/C0-d1-s1__r1,D1,control,mAP50_95,0.022168,0.001219,0.055336,0.013665,1000,0,A1 constraint group,143,215
+noise C0-d1-s1: replicate - replicate,noise/C0-d1-s1__r2,noise/C0-d1-s1__r1,D1,control,mAP50,0.01519,-0.019608,0.042086,0.016034,1000,0,A1 constraint group,143,215
+D0 mean of seeds 0-2: C0 - C1,C0-d0-s0..2,C1-d0-s0..2,D0,overall,mAP50_95,0.01756,0.002435,0.038199,0.009373,1000,0,A1 constraint group (same resamples for the three seeds),235,407
+D0 mean of seeds 0-2: C0 - C1,C0-d0-s0..2,C1-d0-s0..2,D0,overall,mAP50,0.011358,-0.002735,0.033203,0.00947,1000,0,A1 constraint group (same resamples for the three seeds),235,407
+D0 mean of seeds 0-2: C0 - C1,C0-d0-s0..2,C1-d0-s0..2,D0,probe,mAP50_95,0.039104,0.013777,0.067581,0.01345,1000,0,A1 constraint group (same resamples for the three seeds),87,194
+D0 mean of seeds 0-2: C0 - C1,C0-d0-s0..2,C1-d0-s0..2,D0,probe,mAP50,0.026096,-0.001794,0.066773,0.017121,1000,0,A1 constraint group (same resamples for the three seeds),87,194
+D0 mean of seeds 0-2: C0 - C1,C0-d0-s0..2,C1-d0-s0..2,D0,control,mAP50_95,-0.001667,-0.016563,0.018625,0.008779,1000,0,A1 constraint group (same resamples for the three seeds),148,213
+D0 mean of seeds 0-2: C0 - C1,C0-d0-s0..2,C1-d0-s0..2,D0,control,mAP50,0.001234,-0.014031,0.019328,0.00824,1000,0,A1 constraint group (same resamples for the three seeds),148,213
+D0 seed 0: C0 - C1,probe,control,D0,probe - control,mAP50_95,0.042162,0.000296,0.081318,0.020491,1000,0,"A1 constraint group, probes and controls independently",,
+D0 seed 0: C0 - C1,probe,control,D0,probe - control,mAP50,0.036148,-0.019301,0.085144,0.026261,1000,0,"A1 constraint group, probes and controls independently",,
+D0 seed 1: C0 - C1,probe,control,D0,probe - control,mAP50_95,0.077347,0.032323,0.116974,0.021989,1000,0,"A1 constraint group, probes and controls independently",,
+D0 seed 1: C0 - C1,probe,control,D0,probe - control,mAP50,0.03509,-0.011752,0.092231,0.026959,1000,0,"A1 constraint group, probes and controls independently",,
+D0 seed 2: C0 - C1,probe,control,D0,probe - control,mAP50_95,0.002805,-0.036825,0.048616,0.021498,1000,0,"A1 constraint group, probes and controls independently",,
+D0 seed 2: C0 - C1,probe,control,D0,probe - control,mAP50,0.003349,-0.037015,0.05504,0.023856,1000,0,"A1 constraint group, probes and controls independently",,
+D0 mean of seeds 0-2: C0 - C1,probe,control,D0,probe - control,mAP50_95,0.040771,0.010595,0.073312,0.016082,1000,0,"A1 constraint group, probes and controls independently",,
+D0 mean of seeds 0-2: C0 - C1,probe,control,D0,probe - control,mAP50,0.024862,-0.008157,0.066683,0.019126,1000,0,"A1 constraint group, probes and controls independently",,
+D1 seed 0: C0 - C1,probe,control,D1,probe - control,mAP50_95,0.008426,-0.043075,0.052506,0.024114,1000,0,"A1 constraint group, probes and controls independently",,
+D1 seed 0: C0 - C1,probe,control,D1,probe - control,mAP50,0.01411,-0.042355,0.063137,0.02634,1000,0,"A1 constraint group, probes and controls independently",,
+D2 seed 0: C0 - C1,probe,control,D2,probe - control,mAP50_95,0.045823,0.005622,0.080259,0.019193,1000,0,"A1 constraint group, probes and controls independently",,
+D2 seed 0: C0 - C1,probe,control,D2,probe - control,mAP50,0.03103,-0.019378,0.077548,0.025029,1000,0,"A1 constraint group, probes and controls independently",,

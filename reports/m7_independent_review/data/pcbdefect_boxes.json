@@ -1,0 +1,56 @@
+{
+ "B-strict-pcb-defect-s0": {
+  "n_images": 939,
+  "n_gt": 971,
+  "gt_located_any_class_iou50_conf25": 93,
+  "gt_located_correct_class": 76,
+  "unmatched_preds_conf25": 2226,
+  "confusion_gt_rows_pred_cols": {
+   "0": {
+    "0": 0,
+    "1": 0,
+    "2": 0,
+    "3": 1
+   },
+   "3": {
+    "0": 1,
+    "1": 1,
+    "2": 14,
+    "3": 76
+   }
+  }
+ },
+ "A0-s0": {
+  "n_images": 93,
+  "n_gt": 94,
+  "gt_located_any_class_iou50_conf25": 84,
+  "gt_located_correct_class": 84,
+  "unmatched_preds_conf25": 16,
+  "confusion_gt_rows_pred_cols": {
+   "0": {
+    "0": 22,
+    "1": 0,
+    "2": 0,
+    "3": 0
+   },
+   "1": {
+    "0": 0,
+    "1": 23,
+    "2": 0,
+    "3": 0
+   },
+   "2": {
+    "0": 0,
+    "1": 0,
+    "2": 20,
+    "3": 0
+   },
+   "3": {
+    "0": 0,
+    "1": 0,
+    "2": 0,
+    "3": 19
+   }
+  }
+ }
+}

@@ -1,0 +1,146 @@
+{
+ "all_90": {
+  "n": 90,
+  "exact": 0.4,
+  "kappa_7": 0.16908873311677208,
+  "linear_weighted_kappa_A_to_F_excl_G": 0.3134476406404989,
+  "broad_agreement(instance/family/structural/none/ambiguous)": 0.4111111111111111,
+  "broad_kappa": 0.18419702411493066,
+  "duplicate-like (A): agreement": 0.9888888888888889,
+  "duplicate-like (A): kappa": 0.0,
+  "duplicate-like (A): A-count/B-count": [
+   1,
+   0
+  ],
+  "same-instance-like (A+B): agreement": 0.9777777777777777,
+  "same-instance-like (A+B): kappa": 0.48863636363636365,
+  "same-instance-like (A+B): A-count/B-count": [
+   2,
+   2
+  ],
+  "same-family-like (A+B+C): agreement": 0.7888888888888889,
+  "same-family-like (A+B+C): kappa": 0.44660194174757284,
+  "same-family-like (A+B+C): A-count/B-count": [
+   13,
+   30
+  ],
+  "meaningfully-related (A\u2013D): agreement": 0.5777777777777777,
+  "meaningfully-related (A\u2013D): kappa": 0.22448979591836726,
+  "meaningfully-related (A\u2013D): A-count/B-count": [
+   35,
+   63
+  ],
+  "not-meaningfully-related (E+F): agreement": 0.5777777777777777,
+  "not-meaningfully-related (E+F): kappa": 0.19718309859154926,
+  "not-meaningfully-related (E+F): A-count/B-count": [
+   50,
+   24
+  ],
+  "ambiguous (G): agreement": 0.9777777777777777,
+  "ambiguous (G): kappa": 0.7391304347826086,
+  "ambiguous (G): A-count/B-count": [
+   5,
+   3
+  ],
+  "kappa_7_ci95": [
+   0.031010069559925597,
+   0.30107269474804327
+  ]
+ },
+ "probe_pairs_60": {
+  "n": 60,
+  "exact": 0.4,
+  "kappa_7": 0.20295202952029523,
+  "linear_weighted_kappa_A_to_F_excl_G": 0.33226837060702885,
+  "broad_agreement(instance/family/structural/none/ambiguous)": 0.4166666666666667,
+  "broad_kappa": 0.22451994091580485,
+  "duplicate-like (A): agreement": 0.9833333333333333,
+  "duplicate-like (A): kappa": 0.0,
+  "duplicate-like (A): A-count/B-count": [
+   1,
+   0
+  ],
+  "same-instance-like (A+B): agreement": 0.9666666666666667,
+  "same-instance-like (A+B): kappa": 0.48275862068965514,
+  "same-instance-like (A+B): A-count/B-count": [
+   2,
+   2
+  ],
+  "same-family-like (A+B+C): agreement": 0.7333333333333333,
+  "same-family-like (A+B+C): kappa": 0.3846153846153847,
+  "same-family-like (A+B+C): A-count/B-count": [
+   10,
+   24
+  ],
+  "meaningfully-related (A\u2013D): agreement": 0.6333333333333333,
+  "meaningfully-related (A\u2013D): kappa": 0.3096234309623431,
+  "meaningfully-related (A\u2013D): A-count/B-count": [
+   26,
+   44
+  ],
+  "not-meaningfully-related (E+F): agreement": 0.6333333333333333,
+  "not-meaningfully-related (E+F): kappa": 0.2525481313703284,
+  "not-meaningfully-related (E+F): A-count/B-count": [
+   29,
+   13
+  ],
+  "ambiguous (G): agreement": 0.9666666666666667,
+  "ambiguous (G): kappa": 0.7333333333333334,
+  "ambiguous (G): A-count/B-count": [
+   5,
+   3
+  ],
+  "kappa_7_ci95": [
+   0.0519651032287517,
+   0.35243766282098987
+  ]
+ },
+ "control_pairs_30": {
+  "n": 30,
+  "exact": 0.4,
+  "kappa_7": 0.05759162303664933,
+  "linear_weighted_kappa_A_to_F_excl_G": 0.22131147540983587,
+  "broad_agreement(instance/family/structural/none/ambiguous)": 0.4,
+  "broad_kappa": 0.05759162303664933,
+  "duplicate-like (A): agreement": 1.0,
+  "duplicate-like (A): kappa": null,
+  "duplicate-like (A): A-count/B-count": [
+   0,
+   0
+  ],
+  "same-instance-like (A+B): agreement": 1.0,
+  "same-instance-like (A+B): kappa": null,
+  "same-instance-like (A+B): A-count/B-count": [
+   0,
+   0
+  ],
+  "same-family-like (A+B+C): agreement": 0.9,
+  "same-family-like (A+B+C): kappa": 0.6153846153846154,
+  "same-family-like (A+B+C): A-count/B-count": [
+   3,
+   6
+  ],
+  "meaningfully-related (A\u2013D): agreement": 0.4666666666666667,
+  "meaningfully-related (A\u2013D): kappa": 0.03614457831325302,
+  "meaningfully-related (A\u2013D): A-count/B-count": [
+   9,
+   19
+  ],
+  "not-meaningfully-related (E+F): agreement": 0.4666666666666667,
+  "not-meaningfully-related (E+F): kappa": 0.03614457831325302,
+  "not-meaningfully-related (E+F): A-count/B-count": [
+   21,
+   11
+  ],
+  "ambiguous (G): agreement": 1.0,
+  "ambiguous (G): kappa": null,
+  "ambiguous (G): A-count/B-count": [
+   0,
+   0
+  ],
+  "kappa_7_ci95": [
+   -0.21623409123409104,
+   0.2935774309723887
+  ]
+ }
+}

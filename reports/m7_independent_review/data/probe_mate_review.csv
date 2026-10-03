@@ -1,0 +1,91 @@
+code,label,confidence,rationale,item,kind,a,b,src,delta,max_sim_mate
+P3386,E,MEDIUM,different pad/trace layouts and defects,CN-089,control_nearest_C0_train,OI_pcb-ind_fb37baaa751b,OI_pcb-ind_3e242fb729b7,pcb-ind,0.0,0.7880464792251587
+P8528,C,LOW,similar diagonal trace bundle with bend; defects differ,CN-065,control_nearest_C0_train,OI_pcb-ind_86c6ee2bd9b4,OI_pcb-ind_a6c448e4ce31,pcb-ind,0.0086863040924072,0.8407762050628662
+P8453,D,MEDIUM,bent trace bundles with hole; geometry differs,PM-046,probe_nearest_mate:same metadata group,OI_pcb-ind_36a2d9f76942,OI_dspcbsd-plus_85474c3f47d4,pcb-ind,0.0,0.8732357025146484
+P3863,C,LOW,diagonal trace pair with defect at similar place; spacing similar,PM-036,probe_nearest_mate:same component,OI_dspcbsd-plus_ed3013de37bc,OI_dspcbsd-plus_402e360b0497,dspcbsd-plus,-0.0229352116584777,0.816929817199707
+P7439,A,HIGH,same three traces with identical bubble defect; near-identical (slight shift),PM-024,probe_nearest_mate:similar pair,OI_dspcbsd-plus_aab8b8266436,OI_dspcbsd-plus_af42cb7e1bcf,dspcbsd-plus,0.0733001232147216,0.9334954023361206
+P6730,D,MEDIUM,different trace/pad layouts,CN-070,control_nearest_C0_train,OI_dspcbsd-plus_9ede34aace44,OI_dspcbsd-plus_551a5b7aef9b,dspcbsd-plus,0.0,0.5277122259140015
+P8102,E,MEDIUM,edge blob vs hole with hatched insert; different features,PM-044,probe_nearest_mate:same metadata group,OI_pcb-ind_749dffbd3b46,OI_pcb-ind_6c8b72f85fa6,pcb-ind,0.0,0.6733108162879944
+P9304,C,MEDIUM,same DIY board style and trace texture; different regions of a board,PM-006,probe_nearest_mate:crop sibling,OI_pcb-defect_7339d2a40d51,OI_pcb-defect_60f112c4adea,pcb-defect,0.0847371220588684,1.0000003576278689
+P2801,E,MEDIUM,edge blob with hole vs hole with hatched insert,PM-058,probe_nearest_mate:same metadata group,OI_pcb-ind_d897e78ee311,OI_pcb-ind_6c8b72f85fa6,pcb-ind,0.0,0.749321699142456
+P9731,D,MEDIUM,different trace/pad layouts,PM-052,probe_nearest_mate:same metadata group,OI_pcb-ind_1f7ae6db263a,OI_pcb-ind_22d67529de97,pcb-ind,0.0,0.6353696584701538
+P2987,C,LOW,same X-cross trace design; defects differ,PM-014,probe_nearest_mate:similar pair,OI_dspcbsd-plus_fe4d5298873b,OI_dspcbsd-plus_001368584365,dspcbsd-plus,0.2434030771255493,0.95932936668396
+P2313,B,HIGH,adjacent crops of one ring-and-trace feature (left and right halves); same capture,PM-018,probe_nearest_mate:similar pair,OI_dspcbsd-plus_794731f2493f,OI_dspcbsd-plus_400aa198068c,dspcbsd-plus,0.1465277075767517,0.926892638206482
+P8470,D,MEDIUM,diagonal copper edges with defects; tone and defect differ,CN-060,control_nearest_C0_train,OI_dspcbsd-plus_40408cca793c,OI_dspcbsd-plus_f98511422fde,dspcbsd-plus,0.0,0.5920019745826721
+P5315,C,LOW,parallel diagonal thin traces with defect on a trace; spacing similar,PM-015,probe_nearest_mate:similar pair,OI_dspcbsd-plus_42f2e2ccb3b1,OI_dspcbsd-plus_a4d97e1bb28d,dspcbsd-plus,0.0308560729026794,0.9292675852775574
+P1784,E,MEDIUM,diagonal edge with residue vs vertical edge with fibre,PM-045,probe_nearest_mate:same metadata group,OI_pcb-ind_72dc02a94096,OI_pcb-ind_e03ed9080d9a,pcb-ind,0.0,0.6113502979278564
+P4350,C,MEDIUM,same DIY board style and trace texture; different regions,CN-083,control_nearest_C0_train,OI_pcb-defect_29e7eaf5b889,OI_pcb-defect_51a740d7e7ac,pcb-defect,0.0,0.9054279923439026
+P6494,C,MEDIUM,same square pad grid design; small particle defect at same place relative to grid; colour differs slightly,PM-016,probe_nearest_mate:similar pair,OI_dspcbsd-plus_0940574db3dd,OI_dspcbsd-plus_f45929834e71,dspcbsd-plus,0.0856368541717529,0.9210699796676636
+P4763,C,MEDIUM,same DIY board style and trace texture; different regions,CN-073,control_nearest_C0_train,OI_pcb-defect_9a495444d514,OI_pcb-defect_51a740d7e7ac,pcb-defect,0.0,0.9153428077697754
+P6069,C,LOW,same square pad grid design; defect type differs,PM-037,probe_nearest_mate:same component,OI_dspcbsd-plus_52e2a4e2a44e,OI_dspcbsd-plus_880fd323c90d,dspcbsd-plus,0.0961363911628723,0.906132996082306
+P4340,B,HIGH,same trace set with identical bridge defect; shifted crop,CN-088,control_nearest_C0_train,OI_pcb-ind_c7f192d3f710,OI_pcb-ind_5799f9e435bd,pcb-ind,0.0,0.8178619146347046
+P3923,D,MEDIUM,copper corner with edge defects; geometry differs,PM-056,probe_nearest_mate:same metadata group,OI_pcb-ind_d280e970584b,OI_pcb-ind_c1569843f29f,pcb-ind,0.0432132482528686,0.7464302778244019
+P3307,E,MEDIUM,different ring pad/trace layouts and colours,CN-077,control_nearest_C0_train,OI_dspcbsd-plus_9b1d4a40fe5b,OI_dspcbsd-plus_4733f99a33f7,dspcbsd-plus,0.0,0.7285354137420654
+P4089,C,MEDIUM,same DIY board style and trace texture; different regions,PM-009,probe_nearest_mate:crop sibling,OI_pcb-defect_9bf650087988,OI_pcb-defect_661504452187,pcb-defect,0.1003918051719665,1.0000001192092896
+P6685,B,MEDIUM,"overlapping regions of one DIY board (pill pad, traces and loop pad correspond under shift)",PM-004,probe_nearest_mate:crop sibling,OI_pcb-defect_9a780eb8fce5,OI_pcb-defect_a9934270897e,pcb-defect,0.0858306884765625,1.000000238418579
+P7063,E,MEDIUM,pad edge vs hole in damaged copper,PM-055,probe_nearest_mate:same metadata group,OI_pcb-ind_f1edfe22bada,OI_pcb-ind_ef65623a36a4,pcb-ind,0.0,0.6527992486953735
+P7712,D,MEDIUM,bent trace bundles with pinhole; geometry differs,CN-061,control_nearest_C0_train,OI_dspcbsd-plus_4d8634a1312d,OI_pcb-ind_8c9c5f111e1b,dspcbsd-plus,0.0,0.8211215138435364
+P4454,B,HIGH,same pad with identical rim damage and surface marks; different crop,PM-040,probe_nearest_mate:same metadata group,OI_pcb-ind_86ae5af772a3,OI_pcb-ind_89a92041ecbc,pcb-ind,0.0050116181373596,0.6957075595855713
+P7603,D,MEDIUM,different trace/ring layouts,PM-057,probe_nearest_mate:same metadata group,OI_pcb-ind_6ada68a07442,OI_pcb-ind_d7371c34b1aa,pcb-ind,0.0,0.8096840381622314
+P8554,D,MEDIUM,copper particles on dark; shapes differ,PM-042,probe_nearest_mate:same metadata group,OI_pcb-ind_9a749bb738c5,OI_pcb-ind_bb6d5320537d,pcb-ind,0.0,0.6527586579322815
+P5518,D,MEDIUM,different trace/pad layouts,PM-026,probe_nearest_mate:similar pair,OI_dspcbsd-plus_a2f9dc8bf3c4,OI_dspcbsd-plus_cdb66e719d3a,dspcbsd-plus,0.0241379737854003,0.9266456961631776
+P7145,C,MEDIUM,same trace arrangement with gap-and-debris defect at same location; trace count/spacing slightly differ,PM-021,probe_nearest_mate:similar pair,OI_dspcbsd-plus_4cb795ae146b,OI_dspcbsd-plus_4b28fac5f3b9,dspcbsd-plus,0.0560068488121032,0.927204430103302
+P3628,E,MEDIUM,particle on dark vs copper edge nick,CN-075,control_nearest_C0_train,OI_pcb-ind_2b737a4631b7,OI_pcb-ind_e8f50eef7e5d,pcb-ind,0.052732229232788,0.7398110032081604
+P3033,D,LOW,damaged pad/trace areas; structures do not clearly correspond,PM-041,probe_nearest_mate:same metadata group,OI_pcb-ind_f6eb9255bef7,OI_pcb-ind_1d6b0588a249,pcb-ind,0.0779756307601928,0.8297492861747742
+P3959,C,MEDIUM,same DIY board style and trace texture; different regions,PM-001,probe_nearest_mate:crop sibling,OI_pcb-defect_4b98cea2c1df,OI_pcb-defect_cee167eb9b50,pcb-defect,0.1062548756599426,1.000000238418579
+P1092,C,MEDIUM,same DIY board style; different regions/defects,PM-007,probe_nearest_mate:crop sibling,OI_pcb-defect_dca7df2e9f35,OI_pcb-defect_037a6c5a88c0,pcb-defect,0.0708010196685791,0.9999996423721312
+P7480,C,LOW,same ring-pad and trace arrangement type; framing and defect differ,CN-078,control_nearest_C0_train,OI_dspcbsd-plus_ad9f0c3d9ae9,OI_dspcbsd-plus_0e327acb9057,dspcbsd-plus,0.0,0.7413368225097656
+P3418,C,LOW,diagonal thin trace pair with defects; spacing similar; defects differ,PM-039,probe_nearest_mate:same component,OI_dspcbsd-plus_c038d894bbe6,OI_dspcbsd-plus_9ba529913caf,dspcbsd-plus,-0.0271382927894592,0.8344724774360657
+P3663,D,MEDIUM,different trace layouts and tones,CN-080,control_nearest_C0_train,OI_pcb-ind_b29a09abc632,OI_dspcbsd-plus_3d8d5f0c1663,pcb-ind,0.0,0.6958935856819153
+P4156,C,MEDIUM,same DIY board style and trace texture; different regions,CN-063,control_nearest_C0_train,OI_pcb-defect_1e97e020edd9,OI_pcb-defect_209be83fc398,pcb-defect,0.0,0.8941289186477661
+P3736,E,MEDIUM,different pad/trace layouts,CN-071,control_nearest_C0_train,OI_dspcbsd-plus_4dcb879b4f26,OI_pcb-ind_9dc19ec3c9dd,dspcbsd-plus,0.0,0.7478813529014587
+P1428,C,LOW,parallel diagonal trace set with defect on a trace; spacing similar,PM-028,probe_nearest_mate:same component,OI_dspcbsd-plus_de38b28bfccc,OI_dspcbsd-plus_c6f5b5eb7a09,dspcbsd-plus,0.0203601717948913,0.914965808391571
+P4886,C,MEDIUM,same DIY board style; different regions,CN-064,control_nearest_C0_train,OI_pcb-defect_8420432f007a,OI_pcb-defect_1cb90d5aee16,pcb-defect,0.0,0.8972320556640625
+P8343,D,MEDIUM,bent trace bundles; colour and geometry differ,PM-054,probe_nearest_mate:same metadata group,OI_pcb-ind_61164e6ebb9a,OI_dspcbsd-plus_2a66eea6036d,pcb-ind,0.0,0.7615959048271179
+P7351,C,MEDIUM,same DIY board style and trace texture; different regions,PM-008,probe_nearest_mate:crop sibling,OI_pcb-defect_36db30c1bbeb,OI_pcb-defect_cee167eb9b50,pcb-defect,0.1062548756599426,1.000000238418579
+P3074,C,MEDIUM,same DIY board style; different regions,CN-066,control_nearest_C0_train,OI_pcb-defect_b7eff2a20d83,OI_pcb-defect_1cb90d5aee16,pcb-defect,0.0,0.904827117919922
+P1859,C,MEDIUM,same DIY board style; different regions,PM-003,probe_nearest_mate:crop sibling,OI_pcb-defect_a330a8e53fbf,OI_pcb-defect_131a637c140e,pcb-defect,0.0982007980346679,1.0
+P5048,D,MEDIUM,copper corner edges; geometry and tone differ,PM-050,probe_nearest_mate:same metadata group,OI_pcb-ind_669c77ab449a,OI_pcb-ind_9cca0808fdc4,pcb-ind,0.0,0.7253179550170898
+P9308,C,LOW,same square pad grid design; defect differs,PM-038,probe_nearest_mate:same component,OI_dspcbsd-plus_b85b5e071b18,OI_dspcbsd-plus_1e5c3f1a8fb5,dspcbsd-plus,0.0725893378257751,0.8702519536018372
+P5748,C,LOW,same X-cross trace design; defects differ,PM-012,probe_nearest_mate:similar pair,OI_dspcbsd-plus_4c90c9d061aa,OI_dspcbsd-plus_001368584365,dspcbsd-plus,0.2359633445739746,0.9524555802345276
+P6549,C,LOW,diagonal thin trace pair with small defect; spacing similar,PM-033,probe_nearest_mate:same component,OI_dspcbsd-plus_6156805e6cd7,OI_dspcbsd-plus_402e360b0497,dspcbsd-plus,0.0,0.8583377599716187
+P9653,D,MEDIUM,copper blob over trace; tone and blob shape differ,CN-084,control_nearest_C0_train,OI_pcb-ind_ffdc100fbc99,OI_pcb-ind_198d98ac55c7,pcb-ind,0.0,0.5934202075004578
+P6624,C,MEDIUM,same DIY board style; different regions,PM-005,probe_nearest_mate:crop sibling,OI_pcb-defect_ce5b2d80283f,OI_pcb-defect_a9934270897e,pcb-defect,0.0858306884765625,1.000000238418579
+P9887,C,LOW,diagonal thin trace pair with nick at similar place; framing differs,PM-034,probe_nearest_mate:same component,OI_dspcbsd-plus_66c759c1989f,OI_dspcbsd-plus_ec7d48a3c36d,dspcbsd-plus,0.0,0.8641523122787476
+P6947,C,LOW,parallel diagonal trace set with small defect at similar place,PM-023,probe_nearest_mate:similar pair,OI_dspcbsd-plus_387eb11e88bb,OI_dspcbsd-plus_7ef8c1b54634,dspcbsd-plus,0.0672823190689086,0.959170401096344
+P8922,D,MEDIUM,tiny copper particle on dark; generic,PM-013,probe_nearest_mate:similar pair,OI_dspcbsd-plus_4bfa310b7d17,OI_dspcbsd-plus_7a70f7d5f018,dspcbsd-plus,0.0530827045440673,0.91949063539505
+P7582,C,MEDIUM,same DIY board style; different regions (one blurred),CN-069,control_nearest_C0_train,OI_pcb-defect_e2dcd6c87f7f,OI_pcb-defect_1cb90d5aee16,pcb-defect,0.0,0.904827117919922
+P2014,C,MEDIUM,same DIY board style; different regions,PM-000,probe_nearest_mate:crop sibling,OI_pcb-defect_d2d57596e2dc,OI_pcb-defect_f43d04d586d2,pcb-defect,0.0756722092628479,1.0000003576278689
+P2660,C,LOW,same ring-in-copper design; defects differ,PM-035,probe_nearest_mate:same component,OI_dspcbsd-plus_010f6b274095,OI_dspcbsd-plus_bb3e349132f6,dspcbsd-plus,0.0613466501235961,0.886020302772522
+P5913,D,LOW,damaged copper areas; structures do not correspond,CN-082,control_nearest_C0_train,OI_pcb-ind_1de1b231957e,OI_pcb-ind_29c424bf7ca6,pcb-ind,0.0,0.6417636871337891
+P8118,C,MEDIUM,same DIY board style; different regions,PM-002,probe_nearest_mate:crop sibling,OI_pcb-defect_0ab8220b2561,OI_pcb-defect_7acfa3a9d349,pcb-defect,0.0852999091148376,1.0
+P5137,C,MEDIUM,same DIY board style; different regions,CN-074,control_nearest_C0_train,OI_pcb-defect_56ab66e6743f,OI_pcb-defect_51a740d7e7ac,pcb-defect,0.0,0.9153428077697754
+P4928,C,LOW,same parallel diagonal trace set with an open at a similar place; gap form differs,PM-020,probe_nearest_mate:similar pair,OI_dspcbsd-plus_390f3bc9b929,OI_dspcbsd-plus_215b40390cc7,dspcbsd-plus,0.0472536087036132,0.9282830357551576
+P8166,C,LOW,same square pad grid design; defects differ,PM-030,probe_nearest_mate:same component,OI_dspcbsd-plus_5f8e748f24e4,OI_dspcbsd-plus_1e5c3f1a8fb5,dspcbsd-plus,0.0881012082099914,0.8806304335594177
+P9414,D,MEDIUM,pad and trace layouts differ,CN-086,control_nearest_C0_train,OI_dspcbsd-plus_2cbcab4d1768,OI_dspcbsd-plus_8ba235fef3ff,dspcbsd-plus,0.0,0.6858693957328796
+P9085,C,MEDIUM,same DIY board style; different regions,PM-010,probe_nearest_mate:crop sibling,OI_pcb-defect_d7b76b5ab431,OI_pcb-defect_037a6c5a88c0,pcb-defect,0.0708010196685791,0.9999996423721312
+P5164,C,LOW,diagonal trace pair; scale and defects differ,PM-043,probe_nearest_mate:same metadata group,OI_pcb-ind_9d7e69a622e9,OI_dspcbsd-plus_ec7d48a3c36d,pcb-ind,0.0,0.6911163330078125
+P3411,C,LOW,copper flakes near round pad on same dark board type; flake shapes differ,CN-085,control_nearest_C0_train,OI_dspcbsd-plus_cb1d7e5227ff,OI_dspcbsd-plus_537d500613ab,dspcbsd-plus,0.0662032961845398,0.8510950207710266
+P1953,E,MEDIUM,ring edge with particle vs nearly empty dark field,PM-059,probe_nearest_mate:same metadata group,OI_pcb-ind_69c41b6a4bc4,OI_pcb-ind_82c2d347dd58,pcb-ind,0.0,0.590836763381958
+P6353,C,LOW,parallel diagonal trace set with small defect at similar place,PM-019,probe_nearest_mate:similar pair,OI_dspcbsd-plus_36a61eb52066,OI_dspcbsd-plus_a4d97e1bb28d,dspcbsd-plus,0.08777517080307,0.9861382246017456
+P3698,D,MEDIUM,pad with hole vs trace with edge defect,CN-072,control_nearest_C0_train,OI_pcb-ind_609b1b64cc9e,OI_pcb-ind_fbee6f37dfb8,pcb-ind,0.0,0.5653589963912964
+P1894,C,MEDIUM,same DIY board style; different regions,CN-079,control_nearest_C0_train,OI_pcb-defect_157fb4b54395,OI_pcb-defect_1cb90d5aee16,pcb-defect,0.0,0.904827117919922
+P5508,B,MEDIUM,same dark scene with matching edge contour and blob; slight shift/brightness,PM-047,probe_nearest_mate:same metadata group,OI_pcb-ind_80b7c38e9298,OI_pcb-ind_a79b9085c1ac,pcb-ind,0.1870936155319214,0.8663334846496582
+P2982,D,MEDIUM,different pad/trace layouts,PM-027,probe_nearest_mate:similar pair,OI_dspcbsd-plus_86d6904064a2,OI_dspcbsd-plus_09cc73bb3092,dspcbsd-plus,0.0344473719596862,0.944914698600769
+P1831,D,LOW,damaged copper patches on dark; no correspondence,PM-053,probe_nearest_mate:same metadata group,OI_pcb-ind_b5cec1e181e7,OI_pcb-ind_ba73e8de24ae,pcb-ind,0.0438435077667236,0.8149188160896301
+P4590,B,MEDIUM,same trace bundle and hole at matching offsets; shifted crop; defects differ in place,CN-087,control_nearest_C0_train,OI_pcb-ind_21ecfe0fa13a,OI_pcb-ind_4a8a95bea6a2,pcb-ind,0.0,0.808998167514801
+P6076,C,LOW,diagonal trace pair with hole; arrangement similar; defects differ,CN-062,control_nearest_C0_train,OI_pcb-ind_b6e9d493bcba,OI_pcb-ind_5add620a7f33,pcb-ind,0.0,0.8396468162536621
+P9593,E,MEDIUM,different trace layouts and textures,CN-081,control_nearest_C0_train,OI_dspcbsd-plus_9ad7cdfaa6d7,OI_pcb-ind_b5bb34e01ca1,dspcbsd-plus,0.0221869349479675,0.7404835820198059
+P4546,D,MEDIUM,copper corner vs small holes; different features,CN-068,control_nearest_C0_train,OI_dspcbsd-plus_9f8272043024,OI_dspcbsd-plus_9662587f89da,dspcbsd-plus,0.0,0.6440386176109314
+P6852,C,MEDIUM,same DIY board style; H-junction vs broken trace; different regions,CN-067,control_nearest_C0_train,OI_pcb-defect_bce51c116712,OI_pcb-defect_be7ff166bc20,pcb-defect,0.0,0.883963942527771
+P6468,C,LOW,same trace pair with holes; defects differ (scan line vs bridge),PM-049,probe_nearest_mate:same metadata group,OI_pcb-ind_c4ec377ec89f,OI_pcb-ind_489ded0ffa57,pcb-ind,0.0061461329460144,0.8093170523643494
+P8466,C,LOW,diagonal thin trace pair; orientation mirrored; defects at different places,PM-032,probe_nearest_mate:same component,OI_dspcbsd-plus_12abe0924d24,OI_dspcbsd-plus_ec7d48a3c36d,dspcbsd-plus,-0.0032450556755065,0.8444349765777588
+P1205,C,MEDIUM,same DIY board style; different regions,PM-011,probe_nearest_mate:crop sibling,OI_pcb-defect_3f2c1d6626b3,OI_pcb-defect_6c2287d5af28,pcb-defect,0.0867043733596801,1.0000001192092896
+P2868,C,LOW,same bent trace pair design with copper particle in gap; positions differ,PM-017,probe_nearest_mate:similar pair,OI_dspcbsd-plus_26f8cde0048f,OI_dspcbsd-plus_ca520caede4d,dspcbsd-plus,0.0379999876022338,0.9408562183380128
+P8790,C,LOW,same square pad grid design; defects differ,PM-031,probe_nearest_mate:same component,OI_dspcbsd-plus_a6f493e08d9c,OI_dspcbsd-plus_a447cf91b72f,dspcbsd-plus,0.0277773737907409,0.899702787399292
+P4159,C,LOW,same square pad grid design; small defect at similar place; background tone differs,PM-029,probe_nearest_mate:same component,OI_dspcbsd-plus_c5c737f691f6,OI_dspcbsd-plus_be2c9a110964,dspcbsd-plus,0.0499923825263977,0.891503632068634
+P9606,C,LOW,parallel diagonal trace set with tiny defect at similar place,PM-022,probe_nearest_mate:similar pair,OI_dspcbsd-plus_25a62020f985,OI_dspcbsd-plus_cc18a59105fb,dspcbsd-plus,0.0778713226318359,0.946723222732544
+P2951,C,MEDIUM,same DIY board style; different regions,CN-076,control_nearest_C0_train,OI_pcb-defect_6f1dcb3615a0,OI_pcb-defect_6aa0ec85a9e9,pcb-defect,0.0,0.8877583146095276
+P4426,C,MEDIUM,same DIY board style; different regions,PM-025,probe_nearest_mate:similar pair,OI_pcb-defect_890e41c13fcb,OI_pcb-defect_60f112c4adea,pcb-defect,0.0573455095291137,0.9732114672660828
+P1719,D,MEDIUM,different pad/trace layouts,PM-048,probe_nearest_mate:same metadata group,OI_pcb-ind_de55fdc55c6f,OI_pcb-ind_cfa2bd2a413c,pcb-ind,0.0,0.7670989036560059
+P7387,D,MEDIUM,traces with nick vs copper edge with nick; different features,PM-051,probe_nearest_mate:same metadata group,OI_pcb-ind_a9e785bddae9,OI_pcb-ind_e8f50eef7e5d,pcb-ind,0.0,0.73517906665802
