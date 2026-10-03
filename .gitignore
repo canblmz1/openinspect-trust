@@ -45,3 +45,26 @@ desktop.ini
 
 # --- M3: the neighbour table is regenerable and listed by SHA-256 in artifacts/m3/audit.json (T20)
 artifacts/m3/nearest-neighbors.parquet
+
+# --- M7 publication freeze: private EVREN operational artifacts (platform job/model/dataset IDs).
+# Archived outside the repository (C:\data\openinspect-private\m7-publication-freeze); public ID-free
+# versions are in reports/m7_final/public/. Never commit these.
+reports/m7/evren_run_inventory.*
+reports/m7/final_run_manifest.*
+reports/m7/checkpoint_manifest.csv
+reports/m7/m7_expected_vs_actual.md
+reports/m7/m7_config_consistency.md
+reports/m7_final/inventory_*/
+reports/m7_final/FINAL_RUN_INVENTORY.csv
+reports/m7_final/checkpoint_manifest_replication.csv
+reports/m7_final/LAUNCH_SHEET.md
+reports/m7_final/interim_pre_replication/
+reports/m7_final/scripts/eval_replication.py
+reports/m7_final/scripts/fetch_replication_checkpoints.py
+evren_run_inventory.*
+# model weights are never committed
+*.pt
+*.pth
+*.onnx
+# M7 independent-review analysis inputs/outputs (AI review labels, exposure table): public and needed for reproduction
+!reports/m7_independent_review/data/

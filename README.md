@@ -2,7 +2,34 @@
 
 A reproducible dataset and benchmark assurance preflight for industrial vision.
 
-**Status: early development.** Milestones 1 (source registry), 2 (ingest), 3 (similarity and leakage audit), 4 (taxonomy and label audit), 5 (release assembly and canonical splits), 6 (the EVREN import smoke test, PASS) and 5.5 (training readiness) are done on three public PCB defect datasets. No model has been trained yet; the M5.5 verdict is TRAINING READY WITH EXPLICIT LIMITATIONS, and the next step is Milestone 7, the controlled YOLO11n experiments on EVREN, once the maintainer approves the compute.
+**Status: research study frozen (3 October 2026).** Milestones 1–6, 5.5 and 7 are done. Milestone 7, the controlled YOLO11n experiments, was trained on EVREN and evaluated locally; no further training is planned. The grouped image pairs were characterised by AI visual adjudication only; **independent human validation was not performed**.
+
+## Research finding
+
+**Question.** When PCB test images have machine-detected group-related images (visual-similarity groups, crop parents, source board IDs) in the training set, is the performance difference concentrated on those exposed test images? How does that compare with evaluating on an unseen source?
+
+**Controlled design.** Two training sets, C0 and C1, are evaluated on one byte-identical test set. C0 includes the group-mates of designated *probe* test images; C1 replaces them with profile-matched images. Unexposed *control* test images serve as a negative control. The study uses 3 independently drawn designs, 8 matched seed pairs of YOLO11n, one local evaluator (Ultralytics 8.3.0), and separate test-sampling and training-seed uncertainty.
+
+**Frozen primary result.** In the first design, the probe difference mAP50-95(C0) − mAP50-95(C1) was +3.91 points (95% interval +0.41 to +7.65 including seed variation). Pooled over the three designs:
+
+- probe effect +3.70 (+1.71 to +5.70);
+- probe − control +3.37 (+0.68 to +6.06);
+- whole-test-set effect about +2 points.
+
+Replication was mixed: one design's anomalous control gain did not recur, and another design's second seed showed no probe-selective gain. Gains were concentrated among the most strongly exposed probes, while the continuous similarity–gain relationship was weak. AI visual review found no near-duplicates among 60 probe–mate pairs, so we call this *train–test group exposure*, not near-duplicate leakage.
+
+**Source shift.** Holding out a whole source lowered mAP50-95 by 27–47 points (DsPCBSD+ 43.7 → 16.4, PCB-IND 56.8 → 19.2, PCB-Defect 47.6 → 0.3). Image size and format alone identify the source, so this measures acquisition/source shift, not an inability to learn the defect classes.
+
+**Limitations.**
+
+- no independent human validation;
+- machine-detected groups;
+- one architecture and one domain;
+- 2–3 seeds per design;
+- non-deterministic training;
+- no deployment data.
+
+Details: [paper draft](paper/manuscript.md) · [final verdict](reports/m7_final/FINAL_SCIENTIFIC_VERDICT.md) · [claim policy](reports/m7_final/FINAL_SAFE_CLAIMS.md). Preprint link: *to be added*.
 
 ## What it is
 
@@ -59,7 +86,7 @@ All three accepted sources are CC BY 4.0, read from the repository record and co
 |---|---|---|---|---|---|
 | `dspcbsd-plus` | [DsPCBSD+](https://doi.org/10.6084/m9.figshare.24970329.v1) | 10,259 / 20,276 | train / val, random 8:2 | none | factory AOI crops |
 | `pcb-ind` | [PCB-IND v4](https://doi.org/10.5281/zenodo.19723114) | 4,789 / 5,932 | train / val / test | production batch and board side, from the file names | factory AOI ROI patches |
-| `pcb-defect` | [PCB-Defect](https://doi.org/10.17632/vdj74sngvn.1) | 230 / 1,704 | none | board-design family, derived from the original scan names | lab boards, flatbed scan |
+| `pcb-defect` | [PCB-Defect](https://doi.org/10.17632/vdj74sngvn.1) | 230 / 1,704 | none | board-design family, derived from the original scan names | laboratory-fabricated boards (high-resolution images) |
 
 DeepPCB is rejected (its README and its LICENSE file disagree). Every decision and the licences of other candidates are in [LICENSE_MATRIX.md](LICENSE_MATRIX.md).
 
@@ -137,7 +164,7 @@ Before any training, Milestone 5.5 asks: if two EVREN YOLO runs produce differen
 - **Export:** All 14 YOLO packages of the M7 plan pass two independent readers: Ultralytics 8.4.171 in a separate environment and a parser that shares no code with the exporter; their boxes per class equal the release's ([export-validation.md](reports/m5_5/export-validation.md)).
 - Human validation stays NOT PERFORMED (0 / 300 pairs reviewed), so the reports speak of machine-detected potential leakage, visual similarity groups and embedding-defined components only.
 
-The M7 training plan (YOLO11n with one configuration for every run, three training seeds for C0 and C1) is [reports/m5_5/m7-plan.md](reports/m5_5/m7-plan.md); it is not executed.
+The M7 training plan (YOLO11n with one configuration for every run, three training seeds for C0 and C1) is [reports/m5_5/m7-plan.md](reports/m5_5/m7-plan.md). It was executed in Milestone 7 (plus replication seeds); see the Research finding section above and [reports/m7_final/](reports/m7_final/).
 
 ## Results
 

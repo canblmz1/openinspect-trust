@@ -57,6 +57,10 @@ packages = ["src/openinspect"]
 line-length = 100
 target-version = "py312"
 src = [".", "src"]
+# Frozen research-analysis scripts of the M7 study (paper figures/tables, independent review, final
+# analysis). They are kept byte-identical to the code that produced the published numbers (their SHA-256
+# are recorded in reports/m7_final/FINAL_FREEZE_MANIFEST.md), so they are not reformatted or linted.
+extend-exclude = ["paper/scripts", "reports/m7_final/scripts", "reports/m7_independent_review/scripts", "reports/m7_independent_review/data"]
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "UP", "B", "SIM", "C4", "PT", "RUF", "N", "S", "T20"]
@@ -90,6 +94,9 @@ module = [
     "huggingface_hub.*",
     "ultralytics",
     "ultralytics.*",
+    # matplotlib only exists in the separate M7 evaluation environment (scripts/m7_evaluate.py)
+    "matplotlib",
+    "matplotlib.*",
 ]
 ignore_missing_imports = true
 
